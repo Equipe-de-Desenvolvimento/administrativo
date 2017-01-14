@@ -19,6 +19,7 @@ class cliente_model extends Model {
     var $_tipo_logradouro_id = null;
     var $_menu_id = null;
     var $_sala_id = null;
+    var $_saida = null;
 
     function Cliente_model($estoque_cliente_id = null) {
         parent::Model();
@@ -186,6 +187,9 @@ class cliente_model extends Model {
             }
             if($_POST['saida'] != ''){
                 $this->db->set('saida', 'true');
+            } 
+            else {
+                $this->db->set('saida', 'false');
             }
             if ($_POST['municipio_id'] != '') {
                 $this->db->set('municipio_id', $_POST['municipio_id']);
@@ -250,6 +254,7 @@ class cliente_model extends Model {
             $this->_razao_social = $return[0]->razao_social;
             $this->_menu_id = $return[0]->menu_id;
             $this->_sala_id = $return[0]->sala_id;
+            $this->_saida = $return[0]->saida;
         } else {
             $this->_estoque_cliente_id = null;
         }

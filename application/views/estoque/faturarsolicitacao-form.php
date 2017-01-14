@@ -1,3 +1,8 @@
+<style>
+    #form_faturar{
+        overflow-y: auto;
+    }
+</style>
 <body bgcolor="#C0C0C0">
     <div class="content"> <!-- Inicio da DIV content -->
         <h3 class="singular">Faturar</h3>

@@ -44,7 +44,8 @@
             <br/>
             <div>
                 <label>Produtos</label>
-                <select name="produto_id" id="produto_id" class="size4">
+                <select name="produto_id" id="produto_id" class="size4" required="true">
+                    <option value="">SELECIONE</option>
                     <? foreach ($produto as $value) : ?>
                         <option value="<?= $value->estoque_produto_id; ?>" onclick="carregaValor('<?= $value->valor_venda; ?>')"><?php echo $value->descricao; ?></option>
                     <? endforeach; ?>

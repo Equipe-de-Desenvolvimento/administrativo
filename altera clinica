@@ -2,27 +2,12 @@
 
 ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN razao_social character varying(200);
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN faturado boolean NOT NULL DEFAULT false;
-
-CREATE TABLE ponto.tb_estoque_solicitacao_faturamento
-(
-  estoque_solicitacao_faturamento_id serial NOT NULL,
-  estoque_solicitacao_setor_id integer,
-  desconto character varying(300),
-  data_cadastro timestamp without time zone,
-  operador_cadastro integer,
-  data_atualizacao timestamp without time zone,
-  operador_atualizacao integer,
-  valor1 numeric(10,2) DEFAULT 0,
-  forma_pagamento1 integer,
-  quantidade_parcelas1 integer,
-  CONSTRAINT tb_estoque_solicitacao_faturamento_pkey PRIMARY KEY (estoque_solicitacao_faturamento_id)
-);
-
 ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN valor numeric(10,2);
-
+ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN sala_id integer;
 
 -- Dia 05/01/2017
 
+DROP TABLE IF EXISTS ponto.tb_estoque_solicitacao_faturamento;
 
 CREATE TABLE ponto.tb_estoque_solicitacao_faturamento
 (
@@ -68,7 +53,10 @@ ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN tipo_logradouro_id integer;
 -- Dia 13/01/2017
 
 ALTER TABLE ponto.tb_estoque_produto ADD COLUMN ncm character varying(20);
+ALTER TABLE ponto.tb_estoque_produto ADD COLUMN procedimento_id integer;
 ALTER TABLE ponto.tb_estoque_produto RENAME COLUMN procedimento_id TO codigo;
 
 -- Dia 14/01/2017
 ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN inscricao_estadual character varying(20);
+ALTER TABLE ponto.tb_estoque_produto ALTER COLUMN codigo TYPE character varying;
+ALTER TABLE ponto.tb_empresa ADD COLUMN inscricao_estadual character varying(20);

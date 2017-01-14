@@ -80,7 +80,7 @@
                     <tr id="tot">
                         <td class="<?php echo $estilo_linha; ?>">&nbsp;</td>
                         <td class="<?php echo $estilo_linha; ?>" id="textovalortotal"><span id="spantotal"> Total:</span> </td>
-                        <td class="<?php echo $estilo_linha; ?>"><span id="spantotal">R$ <?=$valortotal;?></span></td>
+                        <td class="<?php echo $estilo_linha; ?>"><span id="spantotal">R$ <?= number_format($valortotal, 2, '.', ',')?></span></td>
                         <td class="<?php echo $estilo_linha; ?>">&nbsp;</td>
                     </tr>
             </tbody>    
@@ -95,6 +95,10 @@
         </tfoot>
     </table> 
     <br>
+    
+<div class="bt_link">                                  
+    <a  href="<?= base_url() ?>estoque/solicitacao/pesquisar" onclick="javascript: var a = confirm('Deseja realmente Liberar e Faturar a solicitacao?'); if(a==true){window.open('<?= base_url() ?>estoque/solicitacao/liberarsolicitacaofaturar/<?= $estoque_solicitacao_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=1000,height=750')};">Liberar/Faturar</a>
+</div>                                        
 <div class="bt_link">                                  
     <a onclick="javascript: return confirm('Deseja realmente Liberar a solicitacao?');" href="<?= base_url() ?>estoque/solicitacao/liberarsolicitacao/<?= $estoque_solicitacao_id ?>">Liberar</a>
 </div>

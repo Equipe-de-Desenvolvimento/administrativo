@@ -36,6 +36,7 @@ class menu_model extends Model {
                             p.valor_venda');
         $this->db->from('tb_estoque_produto p');
         $this->db->where('p.ativo', 'true');
+        $this->db->orderby('p.descricao');
         $return = $this->db->get();
         return $return->result();
     }

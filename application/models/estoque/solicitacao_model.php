@@ -24,7 +24,7 @@ class solicitacao_model extends Model {
 
     function listaclientenotafiscal($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->select('ec.*, m.estado, m.nome as municipio');
+        $this->db->select('ec.*, m.estado, m.nome as municipio, esc.data_fechamento');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
         $this->db->join('tb_municipio m', 'm.municipio_id = ec.municipio_id', 'left');
@@ -43,6 +43,7 @@ class solicitacao_model extends Model {
         $this->db->where('oc.operador_id', $operador_id);
         $this->db->where('ec.ativo', 'true');
         $this->db->where('oc.ativo', 'true');
+        $this->db->orderby('ec.nome');
         $return = $this->db->get();
         return $return->result();
     }
@@ -80,9 +81,14 @@ class solicitacao_model extends Model {
     }
 
     function listarsolicitacaosnota($estoque_solicitacao_id) {
-        $this->db->select('ep.descricao, esi.estoque_solicitacao_itens_id, esi.quantidade, esi.exame_id, esi.valor as valor_venda, ep.estoque_produto_id');
+        $this->db->select('ep.descricao, esi.estoque_solicitacao_itens_id, 
+                           esi.quantidade, esi.exame_id, 
+                           esi.valor as valor_venda, 
+                           eu.descricao as unidade, 
+                           ep.estoque_produto_id');
         $this->db->from('tb_estoque_solicitacao_itens esi');
-        $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id');
+        $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id', 'left');
+        $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id = ep.unidade_id', 'left');
         $this->db->where('esi.ativo', 'true');
         $this->db->where('esi.solicitacao_cliente_id', $estoque_solicitacao_id);
         $return = $this->db->get();
@@ -129,7 +135,7 @@ class solicitacao_model extends Model {
                             logradouro,
                             bairro,
                             telefone,
-                            internacao,
+                            inscricao_estadual,
                             numero');
         $this->db->from('tb_empresa');
         $this->db->where('empresa_id', $empresa);

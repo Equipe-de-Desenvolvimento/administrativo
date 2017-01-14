@@ -39,7 +39,7 @@ class Solicitacao extends BaseController {
             $data['produtos'] = $this->solicitacao->listarsolicitacaos($estoque_solicitacao_id);
         }
 //        echo "<pre>";
-//        var_dump($data['produtos']);
+//        var_dump($data['produtos']);die;
         $this->loadView('estoque/solicitacaoitens-form', $data);
     }
 
@@ -169,7 +169,11 @@ class Solicitacao extends BaseController {
             $data['mensagem'] = 'Erro ao Faturar.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
-        echo "<script type='text/javascript'> window.close(); </script>";
+        echo   "<script type='text/javascript'> 
+                    window.close();
+                </script>";
+//                            window.self.close();
+
     }
 
     function excluirsolicitacao($estoque_solicitacao_itens_id, $estoque_solicitacao_id) {
@@ -206,6 +210,25 @@ class Solicitacao extends BaseController {
         
         $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
         $this->pesquisar();
+    }
+
+    function liberarsolicitacaofaturar($estoque_solicitacao_id) {
+
+        $this->solicitacao->liberarsolicitacao($estoque_solicitacao_id);
+        $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
+        $valortotal = 0;
+        foreach ($data['valor_total'] as $item){
+        //calcula valor total
+            $v = (float) $item->valor_venda;
+            $a = (int) str_replace('.', '', $item->quantidade);
+            $preco = (float) $a * $v;
+            $valortotal += $preco;
+        }
+        
+        $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
+        $this->faturarsolicitacao($estoque_solicitacao_id);
+        
+        
     }
 
     function fecharsolicitacao($estoque_solicitacao_id) {

@@ -31,8 +31,8 @@
                 <td height="30" colspan="2" class="tc"><strong></strong></td>
                 <td height="30" colspan="2" class="tc"><strong></strong></td>
                 <td height="30" colspan="2" class="tc"><strong></strong></td>
-                <td height="30" colspan="1" class="tc"><strong></strong></td>
-                <td height="30" colspan="2" class="tc"><strong></strong></td>
+                <td height="30" colspan="1" class="tc"><strong><? echo $empresa[0]->inscricao_estadual; ?></strong></td>
+                <td height="30" colspan="2" class="tc"><strong><? echo $empresa[0]->cnpj; ?></strong></td>
             </tr>
             <tr>
                 <td colspan="8" align="center" style="text-align:center;font-size: 10px;"><strong> DESTINATÁRIO/REMETENTE</strong></td>
@@ -45,7 +45,7 @@
             <tr>
                 <td height="16" colspan="5" class="tc"><strong><?= $destinatario[0]->nome ?></strong></td>
                 <td colspan="2" class="tc"><strong><?= $destinatario[0]->cnpj ?></strong></td>
-                <td colspan="1" class="tc"><strong></strong></td>
+                <td colspan="1" class="tc"><strong><?= date("d/m/Y");?></strong></td>
             </tr>
 
             <tr>
@@ -58,7 +58,7 @@
                 <td colspan="5" class="tc"><strong><?= $destinatario[0]->logradouro ?></strong></td>
                 <td class="tc"><strong><?= $destinatario[0]->bairro ?></strong></td>
                 <td class="tc"><strong><?= $destinatario[0]->cep ?></strong></td>
-                <td class="tc"><strong></strong></td>
+                <td class="tc"><strong><?= date("d/m/Y", strtotime($destinatario[0]->data_fechamento));?></strong></td>
             </tr>
             <tr>
                 <td colspan="3" class="ti">MUNICIPIO</td>
@@ -71,8 +71,8 @@
                 <td colspan="3" class="tc"><strong><?= $destinatario[0]->municipio ?></strong></td>
                 <td colspan="2" class="tc"><strong><?= $destinatario[0]->telefone ?></strong></td>
                 <td class="tc"><strong><?= $destinatario[0]->estado ?></strong></td>
-                <td class="tc"><strong></strong>
-                <td class="tc"><strong></strong></td>
+                <td class="tc"><strong><?= $destinatario[0]->inscricao_estadual ?></strong>
+                <td class="tc"><strong><?= date("H:i", strtotime($destinatario[0]->data_fechamento));?></strong></td>
             </tr>
             <tr>
                 <td colspan="8" align="center" style="text-align:center;font-size: 10px;"><strong> DADOS DO PRODUTO</strong></td>
@@ -116,7 +116,7 @@
 
                     <td colspan="1" class="semborda"><strong></strong></td>
                     <td colspan="1" class="semborda"><strong></strong></td>
-                    <td colspan="1" class="semborda"><strong></strong></td>
+                    <td colspan="1" class="semborda"><strong><?= $item->unidade ?></strong></td>
                     
                     <?
                     $v = (float) $item->valor_venda;
@@ -125,9 +125,9 @@
                     $valortotal += $preco;
                     ?>
 
-                    <td colspan="1" class="semborda"><strong><?= $item->valor_venda ?></strong></td>
-                    <td colspan="1" class="semborda"><strong><?= $item->descricao ?></strong></td>
-                    <td colspan="1" class="semborda"><strong><?= $preco ?></strong></td>
+                    <td colspan="1" class="semborda"><strong>R$ <?= number_format($item->valor_venda, 2, '.', ',')?></strong></td>
+                    <td colspan="1" class="semborda"><strong>R$ <?= number_format($preco, 2, '.', ',')?></strong></td>
+                    <td colspan="1" class="semborda"><strong></strong></td>
                     <td colspan="1" class="semborda"><strong></strong></td>
 
                 </tr>
@@ -156,7 +156,7 @@
                 <td colspan="1" class="tc"><strong></strong></td>
 
                 <td colspan="1" class="tc"><strong></strong></td>
-                <td colspan="3" class="tc"><strong><?=$valortotal?></strong></td>
+                <td colspan="3" class="tc"><strong>R$ <?= number_format($valortotal, 2, '.', ',')?></strong></td>
             </tr>
             <tr class="tic">
                 <td width="20%" height="13" class="tic">VALOR DO FRETE</td>

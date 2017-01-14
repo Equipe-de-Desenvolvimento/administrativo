@@ -101,7 +101,7 @@
                         <label>Saida</label>
                     </dt>
                     <dd>
-                        <input type="checkbox" name="saida"/>
+                        <input type="checkbox" name="saida" <? if(@$obj->_saida == 't'){ echo 'checked';}?>/>
                     </dd>
 
                     
