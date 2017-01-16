@@ -89,8 +89,8 @@
                                         </div>
                                     </td>
                                     <?}?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
-                                            <a href="<?= base_url() ?>estoque/solicitacao/imprimirliberada/<?= $item->estoque_solicitacao_setor_id ?>">Imprimir</a>
+                                    <td class="<?php echo $estilo_linha; ?>" width="90px;"><div class="bt_link" style="min-width: 90px">                                
+                                            <a href="<?= base_url() ?>estoque/solicitacao/imprimirliberada/<?= $item->estoque_solicitacao_setor_id ?>" style="min-width: 90px">Imprimir P.</a>
                                         </div>
                                     </td>
                             <?  }
@@ -104,16 +104,20 @@
         }
         if ($item->situacao == 'FECHADA') {
             ?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
-                                            <a href="<?= base_url() ?>estoque/solicitacao/imprimir/<?= $item->estoque_solicitacao_setor_id ?>">Imprimir</a>
+                                    <td class="<?php echo $estilo_linha; ?>" width="90px;"><div class="bt_link" style="min-width: 90px">                                  
+                                            <a href="<?= base_url() ?>estoque/solicitacao/imprimir/<?= $item->estoque_solicitacao_setor_id ?>" style="min-width: 90px">Imprimir S.</a>
+                                        </div>
+                                    </td>
+                                    
+                                    
+                                    <td class="<?php echo $estilo_linha; ?>" width="90px;"><div class="bt_link" style="min-width: 90px">                                
+                                            <a href="<?= base_url() ?>estoque/solicitacao/imprimirliberada/<?= $item->estoque_solicitacao_setor_id ?>" style="min-width: 90px">Imprimir P.</a>
                                         </div>
                                     </td>
                                     
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;">  <div class="bt_link">                                
                                             <a href="<?= base_url() ?>estoque/solicitacao/carregarnotafiscal/<?= $item->estoque_solicitacao_setor_id ?>">N. Fiscal</a>
                                         </div>
-                                    </td>
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;">
                                     </td>
                         <? } ?>
                             </tr>
@@ -136,6 +140,14 @@
     </div>
 
 </div> <!-- Final da DIV content -->
+<style>
+    .bt_link{
+        min-width: 90px;
+    }
+    .bt_link a {
+        text-align: center;        
+    }
+</style>
 <script type="text/javascript">
 
     $(function () {
