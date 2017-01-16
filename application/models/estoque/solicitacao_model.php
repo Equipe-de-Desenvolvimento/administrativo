@@ -33,6 +33,19 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
+    
+    function listadadossolicitacaoliberada($estoque_solicitacao_id) {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('ec.*, m.estado, m.nome as municipio, esc.data_fechamento, sf.desconto, sf.valor_total');
+        $this->db->from('tb_estoque_solicitacao_cliente esc');
+        $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
+        $this->db->join('tb_municipio m', 'm.municipio_id = ec.municipio_id', 'left');
+        $this->db->join('tb_estoque_solicitacao_faturamento sf', 'sf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id', 'left');
+        $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('esc.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
 
     function listarclientes() {
         $operador_id = $this->session->userdata('operador_id');
@@ -85,7 +98,9 @@ class solicitacao_model extends Model {
                            esi.quantidade, esi.exame_id, 
                            esi.valor as valor_venda, 
                            eu.descricao as unidade, 
-                           ep.estoque_produto_id');
+                           ep.estoque_produto_id,
+                           ep.codigo,
+                           ep.ncm');
         $this->db->from('tb_estoque_solicitacao_itens esi');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id', 'left');
         $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id = ep.unidade_id', 'left');
@@ -127,18 +142,21 @@ class solicitacao_model extends Model {
 
     function empresa() {
         $empresa = $this->session->userdata('empresa_id');
-        $this->db->select('empresa_id,
-                            nome,
-                            cnpj,
-                            cep,
-                            razao_social,
-                            logradouro,
-                            bairro,
-                            telefone,
-                            inscricao_estadual,
-                            numero');
-        $this->db->from('tb_empresa');
+        $this->db->select('e.empresa_id,
+                            e.nome as empresa,
+                            e.cnpj,
+                            e.cep,
+                            e.razao_social,
+                            e.logradouro,
+                            e.bairro,
+                            e.telefone,
+                            e.inscricao_estadual,
+                            m.estado,
+                            m.nome as municipio,
+                            e.numero');
+        $this->db->from('tb_empresa e');
         $this->db->where('empresa_id', $empresa);
+        $this->db->join('tb_municipio m', 'm.municipio_id = e.municipio_id', 'left');
         $return = $this->db->get();
         return $return->result();
     }
@@ -302,9 +320,12 @@ class solicitacao_model extends Model {
 
     function listaritemliberado($estoque_solicitacao_id) {
         $this->db->select('sc.estoque_solicitacao_setor_id,
-                          p.descricao,
+                          p.descricao as produto,
+                          p.codigo,
+                          p.ncm,
                           u.descricao as unidade,
-                          si.quantidade as quantidade_solicitada');
+                          si.quantidade as quantidade_solicitada,
+                          si.valor');
         $this->db->from('tb_estoque_solicitacao_cliente sc');
         $this->db->join('tb_estoque_solicitacao_itens si', 'si.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id', 'left');
         $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id');
@@ -379,6 +400,26 @@ class solicitacao_model extends Model {
             $this->db->where('ec.nome ilike', "%" . $args['nome'] . "%");
         }
         return $this->db;
+    }
+
+    function listarsolicitacaoimpressao($estoque_solicitacao_id) {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('es.estoque_solicitacao_setor_id,
+                            es.cliente_id,
+                            ec.nome as cliente,
+                            ec.saida,
+                            es.data_cadastro,
+                            es.faturado,
+                            es.situacao');
+        $this->db->from('tb_estoque_solicitacao_cliente es');
+        $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = es.cliente_id');
+        $this->db->join('tb_estoque_operador_cliente oc', 'oc.cliente_id = es.cliente_id');
+        $this->db->where('es.ativo', 'true');
+        $this->db->where('es.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('oc.operador_id', $operador_id);
+        $this->db->where('oc.ativo', 't');
+        $return = $this->db->get();
+        return $return->result();
     }
 
     function listarsolicitacao($estoque_solicitacao_id) {
@@ -508,6 +549,7 @@ class solicitacao_model extends Model {
             $this->db->set('faturado', 't');
             $this->db->where('estoque_solicitacao_setor_id', $_POST['estoque_solicitacao_id']);
             $this->db->update('tb_estoque_solicitacao_cliente');
+            
             $erro = $this->db->_error_message();
             if (trim($erro) != "") { // erro de banco
                 return false;

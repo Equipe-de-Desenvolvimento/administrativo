@@ -1,54 +1,677 @@
-<HEAD>
-    <meta charset="utf-8">
-</HEAD>
-<center><table>
-        <tbody>
+<style>
+    .linha_abaixo{
+        border-bottom: 1px solid black;
+    }
+    .tabela_principal{
+        margin: 0 0 -30pt 0;
+    }
+    .cabecalho_principal{
+        font-size: 10pt;
+        margin-bottom: -20pt;
+        margin-top: -15pt;
+    }
+    .cabecalho_secundario{
+        font-size:10pt;
+        margin-bottom: -10pt;
+    }
+    .negrito{
+        font-weight: bolder;
+    }
+    .dados_cabecalho{
+        font-size: 10pt;
+    }
+    .corpo{
+        margin-top: 5pt;
+        min-height: 150pt;
+    }
+    .tabela_fim{
+        font-size: 9pt;
+    }
+</style>
+
+<meta charset="utf-8">
+
+<div>
+    <table style="width: 100%;">
         <tr>
-                <td colspan="2"  ><font size = -1>SETOR : <? echo $nome[0]->nome ?> - <? echo $estoque_solicitacao_id?> </font></td>
-                <td ><font size = -1><center></center></font></td>
-        <td width="30px">&nbsp;</td>
-        <tr>
-            <td colspan="2"  ><font size = -1>DATA SAIDA.: <? echo date('d/m/y', strtotime(substr($nome[0]->data_cadastro, 0, 10))); ?> </font></td>
-            <td ><font size = -1><center></center></font></td>
-        <td width="30px">&nbsp;</td>
-        <tr>
-            <td colspan="2"  ><font size = -1>SOL.: <? echo $nome[0]->solicitante ?></font></td>
-            <td ><font size = -1><center></center></font></td>
-        <td width="30px">&nbsp;</td>
-        <tr>
-            <td colspan="2"  ><font size = -1>LIB.: <? echo $nome[0]->liberou ?></font></td>
-            <td ><font size = -1><center></center></font></td>
-        <td width="30px">&nbsp;</td>
-        </tbody>
-    </table></center>
-<center><table border="1">
-        <thead>
-            <tr>
-                <td class="tabela_teste"><font size="-2">Produto</td>
-                <td class="tabela_teste"><font size="-2">QTDE/SOLIC.</td>
-                <td class="tabela_teste"><font size="-2">UNID</td>
-                <td class="tabela_teste"><font size="-2">SAÍDA</td>
-    <!--            <td class="tabela_teste"><font size="-2">SALDO/ESTOQUE</td>-->
-                <td class="tabela_teste"><font size="-2">ESTOQUE ATUAL</td>
-<!--                <td class="tabela_teste"><font size="-2">Validade</th>-->
-            </tr>
-        </thead>
-        <tbody>
-            <? foreach ($produtossaida as $item) : ?>
-                <tr>
-                    <td><font size="-2"><?= utf8_decode($item->descricao); ?></td>
-                    <td><font size="-2"><?= utf8_decode($item->quantidade_solicitada); ?></td>
-                    <td><font size="-2"><?= utf8_decode($item->unidade); ?></td>
-                    <td><font size="-2"><?= utf8_decode($item->quantidade); ?></td>
-                    <td><font size="-2"><?= utf8_decode($item->saldo); ?></td>
-<!--                    <td><font size="-2"></td>-->
-<!--                    <td><font size="-2"><?= date('d/m/y', strtotime(substr($item->validade, 0, 10))); ?></td>-->
-                </tr>
-            <? endforeach; ?>
+            <!-- LADO ESQUERDO -->
+            <td>
+                <div style="float: left;">
+                <table class="tabela_principal">
 
-        </tbody>
+                    <!-- PRIMEIRO CABECALHO -->
+                    <tr>
+                        <td>
+                            <img src="" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td>
+                            <table class="cabecalho_principal" cellspacing="8" cellpadding="4">
+                                <tr>
+                                    <td colspan="6"><?= @$empresa[0]->empresa; ?></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="negrito">Fone: </span> <?= @$empresa[0]->telefone; ?></td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td><span class="negrito">Fax: </span> <?= @$empresa[0]->fax; ?></td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td><span class="negrito">Cod: </span> <?= @$empresa[0]->cod; ?></td>
+                                    <td>&nbsp;&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><span class="negrito">Email: </span><?= @$empresa[0]->email; ?></td>
+                                    <td colspan="3"><span class="negrito">Data de Saida: </span><?= date("d/m/Y", strtotime($destinatario[0]->data_fechamento)); ?></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="linha_abaixo" colspan="3" height="2">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
 
-    </table></center>
+                    <!-- SEGUNDO CABECALHO -->
+                    <tr>
+                        <td colspan="3">
+                            <table class="cabecalho_secundario" cellspacing="2" cellpadding="4">
+                                <tr>
+                                    
+                                    <td colspan="4"><span class="negrito">Cliente: </span><span class="dados_cabecalho"><?= @$destinatario[0]->nome; ?></span></td>
+                                    <td colspan="2">&nbsp;&nbsp;</td>
+
+                                    <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></td>
+                                    
+                                </tr>
+                                <tr>
+
+                                    <td colspan="3"><span class="negrito">End: </span>
+                                        <span class="dados_cabecalho">
+                                        <?= @$destinatario[0]->logradouro; ?> <?= @$destinatario[0]->numero; ?>
+                                        </span>
+                                    </td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">Fone: </span><span class="dados_cabecalho"><?= @$destinatario[0]->telefone; ?></span></td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td><span class="negrito">Bairro: </span><span class="dados_cabecalho"><?= @$destinatario[0]->bairro; ?></span></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">Cid: </span><span class="dados_cabecalho"><?= @$destinatario[0]->municipio; ?></span></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">UF: </span><span class="dados_cabecalho"><?= @$destinatario[0]->estado; ?></span></td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td colspan="9"><span class="negrito">Vendedor: </span>
+                                        <span class="dados_cabecalho">CESINHA AUGUSTO PAIVA NETOSDASDASDAS</span>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td colspan="4"><span class="negrito">Entregador: </span>
+                                        <span class="dados_cabecalho">ENTREGADOR TAL TAL TAL</span>
+                                    </td>
+                                    <td colspan="5"><span class="negrito">Rota: </span>
+                                        <span class="dados_cabecalho">DIVERSIFICADAMENTE DIVERSO</span>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3"  class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    
+                    <!-- CORPO -->
+                    <tr>
+                        <td colspan="3">
+                            <div class="corpo">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>PRODUTOS</td>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                            <td>QUANTIDADE</td>
+                                        </tr>
+                                    <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
+                                    
+                                        <? foreach ($produtossaida as $value) :?>
+                                        <tr> 
+                                            <td><?= @$value->produto; ?></td>
+                                            <td></td>
+                                            <td><?= @$value->quantidade_solicitada; ?></td>
+                                        </tr>
+                                        <? endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td colspan="3" class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+
+                    <!-- OBSERVAÇÕES -->
+                    <tr>
+                        <td colspan="3">Obs: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr> 
+
+                    <tr>
+                        <td colspan="3"  class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    
+                    <!-- RODAPE -->
+                    <tr>
+                        <td colspan="3">
+                            <table>
+                                <tr>
+                                    <!--RODAPE PARTE 1 -->
+
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+
+                                                    <table>
+                                                        <tr>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                                            <td colspan="5" style="padding-bottom: 8pt">
+                                                                <span class="negrito">Comprovante do Movimento</span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Cliente: </span>
+                                                            </td>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td colspan="5">
+                                                                LABORATORIO ROPE
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Data: </span>
+                                                            </td>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                                            <td>
+                                                                12/02/2019
+                                                            </td>
+
+                                                            <td>&nbsp;&nbsp;</td>
+
+                                                            <td>
+                                                                <span class="negrito">Cód: </span>
+                                                            </td>
+
+                                                            <td>
+                                                                122019
+                                                            </td>
+
+                                                            <td>&nbsp;&nbsp;</td>
+
+                                                            <td>
+                                                                <span class="negrito">Venc: </span>
+                                                            </td>
+
+                                                            <td>
+                                                                12/02/2019
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Qtd.Tot: </span>
+                                                            </td>
+                                                            <td>1</td>
+
+                                                            <td align="right">
+                                                                <span class="negrito" style="text-align: right;">Peso bt: </span>
+                                                            </td>
+                                                            <td></td>    
+                                                            <td>
+                                                                <span style="margin-left: -5pt;">0,00</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="negrito">Peso liq: </span>
+                                                            </td>
+
+                                                            <td></td>
+                                                            <td colspan="3">0,00</td>
+                                                        </tr>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+
+                                                    <table style="height: 40pt">
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Dados do Movimento</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                VENDA
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <!--RODAPE PARTE 2 -->
+                                    <td colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    F.Pagamento: 28 DIAS <br>
+                                                    <div style="margin-bottom: 15pt;"></div>  
+                                                </td>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td style="width: 250pt;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;"> </td>
+                                            </tr>
+                                        </table>
+                                    </td>   
+                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <!--RODAPE PARTE 3 -->
+                                    <td colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td style="width: 75pt;"></td>
+                                                <td style="width: 75pt;"></td>
+                                                <td style="width: 75pt;"></td>
+                                                <td style="width: 75pt;">
+                                                    <span class="negrito">Assinatura</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 75pt; height:30pt;" colspan="4"></td>
+                                            </tr>
+                                        </table>
+                                    </td>   
+                                    <td>
+                                        <table class="tabela_fim">
+                                            <tr>
+                                                <td><span class="negrito">Usuário Emissão:</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="negrito">Data/Hora Emissão:</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>12/12/2019 19:52:07</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr> 
+
+                </table>
+                </div>
+            </td>
+            
 
 
+            <!-- LADO DIREITO -->
+            <td>
+                <div style="float: right;">
+                <table class="tabela_principal">
 
+                    <!-- PRIMEIRO CABECALHO -->
+                    <tr>
+                        <td>
+                            <img src="" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td>
+                            <table class="cabecalho_principal" cellspacing="8" cellpadding="1">
+                                <tr>
+                                    <td colspan="6">DIAGNOSTIC</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="negrito">Fone: </span> (85) 0000-0000</td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td><span class="negrito">Fax: </span> (85) 0000-0000</td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td><span class="negrito">Cod: </span> 1066</td>
+                                    <td>&nbsp;&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><span class="negrito">Email: </span>lasqueitu@gmail.com</td>
+                                    <td colspan="3"><span class="negrito">Data de Saida: </span>12/12/2017</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="linha_abaixo" colspan="3" height="2">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+
+                    <!-- SEGUNDO CABECALHO -->
+                    <tr>
+                        <td colspan="3">
+                            <table class="cabecalho_secundario" cellspacing="2" cellpadding="1">
+                                <tr>
+                                    
+                                    <td colspan="4"><span class="negrito">Cliente: </span><span class="dados_cabecalho">SDFOSIDJJFOSIJJFOS</span></td>
+                                    <td colspan="2">&nbsp;&nbsp;</td>
+
+                                    <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho">000000000000000</span></td>
+                                    
+                                </tr>
+                                <tr>
+
+                                    <td colspan="3"><span class="negrito">End: </span><span class="dados_cabecalho">rua das acacias, n° 199</span></td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">Fone: </span><span class="dados_cabecalho">(85) 0000-0000</span></td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho">65.756-145</span></td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td><span class="negrito">Bairro: </span><span class="dados_cabecalho">CENTRO</span></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">Cid: </span><span class="dados_cabecalho">FORTALEZA</span></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                    <td><span class="negrito">UF: </span><span class="dados_cabecalho">CE</span></td>
+                                    <td>&nbsp;&nbsp;</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td colspan="9"><span class="negrito">Vendedor: </span>
+                                        <span class="dados_cabecalho">CESINHA AUGUSTO PAIVA NETOSDASDASDAS</span>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td colspan="4"><span class="negrito">Entregador: </span>
+                                        <span class="dados_cabecalho">ENTREGADOR TAL TAL TAL</span>
+                                    </td>
+                                    <td colspan="5"><span class="negrito">Rota: </span>
+                                        <span class="dados_cabecalho">DIVERSIFICADAMENTE DIVERSO</span>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3"  class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    
+                    <!-- CORPO -->
+                    <tr>
+                        <td colspan="3">
+                            <div class="corpo">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>PRODUTOS</td>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                            <td>QUANTIDADE</td>
+                                        </tr>
+                                    <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
+                                        <tr>
+                                            <td>produto 1</td>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                            <td>7</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td colspan="3" class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+
+                    <!-- OBSERVAÇÕES -->
+                    <tr>
+                        <td colspan="3">Obs: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr> 
+
+                    <tr>
+                        <td colspan="3"  class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    
+                    <!-- RODAPE -->
+                    <tr>
+                        <td colspan="3">
+                            <table>
+                                <tr>
+                                    <!--RODAPE PARTE 1 -->
+
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+
+                                                    <table>
+                                                        <tr>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                                            <td colspan="5" style="padding-bottom: 8pt">
+                                                                <span class="negrito">Comprovante do Movimento</span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Cliente: </span>
+                                                            </td>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td colspan="5">
+                                                                LABORATORIO ROPE
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Data: </span>
+                                                            </td>
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                                            <td>
+                                                                12/02/2019
+                                                            </td>
+
+                                                            <td>&nbsp;&nbsp;</td>
+
+                                                            <td>
+                                                                <span class="negrito">Cód: </span>
+                                                            </td>
+
+                                                            <td>
+                                                                122019
+                                                            </td>
+
+                                                            <td>&nbsp;&nbsp;</td>
+
+                                                            <td>
+                                                                <span class="negrito">Venc: </span>
+                                                            </td>
+
+                                                            <td>
+                                                                12/02/2019
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Qtd.Tot: </span>
+                                                            </td>
+                                                            <td>1</td>
+
+                                                            <td align="right">
+                                                                <span class="negrito" style="text-align: right;">Peso bt: </span>
+                                                            </td>
+                                                            <td></td>    
+                                                            <td>
+                                                                <span style="margin-left: -5pt;">0,00</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="negrito">Peso liq: </span>
+                                                            </td>
+
+                                                            <td></td>
+                                                            <td colspan="3">0,00</td>
+                                                        </tr>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+
+                                                    <table style="height: 40pt">
+                                                        <tr>
+                                                            <td>
+                                                                <span class="negrito">Dados do Movimento</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                VENDA
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <!--RODAPE PARTE 2 -->
+                                    <td colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    F.Pagamento: 28 DIAS <br>
+                                                    <div style="margin-bottom: 15pt;"></div>  
+                                                </td>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td style="width: 250pt;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;"> </td>
+                                            </tr>
+                                        </table>
+                                    </td>   
+                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <!--RODAPE PARTE 3 -->
+                                    <td colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td style="width: 75pt;"></td>
+                                                <td style="width: 75pt;"></td>
+                                                <td style="width: 75pt;"></td>
+                                                <td style="width: 75pt;">
+                                                    <span class="negrito">Assinatura</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 75pt; height:30pt;" colspan="4"></td>
+                                            </tr>
+                                        </table>
+                                    </td>   
+                                    <td>
+                                        <table class="tabela_fim">
+                                            <tr>
+                                                <td><span class="negrito">Usuário Emissão:</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="negrito">Data/Hora Emissão:</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>12/12/2019 19:52:07</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr> 
+
+                </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

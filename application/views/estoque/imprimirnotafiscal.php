@@ -110,7 +110,7 @@
                 $valortotal = 0;
                 foreach ($produtos as $item){ ?>
                 <tr>
-                    <td class="semborda"><strong><?= $item->estoque_produto_id ?></strong></td>
+                    <td class="semborda"><strong><?= $item->codigo ?></strong></td>
                     <td colspan="1" class="semborda"><strong><?= $item->descricao ?></strong></td>
                     <td height="16" class="semborda"><strong><?= $item->quantidade ?></strong></td>
 

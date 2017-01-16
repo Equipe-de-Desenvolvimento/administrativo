@@ -56,7 +56,7 @@
             <legend>Cadastro de Produtos</legend>
             <div>
                 <label>Produtos</label>
-                <select name="produto_id" id="produto_id" class="size4">
+                <select name="produto_id" id="produto_id" class="size4" required>
                     <option value=''>SELECIONE</option>
                     <?
                     foreach ($produtos as $value) :

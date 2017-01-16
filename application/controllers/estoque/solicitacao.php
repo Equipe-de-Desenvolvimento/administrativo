@@ -58,6 +58,35 @@ class Solicitacao extends BaseController {
         $this->loadView('estoque/saida-form', $data);
     }
 
+    function carregarimpressoes($estoque_solicitacao_id) {
+
+        $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
+        $data['solicitacao'] = $this->solicitacao->listarsolicitacaoimpressao($estoque_solicitacao_id);
+        $this->loadView('estoque/carregarimpressoes', $data);
+    }
+
+    function impressoes() {
+        $estoque_solicitacao_id = $data['estoque_solicitacao_id'];
+        if($_POST['impressao'] == 'pedido_simples'){
+            $this->imprimirliberada($estoque_solicitacao_id);
+        }
+        elseif($_POST['impressao'] == 'pedido'){
+            $this->imprimirliberada($estoque_solicitacao_id);
+        }
+        elseif($_POST['impressao'] == 'saida_simples'){
+            $this->imprimir($estoque_solicitacao_id);
+        }
+        elseif($_POST['impressao'] == 'saida'){
+            $this->imprimir($estoque_solicitacao_id);
+        }
+        elseif($_POST['impressao'] == 'nota'){
+            $this->carregarnotafiscal($estoque_solicitacao_id);
+        }
+        elseif($_POST['impressao'] == 'recibo'){
+            $this->carregarnotafiscal($estoque_solicitacao_id);
+        }
+    }
+
     function imprimirsaida($estoque_solicitacao_id) {
 
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
@@ -76,18 +105,23 @@ class Solicitacao extends BaseController {
     function imprimir($estoque_solicitacao_id) {
 
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
-//        $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
+        $data['empresa'] = $this->solicitacao->empresa();
+        $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['nome'] = $this->solicitacao->solicitacaonome($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
+//        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
         $this->load->View('estoque/impressaosaida', $data);
     }
 
     function imprimirliberada($estoque_solicitacao_id) {
-
+        
+        $data['empresa'] = $this->solicitacao->empresa();
+        $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
-//        $data['empresa'] = $this->guia->listarempresa($_POST['empresa']);
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+        
+//        echo '<pre>';        var_dump($data);die;
         $this->load->View('estoque/impressaoliberada', $data);
     }
 
@@ -103,9 +137,7 @@ class Solicitacao extends BaseController {
         if ($data['contador'] > 0) {
             $data['produtos'] = $this->solicitacao->listarprodutositem($estoque_solicitacao_itens_id);
         }
-
-//        var_dump($data['contador']);
-//        die;
+        
         $data['contadorsaida'] = $this->solicitacao->contadorsaidaitem($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
         $this->loadView('estoque/saidaitens-form', $data);
@@ -118,7 +150,6 @@ class Solicitacao extends BaseController {
 //        $_POST['txtqtde'] = (int) $_POST['txtqtde'];
 //        $_POST['qtdedisponivel'] = (int) $_POST['qtdedisponivel'];
 //        var_dump($_POST['qtdedisponivel']); die;
-
         if ($_POST['produto_id'] == '') {
             $data['mensagem'] = 'Insira um produto valido.';
             $this->session->set_flashdata('message', $data['mensagem']);
@@ -172,7 +203,6 @@ class Solicitacao extends BaseController {
         echo   "<script type='text/javascript'> 
                     window.close();
                 </script>";
-//                            window.self.close();
 
     }
 
@@ -196,10 +226,11 @@ class Solicitacao extends BaseController {
     }
 
     function liberarsolicitacao($estoque_solicitacao_id) {
-
+        
         $this->solicitacao->liberarsolicitacao($estoque_solicitacao_id);
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
         $valortotal = 0;
+        
         foreach ($data['valor_total'] as $item){
         //calcula valor total
             $v = (float) $item->valor_venda;
@@ -209,7 +240,7 @@ class Solicitacao extends BaseController {
         }
         
         $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
-        $this->pesquisar();
+        redirect(base_url() . "estoque/solicitacao");
     }
 
     function liberarsolicitacaofaturar($estoque_solicitacao_id) {
