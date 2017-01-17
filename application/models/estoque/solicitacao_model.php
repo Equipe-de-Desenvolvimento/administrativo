@@ -432,6 +432,21 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function listarsolicitacaoclientetransportadora($estoque_solicitacao_id) {
+        $this->db->select('st.solicitacao_transportadora_id,
+                            st.volume,
+                            st.peso,
+                            st.forma,
+                            st.transportadora_id,
+                            et.descricao');
+        $this->db->from('tb_estoque_solicitacao_cliente_transportadora st');
+        $this->db->join('tb_estoque_transportadora et', 'et.estoque_transportadora_id = st.transportadora_id', 'left');
+        $this->db->where('st.ativo', 'true');
+        $this->db->where('st.solicitacao_cliente_id', $estoque_solicitacao_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function carregarsolicitacao($estoque_solicitacao_id) {
         $this->db->select('estoque_solicitacao_id,
                             descricao');
@@ -672,6 +687,36 @@ class solicitacao_model extends Model {
         else
             return 0;
     }
+
+    function gravarsolicitacaotransportadora() {
+        try {
+            /* inicia o mapeamento no banco */
+            $this->db->set('transportadora_id', $_POST['transportadora_id']);
+            $this->db->set('solicitacao_cliente_id', $_POST['solicitacao_cliente_id']);
+            $this->db->set('volume', $_POST['txtvolume']);
+            $this->db->set('peso', $_POST['peso']);
+            $this->db->set('forma', $_POST['txtforma']);
+            
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+            $solicitacaotransportadora_id = $_POST['solicitacaotransportadora_id'];      
+            if($solicitacaotransportadora_id == ''){ //insert
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_estoque_solicitacao_cliente_transportadora');
+            }    
+            else { //update
+                $this->db->set('data_atualizacao', $horario);
+                $this->db->set('operador_atualizacao', $operador_id);
+                $this->db->where('solicitacao_transportadora_id', $solicitacaotransportadora_id);
+                $this->db->update('tb_estoque_solicitacao_cliente_transportadora');
+            }
+            
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
 
     function gravaritens() {
         try {

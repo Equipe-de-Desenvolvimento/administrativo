@@ -56,7 +56,40 @@ ALTER TABLE ponto.tb_estoque_produto ADD COLUMN ncm character varying(20);
 ALTER TABLE ponto.tb_estoque_produto ADD COLUMN procedimento_id integer;
 ALTER TABLE ponto.tb_estoque_produto RENAME COLUMN procedimento_id TO codigo;
 
+
 -- Dia 14/01/2017
+
 ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN inscricao_estadual character varying(20);
 ALTER TABLE ponto.tb_estoque_produto ALTER COLUMN codigo TYPE character varying;
 ALTER TABLE ponto.tb_empresa ADD COLUMN inscricao_estadual character varying(20);
+
+
+-- Dia 17/01/2017
+CREATE TABLE ponto.tb_estoque_transportadora
+(
+  estoque_transportadora_id serial NOT NULL,
+  descricao character varying(200),
+  ativo boolean DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_transportadora_pkey PRIMARY KEY (estoque_transportadora_id)
+);
+
+CREATE TABLE ponto.tb_estoque_solicitacao_cliente_transportadora
+(
+  solicitacao_transportadora_id serial NOT NULL,
+  transportadora_id integer,
+  solicitacao_cliente_id integer,
+  volume character varying(200),
+  peso numeric(10,2),
+  forma character varying(200),
+  ativo boolean DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_solicitacao_transportadora_pkey PRIMARY KEY (solicitacao_transportadora_id)
+);
+

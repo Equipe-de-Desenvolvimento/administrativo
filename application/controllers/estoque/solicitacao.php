@@ -66,24 +66,24 @@ class Solicitacao extends BaseController {
     }
 
     function impressoes() {
-        $estoque_solicitacao_id = $data['estoque_solicitacao_id'];
+        $estoque_solicitacao_id = $_POST['estoque_solicitacao_id'];
         if($_POST['impressao'] == 'pedido_simples'){
-            $this->imprimirliberada($estoque_solicitacao_id);
+            redirect(base_url() . "estoque/solicitacao/imprimirliberada/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'pedido'){
-            $this->imprimirliberada($estoque_solicitacao_id);
+            redirect(base_url() . "estoque/solicitacao/imprimirliberada/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'saida_simples'){
-            $this->imprimir($estoque_solicitacao_id);
+            redirect(base_url() . "estoque/solicitacao/imprimir/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'saida'){
-            $this->imprimir($estoque_solicitacao_id);
+            redirect(base_url() . "estoque/solicitacao/imprimir/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'nota'){
-            $this->carregarnotafiscal($estoque_solicitacao_id);
+            redirect(base_url() . "estoque/solicitacao/carregarnotafiscal/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'recibo'){
-            $this->carregarnotafiscal($estoque_solicitacao_id);
+            redirect(base_url() . "estoque/solicitacao/carregarnotafiscal/$estoque_solicitacao_id");
         }
     }
 
@@ -184,6 +184,22 @@ class Solicitacao extends BaseController {
         }
 
         redirect(base_url() . "estoque/solicitacao/carregarsolicitacao/$estoque_solicitacao_id");
+    }
+
+    function gravartransportadora($estoque_solicitacao_id) {
+        $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
+        $data['solicitacao_transportadora'] = $this->solicitacao->listarsolicitacaoclientetransportadora($estoque_solicitacao_id);
+        $data['solicitacao_transportadora'] = $data['solicitacao_transportadora'][0];
+        
+        $this->load->View('estoque/gravarsolicitacaotransportadora', $data);
+    }
+
+    function gravarsolicitacaotransportadora() {
+        
+        $this->solicitacao->gravarsolicitacaotransportadora();
+        echo   "<script type='text/javascript'> 
+                    window.close();
+                </script>";
     }
 
     function gravarfaturamento() {

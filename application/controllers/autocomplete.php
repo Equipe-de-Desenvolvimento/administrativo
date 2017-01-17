@@ -15,6 +15,7 @@ class Autocomplete extends Controller {
         $this->load->model('ambulatorio/exame_model', 'exame');
         $this->load->model('estoque/fornecedor_model', 'fornecedor_m');
         $this->load->model('estoque/produto_model', 'produto_m');
+        $this->load->model('estoque/transportadora_model', 'transportadora_m');
         $this->load->model('ambulatorio/laudo_model', 'laudo');
         $this->load->model('ponto/cargo_model', 'cargo');
         $this->load->model('ponto/setor_model', 'setor');
@@ -37,7 +38,22 @@ class Autocomplete extends Controller {
     function index() {
         
     }
-
+    
+    function solicitacaotransportadora() {
+        
+        if (isset($_GET['term'])) {
+            $result = $this->transportadora_m->autocompletetransportadora($_GET['term']);
+        } else {
+            $result = $this->transportadora_m->autocompletetransportadora();
+        }
+        foreach ($result as $item) {
+            $retorno['value'] = $item->descricao;
+            $retorno['id'] = $item->estoque_transportadora_id;
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+    }
+    
     function horariosambulatorio() {
 
         if (isset($_GET['exame'])) {

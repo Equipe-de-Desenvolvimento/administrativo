@@ -97,6 +97,9 @@
     <br>
     
 <div class="bt_link">                                  
+    <a onclick="javascript: window.open('<?= base_url() ?>estoque/solicitacao/gravartransportadora/<?= $estoque_solicitacao_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=750,height=400');">Transportadora</a>
+</div>                                        
+<div class="bt_link">                                  
     <a  href="<?= base_url() ?>estoque/solicitacao/pesquisar" onclick="javascript: var a = confirm('Deseja realmente Liberar e Faturar a solicitacao?'); if(a==true){window.open('<?= base_url() ?>estoque/solicitacao/liberarsolicitacaofaturar/<?= $estoque_solicitacao_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=1000,height=750')};">Liberar/Faturar</a>
 </div>                                        
 <div class="bt_link">                                  
