@@ -189,7 +189,9 @@ class Solicitacao extends BaseController {
     function gravartransportadora($estoque_solicitacao_id) {
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['solicitacao_transportadora'] = $this->solicitacao->listarsolicitacaoclientetransportadora($estoque_solicitacao_id);
-        $data['solicitacao_transportadora'] = $data['solicitacao_transportadora'][0];
+        if(count($data['solicitacao_transportadora']) > 0){
+            $data['solicitacao_transportadora'] = $data['solicitacao_transportadora'][0];
+        }
         
         $this->load->View('estoque/gravarsolicitacaotransportadora', $data);
     }
