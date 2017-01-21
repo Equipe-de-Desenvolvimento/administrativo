@@ -67,6 +67,27 @@ class produto_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
+    
+    function autocompleteestoquepedidolote($produto_id) {
+        
+        $this->db->select(' ee.validade,
+                            ee.estoque_entrada_id,
+                            ee.lote,
+                            sum(ep.quantidade) as total');
+        $this->db->from('tb_estoque_saldo ep');
+        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = ep.produto_id');
+        $this->db->join('tb_estoque_armazem ea', 'ea.estoque_armazem_id = ep.armazem_id');
+        $this->db->join('tb_estoque_entrada ee', 'ee.estoque_entrada_id = ep.estoque_entrada_id');
+        $this->db->where('p.estoque_produto_id', $produto_id);
+        $this->db->where('ep.ativo', 'true');
+        
+        $this->db->groupby('ee.validade, ee.lote, ee.estoque_entrada_id');
+        
+        $this->db->orderby('ee.validade');
+        $return = $this->db->get();
+        return $return->result();
+        
+    }
 
     function excluir($estoque_produto_id) {
 

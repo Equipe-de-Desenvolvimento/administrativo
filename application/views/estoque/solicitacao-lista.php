@@ -79,8 +79,17 @@
                                             
                                         </div>
                                     </td>
+                                    <? 
+                                    if ($item->transportadora == 'f'){ ?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;">
+                                        <div class="bt_link">                                  
+                                            <a onclick="javascript: window.open('<?= base_url() ?>estoque/solicitacao/gravartransportadora/<?= $item->estoque_solicitacao_setor_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=750,height=400');">Transportadora</a>
+                                        </div> 
+                                    </td>
                                     
-                                    <? } 
+                                    <? }
+                                    
+                                    } 
                                     
                                     if($item->faturado == 't' && $item->saida == 't'){?>
                                     
@@ -128,7 +137,7 @@
 </div> <!-- Final da DIV content -->
 <style>
     .bt_link{
-        min-width: 90px;
+        min-width:100px;
     }
     .bt_link a {
         text-align: center;        

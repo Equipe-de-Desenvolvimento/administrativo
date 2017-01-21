@@ -389,6 +389,7 @@ class solicitacao_model extends Model {
                             ec.saida,
                             es.data_cadastro,
                             es.faturado,
+                            es.transportadora,
                             es.situacao');
         $this->db->from('tb_estoque_solicitacao_cliente es');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = es.cliente_id');
@@ -690,6 +691,10 @@ class solicitacao_model extends Model {
 
     function gravarsolicitacaotransportadora() {
         try {
+            $this->db->set('transportadora', 't');
+            $this->db->where('estoque_solicitacao_setor_id', $_POST['solicitacao_cliente_id']);
+            $this->db->update('tb_estoque_solicitacao_cliente');
+            
             /* inicia o mapeamento no banco */
             $this->db->set('transportadora_id', $_POST['transportadora_id']);
             $this->db->set('solicitacao_cliente_id', $_POST['solicitacao_cliente_id']);
@@ -725,8 +730,14 @@ class solicitacao_model extends Model {
             $this->db->set('quantidade', $_POST['txtqtde']);
             $this->db->set('valor', $_POST['valor']);
             $this->db->set('produto_id', $_POST['produto_id']);
+            
+            if($_POST['lote'] != ''){
+                $this->db->set('entrada_id', $_POST['lote']);
+            }
+            
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
+            
             $this->db->set('data_cadastro', $horario);
             $this->db->set('operador_cadastro', $operador_id);
             $this->db->insert('tb_estoque_solicitacao_itens');

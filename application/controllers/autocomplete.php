@@ -337,6 +337,16 @@ class Autocomplete extends Controller {
         }
         echo json_encode($result);
     }
+    
+    function estoquepedidolote() {
+
+        if (isset($_GET['produto_id'])) {
+            $result = $this->produto_m->autocompleteestoquepedidolote($_GET['produto_id']);
+        } else {
+            $result = $this->produto_m->autocompleteestoquepedidolote();
+        }
+        echo json_encode($result);
+    }
 
     function procedimentoconveniogrupo() {
 

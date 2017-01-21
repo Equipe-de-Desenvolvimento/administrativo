@@ -12,14 +12,14 @@
                     <dd>
                         <input type="hidden" name="txtestoque_entrada_id" id="txtestoque_entrada_id" value="<?= @$obj->_estoque_entrada_id; ?>" />
                         <input type="hidden" name="txtproduto" id="txtproduto" value="<?= @$obj->_produto_id; ?>" />
-                        <input type="text" name="txtprodutolabel" id="txtprodutolabel" class="texto10" value="<?= @$obj->_produto; ?>" />
+                        <input type="text" name="txtprodutolabel" id="txtprodutolabel" class="texto10" value="<?= @$obj->_produto; ?>" required/>
                     </dd>
                     <dt>
                     <label>Fornecedor</label>
                     </dt>
                     <dd>
                         <input type="hidden" name="txtfornecedor" id="txtfornecedor" value="<?= @$obj->_fornecedor_id; ?>" />
-                        <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="texto10" value="<?= @$obj->_fornecedor; ?>" />
+                        <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="texto10" value="<?= @$obj->_fornecedor; ?>" required/>
                     </dd>
                     <dt>
                     <label>Armazem</label>
@@ -51,11 +51,19 @@
                     <dd>
                         <input type="text" id="nota" alt="integer" class="texto02" name="nota" value="<?= @$obj->_nota_fiscal; ?>" />
                     </dd>
+                    
                     <dt>
                     <label>Validade</label>
                     </dt>
                     <dd>
-                        <input type="text" id="validade" class="texto02" name="validade" value="<?= substr(@$obj->_validade, 8,2) . "/" . substr(@$obj->_validade, 5,2) . "/" . substr(@$obj->_validade, 0,4); ?>" />
+                        <input type="text" id="validade" class="texto02" name="validade" value="<? if( isset($obj->_validade) ){ echo date("d/m/Y", strtotime($obj->_validade)); } ?>" required/>
+                    </dd>
+                    
+                    <dt>
+                    <label>Lote</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="lote" class="texto02" name="lote" value="<?= @$obj->_nota_fiscal; ?>" required/>
                     </dd>
                  </dl>    
                 <hr/>

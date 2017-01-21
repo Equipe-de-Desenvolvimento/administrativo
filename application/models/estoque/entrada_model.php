@@ -541,9 +541,12 @@ class entrada_model extends Model {
             $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $_POST['compra'])));
             $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $_POST['quantidade'])));
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
+            $this->db->set('lote', $_POST['lote']);
+            
             if ($_POST['validade'] != "//") {
                 $this->db->set('validade', $_POST['validade']);
             }
+            
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 
