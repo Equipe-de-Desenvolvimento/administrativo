@@ -49,7 +49,7 @@
                         </td>
                         <td>
                             <table class="cabecalho_principal" cellspacing="8" cellpadding="4">
-<!--                                <tr>
+                                <tr>
                                     <td colspan="6"><?= @$empresa[0]->empresa; ?></td>
                                 </tr>
                                 <tr>
@@ -63,33 +63,6 @@
                                 <tr>
                                     <td colspan="3"><span class="negrito">Email: </span><?= @$empresa[0]->email; ?></td>
                                     <td colspan="3"><span class="negrito">Data de Saida: </span><?= date("d/m/Y", strtotime($destinatario[0]->data_fechamento)); ?></td>
-                                </tr>-->
-                                <tr>
-                                    <td colspan="4"><span class="negrito"><?= @$empresa[0]->empresa; ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td width="70">Cnpj: </td>
-                                    <td width="400"><?= @$empresa[0]->cnpj; ?></td>
-
-                                    <td width="70">Insc:</td>
-                                    <td width="400"><?= @$empresa[0]->inscricao_estadual; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Fone: </td>
-                                    <td><?= @$empresa[0]->telefone; ?></td>
-
-                                    <td >E-mail:</td>
-                                    <td colspan=""><?= @$empresa[0]->email; ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4"><?= @$empresa[0]->logradouro .', '.@$empresa[0]->numero .' - '. @$empresa[0]->bairro .' - '. @$empresa[0]->estado; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>CEP: </td>
-                                    <td colspan="3"><?= @$empresa[0]->cep; ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4"><span class="negrito">Data de Saida: </span><?= date("d/m/Y", strtotime($destinatario[0]->data_fechamento)); ?></td>
                                 </tr>
                             </table>
                         </td>
@@ -383,7 +356,7 @@
                 </div>
             </td>
             
-            <td><div style="width: 50pt;"></div></td>
+
 
             <!-- LADO DIREITO -->
             <td>
@@ -400,7 +373,7 @@
                         </td>
                         <td>
                             <table class="cabecalho_principal" cellspacing="8" cellpadding="4">
-<!--                                <tr>
+                                <tr>
                                     <td colspan="6"><?= @$empresa[0]->empresa; ?></td>
                                 </tr>
                                 <tr>
@@ -414,33 +387,6 @@
                                 <tr>
                                     <td colspan="3"><span class="negrito">Email: </span><?= @$empresa[0]->email; ?></td>
                                     <td colspan="3"><span class="negrito">Data de Saida: </span><?= date("d/m/Y", strtotime($destinatario[0]->data_fechamento)); ?></td>
-                                </tr>-->
-                                <tr>
-                                    <td colspan="4"><span class="negrito"><?= @$empresa[0]->empresa; ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td width="70">Cnpj: </td>
-                                    <td width="400"><?= @$empresa[0]->cnpj; ?></td>
-
-                                    <td width="70">Insc:</td>
-                                    <td width="400"><?= @$empresa[0]->inscricao_estadual; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Fone: </td>
-                                    <td><?= @$empresa[0]->telefone; ?></td>
-
-                                    <td >E-mail:</td>
-                                    <td colspan=""><?= @$empresa[0]->email; ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4"><?= @$empresa[0]->logradouro .', '.@$empresa[0]->numero .' - '. @$empresa[0]->bairro .' - '. @$empresa[0]->estado; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>CEP: </td>
-                                    <td colspan="3"><?= @$empresa[0]->cep; ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4"><span class="negrito">Data de Saida: </span><?= date("d/m/Y", strtotime($destinatario[0]->data_fechamento)); ?></td>
                                 </tr>
                             </table>
                         </td>

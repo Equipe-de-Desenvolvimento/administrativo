@@ -94,7 +94,13 @@ CREATE TABLE ponto.tb_estoque_solicitacao_cliente_transportadora
 );
 
 
+
 -- Dia 21/01/2017
+
 ALTER TABLE ponto.tb_estoque_entrada ADD COLUMN lote character varying(20);
 ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN entrada_id integer;
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN transportadora boolean NOT NULL DEFAULT false;
+
+
+-- Dia 23/01/2017
+ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN email character varying(60);

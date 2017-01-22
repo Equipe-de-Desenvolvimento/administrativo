@@ -15,6 +15,7 @@ class cliente_model extends Model {
     var $_inscricao_estadual = null;
     var $_celular = null;
     var $_telefone = null;
+    var $_email = null;
     var $_razao_social = null;
     var $_tipo_logradouro_id = null;
     var $_menu_id = null;
@@ -179,18 +180,21 @@ class cliente_model extends Model {
             $this->db->set('numero', $_POST['numero']);
             $this->db->set('bairro', $_POST['bairro']);
             $this->db->set('complemento', $_POST['complemento']);
+            $this->db->set('email', $_POST['email']);
             if ($_POST['txtCNPJ'] != '') {
                 $this->db->set('cnpj', str_replace("/", "", str_replace(".", "", $_POST['txtCNPJ'])));
             }
             if($_POST['sala'] != ''){
                 $this->db->set('sala_id', $_POST['sala']);
             }
+            
             if($_POST['saida'] != ''){
                 $this->db->set('saida', 'true');
             } 
             else {
                 $this->db->set('saida', 'false');
             }
+            
             if ($_POST['municipio_id'] != '') {
                 $this->db->set('municipio_id', $_POST['municipio_id']);
             }
@@ -251,6 +255,7 @@ class cliente_model extends Model {
             $this->_municipio_nome = $return[0]->municipio_nome;
             $this->_tipo_logradouro_id = $return[0]->tipo_logradouro_id;
             $this->_celular = $return[0]->celular;
+            $this->_email = $return[0]->email;
             $this->_razao_social = $return[0]->razao_social;
             $this->_menu_id = $return[0]->menu_id;
             $this->_sala_id = $return[0]->sala_id;

@@ -1,13 +1,13 @@
 
-        <link href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css" />
-        <link href="<?= base_url() ?>css/jquery-treeview.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>
-        <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.8.5.custom.min.js" ></script>
-        <script type="text/javascript" src="<?= base_url() ?>js/jquery-cookie.js" ></script>
-        <script type="text/javascript" src="<?= base_url() ?>js/jquery-treeview.js" ></script>
-        <script type="text/javascript" src="<?= base_url() ?>js/jquery-meiomask.js" ></script>
-        <script type="text/javascript" src="<?= base_url() ?>js/jquery.bestupper.min.js"  ></script>
-        <script type="text/javascript" src="<?= base_url() ?>js/scripts_alerta.js" ></script>
+<link href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css" />
+<link href="<?= base_url() ?>css/jquery-treeview.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.8.5.custom.min.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-cookie.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-treeview.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery-meiomask.js" ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.bestupper.min.js"  ></script>
+<script type="text/javascript" src="<?= base_url() ?>js/scripts_alerta.js" ></script>
 
 <style>
     #form_faturar{
@@ -54,6 +54,8 @@
     }
 </style>
 
+
+<script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">
                         function validar(dom, tipo) {
                             switch (tipo) {
@@ -82,4 +84,21 @@
                                 }
                             });
                         });
+
+//                        $(document).ready(function () {
+//                            jQuery('#form_sala').validate({
+//                                rules: {
+//                                    txtNome: {
+//                                        required: true,
+//                                        minlength: 2
+//                                    }
+//                                },
+//                                messages: {
+//                                    txtNome: {
+//                                        required: "*",
+//                                        minlength: "!"
+//                                    }
+//                                }
+//                            });
+//                        });
 </script>

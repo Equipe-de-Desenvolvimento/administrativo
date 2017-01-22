@@ -64,7 +64,7 @@
                         </tr>
                         <tr>
                             <td>CEP: </td>
-                            <td colspan="3"><?= @$empresa[0]->cep; ?> - 2304400 - 23</td>
+                            <td colspan="3"><?= @$empresa[0]->cep; ?></td>
                         </tr>
                     </table>
                 </td>
@@ -78,39 +78,43 @@
             <tr>
                 <td colspan="2">
                     <table class="cabecalho_secundario" cellspacing="5" cellpadding="5">
-                        <tr>
+                                <tr>
+                                    
+                                    <td colspan="4"><span class="negrito">Cliente: </span><span class="dados_cabecalho"><?= @$destinatario[0]->nome; ?></span></td>
+                                    <td colspan="2">&nbsp;&nbsp;</td>
 
-                            <td width='70'><span class="negrito">Cliente: </span></td>
-                            <td colspan="4"><?= @$destinatario[0]->nome; ?></td>
+                                    <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></td>
+                                    
+                                </tr>
+                                <tr>
 
-                            <td align="right"><span class="negrito">E-mail: </span></td>
-                            <td colspan="4"><?= @$destinatario[0]->email; ?></td>
+                                    <td colspan="3"><span class="negrito">End: </span>
+                                        <span class="dados_cabecalho">
+                                        <?= @$destinatario[0]->logradouro; ?> <?= @$destinatario[0]->numero; ?>
+                                        </span>
+                                    </td>
+                                    <td>&nbsp;&nbsp;</td>
 
-                        </tr>
-                        <tr>
+                                    <td><span class="negrito">Fone: </span><span class="dados_cabecalho"><?= @$destinatario[0]->telefone; ?></span></td>
+                                    <td>&nbsp;&nbsp;</td>
+                                    <td>&nbsp;&nbsp;</td>
 
-                            <td width='70'><span class="negrito">CNPJ: </span></td>
-                            <td colspan="2"><?= @$destinatario[0]->cnpj; ?></td>
+                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
+                                    <td>&nbsp;&nbsp;</td>
 
-                            <td align="right"><span class="negrito">Insc: </span></td>
-                            <td>INSENTO</td>
+                                </tr>
+                                <tr>
 
-                            <td align="right"><span class="negrito">FONE: </span></td>
-                            <td><?= @$destinatario[0]->telefone; ?></td>
-                            
-                            <td>&nbsp;&nbsp;</td>
+                                    <td><span class="negrito">Bairro: </span><span class="dados_cabecalho"><?= @$destinatario[0]->bairro; ?></span></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
-                            <td align="right"><span class="negrito">FAX: </span></td>
-                            <td></td>
+                                    <td><span class="negrito">Cid: </span><span class="dados_cabecalho"><?= @$destinatario[0]->municipio; ?></span></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
-                        </tr>
-                        <tr>
+                                    <td><span class="negrito">UF: </span><span class="dados_cabecalho"><?= @$destinatario[0]->estado; ?></span></td>
+                                    <td>&nbsp;&nbsp;</td>
 
-                            <td width='70'><span class="negrito">Endereço: </span></td>
-                            <td colspan="10"><?= @$destinatario[0]->logradouro; ?> <?= @$destinatario[0]->numero; ?> - <?= @$destinatario[0]->bairro; ?> - <?= @$destinatario[0]->municipio; ?> <?= @$destinatario[0]->estado; ?> - CEP: <?= @$destinatario[0]->cep; ?></td>
-
-                        </tr>
-
+                                </tr>
                     </table>
                 </td>
             </tr>
@@ -132,7 +136,7 @@
                             <td align="right"><span class="negrito">Saída: </span></td>
                             <td>
                                 <? if( isset($destinatario[0]->data_fechamento) ){
-                                        echo $destinatario[0]->data_fechamento;
+                                        echo date("d/m/Y", strtotime($destinatario[0]->data_fechamento));
                                    }
                                    else {
                                         echo "EM ABERTO";
@@ -213,7 +217,7 @@
                                     <td><?= @$value->produto; ?></td>
                                     <td><?= @$value->ncm; ?></td>
                                     <td><?= @$value->unidade; ?></td>
-                                    <td><?= @$value->quantidade_solicitada; ?></td>
+                                    <td align="center"><?= @$value->quantidade_solicitada; ?></td>
                                     <td><?= number_format($value->valor, 2, '.', ',')?></td>
                                     <td><?= number_format($preco, 2, '.', ',')?></td>
                                 </tr>

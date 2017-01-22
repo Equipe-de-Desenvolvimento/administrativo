@@ -62,6 +62,15 @@
                     <dd>
                         <input type="text" id="txtComplemento" class="texto10" name="complemento" value="<?= @$obj->_complemento; ?>" />
                     </dd>
+                    
+                    <dt>
+                    <label>Município</label>
+                    </dt>
+                    <dd>
+                        <input type="hidden" id="txtCidadeID" class="texto_id" name="municipio_id" value="<?= @$obj->_municipio_id; ?>" readonly="true" />
+                        <input type="text" id="txtCidade" class="texto04" name="txtCidade" value="<?= @$obj->_municipio_nome; ?>" />
+                    </dd>
+                    
                     <dt>
                     <label>Telefone</label>
                     </dt>
@@ -74,12 +83,12 @@
                     <dd>
                         <input type="text" id="txtCelular" class="texto02" name="celular" alt="phone" value="<?= @$obj->_celular; ?>" />
                     </dd>
+                    
                     <dt>
-                    <label>Município</label>
+                        <label>Email</label>
                     </dt>
                     <dd>
-                        <input type="hidden" id="txtCidadeID" class="texto_id" name="municipio_id" value="<?= @$obj->_municipio_id; ?>" readonly="true" />
-                        <input type="text" id="txtCidade" class="texto04" name="txtCidade" value="<?= @$obj->_municipio_nome; ?>" />
+                        <input type="text" id="email" class="texto08" name="email" value="<?= @$obj->_email; ?>" />
                     </dd>
                     
                     

@@ -691,10 +691,7 @@ class solicitacao_model extends Model {
 
     function gravarsolicitacaotransportadora() {
         try {
-            $this->db->set('transportadora', 't');
-            $this->db->where('estoque_solicitacao_setor_id', $_POST['solicitacao_cliente_id']);
-            $this->db->update('tb_estoque_solicitacao_cliente');
-            
+                        
             /* inicia o mapeamento no banco */
             $this->db->set('transportadora_id', $_POST['transportadora_id']);
             $this->db->set('solicitacao_cliente_id', $_POST['solicitacao_cliente_id']);
@@ -716,6 +713,10 @@ class solicitacao_model extends Model {
                 $this->db->where('solicitacao_transportadora_id', $solicitacaotransportadora_id);
                 $this->db->update('tb_estoque_solicitacao_cliente_transportadora');
             }
+            
+            $this->db->set('transportadora', 't');
+            $this->db->where('estoque_solicitacao_setor_id', $_POST['solicitacao_cliente_id']);
+            $this->db->update('tb_estoque_solicitacao_cliente');
             
         } catch (Exception $exc) {
             return -1;

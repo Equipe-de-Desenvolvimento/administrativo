@@ -68,13 +68,13 @@ class Solicitacao extends BaseController {
     function impressoes() {
         $estoque_solicitacao_id = $_POST['estoque_solicitacao_id'];
         if($_POST['impressao'] == 'pedido_simples'){
-            redirect(base_url() . "estoque/solicitacao/imprimirliberada/$estoque_solicitacao_id");
+            redirect(base_url() . "estoque/solicitacao/imprimirliberadasimples/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'pedido'){
             redirect(base_url() . "estoque/solicitacao/imprimirliberada/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'saida_simples'){
-            redirect(base_url() . "estoque/solicitacao/imprimir/$estoque_solicitacao_id");
+            redirect(base_url() . "estoque/solicitacao/imprimirsimples/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'saida'){
             redirect(base_url() . "estoque/solicitacao/imprimir/$estoque_solicitacao_id");
@@ -83,8 +83,52 @@ class Solicitacao extends BaseController {
             redirect(base_url() . "estoque/solicitacao/carregarnotafiscal/$estoque_solicitacao_id");
         }
         elseif($_POST['impressao'] == 'recibo'){
-            redirect(base_url() . "estoque/solicitacao/carregarnotafiscal/$estoque_solicitacao_id");
+            redirect(base_url() . "estoque/solicitacao/impressaorecibo/$estoque_solicitacao_id");
         }
+    }
+    
+    function impressaorecibo($estoque_solicitacao_id) {
+
+        $data['emissao'] = date("d-m-Y");
+        $empresa_id = $this->session->userdata('empresa_id');
+        $data['exame'] = $this->guia->listarexame($exames_id);
+        
+        
+        $data['empresa'] = $this->solicitacao->empresa();
+        $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($estoque_solicitacao_id);
+        $data['produtos'] = $this->solicitacao->listarsolicitacaosnota($estoque_solicitacao_id);
+        
+        $grupo = $data['exame'][0]->grupo;
+        $convenioid = $data['exame'][0]->convenio_id;
+        $dinheiro = $data['exame'][0]->dinheiro;
+        $data['exames'] = $this->guia->listarexamesguiaconvenio($guia_id, $convenioid);
+        $exames = $data['exames'];
+        $valor_total = 0;
+
+        foreach ($exames as $item) :
+            if ($dinheiro == "t") {
+                $valor_total = $valor_total + ($item->valor_total);
+            }
+        endforeach;
+
+        $data['guia'] = $this->guia->listar($paciente_id);
+        $data['paciente'] = $this->paciente->listardados($paciente_id);
+        $valor = number_format($valor_total, 2, ',', '.');
+
+        $data['valor'] = $valor;
+
+        if ($valor == '0,00') {
+            $data['extenso'] = 'ZERO';
+        } else {
+            $valoreditado = str_replace(",", "", str_replace(".", "", $valor));
+            if ($dinheiro == "t") {
+                $data['extenso'] = GExtenso::moeda($valoreditado);
+            }
+        }
+
+        $dataFuturo = date("Y-m-d");
+
+        $this->load->View('estoque/impressaorecibo', $data);
     }
 
     function imprimirsaida($estoque_solicitacao_id) {
@@ -113,6 +157,29 @@ class Solicitacao extends BaseController {
         $this->load->View('estoque/impressaosaida', $data);
     }
 
+    function imprimirsimples($estoque_solicitacao_id) {
+
+        $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
+        $data['empresa'] = $this->solicitacao->empresa();
+        $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
+        $data['nome'] = $this->solicitacao->solicitacaonome($estoque_solicitacao_id);
+        $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
+//        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+        $this->load->View('estoque/impressaosaidasimples', $data);
+    }
+
+    function imprimirliberadasimples($estoque_solicitacao_id) {
+        
+        $data['empresa'] = $this->solicitacao->empresa();
+        $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
+        $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
+        $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
+        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+        
+//        echo '<pre>';        var_dump($data);die;
+        $this->load->View('estoque/impressaoliberadasimples', $data);
+    }
+    
     function imprimirliberada($estoque_solicitacao_id) {
         
         $data['empresa'] = $this->solicitacao->empresa();
