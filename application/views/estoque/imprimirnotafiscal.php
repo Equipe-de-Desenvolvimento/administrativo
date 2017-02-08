@@ -91,31 +91,35 @@
             <tbody>
 
                     <tr >
-                    <td width="15%" height="12" class="sembordadireitacimabaixo">CÓDIGO DO PRODUTO</td>
-                    <td width="30%" colspan="1" class="semborda">DESCRIÇÃO DOS PRODUTOS</td>
-                    <td width="10%" class="semborda">QUANTIDADE</td>
+                    <td width="8%" height="12" class="sembordadireitacimabaixo">CÓDIGO DO PRODUTO</td>
+                    <td width="25%" colspan="1" class="semborda">DESCRIÇÃO DOS PRODUTOS</td>
+                    <td width="7%" class="semborda">QUANTIDADE</td>
 
-                    <td width="6%" colspan="1" class="semborda">CF</td>
-                    <td width="6%" colspan="1" class="semborda">SIT.TRIB.</td>
-                    <td width="5%" colspan="1" class="semborda">UNID</td>
+                    <td width="7%" colspan="1" class="semborda">CFOP</td>
+                    <td width="7%" colspan="1" class="semborda">SIT.TRIB.</td>
+                    <td width="7%" colspan="1" class="semborda">UNID</td>
 
-                    <td width="10%" colspan="1" class="semborda">VALOR UNITÁRIO</td>
-                    <td width="10%" colspan="1" class="semborda">VALOR TOTAL</td>
-                    <td width="10%" colspan="1" class="semborda">ALÍQUOTAS (ICMS/IPI)</td>
-                    <td width="10%" colspan="1" class="semborda">VALOR DO IPI</td>
+                    <td width="7%" colspan="1" class="semborda">VALOR UNITÁRIO</td>
+                    <td width="7%" colspan="1" class="semborda">VALOR TOTAL</td>
+                    <td width="7%" colspan="1" class="semborda">VALOR DO ICMS</td>
+                    <td width="7%" colspan="1" class="semborda">ICMS(%)</td>
+                    <td width="7%" colspan="1" class="semborda">VALOR DO IPI</td>
+                    <td width="7%" colspan="1" class="semborda">IPI(%)</td>
 
 
                 </tr>
                 <?  
                 $valortotal = 0;
+                $valortotalicms = 0;
+                $valortotalipi = 0;
                 foreach ($produtos as $item){ ?>
                 <tr>
                     <td class="semborda"><strong><?= $item->codigo ?></strong></td>
                     <td colspan="1" class="semborda"><strong><?= $item->descricao ?></strong></td>
                     <td height="16" class="semborda"><strong><?= $item->quantidade ?></strong></td>
 
-                    <td colspan="1" class="semborda"><strong></strong></td>
-                    <td colspan="1" class="semborda"><strong></strong></td>
+                    <td colspan="1" class="semborda"><strong><?= $item->cfop ?></strong></td>
+                    <td colspan="1" class="semborda"><strong><?= $item->cst ?></strong></td>
                     <td colspan="1" class="semborda"><strong><?= $item->unidade ?></strong></td>
                     
                     <?
@@ -127,8 +131,28 @@
 
                     <td colspan="1" class="semborda"><strong>R$ <?= number_format($item->valor_venda, 2, '.', ',')?></strong></td>
                     <td colspan="1" class="semborda"><strong>R$ <?= number_format($preco, 2, '.', ',')?></strong></td>
-                    <td colspan="1" class="semborda"><strong></strong></td>
-                    <td colspan="1" class="semborda"><strong></strong></td>
+                    <td colspan="1" class="semborda">
+                        <strong>
+                            <? 
+                            $item->icms = (float)$item->icms; 
+                            $icms = $preco * (($item->icms)/100); 
+                            $valortotalicms += $icms;
+                            ?>
+                            R$ <?= number_format($icms, 2, '.', ',')?>
+                        </strong>
+                    </td>
+                    <td colspan="1" class="semborda"><strong><?= number_format($item->icms, 2, '.', ',')?>%</strong></td>
+                    <td colspan="1" class="semborda">
+                        <strong>
+                            <? 
+                            $item->ipi = (float)$item->ipi; 
+                            $ipi = $preco * (($item->ipi)/100); 
+                            $valortotalipi += $ipi;
+                            ?>
+                            R$ <?= number_format($ipi, 2, '.', ',')?>
+                        </strong>
+                    </td>
+                    <td colspan="1" class="semborda"><strong><?= number_format($item->ipi, 2, '.', ',')?>%</strong></td>
 
                 </tr>
                 <?}?>
@@ -150,8 +174,8 @@
 
             </tr>
             <tr>
-                <td class="tc"><strong></strong></td>
-                <td height="16" colspan="1" class="tc"><strong></strong></td>
+                <td class="tc"><strong>R$ <?= number_format($valortotal, 2, '.', ',')?></strong></td>
+                <td height="16" colspan="1" class="tc"><strong>R$ <?= number_format($valortotalicms, 2, '.', ',')?></strong></td>
 
                 <td colspan="1" class="tc"><strong></strong></td>
 
@@ -175,7 +199,7 @@
 
                 <td colspan="1" class="tc"><strong></strong></td>
 
-                <td colspan="1" class="tc"><strong></strong></td>
+                <td colspan="1" class="tc"><strong>R$ <?= number_format($valortotalipi, 2, '.', ',')?></strong></td>
                 <td colspan="3" class="tc"><strong></strong></td>
             </tr>
      

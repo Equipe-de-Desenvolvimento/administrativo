@@ -104,3 +104,14 @@ ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN transportadora boole
 
 -- Dia 23/01/2017
 ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN email character varying(60);
+
+
+-- Dia 07/02/2017
+ALTER TABLE ponto.tb_empresa ADD COLUMN email character varying(60);
+
+-- Dia 08/02/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN icms numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN ipi numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst character varying(10);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cfop character varying(10);
+

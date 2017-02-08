@@ -98,6 +98,7 @@
                 </tr>
             </thead>
             <?
+//                    var_dump($produtossaida); die;
             $estilo_linha = "tabela_content01";
             foreach ($produtossaida as $item) {
                 ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";

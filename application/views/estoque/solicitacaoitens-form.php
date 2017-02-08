@@ -30,11 +30,27 @@
             </div>
             <div>
                 <label>Quantidade</label>
-                <input type="text" name="txtqtde" class="size1" alt="integer" required/>
+                <input type="text" name="txtqtde" class="texto01" alt="integer" required/>
             </div>
-            <div>
+            <div style="margin-left: -10pt; margin-right: 0;">
                 <label>Valor</label>
                 <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required readonly/>
+            </div>
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <label>Sit. Trib.</label>
+                <input type="text" name="sit_trib" id="sit_trib" alt="999" class="texto01" maxlength="3"/>
+            </div>
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <label>ICMS (%)</label>
+                <input type="text" name="icms" id="icms" alt="decimal" class="texto01"/>
+            </div>
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <label>IPI (%)</label>
+                <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01"/>
+            </div>
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <label>CFOP</label>
+                <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
             </div>
             <div>
                 <label>&nbsp;</label>
@@ -132,6 +148,10 @@
     #tot td{
         background-color: #bdc3c7;
     }
+    
+    #form_solicitacaoitens div{
+        margin: 3pt;
+    }
 </style>
 
 
@@ -147,19 +167,30 @@
                     if ($(this).val()) {
                         $('.carregando').show();
                         $.getJSON('<?= base_url() ?>autocomplete/estoquepedidolote', {produto_id: $(this).val()}, function (j) {
+                            $('#lote option').remove();
                             options = '<option value=""></option>';
+//                            alert('teste');
                             for (var c = 0; c < j.length; c++) {
-                                var dia = j[c].validade.substring(8, 10);
-                                var mes = j[c].validade.substring(5, 7);
-                                var ano = j[c].validade.substring(0, 4);
-                                
-                                var data = dia +'/'+ mes +'/'+ ano;
-                                
-                                if ( j[c].lote == 'null' || j[c].lote == null ){
+                                var data = '';
+                                if (j[c].validade != 'null' && j[c].validade != null && j[c].validade != undefined) {
+                                    var dia = j[c].validade.substring(8, 10);
+                                    var mes = j[c].validade.substring(5, 7);
+                                    var ano = j[c].validade.substring(0, 4);
+
+                                    data = dia + '/' + mes + '/' + ano;
+                                }
+
+
+                                if (j[c].lote == 'null' || j[c].lote == null) {
                                     j[c].lote = ' ';
                                 }
-                                
-                                options += '<option value="' + j[c].estoque_entrada_id + '">LOTE: ' + j[c].lote + ' - ' + data + '</option>';
+
+
+                                if (j[c].lote === ' ' && data === '') {
+                                    continue;
+                                } else {
+                                    options += '<option value="' + j[c].estoque_entrada_id + '">LOTE: ' + j[c].lote + ' - ' + data + '</option>';
+                                }
                             }
                             $('#lote').html(options).show();
                             $('.carregando').hide();

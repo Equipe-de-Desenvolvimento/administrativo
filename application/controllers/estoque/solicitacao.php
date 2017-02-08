@@ -175,8 +175,6 @@ class Solicitacao extends BaseController {
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
-        
-//        echo '<pre>';        var_dump($data);die;
         $this->load->View('estoque/impressaoliberadasimples', $data);
     }
     
@@ -207,6 +205,8 @@ class Solicitacao extends BaseController {
         
         $data['contadorsaida'] = $this->solicitacao->contadorsaidaitem($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
+//        echo "<pre>";
+//        var_dump($data['produtossaida']);die;
         $this->loadView('estoque/saidaitens-form', $data);
     }
 
@@ -356,7 +356,7 @@ class Solicitacao extends BaseController {
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($estoque_solicitacao_id);
         $data['produtos'] = $this->solicitacao->listarsolicitacaosnota($estoque_solicitacao_id);
-//        echo "<pre>";var_dump($data['destinatario']);die;
+//        echo "<pre>";var_dump($data['produtos']);die;
         $this->load->View('estoque/imprimirnotafiscal', $data);
     }
 
