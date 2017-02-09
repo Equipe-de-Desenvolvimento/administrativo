@@ -116,3 +116,8 @@ ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst character varying(
 ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cfop character varying(10);
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente_transportadora ADD COLUMN valor_frete numeric(10,2);
 
+-- Dia 09/02/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN mva numeric(10,2);
+
+
+

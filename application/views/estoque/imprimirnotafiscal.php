@@ -194,7 +194,8 @@
 
             </tr>
             <tr>
-                <td class="tc"><strong></strong></td>
+                <td class="tc"><strong>R$ <?$destinatario[0]->valor_frete = (float)$destinatario[0]->valor_frete;
+                                            echo number_format($destinatario[0]->valor_frete , 2, '.', ',')?></strong></td>
                 <td height="16" colspan="1" class="tc"><strong></strong></td>
 
                 <td colspan="1" class="tc"><strong></strong></td>

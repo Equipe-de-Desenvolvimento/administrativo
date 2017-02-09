@@ -24,10 +24,11 @@ class solicitacao_model extends Model {
 
     function listaclientenotafiscal($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->select('ec.*, m.estado, m.nome as municipio, esc.data_fechamento');
+        $this->db->select('ec.*, m.estado, m.nome as municipio, esc.data_fechamento, ct.valor_frete ');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
         $this->db->join('tb_municipio m', 'm.municipio_id = ec.municipio_id', 'left');
+        $this->db->join('tb_estoque_solicitacao_cliente_transportadora ct', 'ct.solicitacao_cliente_id = esc.estoque_solicitacao_setor_id', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('esc.ativo', 'true');
         $return = $this->db->get();
@@ -831,6 +832,13 @@ class solicitacao_model extends Model {
                 $this->db->set('ipi', $_POST['ipi']);
             } else {
                 $this->db->set('ipi', 0.00);
+            }
+            
+            $_POST['mva'] = str_replace(",", ".", $_POST['mva']);
+            if($_POST['mva'] != ''){
+                $this->db->set('mva', $_POST['mva']);
+            } else {
+                $this->db->set('mva', 0.00);
             }
             
             if($_POST['cfop'] != ''){

@@ -29,31 +29,41 @@
                 </select>
             </div>
             <div>
-                <label>Quantidade</label>
-                <input type="text" name="txtqtde" class="texto01" alt="integer" required/>
+                <label for="txtqtde">Quantidade</label>
+                <input type="text" name="txtqtde" id="txtqtde" class="texto01" alt="integer" required/>
             </div>
+            
             <div style="margin-left: -10pt; margin-right: 0;">
                 <label>Valor</label>
                 <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required readonly/>
             </div>
+            
             <div style="margin-left: -10pt; margin-right: 0;">
-                <label>Sit. Trib.</label>
+                <a href="#" title="Código de Situação Tributaria" style="text-decoration: none"><label for="sit_trib">Sit. Trib.</label></a>
                 <input type="text" name="sit_trib" id="sit_trib" alt="999" class="texto01" maxlength="3"/>
             </div>
+            
             <div style="margin-left: -10pt; margin-right: 0;">
-                <label>ICMS (%)</label>
+                <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none"><label for="icms">ICMS (%)</label></a>
                 <input type="text" name="icms" id="icms" alt="decimal" class="texto01"/>
             </div>
+            
             <div style="margin-left: -10pt; margin-right: 0;">
-                <label>IPI (%)</label>
+                <a href="#" title="Imposto sobre Produtos Industrializados" style="text-decoration: none"><label for="ipi">IPI (%)</label></a>
                 <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01"/>
             </div>
+            
             <div style="margin-left: -10pt; margin-right: 0;">
-                <label>CFOP</label>
+                <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none"><label for="cfop">CFOP</label></a>
                 <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
             </div>
-            <div>
-                <label>&nbsp;</label>
+            
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <a href="#" title="Margem de Valor Agregado" style="text-decoration: none"><label for="mva">MVA</label></a>
+                <input type="text" name="mva" id="mva" alt="decimal" class="texto01"/>
+            </div>
+            <div style="width: 100%">
+                <hr>
                 <button type="submit" name="btnEnviar">Adicionar</button>
             </div>
     </form>
