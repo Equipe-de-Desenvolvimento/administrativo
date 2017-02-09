@@ -513,6 +513,7 @@ class solicitacao_model extends Model {
                             st.volume,
                             st.peso,
                             st.forma,
+                            st.valor_frete,
                             st.transportadora_id,
                             et.descricao');
         $this->db->from('tb_estoque_solicitacao_cliente_transportadora st');
@@ -769,11 +770,13 @@ class solicitacao_model extends Model {
                         
             /* inicia o mapeamento no banco */
             $_POST['peso'] = str_replace(",", ".", $_POST['peso']);
+            $_POST['valor_frete'] = str_replace(",", ".", $_POST['valor_frete']);
             
             $this->db->set('transportadora_id', $_POST['transportadora_id']);
             $this->db->set('solicitacao_cliente_id', $_POST['solicitacao_cliente_id']);
             $this->db->set('volume', $_POST['txtvolume']);
             $this->db->set('peso', $_POST['peso']);
+            $this->db->set('valor_frete', $_POST['valor_frete']);
             $this->db->set('forma', $_POST['txtforma']);
             
             $horario = date("Y-m-d H:i:s");
