@@ -3,13 +3,47 @@
     <form name="form_solicitacaoitens" id="form_solicitacaoitens" action="<?= base_url() ?>estoque/solicitacao/gravaritens" method="post">
         <fieldset>
             <legend>Solicitacao produtos</legend>
+
             <div>
                 <label>Nome</label>
                 <input type="hidden" name="txtestoque_solicitacao_id" value="<?php echo $estoque_solicitacao_id; ?>"/>
                 <input type="text" name="txtNome" class="texto10" value="<?php echo $nome[0]->nome; ?>" readonly />
-
             </div>
         </fieldset>
+
+        <fieldset>
+            <legend>Impostos </legend>
+            <div style="margin-right: 0;">
+                <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none">
+                    <label for="icms">ICMS (%)</label>
+                </a>
+                <input type="text" name="icms" id="icms" alt="decimal" class="texto01" value="<?= $nome[0]->icms; ?>"/>
+            </div>
+
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <a href="#" title="Imposto sobre Produtos Industrializados" style="text-decoration: none">
+                    <label for="ipi">IPI (%)</label>
+                </a>
+                <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01" value="<?= $nome[0]->ipi; ?>"/>
+            </div>
+
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
+                    <label for="cfop">CFOP</label>
+                </a>
+                <input type="hidden" name="cfop_id" id="cfop_id" class="texto01" value="<?= @$nome[0]->cfop_id; ?>"/>
+                <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01" value="<?= @$nome[0]->codigo_cfop; ?>"/>
+                <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" value="<?= @$nome[0]->descricao_cfop; ?>" readonly/>
+            </div>
+
+            <div style="margin-left: 10pt; margin-right: 0;">
+                <a href="#" title="Margem de Valor Agregado" style="text-decoration: none">
+                    <label for="mva">MVA</label>
+                </a>
+                <input type="text" name="mva" id="mva" alt="decimal" class="texto01" value="<?= $nome[0]->mva; ?>"/>
+            </div>
+        </fieldset>
+
         <fieldset>
             <legend>Cadastro de Produtos</legend>
             <div>
@@ -32,36 +66,17 @@
                 <label for="txtqtde">Quantidade</label>
                 <input type="text" name="txtqtde" id="txtqtde" class="texto01" alt="integer" required/>
             </div>
-            
+
             <div style="margin-left: -10pt; margin-right: 0;">
                 <label>Valor</label>
                 <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required readonly/>
             </div>
-            
+
             <div style="margin-left: -10pt; margin-right: 0;">
                 <a href="#" title="Código de Situação Tributaria" style="text-decoration: none"><label for="sit_trib">Sit. Trib.</label></a>
                 <input type="text" name="sit_trib" id="sit_trib" alt="999" class="texto01" maxlength="3"/>
             </div>
-            
-            <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none"><label for="icms">ICMS (%)</label></a>
-                <input type="text" name="icms" id="icms" alt="decimal" class="texto01"/>
-            </div>
-            
-            <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Imposto sobre Produtos Industrializados" style="text-decoration: none"><label for="ipi">IPI (%)</label></a>
-                <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01"/>
-            </div>
-            
-            <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none"><label for="cfop">CFOP</label></a>
-                <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
-            </div>
-            
-            <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Margem de Valor Agregado" style="text-decoration: none"><label for="mva">MVA</label></a>
-                <input type="text" name="mva" id="mva" alt="decimal" class="texto01"/>
-            </div>
+
             <div style="width: 100%">
                 <hr>
                 <button type="submit" name="btnEnviar">Adicionar</button>
@@ -158,7 +173,7 @@
     #tot td{
         background-color: #bdc3c7;
     }
-    
+
     #form_solicitacaoitens div{
         margin: 3pt;
     }
@@ -171,6 +186,24 @@
             function carregaValor(valor) {
                 $("#valor").val(valor);
             }
+
+            $(function () {
+                $("#cfop").autocomplete({
+                    source: "<?= base_url() ?>index.php?c=autocomplete&m=autocompletecfop",
+                    minLength: 1,
+                    focus: function (event, ui) {
+                        $("#cfop").val(ui.item.label);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $("#descricao_cfop").val(ui.item.descricao);
+                        $("#cfop").val(ui.item.cfop);
+                        $("#cfop_id").val(ui.item.id);
+                        return false;
+                    }
+                });
+            });
+
 
             $(function () {
                 $('#produto_id').change(function () {

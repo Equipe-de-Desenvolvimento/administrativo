@@ -24,11 +24,21 @@ class solicitacao_model extends Model {
 
     function listaclientenotafiscal($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->select('ec.*, m.estado, m.nome as municipio, esc.data_fechamento, ct.valor_frete ');
+        $this->db->select('ec.*, m.estado, 
+                           m.nome as municipio,  
+                           esc.data_fechamento, 
+                           esc.icms, 
+                           esc.ipi, 
+                           c.cfop_id, 
+                           c.codigo_cfop, 
+                           c.descricao_cfop,
+                           esc.mva, 
+                           ct.valor_frete ');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
         $this->db->join('tb_municipio m', 'm.municipio_id = ec.municipio_id', 'left');
         $this->db->join('tb_estoque_solicitacao_cliente_transportadora ct', 'ct.solicitacao_cliente_id = esc.estoque_solicitacao_setor_id', 'left');
+        $this->db->join('tb_cfop c', 'c.cfop_id = esc.cfop_id', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('esc.ativo', 'true');
         $return = $this->db->get();
@@ -37,11 +47,20 @@ class solicitacao_model extends Model {
     
     function listadadossolicitacaoliberada($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->select('ec.*, m.estado, m.nome as municipio, esc.data_fechamento, sf.desconto, sf.valor_total');
+        $this->db->select('ec.*, 
+                           m.estado, m.nome as municipio,  
+                           esc.data_fechamento, 
+                           o.nome as vendedor,
+                           ent.nome as entregador, 
+                           sf.desconto, 
+                           sf.valor_total');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
         $this->db->join('tb_municipio m', 'm.municipio_id = ec.municipio_id', 'left');
         $this->db->join('tb_estoque_solicitacao_faturamento sf', 'sf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id', 'left');
+        $this->db->join('tb_operador o', 'o.operador_id = esc.operador_fechamento', 'left');
+        $this->db->join('tb_estoque_solicitacao_cliente_transportadora ct', 'ct.solicitacao_cliente_id = esc.estoque_solicitacao_setor_id', 'left');
+        $this->db->join('tb_entregador ent', 'ent.entregador_id = ct.entregador_id', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('esc.ativo', 'true');
         $return = $this->db->get();
@@ -63,11 +82,22 @@ class solicitacao_model extends Model {
     }
 
     function solicitacaonome($estoque_solicitacao_id) {
-        $this->db->select('ec.nome  , esc.data_fechamento , o.nome as liberou, op.nome as solicitante, es.data_cadastro');
+        $this->db->select('ec.nome, 
+                           esc.icms, 
+                           esc.ipi, 
+                           c.cfop_id, 
+                           c.codigo_cfop, 
+                           c.descricao_cfop, 
+                           esc.mva, 
+                           esc.data_fechamento, 
+                           o.nome as liberou, 
+                           op.nome as solicitante, 
+                           es.data_cadastro');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id');
         $this->db->join('tb_operador o', 'o.operador_id = esc.operador_fechamento', 'left');
         $this->db->join('tb_operador op', 'op.operador_id = esc.operador_liberacao', 'left');
+        $this->db->join('tb_cfop c', 'c.cfop_id = esc.cfop_id', 'left');
         $this->db->join('tb_estoque_saida es', 'es.solicitacao_cliente_id = esc.estoque_solicitacao_setor_id', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $return = $this->db->get();
@@ -85,6 +115,17 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function autocompletecfop($parametro) {
+
+        $this->db->select('cfop_id, codigo_cfop, descricao_cfop');
+        $this->db->from('tb_cfop');
+        if ($parametro != null) {
+            $this->db->where('codigo_cfop ilike', $parametro . "%");
+        }
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listararmazem() {
         $this->db->select('estoque_armazem_id,
                             descricao');
@@ -93,50 +134,8 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-
-//    function listarsolicitacaosnota($estoque_solicitacao_id) {
-//        $this->db->select('ep.descricao, esi.estoque_solicitacao_itens_id, 
-//                           esi.quantidade, esi.exame_id, 
-//                           esi.valor as valor_venda, 
-//                           eu.descricao as unidade, 
-//                           ep.estoque_produto_id,
-//                           ep.codigo,
-//                           ep.ncm');
-//        $this->db->from('tb_estoque_solicitacao_itens esi');
-//        $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id', 'left');
-//        $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id = ep.unidade_id', 'left');
-//        $this->db->where('esi.ativo', 'true');
-//        $this->db->where('esi.solicitacao_cliente_id', $estoque_solicitacao_id);
-//        $return = $this->db->get();
-//        return $return->result();
-//    }
+    
     function listarsolicitacaosnota($estoque_solicitacao_id) {
-        $this->db->select('sc.data_fechamento , sc.data_cadastro , si.estoque_solicitacao_itens_id');
-        $this->db->from('tb_estoque_solicitacao_cliente sc');
-        $this->db->join('tb_estoque_solicitacao_itens si', 'si.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id', 'left');
-//        $this->db->join('tb_estoque_saida es' , 'es.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id' , 'left');
-        $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
-        $retorno = $this->db->get()->result();
-
-//        var_dump($retorno[0]->estoque_solicitacao_itens_id , $estoque_solicitacao_id);die;
-
-        $this->db->select('data_cadastro');
-        $this->db->from('tb_estoque_saida ');
-//        $this->db->join('tb_estoque_saida es' , 'es.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id' , 'left');
-        $this->db->where('estoque_solicitacao_itens_id', $retorno[0]->estoque_solicitacao_itens_id);
-        $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
-        $retorno3 = $this->db->get()->result();
-
-//        var_dump($retorno3);die;
-//        
-//        $datateste = $retorno3[0]->data_cadastro;
-
-        if (isset($retorno3[0]->data_cadastro)) {
-            $data = $retorno3[0]->data_cadastro;
-        } else {
-            $data = $retorno[0]->data_cadastro;
-        }
-
         $this->db->select(' es.estoque_saida_id,
                             ep.descricao,
                             ep.estoque_produto_id,
@@ -144,36 +143,20 @@ class solicitacao_model extends Model {
                             esi.estoque_solicitacao_itens_id, 
                             es.validade,
                             es.quantidade,
-                            esi.quantidade, esi.exame_id, 
-                            esi.icms, esi.cst, esi.cfop, esi.ipi,
+                            esi.cst,
                             esi.valor as valor_venda, 
-                            eu.descricao as unidade, 
-                            sum(s.quantidade) as saldo,                           
+                            eu.descricao as unidade,                          
                             esi.quantidade as quantidade_solicitada');
         $this->db->from('tb_estoque_saida es');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = es.produto_id');
         $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id= ep.unidade_id');
-        $this->db->join('tb_estoque_saldo s', 's.produto_id = es.produto_id', 'left');
         $this->db->join('tb_estoque_solicitacao_itens esi', 'esi.estoque_solicitacao_itens_id = es.estoque_solicitacao_itens_id', 'left');
         $this->db->where('es.solicitacao_cliente_id', $estoque_solicitacao_id);
         $this->db->where('es.ativo', 'true');
-//        $this->db->where('s.data_cadastro <=', $retorno[0]->data_cadastro);
-        $this->db->where('s.data_cadastro <=', $data);
-        $this->db->groupby('es.estoque_saida_id,
-                            ep.descricao, esi.ipi,
-                            ep.estoque_produto_id,
-                            ep.codigo, ep.ncm,
-                            esi.estoque_solicitacao_itens_id, 
-                            es.validade,
-                            es.quantidade,
-                            esi.quantidade, esi.exame_id, 
-                            esi.icms, esi.cst, esi.cfop,
-                            esi.valor, 
-                            eu.descricao,                          
-                            esi.quantidade');
         $this->db->orderby('es.estoque_saida_id');
         $return = $this->db->get();
         return $return->result();
+      
     }
 
     function calculavalortotalsolicitacao($estoque_solicitacao_id) {
@@ -348,8 +331,8 @@ class solicitacao_model extends Model {
         $this->db->select('sc.data_fechamento , sc.data_cadastro , si.estoque_solicitacao_itens_id');
         $this->db->from('tb_estoque_solicitacao_cliente sc');
         $this->db->join('tb_estoque_solicitacao_itens si', 'si.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id', 'left');
-//        $this->db->join('tb_estoque_saida es' , 'es.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id' , 'left');
         $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->orderby('si.estoque_solicitacao_itens_id DESC');
         $retorno = $this->db->get()->result();
 //        echo "<pre>";
 //        var_dump($retorno);die;
@@ -479,6 +462,62 @@ class solicitacao_model extends Model {
         return $this->db;
     }
 
+    function listarentregador($args = array()) {
+        $operador_id = $this->session->userdata('operador_id');
+        
+        $this->db->select(' es.entregador_id,
+                            es.nome,
+                            es.cep,
+                            es.logradouro,
+                            es.numero,
+                            es.complemento,
+                            es.bairro,
+                            m.estado,
+                            m.nome as municipio,
+                            es.sexo,
+                            es.nascimento,
+                            es.rg,
+                            es.cns,
+                            es.cpf,
+                            es.celular,
+                            es.telefone,
+                            es.observacao');
+        $this->db->from('tb_entregador es');
+        $this->db->join('tb_municipio m', 'm.municipio_id = es.municipio_id', 'left');
+        $this->db->where('es.ativo', 'true');
+        if (isset($args['nome']) && strlen($args['nome']) > 0) {
+            $this->db->where('es.nome ilike', "%" . $args['nome'] . "%");
+        }
+//        $return = $this->db->get();
+        return $this->db;
+    }
+    
+    function instanciarentregador($entregador_id) {
+        $this->db->select(' es.entregador_id,
+                            es.nome,
+                            es.cep,
+                            es.logradouro,
+                            es.numero,
+                            es.complemento,
+                            es.bairro,
+                            m.estado,
+                            m.nome as municipio,
+                            es.sexo,
+                            es.nascimento,
+                            es.rg,
+                            es.cns,
+                            es.cpf,
+                            es.celular,
+                            es.telefone,
+                            es.observacao');
+        $this->db->from('tb_entregador es');
+        $this->db->join('tb_municipio m', 'm.municipio_id = es.municipio_id', 'left');
+        $this->db->where('es.ativo', 'true');
+        $this->db->where('es.entregador_id', $entregador_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarsolicitacaoimpressao($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('es.estoque_solicitacao_setor_id,
@@ -534,6 +573,22 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function excluirentregador($entregador_id) {
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('ativo', 'f');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('entregador_id', $entregador_id);
+        $this->db->update('tb_entregador');
+        
+        $erro = $this->db->_error_message();
+        if (trim($erro) != "") // erro de banco
+            return -1;
+        else
+            return 0;
+    }
     function excluir($estoque_solicitacao_setor_id) {
 
         $horario = date("Y-m-d H:i:s");
@@ -669,6 +724,60 @@ class solicitacao_model extends Model {
         }
     }
 
+    function gravarentregador() {
+       
+        try {
+            $this->db->set('nome', $_POST['nome']);
+            if ($_POST['cpf'] != '') {
+                $this->db->set('cpf', str_replace("-", "", str_replace(".", "", $_POST['cpf'])));
+            }
+            if ($_POST['nascimento'] != '') {
+                $this->db->set('nascimento',  date("Y-m-d", str_replace("/","-",$_POST['nascimento']) ) );
+            }
+            $this->db->set('cns', $_POST['cns']);
+            $this->db->set('rg', $_POST['rg']);
+            $this->db->set('sexo', $_POST['sexo']);
+            $this->db->set('celular', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['celular']))));
+            $this->db->set('telefone', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['telefone']))));
+            $this->db->set('logradouro', $_POST['endereco']);
+
+            $this->db->set('numero', $_POST['numero']);
+            $this->db->set('bairro', $_POST['bairro']);
+            $this->db->set('complemento', $_POST['complemento']);
+            if ($_POST['municipio_id'] != '') {
+                $this->db->set('municipio_id', $_POST['municipio_id']);
+            }
+            $this->db->set('cep', $_POST['cep']);
+
+            $horario = date("Y-m-d H:i:s");
+//            $data = date("Y-m-d");
+            $operador_id = $this->session->userdata('operador_id');
+            
+            if ($_POST['entregador_id'] == "") {// insert
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_entregador');
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") { // erro de banco
+                    return false;
+                } else
+                    $entregador_id = $this->db->insert_id();
+            }
+            else { // update
+                $entregador_id = $_POST['entregador_id'];
+                $this->db->set('data_atualizacao', $horario);
+                $this->db->set('operador_atualizacao', $operador_id);
+                $this->db->where('entregador_id', $entregador_id);
+                $this->db->update('tb_entregador');
+            }
+
+
+            return $paciente_id;
+        } catch (Exception $exc) {
+            return false;
+        }
+    }
+
     function gravarsolicitacaopaciente($setor) {
         try {
             /* inicia o mapeamento no banco */
@@ -774,6 +883,7 @@ class solicitacao_model extends Model {
             $_POST['valor_frete'] = str_replace(",", ".", $_POST['valor_frete']);
             
             $this->db->set('transportadora_id', $_POST['transportadora_id']);
+            $this->db->set('entregador_id', $_POST['entregador_id']);
             $this->db->set('solicitacao_cliente_id', $_POST['solicitacao_cliente_id']);
             $this->db->set('volume', $_POST['txtvolume']);
             $this->db->set('peso', $_POST['peso']);
@@ -807,6 +917,18 @@ class solicitacao_model extends Model {
 
     function gravaritens() {
         try {
+            $_POST['icms'] = str_replace(",", ".", $_POST['icms']);
+            $_POST['ipi'] = str_replace(",", ".", $_POST['ipi']);
+            $_POST['mva'] = str_replace(",", ".", $_POST['mva']);
+            $this->db->set('icms', $_POST['icms']);
+            $this->db->set('ipi', $_POST['ipi']);
+            $this->db->set('mva', $_POST['mva']);
+            if($_POST['cfop_id'] != ''){
+                $this->db->set('cfop_id', $_POST['cfop_id']);
+            }
+            $this->db->where('estoque_solicitacao_setor_id', $_POST['txtestoque_solicitacao_id']);
+            $this->db->update('tb_estoque_solicitacao_cliente');
+            
             /* inicia o mapeamento no banco */
             $this->db->set('solicitacao_cliente_id', $_POST['txtestoque_solicitacao_id']);
             $this->db->set('quantidade', $_POST['txtqtde']);
@@ -818,31 +940,6 @@ class solicitacao_model extends Model {
             }
             if($_POST['sit_trib'] != ''){
                 $this->db->set('cst', $_POST['sit_trib']);
-            }
-            
-            $_POST['icms'] = str_replace(",", ".", $_POST['icms']);
-            if($_POST['icms'] != ''){
-                $this->db->set('icms', $_POST['icms']);
-            } else {
-                $this->db->set('icms', 0.00);
-            }
-            
-            $_POST['ipi'] = str_replace(",", ".", $_POST['ipi']);
-            if($_POST['ipi'] != ''){
-                $this->db->set('ipi', $_POST['ipi']);
-            } else {
-                $this->db->set('ipi', 0.00);
-            }
-            
-            $_POST['mva'] = str_replace(",", ".", $_POST['mva']);
-            if($_POST['mva'] != ''){
-                $this->db->set('mva', $_POST['mva']);
-            } else {
-                $this->db->set('mva', 0.00);
-            }
-            
-            if($_POST['cfop'] != ''){
-                $this->db->set('cfop', $_POST['cfop']);
             }
             
             $horario = date("Y-m-d H:i:s");

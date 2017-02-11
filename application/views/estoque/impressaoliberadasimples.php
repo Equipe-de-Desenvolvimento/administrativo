@@ -123,7 +123,7 @@
                         <td>
                             <?
                             if (isset($destinatario[0]->data_fechamento)) {
-                                echo $destinatario[0]->data_fechamento;
+                                echo date("d/m/Y H:i", strtotime($destinatario[0]->data_fechamento));
                             } else {
                                 echo "EM ABERTO";
                             }
@@ -143,13 +143,13 @@
                         <td>&nbsp;&nbsp;</td>
 
                         <td align="right"><span class="negrito">Entregador: </span></td>
-                        <td>ENTREGADOR PADRÃO (JOE)</td>
+                        <td><?= @$destinatario[0]->entregador; ?></td>
 
                     </tr>
                     <tr>
 
                         <td><span class="negrito">Vendedor: </span></td>
-                        <td colspan="4">CESINHA DAS PARADA LOKA</td>
+                        <td colspan="4"><?= @$destinatario[0]->vendedor; ?></td>
 
                         <td align="right" colspan="2"><span class="negrito">F.pgto: </span></td>
                         <td colspan="3">28 Dias</td>

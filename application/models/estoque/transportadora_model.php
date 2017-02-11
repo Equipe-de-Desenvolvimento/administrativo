@@ -64,6 +64,20 @@ class transportadora_model extends Model {
         return $return->result();
     }
 
+    function autocompleteentregador($parametro) {
+        $this->db->select('entregador_id,
+                            nome,
+                            sexo,
+                            telefone');
+        $this->db->from('tb_entregador');
+        $this->db->where('ativo', 'true');
+        if ($parametro != null) {
+            $this->db->where('nome ilike', $parametro . "%");
+        }
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function excluir($estoque_transportadora_id) {
 
         $horario = date("Y-m-d H:i:s");

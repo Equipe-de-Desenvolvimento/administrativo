@@ -110,14 +110,53 @@ ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN email character varying(60);
 ALTER TABLE ponto.tb_empresa ADD COLUMN email character varying(60);
 
 -- Dia 08/02/2017
-ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN icms numeric(10,2);
-ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN ipi numeric(10,2);
 ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst character varying(10);
-ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cfop character varying(10);
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente_transportadora ADD COLUMN valor_frete numeric(10,2);
 
--- Dia 09/02/2017
-ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN mva numeric(10,2);
+-- Dia 10/02/2017
 
+CREATE TABLE ponto.tb_entregador
+(
+  entregador_id serial NOT NULL,
+  nome character varying(200) NOT NULL,
+  cep character varying(9),
+  logradouro character varying(200),
+  numero character varying(20),
+  complemento character varying(100),
+  bairro character varying(100),
+  municipio_id integer,
+  sexo character varying(1),
+  nascimento date,
+  rg character varying(20),
+  cns character varying(60),
+  cpf character varying(11),
+  celular character varying(15),
+  telefone character varying(15),
+  observacao character varying(300),
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_entregador_pkey PRIMARY KEY (entregador_id)
+);
 
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente_transportadora ADD COLUMN entregador_id integer;
 
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN icms numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN ipi numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN mva numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN cfop_id integer;
+
+CREATE TABLE ponto.tb_cfop
+(
+  cfop_id serial NOT NULL,
+  codigo_cfop character varying(8),
+  descricao_cfop character varying(500),
+  indNFe character varying(8),
+  indComunica character varying(8),
+  indTransp character varying(8),
+  indDevol character varying(8),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_cfop_pkey PRIMARY KEY (cfop_id)
+);

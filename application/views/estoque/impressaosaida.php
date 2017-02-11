@@ -143,13 +143,13 @@
                                 <tr>
 
                                     <td colspan="9"><span class="negrito">Vendedor: </span>
-                                        <span class="dados_cabecalho">CESINHA AUGUSTO PAIVA NETOSDASDASDAS</span>
+                                        <span class="dados_cabecalho"><?= @$destinatario[0]->vendedor; ?></span>
                                     </td>
                                 </tr>
                                 <tr>
 
                                     <td colspan="4"><span class="negrito">Entregador: </span>
-                                        <span class="dados_cabecalho">ENTREGADOR TAL TAL TAL</span>
+                                        <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                     </td>
                                     <td colspan="5"><span class="negrito">Rota: </span>
                                         <span class="dados_cabecalho">DIVERSIFICADAMENTE DIVERSO</span>
@@ -494,13 +494,13 @@
                                 <tr>
 
                                     <td colspan="9"><span class="negrito">Vendedor: </span>
-                                        <span class="dados_cabecalho">CESINHA AUGUSTO PAIVA NETOSDASDASDAS</span>
+                                        <span class="dados_cabecalho"><?= @$destinatario[0]->vendedor; ?></span>
                                     </td>
                                 </tr>
                                 <tr>
 
                                     <td colspan="4"><span class="negrito">Entregador: </span>
-                                        <span class="dados_cabecalho">ENTREGADOR TAL TAL TAL</span>
+                                        <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                     </td>
                                     <td colspan="5"><span class="negrito">Rota: </span>
                                         <span class="dados_cabecalho">DIVERSIFICADAMENTE DIVERSO</span>

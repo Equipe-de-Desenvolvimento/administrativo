@@ -28,8 +28,8 @@
                 <td colspan="2" class="tic">CNPJ</td>
             </tr>
             <tr>
-                <td height="30" colspan="2" class="tc"><strong></strong></td>
-                <td height="30" colspan="2" class="tc"><strong></strong></td>
+                <td height="30" colspan="2" class="tc"><strong><?= @$destinatario[0]->descricao_cfop ?></strong></td>
+                <td height="30" colspan="2" class="tc"><strong><?= @$destinatario[0]->codigo_cfop ?></strong></td>
                 <td height="30" colspan="2" class="tc"><strong></strong></td>
                 <td height="30" colspan="1" class="tc"><strong><? echo $empresa[0]->inscricao_estadual; ?></strong></td>
                 <td height="30" colspan="2" class="tc"><strong><? echo $empresa[0]->cnpj; ?></strong></td>
@@ -78,15 +78,7 @@
                 <td colspan="8" align="center" style="text-align:center;font-size: 10px;"><strong> DADOS DO PRODUTO</strong></td>
             </tr>
         </table>
-        <!--    <tr>
-              <td colspan="8" align="center" style="text-align:center;font-size: 9px;"><strong>FATURA</strong></td>
-            </tr>
-            <tr>
-              <td colspan="8"  class="ti">&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="8" class="tc"><strong>ads </strong></td>
-            </tr>-->
+        
         <table id="tabelaspec" width="80%" border="1" align="center" cellpadding="0" cellspacing="0" class="tipp" style="border-bottom: 0px;">
             <tbody>
 
@@ -99,11 +91,11 @@
                     <td width="7%" colspan="1" class="semborda">SIT.TRIB.</td>
                     <td width="7%" colspan="1" class="semborda">UNID</td>
 
-                    <td width="7%" colspan="1" class="semborda">VALOR UNITÁRIO</td>
-                    <td width="7%" colspan="1" class="semborda">VALOR TOTAL</td>
-                    <td width="7%" colspan="1" class="semborda">VALOR DO ICMS</td>
+                    <td width="7%" colspan="1" class="semborda">VLR UNITÁRIO</td>
+                    <td width="7%" colspan="1" class="semborda">VLR TOTAL</td>
+                    <td width="7%" colspan="1" class="semborda">VLR DO ICMS</td>
                     <td width="7%" colspan="1" class="semborda">ICMS(%)</td>
-                    <td width="7%" colspan="1" class="semborda">VALOR DO IPI</td>
+                    <td width="7%" colspan="1" class="semborda">VLR DO IPI</td>
                     <td width="7%" colspan="1" class="semborda">IPI(%)</td>
 
 
@@ -118,7 +110,7 @@
                     <td colspan="1" class="semborda"><strong><?= $item->descricao ?></strong></td>
                     <td height="16" class="semborda"><strong><?= $item->quantidade ?></strong></td>
 
-                    <td colspan="1" class="semborda"><strong><?= $item->cfop ?></strong></td>
+                    <td colspan="1" class="semborda"><strong><?= $destinatario[0]->codigo_cfop ?></strong></td>
                     <td colspan="1" class="semborda"><strong><?= $item->cst ?></strong></td>
                     <td colspan="1" class="semborda"><strong><?= $item->unidade ?></strong></td>
                     
@@ -129,30 +121,30 @@
                     $valortotal += $preco;
                     ?>
 
-                    <td colspan="1" class="semborda"><strong>R$ <?= number_format($item->valor_venda, 2, '.', ',')?></strong></td>
-                    <td colspan="1" class="semborda"><strong>R$ <?= number_format($preco, 2, '.', ',')?></strong></td>
+                    <td colspan="1" class="semborda"><strong>R$ <?= number_format($item->valor_venda, 2, ',', '.')?></strong></td>
+                    <td colspan="1" class="semborda"><strong>R$ <?= number_format($preco, 2, ',', '.')?></strong></td>
                     <td colspan="1" class="semborda">
                         <strong>
                             <? 
-                            $item->icms = (float)$item->icms; 
-                            $icms = $preco * (($item->icms)/100); 
+                            $itemIcms = (float)$destinatario[0]->icms; 
+                            $icms = $preco * (($itemIcms)/100); 
                             $valortotalicms += $icms;
                             ?>
-                            R$ <?= number_format($icms, 2, '.', ',')?>
+                            R$ <?= number_format($icms, 2,',', '.')?>
                         </strong>
                     </td>
-                    <td colspan="1" class="semborda"><strong><?= number_format($item->icms, 2, '.', ',')?>%</strong></td>
+                    <td colspan="1" class="semborda"><strong><?= number_format($itemIcms, 2, ',', '.')?>%</strong></td>
                     <td colspan="1" class="semborda">
                         <strong>
                             <? 
-                            $item->ipi = (float)$item->ipi; 
-                            $ipi = $preco * (($item->ipi)/100); 
+                            $itemIpi = (float)$destinatario[0]->ipi; 
+                            $ipi = $preco * (($itemIpi)/100); 
                             $valortotalipi += $ipi;
                             ?>
-                            R$ <?= number_format($ipi, 2, '.', ',')?>
+                            R$ <?= number_format($ipi, 2,',', '.')?>
                         </strong>
                     </td>
-                    <td colspan="1" class="semborda"><strong><?= number_format($item->ipi, 2, '.', ',')?>%</strong></td>
+                    <td colspan="1" class="semborda"><strong><?= number_format($itemIpi, 2, ',', '.')?>%</strong></td>
 
                 </tr>
                 <?}?>
@@ -173,14 +165,19 @@
                 
 
             </tr>
+            <?
+                $destinatario[0]->valor_frete = (float)$destinatario[0]->valor_frete;
+                $valorBaseIcms = $valortotal + $destinatario[0]->valor_frete;
+                $valorIcms = $valorBaseIcms * ( ((float)$destinatario[0]->icms)/100 );
+            ?>
             <tr>
-                <td class="tc"><strong>R$ <?= number_format($valortotal, 2, '.', ',')?></strong></td>
-                <td height="16" colspan="1" class="tc"><strong>R$ <?= number_format($valortotalicms, 2, '.', ',')?></strong></td>
+                <td class="tc"><strong>R$ <?= number_format($valorBaseIcms, 2, ',', '.')?></strong></td>
+                <td height="16" colspan="1" class="tc"><strong>R$ <?= number_format($valorIcms, 2, ',', '.')?></strong></td>
 
                 <td colspan="1" class="tc"><strong></strong></td>
 
                 <td colspan="1" class="tc"><strong></strong></td>
-                <td colspan="3" class="tc"><strong>R$ <?= number_format($valortotal, 2, '.', ',')?></strong></td>
+                <td colspan="3" class="tc"><strong>R$ <?= number_format($valortotal, 2, ',', '.')?></strong></td>
             </tr>
             <tr class="tic">
                 <td width="20%" height="13" class="tic">VALOR DO FRETE</td>
@@ -194,13 +191,12 @@
 
             </tr>
             <tr>
-                <td class="tc"><strong>R$ <?$destinatario[0]->valor_frete = (float)$destinatario[0]->valor_frete;
-                                            echo number_format($destinatario[0]->valor_frete , 2, '.', ',')?></strong></td>
+                <td class="tc"><strong>R$ <?= number_format($destinatario[0]->valor_frete , 2, ',', '.')?></strong></td>
                 <td height="16" colspan="1" class="tc"><strong></strong></td>
 
                 <td colspan="1" class="tc"><strong></strong></td>
 
-                <td colspan="1" class="tc"><strong>R$ <?= number_format($valortotalipi, 2, '.', ',')?></strong></td>
+                <td colspan="1" class="tc"><strong>R$ <?= number_format($valortotalipi, 2, ',', '.')?></strong></td>
                 <td colspan="3" class="tc"><strong></strong></td>
             </tr>
      

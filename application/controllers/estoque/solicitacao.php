@@ -18,6 +18,7 @@ class Solicitacao extends BaseController {
         $this->load->model('estoque/solicitacao_model', 'solicitacao');
         $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->model('cadastro/convenio_model', 'convenio');
+        $this->load->model('cadastro/paciente_model', 'paciente');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -245,6 +246,9 @@ class Solicitacao extends BaseController {
         } elseif ($_POST['valor'] == '') {
             $data['mensagem'] = 'Insira um valor valido.';
             $this->session->set_flashdata('message', $data['mensagem']);
+        } elseif ( ($_POST['cfop'] != '' || $_POST['descricao_cfop'] != '') && $_POST['cfop_id'] == '') {
+            $data['mensagem'] = 'Insira um CFOP valido. Certifique-se de selecionar algum CFOP presente na lista.';
+            $this->session->set_flashdata('message', $data['mensagem']);
         } else {
             $_POST['valor'] = str_replace(',', '.', $_POST['valor']);
             $this->solicitacao->gravaritens();
@@ -264,11 +268,25 @@ class Solicitacao extends BaseController {
     }
 
     function gravarsolicitacaotransportadora() {
+        $solicitacao_id = $_POST['solicitacao_cliente_id'];
         
-        $this->solicitacao->gravarsolicitacaotransportadora();
-        echo   "<script type='text/javascript'> 
+        if($_POST['transportadora_id'] == ''){
+            $data['mensagem'] = 'Insira uma transportadora valida. Certifique-se de escolher um item da lista.';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "estoque/solicitacao/gravartransportadora/$solicitacao_id");
+        }
+        elseif ($_POST['entregador_id'] == '') {
+            $data['mensagem'] = 'Insira um entregador valido. Certifique-se de escolher um item da lista.';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "estoque/solicitacao/gravartransportadora/$solicitacao_id");
+        }
+        else{
+            $this->solicitacao->gravarsolicitacaotransportadora();
+            echo   "<script type='text/javascript'> 
                     window.close();
                 </script>";
+        }
+        
     }
 
     function gravarfaturamento() {
@@ -293,12 +311,12 @@ class Solicitacao extends BaseController {
 
     function excluirsolicitacao($estoque_solicitacao_itens_id, $estoque_solicitacao_id) {
         $this->solicitacao->excluirsolicitacao($estoque_solicitacao_itens_id);
-        $this->carregarsolicitacao($estoque_solicitacao_id);
+        redirect(base_url() . "estoque/solicitacao/carregarsolicitacao/$estoque_solicitacao_id");
     }
 
     function excluirsaida($estoque_saida_id, $estoque_solicitacao_id, $estoque_solicitacao_itens_id) {
         $this->solicitacao->excluirsaida($estoque_saida_id);
-        $this->saidaitens($estoque_solicitacao_itens_id, $estoque_solicitacao_id);
+        redirect(base_url() . "estoque/solicitacao/saidaitens/$estoque_solicitacao_itens_id/$estoque_solicitacao_id");
     }
 
     function faturarsolicitacao($estoque_solicitacao_id) {
@@ -367,6 +385,37 @@ class Solicitacao extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function entregador($args = array()) {
+        $this->loadView('estoque/entregador-lista', $args);
+    }
+
+    function carregarentregador($entregador_id) {
+        $data['entregador'] = $this->solicitacao->instanciarentregador($entregador_id);
+//        die;
+        $this->loadView('estoque/entregador-form', $data);
+    }
+    
+    function gravarentregador() {
+        $verifica = $this->solicitacao->gravarentregador();
+        if ($verifica == "-1") {
+            $data['mensagem'] = 'Erro ao gravar Entregador. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar Entregador.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/solicitacao/entregador");
+    }
+    
+    function excluirentregador($entregador_id) {
+        $verifica = $this->solicitacao->excluirentregador($entregador_id);
+        if ($verifica == "-1") {
+            $data['mensagem'] = 'Erro ao gravar Entregador. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar Entregador.';
+        }
+        redirect(base_url() . "estoque/solicitacao/entregador");
+    }
+    
     function criarsolicitacao($estoque_solicitacao_id) {
         $obj_solicitacao = new solicitacao_model($estoque_solicitacao_id);
         $data['obj'] = $obj_solicitacao;

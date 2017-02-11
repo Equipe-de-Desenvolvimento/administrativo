@@ -16,6 +16,7 @@ class Autocomplete extends Controller {
         $this->load->model('estoque/fornecedor_model', 'fornecedor_m');
         $this->load->model('estoque/produto_model', 'produto_m');
         $this->load->model('estoque/transportadora_model', 'transportadora_m');
+        $this->load->model('estoque/solicitacao_model', 'solicitacao_m');
         $this->load->model('ambulatorio/laudo_model', 'laudo');
         $this->load->model('ponto/cargo_model', 'cargo');
         $this->load->model('ponto/setor_model', 'setor');
@@ -39,6 +40,24 @@ class Autocomplete extends Controller {
         
     }
     
+    function autocompletecfop() {
+        
+        if (isset($_GET['term'])) {
+            $_GET['term'] = str_replace('.', '', $_GET['term']);
+            $result = $this->solicitacao_m->autocompletecfop($_GET['term']);
+        } else {
+            $result = $this->solicitacao_m->autocompletecfop();
+        }
+        foreach ($result as $item) {
+            $retorno['cfop'] = substr($item->codigo_cfop, 0,1) . '.' . substr($item->codigo_cfop, 1, 3);
+            $retorno['value'] = substr($item->codigo_cfop, 0,1) . '.' . substr($item->codigo_cfop, 1, 3) . ' - '. $item->descricao_cfop;
+            $retorno['descricao'] = $item->descricao_cfop;
+            $retorno['id'] = $item->cfop_id;
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+    }
+    
     function solicitacaotransportadora() {
         
         if (isset($_GET['term'])) {
@@ -49,6 +68,21 @@ class Autocomplete extends Controller {
         foreach ($result as $item) {
             $retorno['value'] = $item->descricao;
             $retorno['id'] = $item->estoque_transportadora_id;
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+    }
+    
+    function solicitacaoentregador() {
+        
+        if (isset($_GET['term'])) {
+            $result = $this->transportadora_m->autocompleteentregador($_GET['term']);
+        } else {
+            $result = $this->transportadora_m->autocompleteentregador();
+        }
+        foreach ($result as $item) {
+            $retorno['value'] = $item->nome . ' - '.$item->telefone;
+            $retorno['id'] = $item->entregador_id;
             $var[] = $retorno;
         }
         echo json_encode($var);

@@ -70,7 +70,7 @@
             </div>
             <div>
                 <label>Quantidade</label>
-                <input type="text" name="txtqtde" id="txtqtde" class="size1" alt="integer"/>
+                <input type="text" name="txtqtde" id="txtqtde" class="size1" alt="integer" required/>
             </div>
             
             <div style="display: none">

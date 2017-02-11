@@ -361,6 +361,7 @@ function debug($object) {
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/unidade">Manter Medida</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/armazem">Manter Armazem</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/cliente">Manter Cliente</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao/entregador">Manter Entregador</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador/operadorsetor">Listar Operadores</a></span></ul>
 <? } ?>
                         </li> 
