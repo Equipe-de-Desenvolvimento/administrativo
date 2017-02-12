@@ -90,7 +90,9 @@ class Solicitacao extends BaseController {
     }
     
     function gerarboleto() {
-        
+        include ("boleto/boleto_bb.php");
+        include ("boleto/include/funcoes_bb.php");
+        include ("boleto/include/layout_bb.php");
     }
 
     function carregarimpressoes($estoque_solicitacao_id) {
