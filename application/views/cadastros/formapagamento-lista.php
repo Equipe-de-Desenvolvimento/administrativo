@@ -1,9 +1,11 @@
 
 <div class="content"> <!-- Inicio da DIV content -->
-    <div class="bt_link_new">
-        <a href="<?php echo base_url() ?>cadastros/formapagamento/carregarformapagamento/0">
-            Nova Forma de Pagamento
-        </a>
+    <div class="bt_link_new" style="width: 200pt;">
+        <center>
+            <a style="width: 200pt;" href="<?php echo base_url() ?>cadastros/formapagamento/carregarformapagamento/0">
+                Nova Forma de Pagamento
+            </a>
+        </center>
     </div>
     <div id="accordion">
         <h3 class="singular"><a href="#">Manter Forma de Pagamento</a></h3>

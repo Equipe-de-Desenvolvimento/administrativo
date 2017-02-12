@@ -12,6 +12,7 @@ class formapagamento_model extends Model {
     var $_taxa_juros = null;
     var $_parcelas = null;
     var $_cartao = null;
+    var $_boleto = null;
     var $_fixar = null;
 
     function Formapagamento_model($forma_pagamento_id = null) {
@@ -109,6 +110,7 @@ class formapagamento_model extends Model {
         $this->db->select('forma_pagamento_id,
                             nome,
                             ajuste,
+                            boleto,
                             parcelas');
         $this->db->from('tb_forma_pagamento');
         $this->db->where('ativo', 'true');
@@ -304,6 +306,11 @@ class formapagamento_model extends Model {
             } else {
                 $cartao = 'f';
             }
+            if ($_POST['boleto'] == 'on') {
+                $boleto = 't';
+            } else {
+                $boleto = 'f';
+            }
 
             if ($_POST['arrendondamento'] == 'on') {
                 $arredondamento = 't';
@@ -318,6 +325,7 @@ class formapagamento_model extends Model {
             $this->db->set('taxa_juros', $taxa_juros);
             $this->db->set('fixar', $arredondamento);
             $this->db->set('cartao', $cartao);
+            $this->db->set('boleto', $boleto);
             $this->db->set('credor_devedor', $_POST['credor_devedor']);
             $this->db->set('dia_receber', $diareceber);
             $this->db->set('tempo_receber', $temporeceber);
@@ -362,7 +370,8 @@ class formapagamento_model extends Model {
                                fixar,
                                taxa_juros,
                                parcelas,
-                               cartao');
+                               cartao,
+                               boleto');
             $this->db->from('tb_forma_pagamento');
             $this->db->where("forma_pagamento_id", $forma_pagamento_id);
             $query = $this->db->get();
@@ -379,6 +388,7 @@ class formapagamento_model extends Model {
             $this->_parcelas = $return[0]->parcelas;
             $this->_parcela_minima = $return[0]->parcela_minima;
             $this->_cartao = $return[0]->cartao;
+            $this->_boleto = $return[0]->boleto;
 } else {
             $this->_forma_pagamento_id = null;
         }

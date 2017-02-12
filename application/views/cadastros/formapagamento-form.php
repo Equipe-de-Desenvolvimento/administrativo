@@ -74,16 +74,21 @@
                         </select>
                     </dd>
                     <dt>
-                        <label>Forma de Pagamento Cartão</label>
+                        <label for="cartao">Forma de Pagamento Cartão</label>
                     </dt>
                     <dd>
                         <input type="checkbox" name="cartao" id="cartao" <? if (@$obj->_cartao == 't') { ?>checked <? } ?>  />
+                    </dd>
+                    <dt>
+                        <label for="boleto">Forma de Pagamento Boleto</label>
+                    </dt>
+                    <dd>
+                        <input type="checkbox" name="boleto" id="boleto" <? if (@$obj->_boleto == 't') { ?>checked <? } ?>  />
                     </dd>
                 </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>
                 <button type="reset" name="btnLimpar">Limpar</button>
-                <button type="button" id="btnVoltar" name="btnVoltar">Voltar</button>
             </form>
         </div>
     </div>
@@ -92,12 +97,16 @@
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
-    $('#btnVoltar').click(function () {
-        $(location).attr('href', '<?= base_url(); ?>ponto/cargo');
-    });
 
     $(function () {
         $("#accordion").accordion();
+    });
+
+    $("#cartao").click(function () {
+        $("#boleto").removeAttr('checked');
+    });
+    $("#boleto").click(function () {
+        $("#cartao").removeAttr('checked');
     });
 
 

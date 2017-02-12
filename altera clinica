@@ -143,10 +143,10 @@ CREATE TABLE ponto.tb_entregador
 
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente_transportadora ADD COLUMN entregador_id integer;
 
-ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN icms numeric(10,2);
-ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN ipi numeric(10,2);
-ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN mva numeric(10,2);
-ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN cfop_id integer;
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN icms numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN ipi numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN mva numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cfop_id integer;
 
 CREATE TABLE ponto.tb_cfop
 (
@@ -160,3 +160,15 @@ CREATE TABLE ponto.tb_cfop
   ativo boolean DEFAULT true,
   CONSTRAINT tb_cfop_pkey PRIMARY KEY (cfop_id)
 );
+
+
+-- Dia 11/02/2017
+
+ALTER TABLE ponto.tb_forma_pagamento ADD COLUMN cartao boolean;
+ALTER TABLE ponto.tb_forma_pagamento ADD COLUMN boleto boolean;
+ALTER TABLE ponto.tb_forma_pagamento ADD COLUMN parcela_minima numeric(10,2);
+ALTER TABLE ponto.tb_forma_pagamento ADD COLUMN fixar boolean DEFAULT false;
+
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN contrato boolean DEFAULT false;
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN contrato_id integer;
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN boleto boolean DEFAULT false;

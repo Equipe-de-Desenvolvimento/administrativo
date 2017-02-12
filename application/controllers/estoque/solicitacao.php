@@ -59,6 +59,40 @@ class Solicitacao extends BaseController {
         $this->loadView('estoque/saida-form', $data);
     }
 
+    function carregarboleto($solicitacao_cliente_id) {
+
+        $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
+        $data['formaspagamento'] = $this->solicitacao->listarformapagamentoboleto($solicitacao_cliente_id);
+//                    die;
+
+        if(count($data['formaspagamento']) > 1){
+            $this->loadView('estoque/solicitacaoboleto', $data);    
+        }
+        else{
+            $pagamento_id = $data['formaspagamento'][0]->forma_pagamento_id;
+            redirect(base_url() . "estoque/solicitacao/solicitacaoboleto/$solicitacao_cliente_id/$pagamento_id");
+        }
+        
+    }
+
+    function solicitacaoboleto($solicitacao_cliente_id, $pagamento_id = null) {
+        $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
+        if($pagamento_id != null){
+            $forma_id = $pagamento_id;
+        }
+        else{
+            $forma_id = $_POST['formapagamento'];
+        }
+        $data['conta'] = $this->solicitacao->listarcontaboleto($forma_id);
+        $this->loadView('estoque/dadosboleto', $data);
+        
+        
+    }
+    
+    function gerarboleto() {
+        
+    }
+
     function carregarimpressoes($estoque_solicitacao_id) {
 
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
@@ -281,6 +315,7 @@ class Solicitacao extends BaseController {
             redirect(base_url() . "estoque/solicitacao/gravartransportadora/$solicitacao_id");
         }
         else{
+//            die('ola');
             $this->solicitacao->gravarsolicitacaotransportadora();
             echo   "<script type='text/javascript'> 
                     window.close();

@@ -30,10 +30,11 @@
                         </dt>
                         <dd>
                             <input type="text" name="valor1" id="valor1" class="texto01" value="<?= $solicitacao[0]->valor1; ?>" onblur="history.go(0)" />
+                            <input type="hidden" name="formapamento1_boleto" id="formapamento1_boleto" class="texto01"/>
                             <select  name="formapamento1" id="formapamento1" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
-                                    <option value="<?= $item->forma_pagamento_id; ?>" ><?= $item->nome; ?></option>
+                                <option value="<?= $item->forma_pagamento_id; ?>" ><?= $item->nome; ?></option>
                                         <? endforeach; ?>
                                 <input type="text" name="ajuste1" id="ajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>                                                                           
                                 <input type="text" name="valorajuste1" id="valorajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/> 
@@ -47,6 +48,7 @@
                         </dt>
                         <dd>
                             <input type="text" name="valor2" id="valor2" class="texto01" value="<?= $solicitacao[0]->valor2; ?>" onblur="history.go(0)"/>
+                            <input type="hidden" name="formapamento2_boleto" id="formapamento2_boleto" class="texto01"/>
                             <select  name="formapamento2" id="formapamento2" class="size1" >
                                 <option value="">Selecione</option>
                                 <? foreach ($forma_pagamento as $item) : ?>
@@ -63,6 +65,7 @@
                             <label>Valor3/ Forma de pagamento3 / Ajuste3(%) / Valor Ajustado3 / Parcelas3</label>
                         </dt>
                         <dd>
+                            <input type="hidden" name="formapamento3_boleto" id="formapamento3_boleto" class="texto01"/>
                             <input type="text" name="valor3" id="valor3" class="texto01" value="<?= $solicitacao[0]->valor3; ?>" onblur="history.go(0)"/>
                             <select  name="formapamento3" id="formapamento3" class="size1" >
                                 <option value="">Selecione</option>
@@ -81,6 +84,7 @@
                         </dt>
                         <dd>                           
                             <input type="text" name="valor4" id="valor4" class="texto01"  value="<?= $solicitacao[0]->valor4; ?>" onblur="history.go(0)"/>
+                            <input type="hidden" name="formapamento4_boleto" id="formapamento4_boleto" class="texto01"/>
 
                             <select  name="formapamento4" id="formapamento4" class="size1" >
                                 <option value="">Selecione</option>
@@ -152,6 +156,7 @@
                                                     $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento1: $(this).val(), ajax: true}, function (j) {
                                                         options = "";
                                                         parcelas = "";
+                                                        document.getElementById("formapamento1_boleto").value = j[0].boleto;
                                                         options = j[0].ajuste;
                                                         parcelas = j[0].parcelas;
                                                         numer_1 = parseFloat(document.form_faturar.valor1.value.replace(",", "."));
@@ -187,6 +192,7 @@
                                                     $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento2: $(this).val(), ajax: true}, function (j) {
                                                         options = "";
                                                         parcelas = "";
+                                                        document.getElementById("formapamento2_boleto").value = j[0].boleto;
                                                         options = j[0].ajuste;
                                                         parcelas = j[0].parcelas;
                                                         numer_2 = parseFloat(document.form_faturar.valor2.value.replace(",", "."));
@@ -224,6 +230,7 @@
                                                     $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento3: $(this).val(), ajax: true}, function (j) {
                                                         options = "";
                                                         parcelas = "";
+                                                        document.getElementById("formapamento3_boleto").value = j[0].boleto;
                                                         options = j[0].ajuste;
                                                         parcelas = j[0].parcelas;
                                                         numer_3 = parseFloat(document.form_faturar.valor3.value.replace(",", "."));
@@ -259,6 +266,7 @@
                                                     $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento4: $(this).val(), ajax: true}, function (j) {
                                                         options = "";
                                                         parcelas = "";
+                                                        document.getElementById("formapamento4_boleto").value = j[0].boleto;
                                                         options = j[0].ajuste;
                                                         parcelas = j[0].parcelas;
                                                         numer_4 = parseFloat(document.form_faturar.valor4.value.replace(",", "."));

@@ -98,6 +98,14 @@
                                         </div>
                                     </td>
                                     <?}?>
+                                    
+                                    <?if($item->faturado == 't' && $item->boleto == 't'){?>
+                                    
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
+                                            <a href="<?= base_url() ?>estoque/solicitacao/carregarboleto/<?= $item->estoque_solicitacao_setor_id ?>">Boleto</a>
+                                        </div>
+                                    </td>
+                                    <?}?>
                             <?  }
                             
                                 if ($item->situacao != 'ABERTA') {

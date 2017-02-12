@@ -12,39 +12,6 @@
         </fieldset>
 
         <fieldset>
-            <legend>Impostos </legend>
-            <div style="margin-right: 0;">
-                <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none">
-                    <label for="icms">ICMS (%)</label>
-                </a>
-                <input type="text" name="icms" id="icms" alt="decimal" class="texto01" value="<?= $nome[0]->icms; ?>"/>
-            </div>
-
-            <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Imposto sobre Produtos Industrializados" style="text-decoration: none">
-                    <label for="ipi">IPI (%)</label>
-                </a>
-                <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01" value="<?= $nome[0]->ipi; ?>"/>
-            </div>
-
-            <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
-                    <label for="cfop">CFOP</label>
-                </a>
-                <input type="hidden" name="cfop_id" id="cfop_id" class="texto01" value="<?= @$nome[0]->cfop_id; ?>"/>
-                <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01" value="<?= @$nome[0]->codigo_cfop; ?>"/>
-                <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" value="<?= @$nome[0]->descricao_cfop; ?>" readonly/>
-            </div>
-
-            <div style="margin-left: 10pt; margin-right: 0;">
-                <a href="#" title="Margem de Valor Agregado" style="text-decoration: none">
-                    <label for="mva">MVA</label>
-                </a>
-                <input type="text" name="mva" id="mva" alt="decimal" class="texto01" value="<?= $nome[0]->mva; ?>"/>
-            </div>
-        </fieldset>
-
-        <fieldset>
             <legend>Cadastro de Produtos</legend>
             <div>
                 <label>Produtos</label>
@@ -70,6 +37,37 @@
             <div style="margin-left: -10pt; margin-right: 0;">
                 <label>Valor</label>
                 <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required readonly/>
+            </div>
+            
+            <div style="width: 100%;">
+                <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
+                    <label for="cfop">CFOP</label>
+                </a>
+                <input type="hidden" name="cfop_id" id="cfop_id" class="texto01"/>
+                <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
+                <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" readonly/>
+            </div>
+            
+            
+            <div style="margin-right: 0;">
+                <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none">
+                    <label for="icms">ICMS (%)</label>
+                </a>
+                <input type="text" name="icms" id="icms" alt="decimal" class="texto01"/>
+            </div>
+
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <a href="#" title="Imposto sobre Produtos Industrializados" style="text-decoration: none">
+                    <label for="ipi">IPI (%)</label>
+                </a>
+                <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01"/>
+            </div>
+
+            <div style="margin-left: 10pt; margin-right: 0;">
+                <a href="#" title="Margem de Valor Agregado" style="text-decoration: none">
+                    <label for="mva">MVA</label>
+                </a>
+                <input type="text" name="mva" id="mva" alt="decimal" class="texto01"/>
             </div>
 
             <div style="margin-left: -10pt; margin-right: 0;">
