@@ -90,6 +90,12 @@ class Solicitacao extends BaseController {
     }
     
     function gerarboleto() {
+        $data['conta'] = $this->solicitacao->listarcontaboleto($_POST['forma_pagamento_id']);
+        $data['empresa'] = $this->solicitacao->empresaboleto();
+        $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($_POST['solicitacao_cliente_id']);
+        
+//        var_dump($data['destinatario']);die;
+        
         include ("boleto/boleto_bb.php");
         include ("boleto/include/funcoes_bb.php");
         include ("boleto/include/layout_bb.php");

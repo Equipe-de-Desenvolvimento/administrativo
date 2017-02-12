@@ -24,6 +24,10 @@
 
         </fieldset>
         <fieldset>
+            <div>        
+                <label>Vencimento</label>
+                <input type="text" name="vencimento" id="vencimento" alt="date"/>
+            </div>
             <div style="display: block; width: 100%">
                 <hr>
                 <button type="submit" name="btnEnviar">enviar</button>
@@ -37,6 +41,19 @@
 <script type="text/javascript">
     $(function () {
         $("#accordion").accordion();
+    });
+    
+    $(function() {
+        $("#vencimento").datepicker({
+            autosize: true,
+//            minDate: <?= date("d/m/Y")?>,
+            changeYear: true,
+            changeMonth: true,
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            buttonImage: '<?= base_url() ?>img/form/date.png',
+            dateFormat: 'dd/mm/yy'
+        });
     });
 
     $(function () {

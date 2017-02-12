@@ -28,7 +28,9 @@
 
 
 // ------------------------- DADOS DINÂMICOS DO SEU CLIENTE PARA A GERAÇÃO DO BOLETO (FIXO OU VIA GET) -------------------- //
-// Os valores abaixo podem ser colocados manualmente ou ajustados p/ formulário c/ POST, GET ou de BD (MySql,Postgre,etc)	//
+// Os valores abaixo podem ser colocados manualmente ou ajustados p/ formulário c/ POST, GET ou de BD (MySql,Postgre,etc)	// 
+
+//$data['destinatario']
 
 // DADOS DO BOLETO PARA O SEU CLIENTE
 $dias_de_prazo_para_pagamento = 5;
@@ -46,8 +48,14 @@ $dadosboleto["data_processamento"] = date("d/m/Y"); // Data de processamento do 
 $dadosboleto["valor_boleto"] = $valor_boleto; 	// Valor do Boleto - REGRA: Com vírgula e sempre com duas casas depois da virgula
 
 // DADOS DO SEU CLIENTE
-$dadosboleto["sacado"] = "Nome do seu Cliente";
-$dadosboleto["endereco1"] = "Endereço do seu Cliente";
+$dadosboleto["sacado"] = $data['destinatario'][0]->nome;
+if($data['destinatario'][0]->numero != ''){
+	$endereco_cli = $data['destinatario'][0]->logradouro .', N° '.$data['destinatario'][0]->numero;
+}
+else{
+	$endereco_cli = $data['destinatario'][0]->logradouro;
+}
+$dadosboleto["endereco1"] = $endereco_cli;
 $dadosboleto["endereco2"] = "Cidade - Estado -  CEP: 00000-000";
 
 // INFORMACOES PARA O CLIENTE
@@ -58,7 +66,7 @@ $dadosboleto["demonstrativo3"] = "BoletoPhp - http://www.boletophp.com.br";
 // INSTRUÇÕES PARA O CAIXA
 $dadosboleto["instrucoes1"] = "- Sr. Caixa, cobrar multa de 2% após o vencimento";
 $dadosboleto["instrucoes2"] = "- Receber até 10 dias após o vencimento";
-$dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: xxxx@xxxx.com.br";
+$dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: ".$data['empresa'][0]->email;
 $dadosboleto["instrucoes4"] = "&nbsp; Emitido pelo sistema Projeto BoletoPhp - www.boletophp.com.br";
 
 // DADOS OPCIONAIS DE ACORDO COM O BANCO OU CLIENTE
@@ -73,8 +81,8 @@ $dadosboleto["especie_doc"] = "DM";
 
 
 // DADOS DA SUA CONTA - BANCO DO BRASIL
-$dadosboleto["agencia"] = "9999"; // Num da agencia, sem digito
-$dadosboleto["conta"] = "99999"; 	// Num da conta, sem digito
+$dadosboleto["agencia"] = $data['conta'][0]->agencia; // Num da agencia, sem digito
+$dadosboleto["conta"] = $data['conta'][0]->conta; 	// Num da conta, sem digito
 
 // DADOS PERSONALIZADOS - BANCO DO BRASIL
 $dadosboleto["convenio"] = "7777777";  // Num do convênio - REGRA: 6 ou 7 ou 8 dígitos
@@ -106,11 +114,19 @@ DESENVOLVIDO PARA CARTEIRA 18
 
 
 // SEUS DADOS
-$dadosboleto["identificacao"] = "BoletoPhp - Código Aberto de Sistema de Boletos";
-$dadosboleto["cpf_cnpj"] = "";
-$dadosboleto["endereco"] = "Coloque o endereço da sua empresa aqui";
-$dadosboleto["cidade_uf"] = "Cidade / Estado";
-$dadosboleto["cedente"] = "Coloque a Razão Social da sua empresa aqui";
+$dadosboleto["identificacao"] = "BOLETO BANCARIO";
+$dadosboleto["cpf_cnpj"] = $data['empresa'][0]->cnpj;
+
+if($data['empresa'][0]->numero != ''){
+	$endereco_emp = $data['empresa'][0]->logradouro .', N° '.$data['empresa'][0]->numero;
+}
+else{
+	$endereco_emp = $data['empresa'][0]->logradouro;
+}
+
+$dadosboleto["endereco"] = $endereco_emp;
+$dadosboleto["cidade_uf"] = $data['empresa'][0]->municipio . ' / ' . $data['empresa'][0]->estado;
+$dadosboleto["cedente"] = $data['empresa'][0]->razao_social;
 
 // NÃO ALTERAR!
 include("include/funcoes_bb.php"); 

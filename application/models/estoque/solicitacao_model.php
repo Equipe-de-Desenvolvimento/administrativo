@@ -202,6 +202,28 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
+    
+    function empresaboleto() {
+        $empresa = $this->session->userdata('empresa_id');
+        $this->db->select('e.empresa_id,
+                            e.nome as empresa,
+                            e.cnpj,
+                            e.cep,
+                            e.razao_social,
+                            e.logradouro,
+                            e.bairro,
+                            e.telefone,
+                            e.inscricao_estadual,
+                            e.email,
+                            m.estado,
+                            m.nome as municipio,
+                            e.numero');
+        $this->db->from('tb_empresa e');
+        $this->db->where('empresa_id', $empresa);
+        $this->db->join('tb_municipio m', 'm.municipio_id = e.municipio_id', 'left');
+        $return = $this->db->get();
+        return $return->result();
+    }
 
     function listarprodutos($estoque_solicitacao_id) {
         $this->db->select('ep.estoque_produto_id,
