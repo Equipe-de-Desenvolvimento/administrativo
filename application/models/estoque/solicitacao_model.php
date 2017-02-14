@@ -38,6 +38,17 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function listasolicitacaofaturamento($estoque_solicitacao_id) {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('esf.*,
+                           ct.valor_frete ');
+        $this->db->from('tb_estoque_solicitacao_faturamento esf');
+        $this->db->join('tb_estoque_solicitacao_cliente_transportadora ct', 'ct.solicitacao_cliente_id = esf.estoque_solicitacao_id', 'left');
+        $this->db->where('esf.estoque_solicitacao_id', $estoque_solicitacao_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listadadossolicitacaoliberada($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('ec.*, 
@@ -101,7 +112,26 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
-    function autocompletecfop($parametro) {
+    function autocompletecest() {
+
+        $this->db->select('*');
+        $this->db->from('tb_cest');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function autocompletencm($parametro = null) {
+
+        $this->db->select('ncm_id, codigo_ncm, descricao_ncm, aliquota');
+        $this->db->from('tb_ncm');
+        if ($parametro != null) {
+            $this->db->where('codigo_ncm ilike', $parametro . "%");
+        }
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function autocompletecfop($parametro = null) {
 
         $this->db->select('cfop_id, codigo_cfop, descricao_cfop');
         $this->db->from('tb_cfop');

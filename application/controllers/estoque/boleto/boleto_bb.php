@@ -30,13 +30,13 @@
 // ------------------------- DADOS DINÂMICOS DO SEU CLIENTE PARA A GERAÇÃO DO BOLETO (FIXO OU VIA GET) -------------------- //
 // Os valores abaixo podem ser colocados manualmente ou ajustados p/ formulário c/ POST, GET ou de BD (MySql,Postgre,etc)	// 
 
-//$data['destinatario']
+//data['dados_faturamento'][0]->valor_total
 
 // DADOS DO BOLETO PARA O SEU CLIENTE
 $dias_de_prazo_para_pagamento = 5;
-$taxa_boleto = 2.95;
-$data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; 
-$valor_cobrado = "2950,00"; // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
+// $data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006";
+$data_venc = $data['data_venc'];
+$valor_cobrado = (float)$data['dados_faturamento'][0]->valor_total; // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
 $valor_cobrado = str_replace(",", ".",$valor_cobrado);
 $valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
 
@@ -56,22 +56,22 @@ else{
 	$endereco_cli = $data['destinatario'][0]->logradouro;
 }
 $dadosboleto["endereco1"] = $endereco_cli;
-$dadosboleto["endereco2"] = "Cidade - Estado -  CEP: 00000-000";
+$dadosboleto["endereco2"] = $data['destinatario'][0]->municipio." - ".$data['destinatario'][0]->estado." -  CEP: ".$data['destinatario'][0]->cep;
 
 // INFORMACOES PARA O CLIENTE
-$dadosboleto["demonstrativo1"] = "Pagamento de Compra na Loja Nonononono";
-$dadosboleto["demonstrativo2"] = "Mensalidade referente a nonon nonooon nononon<br>Taxa bancária - R$ ".number_format($taxa_boleto, 2, ',', '');
-$dadosboleto["demonstrativo3"] = "BoletoPhp - http://www.boletophp.com.br";
+$dadosboleto["demonstrativo1"] = "Pagamento de Compra na ".$data['empresa'][0]->razao_social;
+$dadosboleto["demonstrativo2"] = "Mensalidade referente a .".$data['empresa'][0]->razao_social."<br>Taxa bancária - R$ ".number_format($taxa_boleto, 2, ',', '');
+$dadosboleto["demonstrativo3"] = "&nbsp;";
 
 // INSTRUÇÕES PARA O CAIXA
 $dadosboleto["instrucoes1"] = "- Sr. Caixa, cobrar multa de 2% após o vencimento";
 $dadosboleto["instrucoes2"] = "- Receber até 10 dias após o vencimento";
 $dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: ".$data['empresa'][0]->email;
-$dadosboleto["instrucoes4"] = "&nbsp; Emitido pelo sistema Projeto BoletoPhp - www.boletophp.com.br";
+$dadosboleto["instrucoes4"] = "&nbsp;";
 
 // DADOS OPCIONAIS DE ACORDO COM O BANCO OU CLIENTE
-$dadosboleto["quantidade"] = "10";
-$dadosboleto["valor_unitario"] = "10";
+$dadosboleto["quantidade"] = "";
+$dadosboleto["valor_unitario"] = "";
 $dadosboleto["aceite"] = "N";		
 $dadosboleto["especie"] = "R$";
 $dadosboleto["especie_doc"] = "DM";

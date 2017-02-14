@@ -172,3 +172,26 @@ ALTER TABLE ponto.tb_forma_pagamento ADD COLUMN fixar boolean DEFAULT false;
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN contrato boolean DEFAULT false;
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN contrato_id integer;
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN boleto boolean DEFAULT false;
+
+
+-- Dia 13/02/2017
+CREATE TABLE ponto.tb_ncm
+(
+  ncm_id serial NOT NULL,
+  codigo_ncm character varying(600),
+  descricao_ncm character varying(5000),
+  aliquota character varying(600),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_ncm_pkey PRIMARY KEY (ncm_id)
+);
+
+CREATE TABLE ponto.tb_cest
+(
+  cest_id serial NOT NULL,
+  codigo_cest character varying(600),
+  codigo_ncm character varying(600),
+  descricao_cest character varying(5000),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_cest_pkey PRIMARY KEY (cest_id)
+);
+

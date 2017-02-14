@@ -90,11 +90,32 @@ class Solicitacao extends BaseController {
     }
     
     function gerarboleto() {
+        //dados 
         $data['conta'] = $this->solicitacao->listarcontaboleto($_POST['forma_pagamento_id']);
         $data['empresa'] = $this->solicitacao->empresaboleto();
         $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($_POST['solicitacao_cliente_id']);
+        $data['dados_faturamento'] = $this->solicitacao->listasolicitacaofaturamento($_POST['solicitacao_cliente_id']);
+        $data['data_venc'] = $_POST['vencimento'];
         
-//        var_dump($data['destinatario']);die;
+        //valores
+        if((float)$data['dados_faturamento'][0]->desconto != '0'){
+            $desconto = (float)$data['dados_faturamento'][0]->desconto;
+        }
+        else{
+            $desconto = '0,00';
+        }
+        $deducoes = '0,00';
+        
+        $acrescimos = '0,00';
+        $multa = '0,00';
+        $taxa_boleto = (float)  str_replace(',', '.', str_replace('.', '',$_POST['taxa_boleto']));
+        
+        $data['valor_cobrado'] = (float)$data['dados_faturamento'][0]->valor_total - (float)$desconto - (float)$deducoes + (float)$multa + (float)$acrescimos + $taxa_boleto;
+      
+        
+        
+//        echo  '<pre>';
+//        var_dump($taxa_boleto);die;
         
         include ("boleto/boleto_bb.php");
         include ("boleto/include/funcoes_bb.php");

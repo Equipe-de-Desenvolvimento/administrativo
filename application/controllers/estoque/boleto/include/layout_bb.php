@@ -599,11 +599,11 @@ do Sacado</b></div></TD></tr></tbody></table>
 			<td class="valor_cobrado">(=) Valor cobrado</td>
 		</tr>
 		<tr class="campos">
-			<td class="desconto">&nbsp;</td>
-			<td class="outras_deducoes">&nbsp;</td>
-			<td class="mora_multa">&nbsp;</td>
-			<td class="outros_acrescimos">&nbsp;</td>
-			<td class="valor_cobrado">&nbsp;</td>
+			<td class="desconto"><?php echo $desconto ?></td>
+			<td class="outras_deducoes"><?php echo $deducoes ?></td>
+			<td class="mora_multa"><?php echo $multa ?></td>
+			<td class="outros_acrescimos"><?php echo $acrescimos ?></td>
+			<td class="valor_cobrado"><?php echo number_format($data['valor_cobrado'], 2, ',', '') ?></td>
 		</tr>
 		</tbody>
 		</table>
@@ -650,7 +650,8 @@ do Sacado</b></div></TD></tr></tbody></table>
 			<td class="vencimento2">Vencimento</td>
 		</tr>
 		<tr class="campos">
-			<td class="local_pagto">QUALQUER BANCO AT&Eacute; O VENCIMENTO</td>
+			<td class="local_pagto">Pag&aacute;vel em qualquer 
+banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.</td>
 			<td class="vencimento2"><?php echo $dadosboleto["data_vencimento"]?></td>
 		</tr>
 		</tbody>
@@ -744,7 +745,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 				<td class="desconto2">(-) Desconto / Abatimento</td>
 			</tr>
 			<tr class="campos">
-				<td class="desconto2">&nbsp;</td>
+				<td class="desconto2"><?php echo $desconto ?></td>
 			</tr>
 			</tbody>
 			</table>
@@ -757,7 +758,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 				<td class="outras_deducoes2">(-) Outras dedu&ccedil;&otilde;es</td>
 			</tr>
 			<tr class="campos">
-				<td class="outras_deducoes2">&nbsp;</td>
+				<td class="outras_deducoes2"><?php echo $deducoes ?></td>
 			</tr>
 			</tbody>
 			</table>
@@ -770,7 +771,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 				<td class="mora_multa2">(+) Mora / Multa</td>
 			</tr>
 			<tr class="campos">
-				<td class="mora_multa2">&nbsp;</td>
+				<td class="mora_multa2"><?php echo $multa ?></td>
 			</tr>
 			</tbody>
 			</table>
@@ -783,7 +784,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 				<td class="outros_acrescimos2">(+) Outros Acr&eacute;scimos</td>
 			</tr>
 			<tr class="campos">
-				<td class="outros_acrescimos2">&nbsp;</td>
+				<td class="outros_acrescimos2"><?php echo $acrescimos ?></td>
 			</tr>
 			</tbody>
 			</table>
@@ -796,7 +797,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 				<td class="valor_cobrado2">(=) Valor cobrado</td>
 			</tr>
 			<tr class="campos">
-				<td class="valor_cobrado2">&nbsp;</td>
+				<td class="valor_cobrado2"><?php echo number_format($data['valor_cobrado'], 2, ',', '') ?></td>
 			</tr>
 			</tbody>
 			</table>

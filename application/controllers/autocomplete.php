@@ -39,9 +39,48 @@ class Autocomplete extends Controller {
     function index() {
         
     }
-    
-    function autocompletecfop() {
+
+    function autocompletecest() {
+        $result = $this->solicitacao_m->autocompletecest();
+        echo "<pre>";
+        var_dump($result);
+        echo "<meta charset=utf-8>";
+        foreach ($result as $value) {
+            $inicioInsert = "INSERT INTO ponto.tb_cest_teste(codigo_cest, codigo_ncm, descricao_cest) VALUES('";
+            $d = "','";
+            $fimIsert = "');";
+            $tudo = '';
+            $ncm = null;
+            $ncm = explode(",", $value->codigo_ncm);
+            for ($i = 0; $i < count($ncm); $i++) {
+                $sql = $inicioInsert . $value->codigo_cest . $d . $ncm[$i] . $d . $value->descricao_cest . $fimIsert;
+                $tudo .= $sql."<br>";
+            }
+        }
         
+        echo $tudo;
+
+    }
+
+    function autocompletencm() {
+
+        if (isset($_GET['term'])) {
+            $result = $this->solicitacao_m->autocompletencm($_GET['term']);
+        } else {
+            $result = $this->solicitacao_m->autocompletencm();
+        }
+        foreach ($result as $item) {
+            $retorno['codigo'] = $item->codigo_ncm;
+            $retorno['value'] = $item->codigo_ncm . ' - ' . $item->descricao_ncm;
+            $retorno['descricao'] = $item->descricao_ncm;
+            $retorno['id'] = $item->ncm_id;
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+    }
+
+    function autocompletecfop() {
+
         if (isset($_GET['term'])) {
             $_GET['term'] = str_replace('.', '', $_GET['term']);
             $result = $this->solicitacao_m->autocompletecfop($_GET['term']);
@@ -49,17 +88,17 @@ class Autocomplete extends Controller {
             $result = $this->solicitacao_m->autocompletecfop();
         }
         foreach ($result as $item) {
-            $retorno['cfop'] = substr($item->codigo_cfop, 0,1) . '.' . substr($item->codigo_cfop, 1, 3);
-            $retorno['value'] = substr($item->codigo_cfop, 0,1) . '.' . substr($item->codigo_cfop, 1, 3) . ' - '. $item->descricao_cfop;
+            $retorno['cfop'] = substr($item->codigo_cfop, 0, 1) . '.' . substr($item->codigo_cfop, 1, 3);
+            $retorno['value'] = substr($item->codigo_cfop, 0, 1) . '.' . substr($item->codigo_cfop, 1, 3) . ' - ' . $item->descricao_cfop;
             $retorno['descricao'] = $item->descricao_cfop;
             $retorno['id'] = $item->cfop_id;
             $var[] = $retorno;
         }
         echo json_encode($var);
     }
-    
+
     function solicitacaotransportadora() {
-        
+
         if (isset($_GET['term'])) {
             $result = $this->transportadora_m->autocompletetransportadora($_GET['term']);
         } else {
@@ -72,22 +111,22 @@ class Autocomplete extends Controller {
         }
         echo json_encode($var);
     }
-    
+
     function solicitacaoentregador() {
-        
+
         if (isset($_GET['term'])) {
             $result = $this->transportadora_m->autocompleteentregador($_GET['term']);
         } else {
             $result = $this->transportadora_m->autocompleteentregador();
         }
         foreach ($result as $item) {
-            $retorno['value'] = $item->nome . ' - '.$item->telefone;
+            $retorno['value'] = $item->nome . ' - ' . $item->telefone;
             $retorno['id'] = $item->entregador_id;
             $var[] = $retorno;
         }
         echo json_encode($var);
     }
-    
+
     function horariosambulatorio() {
 
         if (isset($_GET['exame'])) {
@@ -371,7 +410,7 @@ class Autocomplete extends Controller {
         }
         echo json_encode($result);
     }
-    
+
     function estoquepedidolote() {
 
         if (isset($_GET['produto_id'])) {

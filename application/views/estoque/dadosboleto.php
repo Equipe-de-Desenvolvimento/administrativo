@@ -28,6 +28,10 @@
                 <label>Vencimento</label>
                 <input type="text" name="vencimento" id="vencimento" alt="date"/>
             </div>
+            <div>        
+                <label>Taxa Boleto (R$)</label>
+                <input type="text" name="taxa_boleto" id="taxa_boleto" alt="decimal" class="texto01"/>
+            </div>
             <div style="display: block; width: 100%">
                 <hr>
                 <button type="submit" name="btnEnviar">enviar</button>
