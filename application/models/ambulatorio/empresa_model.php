@@ -16,6 +16,8 @@ class empresa_model extends Model {
     var $_municipio_id = null;
     var $_cep = null;
     var $_cnes = null;
+    var $_inscricao_estadual = null;
+    var $_email = null;
 
     function Empresa_model($exame_empresa_id = null) {
         parent::Model();
@@ -89,6 +91,12 @@ class empresa_model extends Model {
             if ($_POST['txtCNPJ'] != '') {
                 $this->db->set('cnpj', str_replace("-", "", str_replace("/", "", str_replace(".", "", $_POST['txtCNPJ']))));
             }
+            if ($_POST['inscricaoestadual'] != '') {
+                $this->db->set('inscricao_estadual',$_POST['inscricaoestadual']);
+            }
+            if ($_POST['email'] != '') {
+                $this->db->set('email',$_POST['email']);
+            }
             $this->db->set('telefone', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['telefone']))));
             $this->db->set('celular', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['celular']))));
             if ($_POST['municipio_id'] != '') {
@@ -139,6 +147,8 @@ class empresa_model extends Model {
                                logradouro,
                                numero,
                                bairro,
+                               inscricao_estadual,
+                               email,
                                cnes,
                                f.municipio_id,
                                c.nome as municipio,
@@ -149,6 +159,9 @@ class empresa_model extends Model {
             $this->db->where("empresa_id", $empresa_id);
             $query = $this->db->get();
             $return = $query->result();
+//            var $_inscricao_estadual = null;
+//            var $_email = null;
+            
             $this->_empresa_id = $empresa_id;
             $this->_nome = $return[0]->nome;
             $this->_cnpj = $return[0]->cnpj;
@@ -159,6 +172,8 @@ class empresa_model extends Model {
             $this->_logradouro = $return[0]->logradouro;
             $this->_numero = $return[0]->numero;
             $this->_bairro = $return[0]->bairro;
+            $this->_inscricao_estadual = $return[0]->inscricao_estadual;
+            $this->_email = $return[0]->email;
             $this->_municipio_id = $return[0]->municipio_id;
             $this->_municipio = $return[0]->municipio;
             $this->_nome = $return[0]->nome;

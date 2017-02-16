@@ -8,6 +8,9 @@ class produto_model extends Model {
     var $_unidade = null;
     var $_codigo = null;
     var $_ncm = null;
+    var $_ncm_descricao = null;
+    var $_cest = null;
+    var $_ipi = null;
     var $_sub_classe_id = null;
     var $_sub_classe = null;
     var $_valor_compra = null;
@@ -110,6 +113,7 @@ class produto_model extends Model {
             /* inicia o mapeamento no banco */
             $estoque_produto_id = $_POST['txtestoqueprodutoid'];
             $this->db->set('descricao', $_POST['nome']);
+            $this->db->set('ipi', str_replace(",", ".", str_replace(".", "", $_POST['ipi'])));
             $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $_POST['compra'])));
             $this->db->set('valor_venda', str_replace(",", ".", str_replace(".", "", $_POST['venda'])));
             $this->db->set('estoque_minimo', $_POST['minimo']);
@@ -120,6 +124,9 @@ class produto_model extends Model {
             }
             if($_POST['ncm'] != ''){
                 $this->db->set('ncm', $_POST['ncm']);
+            }
+            if($_POST['cest'] != ''){
+                $this->db->set('ncm', $_POST['cest']);
             }
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
@@ -155,12 +162,16 @@ class produto_model extends Model {
                             p.sub_classe_id,
                             p.codigo,
                             p.ncm,
+                            n.descricao_ncm,
+                            p.cest,
+                            p.ipi,
                             sc.descricao as sub_classe,
                             p.valor_compra,
                             p.valor_venda,
                             p.estoque_minimo');
             $this->db->from('tb_estoque_produto p');
             $this->db->join('tb_estoque_sub_classe sc', 'sc.estoque_sub_classe_id = p.sub_classe_id', 'left');
+            $this->db->join('tb_ncm n', 'n.codigo_ncm = p.ncm', 'left');
             $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id = p.unidade_id', 'left');
             $this->db->where("estoque_produto_id", $estoque_produto_id);
             $query = $this->db->get();
@@ -171,11 +182,15 @@ class produto_model extends Model {
             $this->_unidade = $return[0]->unidade;
             $this->_codigo = $return[0]->codigo;
             $this->_ncm = $return[0]->ncm;
+            $this->_ncm_descricao = $return[0]->descricao_ncm;
+            $this->_ipi = $return[0]->ipi;
+            $this->_cest = $return[0]->cest;
             $this->_sub_classe_id = $return[0]->sub_classe_id;
             $this->_sub_classe = $return[0]->sub_classe;
             $this->_valor_compra = $return[0]->valor_compra;
             $this->_valor_venda = $return[0]->valor_venda;
             $this->_estoque_minimo = $return[0]->estoque_minimo;
+//            var_dump($return[0]->ncm); die;
         } else {
             $this->_estoque_produto_id = null;
         }

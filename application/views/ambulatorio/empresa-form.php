@@ -31,6 +31,18 @@
                         <input type="text" name="txtCNES" maxlength="14" class="texto03" value="<?= @$obj->_cnes; ?>" />
                     </dd>
                     <dt>
+                    <label>Inscrição Estadual</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="inscricaoestadual" class="texto04" name="inscricaoestadual" alt="99.999.9999-9" value="<?= @$obj->_inscricao_estadual; ?>" />
+                    </dd>
+                    <dt>
+                        <label>Email</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="email" class="texto08" name="email" value="<?= @$obj->_email; ?>" />
+                    </dd>
+                    <dt>
                     <label>Endere&ccedil;o</label>
                     </dt>
                     <dd>

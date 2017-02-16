@@ -195,3 +195,20 @@ CREATE TABLE ponto.tb_cest
   CONSTRAINT tb_cest_pkey PRIMARY KEY (cest_id)
 );
 
+-- Dia 15/02/2017
+ALTER TABLE ponto.tb_estoque_produto ADD COLUMN cest character varying(20);
+ALTER TABLE ponto.tb_estoque_produto ADD COLUMN ipi numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN icmsst boolean DEFAULT false;
+ALTER TABLE ponto.tb_empresa ADD COLUMN impressao_tipo integer;
+
+CREATE TABLE ponto.tb_cst
+(
+  cst_id serial NOT NULL,
+  cst character varying(600),
+  tipo character varying(600),
+  situacao_tributaria character varying(5000),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_cst_pkey PRIMARY KEY (cst_id)
+);
+
+

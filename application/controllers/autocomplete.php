@@ -40,25 +40,43 @@ class Autocomplete extends Controller {
         
     }
 
-    function autocompletecest() {
-        $result = $this->solicitacao_m->autocompletecest();
-        echo "<pre>";
-        var_dump($result);
-        echo "<meta charset=utf-8>";
-        foreach ($result as $value) {
-            $inicioInsert = "INSERT INTO ponto.tb_cest_teste(codigo_cest, codigo_ncm, descricao_cest) VALUES('";
-            $d = "','";
-            $fimIsert = "');";
-            $tudo = '';
-            $ncm = null;
-            $ncm = explode(",", $value->codigo_ncm);
-            for ($i = 0; $i < count($ncm); $i++) {
-                $sql = $inicioInsert . $value->codigo_cest . $d . $ncm[$i] . $d . $value->descricao_cest . $fimIsert;
-                $tudo .= $sql."<br>";
+    function autocompletencmcest() {
+        
+        $_GET['ncm'] = str_replace('.', '', $_GET['ncm']);
+        $result = $this->solicitacao_m->autocompletencmcest($_GET['ncm']);
+        if(count($result) == 1){
+            echo json_encode($result);
+        }
+        else{
+            //seis digitos
+            $seis = substr($_GET['ncm'], 0, 6);
+//            echo 'seis: '.$seis.'<br>';
+//            var_dump();
+            $result = $this->solicitacao_m->autocompletencmcest($seis);
+            if(count($result) > 1){
+                echo json_encode($result);
+            }
+            else{
+                //quatro digitos
+                $quatro = substr($_GET['ncm'], 0, 4);
+//                echo 'quatro: '.$quatro.'<br>';
+                $result = $this->solicitacao_m->autocompletencmcest($quatro);
+                if(count($result) > 1){
+                    echo json_encode($result);
+                }
+                
+                else{
+                    //dois digitos
+                    $dois = substr($_GET['ncm'], 0, 2);
+//                    echo 'dois: '.$dois.'<br>';
+                    $result = $this->solicitacao_m->autocompletencmcest($dois);
+                    if(count($result) == 1){
+                        echo json_encode($result);
+                    }
+                }
+            
             }
         }
-        
-        echo $tudo;
 
     }
 
@@ -73,7 +91,26 @@ class Autocomplete extends Controller {
             $retorno['codigo'] = $item->codigo_ncm;
             $retorno['value'] = $item->codigo_ncm . ' - ' . $item->descricao_ncm;
             $retorno['descricao'] = $item->descricao_ncm;
+            if($item->aliquota != 'NT'){
+                $item->aliquota = (float)$item->aliquota;
+                $item->aliquota = number_format($item->aliquota, 2, ',', '');
+            }
+            $retorno['aliquota'] = $item->aliquota;
             $retorno['id'] = $item->ncm_id;
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+    }
+    function autocompletecst() {
+
+        if (isset($_GET['term'])) {
+            $result = $this->solicitacao_m->autocompletecst($_GET['term']);
+        } else {
+            $result = $this->solicitacao_m->autocompletecst();
+        }
+        foreach ($result as $item) {
+            $retorno['value'] = $item->cst . ' (' . $item->tipo.' - '.$item->situacao_tributaria.')';
+            $retorno['id'] = $item->cst;
             $var[] = $retorno;
         }
         echo json_encode($var);

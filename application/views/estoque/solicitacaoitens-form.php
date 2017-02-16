@@ -17,10 +17,13 @@
                 <label>Produtos</label>
                 <select name="produto_id" id="produto_id" class="size4" required>
                     <option value=""  onclick="carregaValor('0.00')">SELECIONE</option>
-                    <? foreach ($produto as $value) : ?>
-                        <option value="<?= $value->estoque_produto_id; ?>"  onclick="carregaValor('<?= $value->valor_venda; ?>')">
-                            <?php echo $value->descricao; ?></option>
-                    <? endforeach; ?>
+                    <?
+                    foreach ($produto as $value) :
+                        $parametro = $value->valor_venda . '|' . $value->ipi
+                        ?>
+                        <option value="<?= $value->estoque_produto_id; ?>"  onclick="carregaValor('<?= $parametro; ?>')">
+                        <?php echo $value->descricao; ?></option>
+<? endforeach; ?>
                 </select>
             </div>
             <div>
@@ -38,7 +41,7 @@
                 <label>Valor</label>
                 <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required readonly/>
             </div>
-            
+
             <div style="width: 100%;">
                 <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
                     <label for="cfop">CFOP</label>
@@ -47,8 +50,8 @@
                 <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
                 <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" readonly/>
             </div>
-            
-            
+
+
             <div style="margin-right: 0;">
                 <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none">
                     <label for="icms">ICMS (%)</label>
@@ -73,6 +76,11 @@
             <div style="margin-left: -10pt; margin-right: 0;">
                 <a href="#" title="Código de Situação Tributaria" style="text-decoration: none"><label for="sit_trib">Sit. Trib.</label></a>
                 <input type="text" name="sit_trib" id="sit_trib" alt="999" class="texto01" maxlength="3"/>
+            </div>
+
+            <div style="margin-left: -10pt; margin-right: 0;">
+                <a href="#" title="Usa ICMS de Situação Tributaria" style="text-decoration: none"><label for="icmsst">ICMS ST</label></a>
+                <input type="checkbox" name="icmsst" id="icmsst"/>
             </div>
 
             <div style="width: 100%">
@@ -102,8 +110,40 @@
             ?>
             <tbody>
                 <?
+                $valorTotalProduto = 0;
+                $valorTotalIpi = 0;
+                $valorTotalIcms = 0;
+                $valorTotalIcmsSt = 0;
                 foreach ($produtos as $item) {
                     ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+
+                    //calculando valor total dos produtos com imposto
+                    $v = (float) $item->valor_venda;
+                    $a = (int) str_replace('.', '', $item->quantidade);
+                    $preco = (float) $a * $v;
+                    $valorTotalProduto += $preco;
+
+                    $item->icms = (float) $item->icms;
+                    $icms = $preco * (($item->icms) / 100);
+                    if ($icms != 0) {
+//                        $valorBaseIcms += $preco;
+                        $valorTotalIcms += $icms;
+                    }
+
+                    $item->ipi = (float) $item->ipi;
+                    $ipi = $preco * (($item->ipi) / 100);
+                    if ($ipi != 0) {
+//                        $valorBaseIcms += $preco;
+                        $valorTotalIpi += $ipi;
+                    }
+                    if ($item->icmsst == 't') {
+                        $item->mva = (float) $item->mva;
+                        $baseIcmsSt = ($preco + $ipi) * (1 + ($item->mva / 100));
+                        $valorIcmsSt = ($baseIcmsSt * (($item->icms) / 100)) - $icms;
+
+//                        $baseTotalIcmsSt += $baseIcmsSt;
+                        $valorTotalIcmsSt += $valorIcmsSt;
+                    }
                     ?>
                     <tr>
                         <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
@@ -113,7 +153,7 @@
                             $a = (int) str_replace('.', '', $item->quantidade);
                             $preco = (float) $a * $v;
                             $valortotal += $preco;
-                            echo "R$ <span id='valorunitario'>" . number_format($preco, 2, '.', ',') . '</span>';
+                            echo "R$ <span id='valorunitario'>" . number_format($preco, 2, ',', '.') . '</span>';
                             ?></td>
                         <td class="<?php echo $estilo_linha; ?>" width="100px;">
                             <a href="<?= base_url() ?>estoque/solicitacao/excluirsolicitacao/<?= $item->estoque_solicitacao_itens_id; ?>/<?= $estoque_solicitacao_id; ?>" class="delete">
@@ -123,13 +163,22 @@
                     </tr>
 
 
-                <? }
+                <?
+                }
+                $valTotImposto = $valorTotalProduto + $valorTotalIpi + $valorTotalIcms + $valorTotalIcmsSt;
                 ?>
                 <tr id="tot">
                     <td class="<?php echo $estilo_linha; ?>">&nbsp;</td>
                     <td class="<?php echo $estilo_linha; ?>" id="textovalortotal"><span id="spantotal"> Total:</span> </td>
-                    <td class="<?php echo $estilo_linha; ?>"><span id="spantotal">R$ <?= number_format($valortotal, 2, '.', ',') ?></span></td>
-                    <td class="<?php echo $estilo_linha; ?>">&nbsp;</td>
+                    <td class="<?php echo $estilo_linha; ?>"><span id="spantotal">
+                            R$ <?= number_format($valortotal, 2, ',', '.') ?>
+
+                            <img src="<?= base_url(); ?>img/form-ic-info.png" alt="Valor com Impostos: <?= number_format($valTotImposto, 2, ',', '.') ?>"
+                                 title="Valor com Impostos: <?= number_format($valTotImposto, 2, ',', '.') ?>"/>
+                        </span>
+                    </td>
+                    <td class="<?php echo $estilo_linha; ?>">&nbsp;
+                    </td>
                 </tr>
             </tbody>    
             <?
@@ -182,7 +231,11 @@
 <script type="text/javascript">
 
             function carregaValor(valor) {
-                $("#valor").val(valor);
+                var valores = valor.split('|');
+                var valVenda = valores[0];
+                var valIpi = valores[1];
+                $("#valor").val(valVenda);
+                $("#ipi").val(valIpi);
             }
 
             $(function () {
@@ -197,6 +250,21 @@
                         $("#descricao_cfop").val(ui.item.descricao);
                         $("#cfop").val(ui.item.cfop);
                         $("#cfop_id").val(ui.item.id);
+                        return false;
+                    }
+                });
+            });
+
+            $(function () {
+                $("#sit_trib").autocomplete({
+                    source: "<?= base_url() ?>index.php?c=autocomplete&m=autocompletecst",
+                    minLength: 1,
+                    focus: function (event, ui) {
+                        $("#sit_trib").val(ui.item.label);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $("#sit_trib").val(ui.item.id);
                         return false;
                     }
                 });

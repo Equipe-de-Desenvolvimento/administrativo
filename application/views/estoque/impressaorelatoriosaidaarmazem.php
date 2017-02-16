@@ -1,4 +1,5 @@
 <div class="content"> <!-- Inicio da DIV content -->
+    <meta charset="utf8"/>
     <? $tipoempresa = ""; ?>
     <table>
         <thead>

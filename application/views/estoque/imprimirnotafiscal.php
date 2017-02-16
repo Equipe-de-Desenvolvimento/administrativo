@@ -141,12 +141,12 @@
                     <td colspan="1" class="semborda">
                         <strong>
                             <? 
-                            $usaIcmsSt = false;
+//                            $usaIcmsSt = $item->$item->icmsst;;
                             $item->ipi = (float)$item->ipi; 
                             $ipi = $preco * (($item->ipi)/100); 
                             $valorTotalIpi += $ipi;
                             
-                            if($usaIcmsSt){
+                            if($item->icmsst == 't'){
                                 $item->mva = (float)$item->mva;
                                 $baseIcmsSt = ($preco + $ipi)*(1+($item->mva/100));
                                 $valorIcmsSt = ($baseIcmsSt*(($item->icms)/100)) -  $icms;

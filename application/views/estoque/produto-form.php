@@ -53,14 +53,21 @@
                     </dt>
                     <dd>
                         <input type="text" name="ncm" id="codigo_ncm" alt="9999.99.99" class="texto2" value="<?= @$obj->_ncm; ?>" />
-                        <input type="text" name="descricao_ncm" id="descricao_ncm" alt="" class="texto07" readonly=""/>
+                        <input type="text" name="descricao_ncm" id="descricao_ncm" alt="" class="texto07" readonly="" value="<?= @$obj->_ncm_descricao; ?>"/>
                     </dd>
 
                     <dt>
                         <label>CEST</label>
                     </dt>
                     <dd>
-                        <input type="text" name="ncm" id="" class="texto2" value="<?= @$obj->_ncm; ?>" />
+                        <input type="text" name="cest" alt="99.999.99" id="cest" class="texto2" value="<?= @$obj->_cest; ?>" />
+                    </dd>
+
+                    <dt>
+                        <label>IPI</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="ipi" alt="decimal" class="texto02" name="ipi" value="<?= @$obj->_ipi; ?>" />
                     </dd>
 
                     <dt>
@@ -109,6 +116,12 @@
             select: function (event, ui) {
                 $("#codigo_ncm").val(ui.item.codigo);
                 $("#descricao_ncm").val(ui.item.descricao);
+                if(ui.item.aliquota != "NT"){
+                    $("#ipi").val(ui.item.aliquota);
+                }
+                $.getJSON('<?= base_url() ?>autocomplete/autocompletencmcest', {ncm: ui.item.codigo}, function (j) {
+                    $("#cest").val(j[0].codigo_cest);
+                });
                 return false;
             }
         });

@@ -112,10 +112,12 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
-    function autocompletecest() {
-
-        $this->db->select('*');
+    function autocompletencmcest($parametro = null) {
+        $this->db->select('codigo_cest, codigo_ncm, descricao_cest, cest_id');
         $this->db->from('tb_cest');
+        if ($parametro != null) {
+            $this->db->where('codigo_ncm ilike', $parametro);
+        }
         $return = $this->db->get();
         return $return->result();
     }
@@ -126,6 +128,17 @@ class solicitacao_model extends Model {
         $this->db->from('tb_ncm');
         if ($parametro != null) {
             $this->db->where('codigo_ncm ilike', $parametro . "%");
+        }
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function autocompletecst($parametro = null) {
+
+        $this->db->select('cst, tipo, situacao_tributaria');
+        $this->db->from('tb_cst');
+        if ($parametro != null) {
+            $this->db->where('cst ilike', $parametro . "%");
         }
         $return = $this->db->get();
         return $return->result();
@@ -162,6 +175,7 @@ class solicitacao_model extends Model {
                             esi.cst,
                             esi.icms, 
                             esi.ipi, 
+                            esi.icmsst, 
                             c.cfop_id, 
                             c.codigo_cfop, 
                             c.descricao_cfop,
@@ -182,7 +196,12 @@ class solicitacao_model extends Model {
     }
 
     function calculavalortotalsolicitacao($estoque_solicitacao_id) {
-        $this->db->select('esi.quantidade, esi.valor as valor_venda');
+        $this->db->select('esi.quantidade, 
+                           esi.valor as valor_venda,
+                           esi.icms, 
+                           esi.mva, 
+                           esi.icmsst, 
+                           esi.ipi');
         $this->db->from('tb_estoque_solicitacao_itens esi');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id');
         $this->db->where('esi.ativo', 'true');
@@ -192,7 +211,14 @@ class solicitacao_model extends Model {
     }
 
     function listarsolicitacaos($estoque_solicitacao_id) {
-        $this->db->select('ep.descricao, esi.estoque_solicitacao_itens_id, esi.quantidade, esi.exame_id, esi.valor as valor_venda');
+        $this->db->select('ep.descricao, 
+                           esi.estoque_solicitacao_itens_id, 
+                           esi.quantidade, esi.exame_id, 
+                           esi.valor as valor_venda,
+                           esi.icms, 
+                           esi.mva, 
+                           esi.icmsst, 
+                           esi.ipi');
         $this->db->from('tb_estoque_solicitacao_itens esi');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id');
         $this->db->where('esi.ativo', 'true');
@@ -258,6 +284,7 @@ class solicitacao_model extends Model {
     function listarprodutos($estoque_solicitacao_id) {
         $this->db->select('ep.estoque_produto_id,
                             ep.descricao,
+                            ep.ipi,
                             emp.valor as valor_venda');
         $this->db->from('tb_estoque_produto ep');
         $this->db->join('tb_estoque_menu_produtos emp', 'emp.produto = ep.estoque_produto_id');
@@ -1067,6 +1094,9 @@ class solicitacao_model extends Model {
     function gravaritens() {
         try {
             /* inicia o mapeamento no banco */
+            if($_POST['ipi'] == ''){
+                $_POST['ipi'] = 0;
+            }
             $_POST['icms'] = str_replace(",", ".", $_POST['icms']);
             $_POST['ipi'] = str_replace(",", ".", $_POST['ipi']);
             $_POST['mva'] = str_replace(",", ".", $_POST['mva']);
@@ -1087,6 +1117,9 @@ class solicitacao_model extends Model {
             }
             if ($_POST['sit_trib'] != '') {
                 $this->db->set('cst', $_POST['sit_trib']);
+            }
+            if (isset($_POST['icmsst'])) {
+                $this->db->set('icmsst', 't');
             }
 
             $horario = date("Y-m-d H:i:s");

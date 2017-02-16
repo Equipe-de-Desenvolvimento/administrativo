@@ -65,30 +65,25 @@ class Solicitacao extends BaseController {
         $data['formaspagamento'] = $this->solicitacao->listarformapagamentoboleto($solicitacao_cliente_id);
 //                    die;
 
-        if(count($data['formaspagamento']) > 1){
-            $this->loadView('estoque/solicitacaoboleto', $data);    
-        }
-        else{
+        if (count($data['formaspagamento']) > 1) {
+            $this->loadView('estoque/solicitacaoboleto', $data);
+        } else {
             $pagamento_id = $data['formaspagamento'][0]->forma_pagamento_id;
             redirect(base_url() . "estoque/solicitacao/solicitacaoboleto/$solicitacao_cliente_id/$pagamento_id");
         }
-        
     }
 
     function solicitacaoboleto($solicitacao_cliente_id, $pagamento_id = null) {
         $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
-        if($pagamento_id != null){
+        if ($pagamento_id != null) {
             $forma_id = $pagamento_id;
-        }
-        else{
+        } else {
             $forma_id = $_POST['formapagamento'];
         }
         $data['conta'] = $this->solicitacao->listarcontaboleto($forma_id);
         $this->loadView('estoque/dadosboleto', $data);
-        
-        
     }
-    
+
     function gerarboleto() {
         //dados 
         $data['conta'] = $this->solicitacao->listarcontaboleto($_POST['forma_pagamento_id']);
@@ -97,26 +92,40 @@ class Solicitacao extends BaseController {
         $data['dados_faturamento'] = $this->solicitacao->listasolicitacaofaturamento($_POST['solicitacao_cliente_id']);
         $data['data_venc'] = $_POST['vencimento'];
         
+        //tratando acentuações
+        $data['empresa'][0]->logradouro = utf8_decode($data['empresa'][0]->logradouro);
+        $data['empresa'][0]->estado = utf8_decode($data['empresa'][0]->estado);
+        $data['empresa'][0]->municipio = utf8_decode($data['empresa'][0]->municipio);
+        $data['empresa'][0]->razao_social = utf8_decode($data['empresa'][0]->razao_social);
+        $data['destinatario'][0]->nome = utf8_decode($data['destinatario'][0]->nome);
+        $data['destinatario'][0]->logradouro = utf8_decode($data['destinatario'][0]->logradouro);
+        $data['destinatario'][0]->municipio = utf8_decode($data['destinatario'][0]->municipio);
+        $data['destinatario'][0]->estado = utf8_decode($data['destinatario'][0]->estado);
+        
+
         //valores
-        if((float)$data['dados_faturamento'][0]->desconto != '0'){
-            $desconto = (float)$data['dados_faturamento'][0]->desconto;
-        }
-        else{
+        if ((float) $data['dados_faturamento'][0]->desconto != '0') {
+            $desconto = (float) $data['dados_faturamento'][0]->desconto;
+        } else {
             $desconto = '0,00';
         }
         $deducoes = '0,00';
-        
+
         $acrescimos = '0,00';
         $multa = '0,00';
-        $taxa_boleto = (float)  str_replace(',', '.', str_replace('.', '',$_POST['taxa_boleto']));
-        
-        $data['valor_cobrado'] = (float)$data['dados_faturamento'][0]->valor_total - (float)$desconto - (float)$deducoes + (float)$multa + (float)$acrescimos + $taxa_boleto;
-      
-        
-        
+        $taxa_boleto = (float) str_replace(',', '.', str_replace('.', '', $_POST['taxa_boleto']));
+
+        $data['valor_cobrado'] = (float) $data['dados_faturamento'][0]->valor_total - (float) $deducoes + (float) $multa + (float) $acrescimos + $taxa_boleto;
+
+//        $var = ereg_replace("[áàâãª]","a",$var);	
+//	$var = ereg_replace("[éèê]","e",$var);	
+//	$var = ereg_replace("[óòôõº]","o",$var);	
+//	$var = ereg_replace("[úùû]","u",$var);	
+//	$var = str_replace("ç","c",$var);
+
 //        echo  '<pre>';
 //        var_dump($taxa_boleto);die;
-        
+
         include ("boleto/boleto_bb.php");
         include ("boleto/include/funcoes_bb.php");
         include ("boleto/include/layout_bb.php");
@@ -131,37 +140,32 @@ class Solicitacao extends BaseController {
 
     function impressoes() {
         $estoque_solicitacao_id = $_POST['estoque_solicitacao_id'];
-        if($_POST['impressao'] == 'pedido_simples'){
+        if ($_POST['impressao'] == 'pedido_simples') {
             redirect(base_url() . "estoque/solicitacao/imprimirliberadasimples/$estoque_solicitacao_id");
-        }
-        elseif($_POST['impressao'] == 'pedido'){
+        } elseif ($_POST['impressao'] == 'pedido') {
             redirect(base_url() . "estoque/solicitacao/imprimirliberada/$estoque_solicitacao_id");
-        }
-        elseif($_POST['impressao'] == 'saida_simples'){
+        } elseif ($_POST['impressao'] == 'saida_simples') {
             redirect(base_url() . "estoque/solicitacao/imprimirsimples/$estoque_solicitacao_id");
-        }
-        elseif($_POST['impressao'] == 'saida'){
+        } elseif ($_POST['impressao'] == 'saida') {
             redirect(base_url() . "estoque/solicitacao/imprimir/$estoque_solicitacao_id");
-        }
-        elseif($_POST['impressao'] == 'nota'){
+        } elseif ($_POST['impressao'] == 'nota') {
             redirect(base_url() . "estoque/solicitacao/carregarnotafiscal/$estoque_solicitacao_id");
-        }
-        elseif($_POST['impressao'] == 'recibo'){
+        } elseif ($_POST['impressao'] == 'recibo') {
             redirect(base_url() . "estoque/solicitacao/impressaorecibo/$estoque_solicitacao_id");
         }
     }
-    
+
     function impressaorecibo($estoque_solicitacao_id) {
 
         $data['emissao'] = date("d-m-Y");
         $empresa_id = $this->session->userdata('empresa_id');
         $data['exame'] = $this->guia->listarexame($exames_id);
-        
-        
+
+
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($estoque_solicitacao_id);
         $data['produtos'] = $this->solicitacao->listarsolicitacaosnota($estoque_solicitacao_id);
-        
+
         $grupo = $data['exame'][0]->grupo;
         $convenioid = $data['exame'][0]->convenio_id;
         $dinheiro = $data['exame'][0]->dinheiro;
@@ -233,7 +237,7 @@ class Solicitacao extends BaseController {
     }
 
     function imprimirliberadasimples($estoque_solicitacao_id) {
-        
+
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
@@ -241,15 +245,15 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
         $this->load->View('estoque/impressaoliberadasimples', $data);
     }
-    
+
     function imprimirliberada($estoque_solicitacao_id) {
-        
+
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
-        
+
 //        echo '<pre>';        var_dump($data);die;
         $this->load->View('estoque/impressaoliberada', $data);
     }
@@ -266,7 +270,7 @@ class Solicitacao extends BaseController {
         if ($data['contador'] > 0) {
             $data['produtos'] = $this->solicitacao->listarprodutositem($estoque_solicitacao_itens_id);
         }
-        
+
         $data['contadorsaida'] = $this->solicitacao->contadorsaidaitem($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
 //        echo "<pre>";
@@ -309,7 +313,7 @@ class Solicitacao extends BaseController {
         } elseif ($_POST['valor'] == '') {
             $data['mensagem'] = 'Insira um valor valido.';
             $this->session->set_flashdata('message', $data['mensagem']);
-        } elseif ( ($_POST['cfop'] != '' || $_POST['descricao_cfop'] != '') && $_POST['cfop_id'] == '') {
+        } elseif (($_POST['cfop'] != '' || $_POST['descricao_cfop'] != '') && $_POST['cfop_id'] == '') {
             $data['mensagem'] = 'Insira um CFOP valido. Certifique-se de selecionar algum CFOP presente na lista.';
             $this->session->set_flashdata('message', $data['mensagem']);
         } else {
@@ -323,54 +327,48 @@ class Solicitacao extends BaseController {
     function gravartransportadora($estoque_solicitacao_id) {
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['solicitacao_transportadora'] = $this->solicitacao->listarsolicitacaoclientetransportadora($estoque_solicitacao_id);
-        if(count($data['solicitacao_transportadora']) > 0){
+        if (count($data['solicitacao_transportadora']) > 0) {
             $data['solicitacao_transportadora'] = $data['solicitacao_transportadora'][0];
         }
-        
+
         $this->load->View('estoque/gravarsolicitacaotransportadora', $data);
     }
 
     function gravarsolicitacaotransportadora() {
         $solicitacao_id = $_POST['solicitacao_cliente_id'];
-        
-        if($_POST['transportadora_id'] == ''){
+
+        if ($_POST['transportadora_id'] == '') {
             $data['mensagem'] = 'Insira uma transportadora valida. Certifique-se de escolher um item da lista.';
             $this->session->set_flashdata('message', $data['mensagem']);
             redirect(base_url() . "estoque/solicitacao/gravartransportadora/$solicitacao_id");
-        }
-        elseif ($_POST['entregador_id'] == '') {
+        } elseif ($_POST['entregador_id'] == '') {
             $data['mensagem'] = 'Insira um entregador valido. Certifique-se de escolher um item da lista.';
             $this->session->set_flashdata('message', $data['mensagem']);
             redirect(base_url() . "estoque/solicitacao/gravartransportadora/$solicitacao_id");
-        }
-        else{
+        } else {
 //            die('ola');
             $this->solicitacao->gravarsolicitacaotransportadora();
-            echo   "<script type='text/javascript'> 
+            echo "<script type='text/javascript'> 
                     window.close();
                 </script>";
         }
-        
     }
 
     function gravarfaturamento() {
-        if($_POST['valortotal'] == '0.00'){
+        if ($_POST['valortotal'] == '0.00') {
             $verifica = $this->solicitacao->gravarfaturamento();
             if ($verifica) {
-                $data['mensagem'] = 'Faturado com sucesso.'; 
+                $data['mensagem'] = 'Faturado com sucesso.';
+            } else {
+                $data['mensagem'] = 'Erro ao Faturar.';
             }
-            else{
-                $data['mensagem'] = 'Erro ao Faturar.';  
-            }
-        }
-        else{
+        } else {
             $data['mensagem'] = 'Erro ao Faturar.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
-        echo   "<script type='text/javascript'> 
+        echo "<script type='text/javascript'> 
                     window.close();
                 </script>";
-
     }
 
     function excluirsolicitacao($estoque_solicitacao_itens_id, $estoque_solicitacao_id) {
@@ -393,19 +391,49 @@ class Solicitacao extends BaseController {
     }
 
     function liberarsolicitacao($estoque_solicitacao_id) {
-        
+
         $this->solicitacao->liberarsolicitacao($estoque_solicitacao_id);
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
-        $valortotal = 0;
-        
-        foreach ($data['valor_total'] as $item){
-        //calcula valor total
+        $valorTotalProduto = 0;
+        $valorTotalIcms = 0;
+        $valorTotalIpi = 0;
+        $valorTotalIcmsSt = 0;
+
+        foreach ($data['valor_total'] as $item) {
+//        //calcula valor total
+//            $v = (float) $item->valor_venda;
+//            $a = (int) str_replace('.', '', $item->quantidade);
+//            $preco = (float) $a * $v;
+//            $valortotal += $preco;
+
             $v = (float) $item->valor_venda;
             $a = (int) str_replace('.', '', $item->quantidade);
             $preco = (float) $a * $v;
-            $valortotal += $preco;
+            $valorTotalProduto += $preco;
+
+            $item->icms = (float) $item->icms;
+            $icms = $preco * (($item->icms) / 100);
+            if ($icms != 0) {
+                $valorTotalIcms += $icms;
+            }
+
+            $item->ipi = (float) $item->ipi;
+            $ipi = $preco * (($item->ipi) / 100);
+            if ($ipi != 0) {
+                $valorTotalIpi += $ipi;
+            }
+            if ($item->icmsst == 't') {
+                $item->mva = (float) $item->mva;
+                $baseIcmsSt = ($preco + $ipi) * (1 + ($item->mva / 100));
+                $valorIcmsSt = ($baseIcmsSt * (($item->icms) / 100)) - $icms;
+
+//                        $baseTotalIcmsSt += $baseIcmsSt;
+                $valorTotalIcmsSt += $valorIcmsSt;
+            }
         }
-        
+
+        $valortotal = $valorTotalProduto + $valorTotalIcms + $valorTotalIpi + $valorTotalIcmsSt;
+
         $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
         redirect(base_url() . "estoque/solicitacao");
     }
@@ -414,19 +442,47 @@ class Solicitacao extends BaseController {
 
         $this->solicitacao->liberarsolicitacao($estoque_solicitacao_id);
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
-        $valortotal = 0;
-        foreach ($data['valor_total'] as $item){
-        //calcula valor total
+        $valorTotalProduto = 0;
+        $valorTotalIcms = 0;
+        $valorTotalIpi = 0;
+        $valorTotalIcmsSt = 0;
+
+        foreach ($data['valor_total'] as $item) {
+//        //calcula valor total
+//            $v = (float) $item->valor_venda;
+//            $a = (int) str_replace('.', '', $item->quantidade);
+//            $preco = (float) $a * $v;
+//            $valortotal += $preco;
+
             $v = (float) $item->valor_venda;
             $a = (int) str_replace('.', '', $item->quantidade);
             $preco = (float) $a * $v;
-            $valortotal += $preco;
+            $valorTotalProduto += $preco;
+
+            $item->icms = (float) $item->icms;
+            $icms = $preco * (($item->icms) / 100);
+            if ($icms != 0) {
+                $valorTotalIcms += $icms;
+            }
+
+            $item->ipi = (float) $item->ipi;
+            $ipi = $preco * (($item->ipi) / 100);
+            if ($ipi != 0) {
+                $valorTotalIpi += $ipi;
+            }
+            if ($item->icmsst == 't') {
+                $item->mva = (float) $item->mva;
+                $baseIcmsSt = ($preco + $ipi) * (1 + ($item->mva / 100));
+                $valorIcmsSt = ($baseIcmsSt * (($item->icms) / 100)) - $icms;
+
+//                        $baseTotalIcmsSt += $baseIcmsSt;
+                $valorTotalIcmsSt += $valorIcmsSt;
+            }
         }
-        
-        $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
+
+        $valortotal = $valorTotalProduto + $valorTotalIcms + $valorTotalIpi + $valorTotalIcmsSt;
+        $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal); 
         $this->faturarsolicitacao($estoque_solicitacao_id);
-        
-        
     }
 
     function fecharsolicitacao($estoque_solicitacao_id) {
@@ -458,7 +514,7 @@ class Solicitacao extends BaseController {
 //        die;
         $this->loadView('estoque/entregador-form', $data);
     }
-    
+
     function gravarentregador() {
         $verifica = $this->solicitacao->gravarentregador();
         if ($verifica == "-1") {
@@ -469,7 +525,7 @@ class Solicitacao extends BaseController {
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/solicitacao/entregador");
     }
-    
+
     function excluirentregador($entregador_id) {
         $verifica = $this->solicitacao->excluirentregador($entregador_id);
         if ($verifica == "-1") {
@@ -479,7 +535,7 @@ class Solicitacao extends BaseController {
         }
         redirect(base_url() . "estoque/solicitacao/entregador");
     }
-    
+
     function criarsolicitacao($estoque_solicitacao_id) {
         $obj_solicitacao = new solicitacao_model($estoque_solicitacao_id);
         $data['obj'] = $obj_solicitacao;

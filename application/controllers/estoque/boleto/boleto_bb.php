@@ -36,7 +36,7 @@
 $dias_de_prazo_para_pagamento = 5;
 // $data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006";
 $data_venc = $data['data_venc'];
-$valor_cobrado = (float)$data['dados_faturamento'][0]->valor_total; // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
+$valor_cobrado = (float)$data['dados_faturamento'][0]->valor_total+(float)$data['dados_faturamento'][0]->desconto; // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
 $valor_cobrado = str_replace(",", ".",$valor_cobrado);
 $valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
 
@@ -50,7 +50,7 @@ $dadosboleto["valor_boleto"] = $valor_boleto; 	// Valor do Boleto - REGRA: Com v
 // DADOS DO SEU CLIENTE
 $dadosboleto["sacado"] = $data['destinatario'][0]->nome;
 if($data['destinatario'][0]->numero != ''){
-	$endereco_cli = $data['destinatario'][0]->logradouro .', N° '.$data['destinatario'][0]->numero;
+	$endereco_cli = $data['destinatario'][0]->logradouro .', N '.$data['destinatario'][0]->numero;
 }
 else{
 	$endereco_cli = $data['destinatario'][0]->logradouro;
@@ -118,7 +118,7 @@ $dadosboleto["identificacao"] = "BOLETO BANCARIO";
 $dadosboleto["cpf_cnpj"] = $data['empresa'][0]->cnpj;
 
 if($data['empresa'][0]->numero != ''){
-	$endereco_emp = $data['empresa'][0]->logradouro .', N° '.$data['empresa'][0]->numero;
+	$endereco_emp = $data['empresa'][0]->logradouro .', N '.$data['empresa'][0]->numero;
 }
 else{
 	$endereco_emp = $data['empresa'][0]->logradouro;
