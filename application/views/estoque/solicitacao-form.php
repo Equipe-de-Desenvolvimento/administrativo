@@ -9,7 +9,8 @@
                         <label>Cliente</label>
                     </dt>
                     <dd>
-                        <select name="setor" id="setor" class="size4" required="">
+                        <select name="setor" id="setor" class="size4" required="" x-moz-errormessage="Selecione um Cliente">
+                            <option value="">Selecione</option>
                             <? foreach ($setor as $value) : ?>
                                 <option value="<?= $value->estoque_cliente_id; ?>"><?php echo $value->nome; ?></option>
                             <? endforeach; ?>

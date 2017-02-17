@@ -1,6 +1,6 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3 class="singular"><a href="#">Cadastro de Unidade</a></h3>
+        <h3 class="singular"><a href="#">Cadastro de Tipo Contrato</a></h3>
         <div>
             <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/contrato/gravarcontratotipo" method="post">
 

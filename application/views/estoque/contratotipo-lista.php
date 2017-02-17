@@ -2,11 +2,11 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new" style=" width: 150pt">
         <a href="<?php echo base_url() ?>estoque/contrato/carregarcontratotipo/0" style=" width: 250pt">
-            Novo Unidade de Vigencia
+            Novo Tipo Contrato
         </a>
     </div>
     <div id="accordion">
-        <h3 class="singular"><a href="#">Manter Unidade de Vigencia</a></h3>
+        <h3 class="singular"><a href="#">Manter Tipo Contrato</a></h3>
         <div>
             <table>
                 <thead>
