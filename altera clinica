@@ -212,3 +212,46 @@ CREATE TABLE ponto.tb_cst
 );
 
 
+-- Dia 16/02/2017
+CREATE TABLE ponto.tb_estoque_contrato
+(
+  estoque_contrato_id serial NOT NULL,
+  nome character varying(200),
+  numero_contrato character varying(9),
+  tipo_contrato_id integer,
+  cliente_id integer,
+  formapagamento_id integer,
+  data_inicio date,
+  data_fim date,
+  data_assinatura date,
+  valor_inicial numeric(10,2),
+  calcao numeric(10,2),
+  logradouro character varying(200),
+  numero character varying(20),
+  complemento character varying(100),
+  bairro character varying(100),
+  municipio_id integer,
+  situacao character varying(50),
+  observacao character varying(10000),
+  clasulas character varying(30000),
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_estoque_contrato_pkey PRIMARY KEY (estoque_contrato_id)
+);
+
+CREATE TABLE ponto.tb_estoque_tipo_contrato
+(
+  estoque_tipo_contrato_id serial NOT NULL,
+  descricao character varying(200),
+  ativo boolean DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_estoque_tipo_contrato_pkey PRIMARY KEY (estoque_tipo_contrato_id)
+);
+
+

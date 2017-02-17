@@ -482,7 +482,7 @@ class Solicitacao extends BaseController {
 
         $valortotal = $valorTotalProduto + $valorTotalIcms + $valorTotalIpi + $valorTotalIcmsSt;
         $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal); 
-        $this->faturarsolicitacao($estoque_solicitacao_id);
+        redirect(base_url() . "estoque/solicitacao/faturarsolicitacao/$estoque_solicitacao_id");
     }
 
     function fecharsolicitacao($estoque_solicitacao_id) {

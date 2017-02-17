@@ -30,13 +30,13 @@
                         <input type="text" name="txtprodutolabel" id="txtprodutolabel" class="texto10" value="<?= @$obj->_produto; ?>" />
                     </dd>
                     <dt>
-                    <label>Data inicio</label>
+                        <label>Data inicio</label>
                     </dt>
                     <dd>
                         <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date"/>
                     </dd>
                     <dt>
-                    <label>Data fim</label>
+                        <label>Data fim</label>
                     </dt>
                     <dd>
                         <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date"/>

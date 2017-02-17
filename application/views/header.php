@@ -8,7 +8,6 @@ $perfil_id = $this->session->userdata('perfil_id');
 $operador_id = $this->session->userdata('operador_id');
 $internacao = $this->session->userdata('internacao');
 
-
 function alerta($valor) {
     echo "<script>alert('$valor');</script>";
 }
@@ -61,38 +60,38 @@ function debug($object) {
                         }
 
                         if (retorno != 0) {
-                            jQuery(".batepapo_div #contatos_chat_lista").append("<span class='total_mensagens'>+"+retorno+"</span>");
+                            jQuery(".batepapo_div #contatos_chat_lista").append("<span class='total_mensagens'>+" + retorno + "</span>");
                             abrindomensagensnaolidas();
                         }
                     }
                 });
             }
-            
-            
+
+
             function abrindomensagensnaolidas() {
                 jQuery.ajax({
                     type: "GET",
                     url: "<?= base_url(); ?>" + "batepapo/abrindomensagensnaolidas",
                     dataType: "json",
                     success: function (retorno) {
-                        
-                        if(retorno.length > 0){
-                            for (var obj in retorno){
+
+                        if (retorno.length > 0) {
+                            for (var obj in retorno) {
                                 var id = "<?= $operador_id ?>:" + retorno[obj].operador_id;
                                 var nome = retorno[obj].usuario;
-                                var status = null;    
+                                var status = null;
                                 var aberta = false;
-                                for (var i = 0; i < chatsAbertos.length; i++){
-                                    if(retorno[obj].operador_id == chatsAbertos[i]){
+                                for (var i = 0; i < chatsAbertos.length; i++) {
+                                    if (retorno[obj].operador_id == chatsAbertos[i]) {
                                         aberta = true;
                                     }
                                 }
-                                if(!aberta){
+                                if (!aberta) {
                                     adicionarJanela(id, nome, status);
                                 }
                             }
                         }
-                        
+
                     }
                 });
             }
@@ -123,8 +122,8 @@ function debug($object) {
                                 if (usr.num_mensagens != 0) {
                                     tags += "<span class='total_mensagens'> +" + usr.num_mensagens + " </span>";
                                 }
-                                tags += "<span id='"+usr.operador_id+"'></span></li>";
-                                
+                                tags += "<span id='" + usr.operador_id + "'></span></li>";
+
                                 //apos criar o item, adciona ele a lista e cria-se o item seguinte
                                 jQuery("#principalChat #usuarios_online ul").append(tags);
                             }
@@ -133,7 +132,7 @@ function debug($object) {
                 });
             }
 
-            
+
             //abri uma nova janela de batepapo
             function adicionarJanela(id, nome, status) {
                 //o parametro ID diz respeito ao operador_id que mandou a mensagem
@@ -144,7 +143,7 @@ function debug($object) {
                 //o numero maximo de janelas permitido sao cinco
                 var numeroJanelas = Number(jQuery("#chats .janela_chat").length);
                 if (numeroJanelas < 5) {
-                    
+
                     //atribui dinamicamente a posicao da janela na pagina
                     var posicaoJanela = (270 + 15) * numeroJanelas;
                     var estiloJanela = 'float:none; position: absolute; bottom:0; right:' + posicaoJanela + 'px';
@@ -152,8 +151,8 @@ function debug($object) {
                     //pega o id do operador origem e do operador destino
                     var splitOperadores = id.split(':');
                     var operadorDestino = Number(splitOperadores[1]);
-                    
-                    
+
+
                     // CRIANDO A JANELA DE BATEPAPO
                     // Toda janela de batepapo e construida da seguinte maneira:
                     // TAG <div> class='janela_chat' (serve para estilizar via CSS) e id que contera o id do contado aberto
@@ -173,7 +172,7 @@ function debug($object) {
                     //                  o INPUT tem um valor maximo de 300 caracteres
                     var janela;
                     janela = "<div class='janela_chat' id='janela_" + operadorDestino + "' style='" + estiloJanela + "'>";
-                    janela += "<div class='cabecalho_janela_chat'> <a href='#' class='fechar'>X</a>"; 
+                    janela += "<div class='cabecalho_janela_chat'> <a href='#' class='fechar'>X</a>";
                     janela += "<span class='nome_chat'>" + nome + "</span><span id='" + operadorDestino + "'></span></div>";
                     janela += "<div class='corpo_janela_chat'><div class='mensagens_chat'><ul></ul></div>";
                     janela += "<div class='enviar_mensagens_chat' id='" + id + "'>";
@@ -279,16 +278,16 @@ function debug($object) {
                         <li><span class="folder">Rotinas</span>
                             <? if ($perfil_id != 9 && $perfil_id != 2 && $perfil_id != 11 && $perfil_id != 12) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao">Manter Pedido</a></span></ul>
-<? } if ($perfil_id == 1 || $perfil_id == 8) { ?>
+                            <? } if ($perfil_id == 1 || $perfil_id == 8) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada">Manter Entrada</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/inventario">Manter Inventario</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/fornecedor">Manter Fornecedor</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/produto">Manter Produto</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/transportadora">Manter Transportadora</a></span></ul>
-<? } ?>
+                            <? } ?>
                         </li> 
                         <li><span class="folder">Relatorios</span>
-<? if ($perfil_id == 1 || $perfil_id == 8) { ?>
+                            <? if ($perfil_id == 1 || $perfil_id == 8) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatorioentradaarmazem">Relatorio Entrada Produtos</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaidaarmazem">Relatorio Saida Produtos</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaldoarmazem">Relatorio Saldo Produtos/Entrada</a></span></ul>
@@ -297,14 +296,14 @@ function debug($object) {
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatorioprodutos">Relatorio Produtos</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriofornecedores">Relatorio Fornecedores</a></span></ul>
 
-<? } ?>
+                            <? } ?>
                         </li> 
                     </ul>
                 </li>
                 <li><span class="folder">Financeiro</span>
                     <ul>
                         <li><span class="folder">Rotinas</span>
-<? if ($perfil_id == 1) { ?>
+                            <? if ($perfil_id == 1) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa">Manter Entrada</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/pesquisar2">Manter Saida</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/contaspagar">Manter Contas a pagar</a></span></ul>
@@ -348,12 +347,12 @@ function debug($object) {
 
                     </ul>
                 </li>
-                
+
                 <li><span class="folder">Configura&ccedil;&atilde;o</span>
                     <ul>
-                        
+
                         <li><span class="folder">Estoque</span>
-<? if ($perfil_id == 1 || $perfil_id == 8) { ?>
+                            <? if ($perfil_id == 1 || $perfil_id == 8) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/menu">Manter Menu</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/tipo">Manter Tipo</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/classe">Manter Classe</a></span></ul>
@@ -363,23 +362,29 @@ function debug($object) {
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/cliente">Manter Cliente</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao/entregador">Manter Entregador</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador/operadorsetor">Listar Operadores</a></span></ul>
-<? } ?>
+                            <? } ?>
+                        </li> 
+                        <li><span class="folder">Contratos</span>
+                            <? if ($perfil_id == 1) { ?>          
+                                <ul><span class="file"><a href="<?= base_url() ?>estoque/contrato">Manter Contrato</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>estoque/contrato/pesquisarcontratotipo">Manter Contrato Tipo</a></span></ul>
+                            <? } ?>
                         </li> 
                         <li><span class="folder">Financeiro</span>
-<? if ($perfil_id == 1) { ?>
+                            <? if ($perfil_id == 1) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/tipo">Manter Tipo</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/classe">Manter Classe</a></span></ul>
     <!--                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/subclasse">Manter Sub-Classe</a></span></ul>-->
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter Conta</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento">Manter Forma de Pagamento</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/grupospagamento">Forma de Pagamento Grupo</a></span></ul>
-<? } ?>
+                            <? } ?>
                         </li> 
                         <li><span class="folder">Administrativas</span>
-<? if ($perfil_id == 1 || $perfil_id == 3) { ?>
+                            <? if ($perfil_id == 1 || $perfil_id == 3) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/empresa">Manter Empresa</a></span></ul>
                                 <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/versao">Vers&atilde;o</a></span></ul>
-<? } ?>
+                            <? } ?>
                         </li> 
                     </ul>
                 </li>
@@ -390,9 +395,9 @@ function debug($object) {
             <!-- Fim da Barra Lateral -->
         </div>
         <div class="mensagem"><?
-            if (isset($mensagem)): echo $mensagem;
-            endif;
-            ?></div>
+                            if (isset($mensagem)): echo $mensagem;
+                            endif;
+                            ?></div>
         <script type="text/javascript">
             $("#menu").treeview({
                 animated: "normal",
@@ -400,48 +405,47 @@ function debug($object) {
                 collapsed: true,
                 unique: true
             });
-            
-            jQuery(function(){
-                
-                jQuery("#contatos_chat_lista").click( function () {
-                    
+
+            jQuery(function () {
+
+                jQuery("#contatos_chat_lista").click(function () {
+
                     var classe = jQuery("#contatos_chat_lista").attr("class");
-                    
+
                     //verificando se o usuario ja clicou no icone de batepapo
-                    if(classe == 'nao_clicado'){
+                    if (classe == 'nao_clicado') {
                         //mostrando a lista de contatos
                         carregacontatos();
                         jQuery("#contatos_chat_lista").attr("class", 'clicado');
 
-                        jQuery("#principalChat #usuarios_online").mouseleave( function () {
+                        jQuery("#principalChat #usuarios_online").mouseleave(function () {
                             jQuery("#principalChat #usuarios_online ul li").remove();
                             jQuery("#contatos_chat_lista").attr("class", 'nao_clicado');
                         });
                     }
                 });
-                
+
             });
-            
-            jQuery(".total_mensagens").css("opacity","0.4");//define opacidade inicial
+
+            jQuery(".total_mensagens").css("opacity", "0.4");//define opacidade inicial
             //faz o numero de mensagens nao lidas piscar
-            setInterval(function() {
-                if($(".total_mensagens").css("opacity") == 0){
-                    $(".total_mensagens").css("opacity","1");
-                }
-                else{
-                  $(".total_mensagens").css("opacity","0");
+            setInterval(function () {
+                if ($(".total_mensagens").css("opacity") == 0) {
+                    $(".total_mensagens").css("opacity", "1");
+                } else {
+                    $(".total_mensagens").css("opacity", "0");
                 }
             }, 600);
-                
-                
+
+
             //abrindo a janelas de batepapo
-            jQuery(function(){
+            jQuery(function () {
                 jQuery("#principalChat #usuarios_online ul li a").live('click', function () {
 //                    console.log('teste');
                     var id = jQuery(this).attr("id");
                     jQuery(this).removeClass("comecarChat");
 
-                    var status = jQuery(this).next().attr("class"); 
+                    var status = jQuery(this).next().attr("class");
 //                    console.log(status);
                     var splitId = id.split(":");
                     var idJanela = Number(splitId[1]);
@@ -457,7 +461,7 @@ function debug($object) {
             });
 
             //minimizando as janelas
-            jQuery(function(){
+            jQuery(function () {
                 jQuery("#principalChat .cabecalho_janela_chat").live('click', function () {
                     var corpo_janela_chat = jQuery(this).next();
                     corpo_janela_chat.toggle(100);
@@ -466,7 +470,7 @@ function debug($object) {
 
 
             //fechando a janela
-            jQuery(function(){
+            jQuery(function () {
                 jQuery("#principalChat .fechar").live('click', function () {
 
                     var janelaSelecionada = jQuery(this).parent().parent();
@@ -497,7 +501,7 @@ function debug($object) {
             });
 
             //Enviando mensagens
-            jQuery(function(){
+            jQuery(function () {
                 jQuery("#principalChat .mensagem_chat").live('keyup', function (tecla) {
 
                     if (tecla.which == 13) {
@@ -523,11 +527,11 @@ function debug($object) {
                     }
                 });
             });
-            
+
             //Atualizando novas mensagens
             function verifica(timestamp, ultimoId, operadorOrigem) {
                 var t;
-                
+
                 //ESSA FUNCAO IRA VERIFICAR SE HA NOVAS MENSAGENS PARA OS CONTATOS ABERTOS OU NOVAS MENSAGENS NAO LIDAS
                 jQuery.ajax({
                     url: "<?= base_url(); ?>" + "batepapo/atualizamensagens",
@@ -551,7 +555,7 @@ function debug($object) {
 
                                     //testando se ela ja esta aberta
                                     if (jQuery("#janela_" + msg.janela).length > 0) {
-                                        
+
                                         //caso a janela ja esteja aberta adciona as novas mensagens em uma tag <li> e incrementa elas a <ul> da janela correspondente
                                         if (jQuery("#janela_" + msg.janela + " .mensagens_chat ul li#" + msg.chat_id).length == 0 && msg.janela > 0) {
 
@@ -561,10 +565,10 @@ function debug($object) {
                                                 jQuery("#janela_" + msg.janela + " .mensagens_chat ul").append("<li id='" + msg.chat_id + "'><div class='imgPerfil'></div><p>" + msg.mensagem + "</p></li>");
                                             }
                                         }
-                                        
+
                                         //CASO O CONTATO ESTEJA ABBERTO ELE MARCA A MENSAGEM COMO LIDA
                                         jQuery.ajax({
-                                                url: "<?= base_url(); ?>" + "batepapo/visualizacontatoaberto",
+                                            url: "<?= base_url(); ?>" + "batepapo/visualizacontatoaberto",
                                             type: "GET",
                                             data: 'operador_destino=' + msg.janela,
                                             success: function () {
