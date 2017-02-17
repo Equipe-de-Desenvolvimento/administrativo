@@ -43,19 +43,20 @@
     });
 
     $(function () {
-        $('#convenio1').change(function () {
+        $('#setor').change(function () {
             if ($(this).val()) {
+//                alert('ola');
                 $('.carregando').show();
-                $.getJSON('<?= base_url() ?>autocomplete/procedimentoconvenio', {convenio1: $(this).val(), ajax: true}, function (j) {
+                $.getJSON('<?= base_url() ?>autocomplete/contratocliente', {setor: $(this).val(), ajax: true}, function (j) {
                     options = '<option value=""></option>';
                     for (var c = 0; c < j.length; c++) {
-                        options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
+                        options += '<option value="' + j[c].estoque_contrato_id + '">' + j[c].contrato + ' - ' + j[c].tipo +'</option>';
                     }
-                    $('#procedimento1').html(options).show();
+                    $('#contrato').html(options).show();
                     $('.carregando').hide();
                 });
             } else {
-                $('#procedimento1').html('<option value="">Selecione</option>');
+                $('#contrato').html('<option value="">Selecione</option>');
             }
         });
     });

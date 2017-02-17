@@ -38,6 +38,19 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function listarautocompleteclientecontrato($parametro = null) {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('ec.nome as contrato, ec.estoque_contrato_id, etc.descricao as tipo');
+        $this->db->from('tb_estoque_contrato ec');
+        $this->db->join('tb_estoque_tipo_contrato etc', 'etc.estoque_tipo_contrato_id = ec.tipo_contrato_id', 'left');
+        $this->db->where('ec.ativo', 'true');
+        if ($parametro != null) {
+            $this->db->where('ec.cliente_id', $parametro);
+        }
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listasolicitacaofaturamento($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('esf.*,

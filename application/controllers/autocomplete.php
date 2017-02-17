@@ -164,6 +164,16 @@ class Autocomplete extends Controller {
         echo json_encode($var);
     }
 
+    function contratocliente() {
+
+        if (isset($_GET['setor'])) {
+            $result = $this->solicitacao_m->listarautocompleteclientecontrato($_GET['setor']);
+        } else {
+            $result = $this->solicitacao_m->listarautocompleteclientecontrato();
+        }
+        echo json_encode($result);
+    }
+
     function horariosambulatorio() {
 
         if (isset($_GET['exame'])) {
