@@ -41,7 +41,7 @@ $valor_cobrado = str_replace(",", ".",$valor_cobrado);
 $valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
 
 $dadosboleto["nosso_numero"] = "87654";
-$dadosboleto["numero_documento"] = "27.030195.10";	// Num do pedido ou do documento
+$dadosboleto["numero_documento"] = $_POST['numDoc'];	// Num do pedido ou do documento
 $dadosboleto["data_vencimento"] = $data_venc; // Data de Vencimento do Boleto - REGRA: Formato DD/MM/AAAA
 $dadosboleto["data_documento"] = date("d/m/Y"); // Data de emissão do Boleto
 $dadosboleto["data_processamento"] = date("d/m/Y"); // Data de processamento do boleto (opcional)
@@ -85,10 +85,10 @@ $dadosboleto["agencia"] = $data['conta'][0]->agencia; // Num da agencia, sem dig
 $dadosboleto["conta"] = $data['conta'][0]->conta; 	// Num da conta, sem digito
 
 // DADOS PERSONALIZADOS - BANCO DO BRASIL
-$dadosboleto["convenio"] = "7777777";  // Num do convênio - REGRA: 6 ou 7 ou 8 dígitos
-$dadosboleto["contrato"] = "999999"; // Num do seu contrato
-$dadosboleto["carteira"] = "18";
-$dadosboleto["variacao_carteira"] = "-019";  // Variação da Carteira, com traço (opcional)
+$dadosboleto["convenio"] = "";  // Num do convênio - REGRA: 6 ou 7 ou 8 dígitos
+$dadosboleto["contrato"] = ""; // Num do seu contrato
+$dadosboleto["carteira"] = $_POST['carteira'];
+$dadosboleto["variacao_carteira"] = "";  // Variação da Carteira, com traço (opcional)
 
 // TIPO DO BOLETO
 $dadosboleto["formatacao_convenio"] = "7"; // REGRA: 8 p/ Convênio c/ 8 dígitos, 7 p/ Convênio c/ 7 dígitos, ou 6 se Convênio c/ 6 dígitos

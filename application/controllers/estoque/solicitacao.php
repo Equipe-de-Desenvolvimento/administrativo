@@ -117,15 +117,6 @@ class Solicitacao extends BaseController {
 
         $data['valor_cobrado'] = (float) $data['dados_faturamento'][0]->valor_total - (float) $deducoes + (float) $multa + (float) $acrescimos + $taxa_boleto;
 
-//        $var = ereg_replace("[áàâãª]","a",$var);	
-//	$var = ereg_replace("[éèê]","e",$var);	
-//	$var = ereg_replace("[óòôõº]","o",$var);	
-//	$var = ereg_replace("[úùû]","u",$var);	
-//	$var = str_replace("ç","c",$var);
-
-//        echo  '<pre>';
-//        var_dump($taxa_boleto);die;
-
         include ("boleto/boleto_bb.php");
         include ("boleto/include/funcoes_bb.php");
         include ("boleto/include/layout_bb.php");

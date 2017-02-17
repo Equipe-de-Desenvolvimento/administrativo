@@ -25,8 +25,16 @@
         </fieldset>
         <fieldset>
             <div>        
-                <label>Vencimento</label>
-                <input type="text" name="vencimento" id="vencimento" alt="date"/>
+                <label>Vencimento *</label>
+                <input type="text" name="vencimento" id="vencimento" alt="date" required=""/>
+            </div>
+            <div>        
+                <label>Carteira *</label>
+                <input type="text" name="carteira" id="carteira" required/>
+            </div>
+            <div>        
+                <label>Num. Documento</label>
+                <input type="text" name="numDoc" id="numDoc"/>
             </div>
             <div>        
                 <label>Taxa Boleto (R$)</label>
