@@ -348,7 +348,7 @@ class formapagamento_model extends Model {
                 $this->db->set('operador_atualizacao', $operador_id);
 //                $forma_pagamento_id = $_POST['txtcadastrosformapagamentoid'];
                 $this->db->where('forma_pagamento_id', $forma_pagamento_id);
-                $this->db->update('tb_forma_pagamento');
+                $this->db->update('tb_descricao_forma_pagamento');
             }
             return $forma_pagamento_id;
         } catch (Exception $exc) {

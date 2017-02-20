@@ -142,9 +142,9 @@ class Formapagamento extends BaseController {
     function gravardescricao() {
         $exame_formapagamento_id = $this->formapagamento->gravardescricao();
         if ($exame_formapagamento_id == "-1") {
-            $data['mensagem'] = 'Erro ao gravar a Forma. Opera&ccedil;&atilde;o cancelada.';
+            $data['mensagem'] = 'Erro ao gravar a Descrição. Opera&ccedil;&atilde;o cancelada.';
         } else {
-            $data['mensagem'] = 'Sucesso ao gravar a Forma.';
+            $data['mensagem'] = 'Sucesso ao gravar a Descrição.';
         }
 //        $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/formapagamento/pesquisardescricao");

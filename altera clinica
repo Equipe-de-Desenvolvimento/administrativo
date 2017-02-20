@@ -257,4 +257,28 @@ CREATE TABLE ponto.tb_estoque_tipo_contrato
 --Dia 17/02/2017
 ALTER TABLE ponto.tb_estoque_contrato ALTER COLUMN numero_contrato TYPE character varying(200);
 
+-- Dia 20/02/2017
+
+CREATE TABLE ponto.tb_descricao_forma_pagamento
+(
+  descricao_forma_pagamento_id serial NOT NULL,
+  nome character varying(100) NOT NULL,
+  ativo boolean NOT NULL DEFAULT true,
+  operador_cadastro integer,
+  data_cadastro timestamp without time zone,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  conta_id integer,
+  ajuste numeric(10,2),
+  dia_receber integer,
+  tempo_receber integer,
+  credor_devedor integer,
+  parcelas integer,
+  taxa_juros numeric(10,2),
+  fixar boolean DEFAULT false,
+  cartao boolean,
+  parcela_minima numeric(10,2),
+  boleto boolean,
+  CONSTRAINT tb_descricao_forma_pagamento_pkey PRIMARY KEY (descricao_forma_pagamento_id )
+);
 
