@@ -1,13 +1,14 @@
+
 <div class="content"> <!-- Inicio da DIV content -->
     <div class="bt_link_new" style="width: 200pt;">
         <center>
-            <a style="width: 200pt;" href="<?php echo base_url() ?>cadastros/formapagamento/carregarformapagamento/0">
-                Nova Forma de Pagamento
+            <a style="width: 200pt;" href="<?php echo base_url() ?>cadastros/formapagamento/carregardescricaoformapagamento/0">
+                Nova Descrição
             </a>
         </center>
     </div>
     <div id="accordion">
-        <h3 class="singular"><a href="#">Manter Forma de Pagamento</a></h3>
+        <h3 class="singular"><a href="#">Manter Descrição de Pagamento</a></h3>
         <div>
             <table>
                 <thead>
@@ -30,6 +31,7 @@
                     $total    = $consulta->count_all_results();
                     $limit    = 10;
                     isset ($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
+
                     if ($total > 0) {
                 ?>
                 <tbody>
@@ -72,7 +74,10 @@
 
 </div> <!-- Final da DIV content -->
 <script type="text/javascript">
+
     $(function() {
         $( "#accordion" ).accordion();
     });
+
 </script>
+

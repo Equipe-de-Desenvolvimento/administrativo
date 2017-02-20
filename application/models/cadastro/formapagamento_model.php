@@ -267,6 +267,95 @@ class formapagamento_model extends Model {
         }
     }
 
+    function gravardescricao() {
+        try {
+            /* inicia o mapeamento no banco */
+            $forma_pagamento_id = $_POST['txtcadastrosformapagamentoid'];
+            $this->db->set('nome', $_POST['txtNome']);
+            $this->db->set('conta_id', $_POST['conta']);
+
+
+            $parcelas = $_POST['parcelas'];
+            if ($_POST['parcelas'] == "" || $_POST['parcelas'] == 0) {
+                $parcelas = 1;
+            }
+            $diareceber = $_POST['diareceber'];
+            $temporeceber = $_POST['temporeceber'];
+            if ($_POST['diareceber'] == '' || $_POST['diareceber'] < 0) {
+                $diareceber = 0;
+            }
+            if ($_POST['temporeceber'] == '' || $_POST['temporeceber'] < 0) {
+                $temporeceber = 0;
+            }
+            $ajuste = $_POST['ajuste'];
+            if ($_POST['ajuste'] == '') {
+                $ajuste = 0;
+            }
+            
+            $parcela_minima = $_POST['parcela_minima'];
+            if ($_POST['parcela_minima'] == '') {
+                $parcela_minima = 0;
+            }
+            $taxa_juros = $_POST['taxa_juros'];
+            if ($_POST['taxa_juros'] == '') {
+                $taxa_juros = 0;
+            }
+
+            if ($_POST['cartao'] == 'on') {
+                $cartao = 't';
+            } else {
+                $cartao = 'f';
+            }
+            if ($_POST['boleto'] == 'on') {
+                $boleto = 't';
+            } else {
+                $boleto = 'f';
+            }
+
+            if ($_POST['arrendondamento'] == 'on') {
+                $arredondamento = 't';
+            } else {
+                $arredondamento = 'f';
+            }
+//            var_dump($arredondamento); die;
+
+            $this->db->set('ajuste', $ajuste);
+            $this->db->set('parcelas', $parcelas);
+            $this->db->set('parcela_minima', str_replace(",", ".", str_replace(".", "", $parcela_minima)));
+            $this->db->set('taxa_juros', $taxa_juros);
+            $this->db->set('fixar', $arredondamento);
+            $this->db->set('cartao', $cartao);
+            $this->db->set('boleto', $boleto);
+            $this->db->set('credor_devedor', $_POST['credor_devedor']);
+            $this->db->set('dia_receber', $diareceber);
+            $this->db->set('tempo_receber', $temporeceber);
+//            $this->db->set('ativo', 't');
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+
+            if ($_POST['txtcadastrosformapagamentoid'] == "") {// insert
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_forma_pagamento');
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $forma_pagamento_id = $this->db->insert_id();
+            }
+            else { // update
+                $this->db->set('data_atualizacao', $horario);
+                $this->db->set('operador_atualizacao', $operador_id);
+//                $forma_pagamento_id = $_POST['txtcadastrosformapagamentoid'];
+                $this->db->where('forma_pagamento_id', $forma_pagamento_id);
+                $this->db->update('tb_forma_pagamento');
+            }
+            return $forma_pagamento_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+    
     function gravar() {
         try {
             /* inicia o mapeamento no banco */

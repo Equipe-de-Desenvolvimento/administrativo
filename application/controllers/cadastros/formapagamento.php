@@ -34,6 +34,10 @@ class Formapagamento extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function pesquisardescricao($args = array()) {
+        $this->loadView('cadastros/descricaoformapagamento-lista', $args);
+    }
+
     function grupospagamento($args = array()) {
 
         $this->loadView('cadastros/grupopagamento-lista', $args);
@@ -44,6 +48,15 @@ class Formapagamento extends BaseController {
     function carregargrupospagamento() {
         $data['forma_pagamento'] = $this->formapagamento->listarforma();
         $this->loadView('cadastros/grupopagamento-form', $data);
+    }
+
+    function carregardescricaoformapagamento($formapagamento_id) {
+        $obj_formapagamento = new formapagamento_model($formapagamento_id);
+        $data['obj'] = $obj_formapagamento;
+        $data['conta'] = $this->forma->listarforma();
+        $data['credor_devedor'] = $this->formapagamento->listarcredordevedor();
+        //$this->carregarView($data, 'giah/servidor-form');
+        $this->loadView('cadastros/descricaoformapagamento-form', $data);
     }
 
     function carregarformapagamento($formapagamento_id) {
@@ -124,6 +137,17 @@ class Formapagamento extends BaseController {
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/formapagamento/grupoadicionar/$grupo_id");
+    }
+
+    function gravardescricao() {
+        $exame_formapagamento_id = $this->formapagamento->gravardescricao();
+        if ($exame_formapagamento_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar a Forma. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar a Forma.';
+        }
+//        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/formapagamento/pesquisardescricao");
     }
 
     function gravar() {

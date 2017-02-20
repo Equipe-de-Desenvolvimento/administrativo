@@ -1,8 +1,8 @@
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
-        <h3 class="singular"><a href="#">Cadastro Forma de Pagamento</a></h3>
+        <h3 class="singular"><a href="#">Cadastrar Descrição de Pagamento</a></h3>
         <div>
-            <form name="form_formapagamento" id="form_formapagamento" action="<?= base_url() ?>cadastros/formapagamento/gravar" method="post">
+            <form name="form_formapagamento" id="form_formapagamento" action="<?= base_url() ?>cadastros/formapagamento/gravardescricao" method="post">
 
                 <dl class="dl_desconto_lista">
                     <dt>
@@ -97,15 +97,19 @@
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
+
     $(function () {
         $("#accordion").accordion();
     });
+
     $("#cartao").click(function () {
         $("#boleto").removeAttr('checked');
     });
     $("#boleto").click(function () {
         $("#cartao").removeAttr('checked');
     });
+
+
     $(document).ready(function () {
         jQuery('#form_formapagamento').validate({
             rules: {
@@ -115,6 +119,7 @@
                 },
                 conta: {
                     required: true
+
                 },
                 credor_devedor: {
                     required: true
@@ -122,6 +127,7 @@
                 parcelas: {
                     required: true
                 }
+
             },
             messages: {
                 txtNome: {
@@ -130,6 +136,7 @@
                 },
                 conta: {
                     required: "*"
+
                 },
                 credor_devedor: {
                     required: "*"
@@ -140,4 +147,5 @@
             }
         });
     });
+
 </script>
