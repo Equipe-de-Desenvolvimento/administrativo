@@ -16,9 +16,9 @@
                         <label>Pagamento</label>
                     </dt>
                     <dd>
-                        <input type="radio" name="tipo" value="1">Avista
-                        <input type="radio" name="tipo" value="2">Parcelado
-                        <input type="radio" name="tipo" value="3">Cadastro Manual
+                        <input type="radio" name="tipo" value="1" id="1" <? if(@$obj->_tipo == '1'){ ?>checked <?}?>><label for="1">Avista</label>
+                        <input type="radio" name="tipo" value="2" id="2" <? if(@$obj->_tipo == '2'){ ?>checked <?}?>><label for="2">Parcelado</label>
+                        <input type="radio" name="tipo" value="3" id="3" <? if(@$obj->_tipo == '3'){ ?>checked <?}?>><label for="3">Cadastro Manual</label>
                     </dd>
 <!--                    <dt>
                         <label>Prazo (caso seja Avista)</label>

@@ -90,6 +90,13 @@ class Formapagamento extends BaseController {
         $this->loadView('cadastros/formapagamentoparcelas-form', $data);
     }
     
+    function formapagamentoparcelado($formapagamento_id) {
+        $data['formapagamento_id'] = $formapagamento_id;
+        $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
+        $data['parcelas'] = $this->formapagamento->buscarformatipo($formapagamento_id);
+        $this->loadView('cadastros/formapagamentoparcelado', $data);
+    }
+    
     function formapagamentoavistaprazo($formapagamento_id) {
         $data['formapagamento_id'] = $formapagamento_id;
         $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
@@ -97,6 +104,13 @@ class Formapagamento extends BaseController {
         $this->loadView('cadastros/formapagamentoavistaprazo', $data);
     }
     
+    
+    function gravarpagamentoparcelado() {
+        $_POST['tot_parcelas'] = (int)$_POST['tot_parcelas'];
+        
+        $this->formapagamento->gravarpagamentoparcelado();
+        redirect(base_url() . "cadastros/formapagamento");
+    }
     
     function gravaravistaprazo() {
 //        $formapagamento_id = $_POST['formapagamento_id'];

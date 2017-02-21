@@ -304,5 +304,6 @@ ALTER TABLE ponto.tb_formapagamento_pacela_juros DROP COLUMN parcelas_fim;
 ALTER TABLE ponto.tb_formapagamento_pacela_juros DROP COLUMN parcelas_inicio;
 ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN parcela integer;
 ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN total_parcelas integer;
+ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN dias integer;
 
 
