@@ -62,9 +62,6 @@ class Formapagamento extends BaseController {
     function carregarformapagamento($formapagamento_id) {
         $obj_formapagamento = new formapagamento_model($formapagamento_id);
         $data['obj'] = $obj_formapagamento;
-        $data['conta'] = $this->forma->listarforma();
-        $data['credor_devedor'] = $this->formapagamento->listarcredordevedor();
-        //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('cadastros/formapagamento-form', $data);
     }
 
@@ -93,6 +90,19 @@ class Formapagamento extends BaseController {
         $this->loadView('cadastros/formapagamentoparcelas-form', $data);
     }
     
+    function formapagamentoavistaprazo($formapagamento_id) {
+        $data['formapagamento_id'] = $formapagamento_id;
+        $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
+        $data['parcelas'] = $this->formapagamento->buscarformatipo($formapagamento_id);
+        $this->loadView('cadastros/formapagamentoavistaprazo', $data);
+    }
+    
+    
+    function gravaravistaprazo() {
+//        $formapagamento_id = $_POST['formapagamento_id'];
+        $this->formapagamento->gravaravistaprazo();
+        redirect(base_url() . "cadastros/formapagamento");
+    }
     
     function gravarparcelas() {
         $formapagamento_id = $_POST['formapagamento_id'];
@@ -158,7 +168,7 @@ class Formapagamento extends BaseController {
         } else {
             $data['mensagem'] = 'Sucesso ao gravar a Descrição.';
         }
-//        $this->session->set_flashdata('message', $data['mensagem']);
+        $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/formapagamento/pesquisardescricao");
     }
 
@@ -166,16 +176,11 @@ class Formapagamento extends BaseController {
         $exame_formapagamento_id = $this->formapagamento->gravar();
         if ($exame_formapagamento_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Forma. Opera&ccedil;&atilde;o cancelada.';
-            redirect(base_url() . "cadastros/formapagamento");
         } else {
             $data['mensagem'] = 'Sucesso ao gravar a Forma.';
-            if($_POST['tipo'] == '2'){
-                $this->loadView('cadastros/formapagamentoparcelado', $data);
-            }
-            elseif($_POST['tipo'] == '3'){
-                $this->loadView('cadastros/formapagamentomanual', $data);
-            }
         }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "cadastros/formapagamento");
     }
 
     function grupoadicionar($financeiro_grupo_id) {

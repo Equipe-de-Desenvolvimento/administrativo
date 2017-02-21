@@ -4,7 +4,7 @@ class formapagamento_model extends Model {
 
     var $_forma_pagamento_id = null;
     var $_nome = null;
-    var $_conta_id = null;
+    var $_tipo = null;
     var $_ajuste = null;
     var $_dia_receber = null;
     var $_tempo_receber = null;
@@ -25,6 +25,7 @@ class formapagamento_model extends Model {
     function listar($args = array()) {
         $this->db->select('forma_pagamento_id,
                             nome, 
+                            tipo
                             ');
         $this->db->from('tb_forma_pagamento');
         $this->db->where('ativo', 'true');
@@ -118,14 +119,20 @@ class formapagamento_model extends Model {
     }
 
     function buscarforma($forma_pagamento_id) {
-        $this->db->select('descricao_forma_pagamento_id,
+        $this->db->select('forma_pagamento_id,
                             nome,
-                            ajuste,
-                            boleto,
-                            parcelas');
-        $this->db->from('tb_descricao_forma_pagamento');
+                            tipo');
+        $this->db->from('tb_forma_pagamento');
         $this->db->where('ativo', 'true');
-        $this->db->where('descricao_forma_pagamento_id', "$forma_pagamento_id");
+        $this->db->where('forma_pagamento_id', $forma_pagamento_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+    function buscarformatipo($forma_pagamento_id) {
+        $this->db->select('*');
+        $this->db->from('tb_formapagamento_pacela_juros');
+        $this->db->where('ativo', 'true');
+        $this->db->where('forma_pagamento_id', $forma_pagamento_id);
         $return = $this->db->get();
         return $return->result();
     }
@@ -139,6 +146,31 @@ class formapagamento_model extends Model {
         $this->db->where('financeiro_grupo_id', "$financeiro_grupo_id");
         $return = $this->db->get();
         return $return->result();
+    }
+
+    function gravaravistaprazo() {
+
+        //instanciando o banco       
+        $this->db->set('valor', '100.00');
+        $this->db->set('parcela', '1');
+        $this->db->set('total_parcelas', '1');
+        $this->db->set('forma_pagamento_id', $_POST['formapagamento_id']);
+        $this->db->set('prazo', $_POST['prazo']);
+        
+        
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        if($_POST['formapagamentoparcela_id'] == ''){//insert
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id); 
+            $this->db->insert('tb_formapagamento_pacela_juros');
+        }
+        else{//update
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('operador_atualizacao', $operador_id); 
+            $this->db->where('formapagamento_pacela_juros_id', $_POST['formapagamentoparcela_id']); 
+            $this->db->update('tb_formapagamento_pacela_juros');
+        }
     }
 
     function excluir($forma_pagamento_id) {
@@ -388,6 +420,7 @@ class formapagamento_model extends Model {
             /* inicia o mapeamento no banco */
             $forma_pagamento_id = $_POST['txtcadastrosformapagamentoid'];
             $this->db->set('nome', $_POST['txtNome']);
+            $this->db->set('tipo', $_POST['tipo']);
             
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
@@ -407,14 +440,6 @@ class formapagamento_model extends Model {
                 $this->db->set('operador_atualizacao', $operador_id);
                 $this->db->where('forma_pagamento_id', $forma_pagamento_id);
                 $this->db->update('tb_forma_pagamento');
-            }
-            
-            if ($_POST['tipo'] == '1' && $_POST['prazo'] != ''){
-                $this->db->set('forma_pagamento_id', $forma_pagamento_id);
-                $this->db->set('parcelas_inicio', '1');
-                $this->db->set('prazo', $_POST['prazo']);
-                $this->db->set('valor', '100.00');
-                $this->db->insert('tb_formapagamento_pacela_juros');
             }
             return $forma_pagamento_id;
         } catch (Exception $exc) {
@@ -452,35 +477,15 @@ class formapagamento_model extends Model {
 
         if ($forma_pagamento_id != 0) {
             $this->db->select('forma_pagamento_id,
-                               nome, 
-                               conta_id,
-                               ajuste, 
-                               dia_receber, 
-                               parcela_minima, 
-                               tempo_receber, 
-                               credor_devedor,
-                               fixar,
-                               taxa_juros,
-                               parcelas,
-                               cartao,
-                               boleto');
+                               nome,
+                               tipo');
             $this->db->from('tb_forma_pagamento');
             $this->db->where("forma_pagamento_id", $forma_pagamento_id);
             $query = $this->db->get();
             $return = $query->result();
             $this->_forma_pagamento_id = $forma_pagamento_id;
             $this->_nome = $return[0]->nome;
-            $this->_conta_id = $return[0]->conta_id;
-            $this->_ajuste = $return[0]->ajuste;
-            $this->_dia_receber = $return[0]->dia_receber;
-            $this->_fixar = $return[0]->fixar;
-            $this->_tempo_receber = $return[0]->tempo_receber;
-            $this->_credor_devedor = $return[0]->credor_devedor;
-            $this->_taxa_juros = $return[0]->taxa_juros;
-            $this->_parcelas = $return[0]->parcelas;
-            $this->_parcela_minima = $return[0]->parcela_minima;
-            $this->_cartao = $return[0]->cartao;
-            $this->_boleto = $return[0]->boleto;
+            $this->_tipo = $return[0]->tipo;
         } else {
             $this->_forma_pagamento_id = null;
         }

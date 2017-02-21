@@ -2,30 +2,17 @@
     <div id="accordion">
         <h3 class="singular"><a href="#">Cadastro Forma de Pagamento</a></h3>
         <div>
-            <form name="form_formapagamento" id="form_formapagamento" action="<?= base_url() ?>cadastros/formapagamento/gravar" method="post">
+            <form name="form_formapagamento" id="form_formapagamento" action="<?= base_url() ?>cadastros/formapagamento/gravaravistaprazo" method="post">
 
                 <dl class="dl_desconto_lista">
                     <dt>
-                        <label>Nome</label>
+                        <label>Prazo</label>
                     </dt>
                     <dd>
-                        <input type="hidden" name="txtcadastrosformapagamentoid" class="texto10" value="<?= @$obj->_forma_pagamento_id; ?>" />
-                        <input type="text" name="txtNome" class="texto05" value="<?= @$obj->_nome; ?>" required=""/>
+                        <input type="hidden" name="formapagamento_id" class="texto01" value="<?= @$formapagamento_id ?>"/>
+                        <input type="hidden" name="formapagamentoparcela_id" class="texto01" value="<?= @$parcelas[0]->formapagamento_pacela_juros_id ?>"/>
+                        <input type="text" alt="integer" name="prazo" class="texto01" value="<?= @$parcelas[0]->prazo ?>"/>dias
                     </dd>
-                    <dt>
-                        <label>Pagamento</label>
-                    </dt>
-                    <dd>
-                        <input type="radio" name="tipo" value="1">Avista
-                        <input type="radio" name="tipo" value="2">Parcelado
-                        <input type="radio" name="tipo" value="3">Cadastro Manual
-                    </dd>
-<!--                    <dt>
-                        <label>Prazo (caso seja Avista)</label>
-                    </dt>
-                    <dd>
-                        <input type="text" alt="integer" name="prazo" class="texto01"/>dias
-                    </dd>-->
 
                 </dl>    
                 <hr/>

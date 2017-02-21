@@ -21,6 +21,7 @@
                     </tr>
                     <tr>
                         <th class="tabela_header">Nome</th>
+                        <th class="tabela_header">Pagamento</th>
                         <th class="tabela_header" width="70px;" colspan="3"><center>Detalhes</center></th>
                     </tr>
                 </thead>
@@ -41,6 +42,14 @@
                      ?>
                             <tr >
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->nome; ?></td>
+                                <? if($item->tipo == '1'):?>
+                                    <td class="<?php echo $estilo_linha; ?>">AVISTA</td>
+                                <? elseif($item->tipo == '2'):?>
+                                    <td class="<?php echo $estilo_linha; ?>">PARCELADO</td>
+                                <? elseif($item->tipo == '3'):?>
+                                    <td class="<?php echo $estilo_linha; ?>">CADASTRO MANUAL</td>
+                                <?endif;?>
+                                    
 
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a href="<?= base_url() ?>cadastros/formapagamento/carregarformapagamento/<?= $item->forma_pagamento_id ?>">Editar</a>
@@ -48,9 +57,20 @@
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Forma?');" href="<?= base_url() ?>cadastros/formapagamento/excluir/<?= $item->forma_pagamento_id ?>">Excluir</a>
                                 </td>
-                                <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                    <a href="<?= base_url() ?>cadastros/formapagamento/formapagamentoparcelas/<?= $item->forma_pagamento_id ?>">Parcelas</a>
-                                </td>
+                                
+                                <? if($item->tipo == '1'):?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                        <a href="<?= base_url() ?>cadastros/formapagamento/formapagamentoavistaprazo/<?= $item->forma_pagamento_id ?>">Prazo</a>
+                                    </td>
+                                <? elseif($item->tipo == '2'):?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                        <a href="<?= base_url() ?>cadastros/formapagamento/formapagamentoparcelado/<?= $item->forma_pagamento_id ?>">Parcelas</a>
+                                    </td>
+                                <? elseif($item->tipo == '3'):?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                        <a href="<?= base_url() ?>cadastros/formapagamento/formapagamentomanual/<?= $item->forma_pagamento_id ?>">Cadastrar</a>
+                                    </td>
+                                <?endif;?>
                         </tr>
 
                         </tbody>
@@ -60,7 +80,7 @@
                         ?>
                         <tfoot>
                             <tr>
-                                <th class="tabela_footer" colspan="4">
+                                <th class="tabela_footer" colspan="5">
                                    <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
                                 </th>
