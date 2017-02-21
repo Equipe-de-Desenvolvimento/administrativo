@@ -21,7 +21,7 @@ class menu_model extends Model {
     }
 
     function listarmenus($estoque_menu_id) {
-        $this->db->select('ep.descricao, mp.estoque_menu_produtos_id');
+        $this->db->select('ep.descricao, mp.estoque_menu_produtos_id, mp.valor');
         $this->db->from('tb_estoque_menu_produtos mp');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = mp.produto');
         $this->db->where('mp.ativo', 'true');

@@ -282,3 +282,21 @@ CREATE TABLE ponto.tb_descricao_forma_pagamento
   CONSTRAINT tb_descricao_forma_pagamento_pkey PRIMARY KEY (descricao_forma_pagamento_id )
 );
 
+-- Dia 21/02/2017
+DROP TABLE ponto.tb_forma_pagamento;
+
+CREATE TABLE ponto.tb_forma_pagamento
+(
+  forma_pagamento_id serial NOT NULL,
+  nome character varying(200),
+  tipo character varying(10),
+  ativo boolean NOT NULL DEFAULT true,
+  operador_cadastro integer,
+  data_cadastro timestamp without time zone,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_forma_pagamento_pkey PRIMARY KEY (forma_pagamento_id)
+);
+
+ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN prazo integer;
+ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN valor numeric(10,2);

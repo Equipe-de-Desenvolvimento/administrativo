@@ -73,6 +73,7 @@
 
                 <tr>
                     <th class="tabela_header">Produtos</th>
+                    <th class="tabela_header">Valor</th>
                     <th class="tabela_header">&nbsp;</th>
                 </tr>
             </thead>
@@ -84,6 +85,7 @@
                 <tbody>
                     <tr>
                         <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', '.'); ?></td>
                         <td class="<?php echo $estilo_linha; ?>" width="100px;">
                             <a href="<?= base_url() ?>estoque/menu/excluirmenu/<?= $item->estoque_menu_produtos_id; ?>/<?= $menu[0]->estoque_menu_id; ?>" class="delete">
                             </a>

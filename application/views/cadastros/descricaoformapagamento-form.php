@@ -9,41 +9,41 @@
                         <label>Nome</label>
                     </dt>
                     <dd>
-                        <input type="hidden" name="txtcadastrosformapagamentoid" class="texto10" value="<?= @$obj->_forma_pagamento_id; ?>" />
-                        <input type="text" name="txtNome" class="texto05" value="<?= @$obj->_nome; ?>" />
+                        <input type="hidden" name="txtcadastrosformapagamentoid" class="texto10" value="<?= @$descricao[0]->descricao_forma_pagamento_id; ?>" />
+                        <input type="text" name="txtNome" class="texto05" value="<?= @$descricao[0]->nome; ?>" />
                     </dd>
 
                     <dt>
                         <label>Ajuste</label>
                     </dt>
                     <dd>
-                        <input type="text" name="ajuste" class="texto02" id="ajuste" value="<?= @$obj->_ajuste; ?>" />%
+                        <input type="text" name="ajuste" class="texto02" id="ajuste" value="<?= @$descricao[0]->ajuste; ?>" />%
                     </dd>
 
                     <dt>
                         <label>Data de Recebimento</label>
                     </dt>
                     <dd>
-                        <input type="text" name="diareceber" class="texto02" id="diareceber" value="<?= @$obj->_dia_receber; ?>"/>
+                        <input type="text" name="diareceber" class="texto02" id="diareceber" value="<?= @$descricao[0]->dia_receber; ?>"/>
                     </dd>
                     <dt>
                         <label>Tempo Recebimento</label>
                     </dt>
                     <dd>
-                        <input type="text" name="temporeceber" class="texto02" id="temporeceber" value= "<?= @$obj->_tempo_receber; ?>" />
-                        <input type="checkbox" name="arrendondamento" id="arrendondamento" <? if (@$obj->_fixar == 't') { ?>checked <? } ?>  />Fixar
+                        <input type="text" name="temporeceber" class="texto02" id="temporeceber" value= "<?= @$descricao[0]->tempo_receber; ?>" />
+                        <input type="checkbox" name="arrendondamento" id="arrendondamento" <? if (@$descricao[0]->fixar == 't') { ?>checked <? } ?>  />Fixar
                     </dd>
                     <dt>
                         <label>N° Maximo de Parcelas</label>
                     </dt>
                     <dd>
-                        <input type="text" name="parcelas" class="texto02" id="parcelas" value= "<?= @$obj->_parcelas; ?>" />
+                        <input type="text" name="parcelas" class="texto02" id="parcelas" value= "<?= @$descricao[0]->parcelas; ?>" />
                     </dd>
                     <dt>
                         <label>Valor Mínimo da Parcela</label>
                     </dt>
                     <dd>
-                        <input type="text" name="parcela_minima" class="texto02" id="parcela_minima" value= "<?= @$obj->_parcela_minima; ?>" />
+                        <input type="text" name="parcela_minima" class="texto02" id="parcela_minima" value= "<?= @$descricao[0]->parcela_minima; ?>" />
                     </dd>
                     <dt>
                         <label>Conta</label>
@@ -53,7 +53,7 @@
                             <option value="">SELECIONE</option>
                             <? foreach ($conta as $value) { ?>
                                 <option value="<?= $value->forma_entradas_saida_id ?>" <?
-                                if (@$obj->_conta_id == $value->forma_entradas_saida_id):echo 'selected';
+                                if (@$descricao[0]->conta_id == $value->forma_entradas_saida_id):echo 'selected';
                                 endif;
                                 ?>><?= $value->descricao ?></option>
                                     <? } ?>                            
@@ -67,7 +67,7 @@
                             <option value="">SELECIONE</option>
                             <? foreach ($credor_devedor as $value) { ?>
                                 <option value="<?= $value->financeiro_credor_devedor_id ?>" <?
-                                if (@$obj->_credor_devedor == $value->financeiro_credor_devedor_id):echo 'selected';
+                                if (@$descricao[0]->credor_devedor == $value->financeiro_credor_devedor_id):echo 'selected';
                                 endif;
                                 ?>><?= $value->razao_social ?></option>
                                     <? } ?>                            
@@ -77,13 +77,13 @@
                         <label for="cartao">Forma de Pagamento Cartão</label>
                     </dt>
                     <dd>
-                        <input type="checkbox" name="cartao" id="cartao" <? if (@$obj->_cartao == 't') { ?>checked <? } ?>  />
+                        <input type="checkbox" name="cartao" id="cartao" <? if (@$descricao[0]->cartao == 't') { ?>checked <? } ?>  />
                     </dd>
                     <dt>
                         <label for="boleto">Forma de Pagamento Boleto</label>
                     </dt>
                     <dd>
-                        <input type="checkbox" name="boleto" id="boleto" <? if (@$obj->_boleto == 't') { ?>checked <? } ?>  />
+                        <input type="checkbox" name="boleto" id="boleto" <? if (@$descricao[0]->boleto == 't') { ?>checked <? } ?>  />
                     </dd>
                 </dl>    
                 <hr/>

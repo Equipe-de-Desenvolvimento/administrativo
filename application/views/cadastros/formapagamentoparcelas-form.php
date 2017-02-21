@@ -67,7 +67,7 @@
                                 <td class="<?php echo $estilo_linha; ?>">Taxa: <?= $item->taxa_juros ?></td>
                                 <td class="<?php echo $estilo_linha; ?>">Parcela inicio: <?= $item->parcelas_inicio ?></td>
                                 <td class="<?php echo $estilo_linha; ?>">Parcela fim: <?= $item->parcelas_fim ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><center><a class="delete" href="<?= base_url() ?>cadastros/formapagamento/excluirparcela/<?=$item->formapagamento_pacela_juros_id?>/<?=$item->forma_pagamento_id?>">delete</a></center></td>
+                                <td class="<?php echo $estilo_linha; ?>"><center><a class="delete" href="<?= base_url() ?>cadastros/formapagamento/excluirparcela/<?=$item->formapagamento_pacela_juros_id?>/<?=$item->descricao_forma_pagamento_id?>">delete</a></center></td>
                             </tr>
                         <? } ?>
                     </tbody>

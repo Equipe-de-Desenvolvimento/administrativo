@@ -9,82 +9,24 @@
                         <label>Nome</label>
                     </dt>
                     <dd>
-                        <input type="hidden" name="txtcadastrosformapagamentoid" class="texto10" value="<?= @$obj->_forma_pagamento_id; ?>" />
-                        <input type="text" name="txtNome" class="texto05" value="<?= @$obj->_nome; ?>" />
+                        <input type="hidden" name="txtcadastrosformapagamentoid" class="texto10" value="<?= @$descricao[0]->descricao_forma_pagamento_id; ?>" />
+                        <input type="text" name="txtNome" class="texto05" value="<?= @$descricao[0]->nome; ?>" required=""/>
+                    </dd>
+                    <dt>
+                        <label>Pagamento</label>
+                    </dt>
+                    <dd>
+                        <input type="radio" name="tipo" value="1">Avista
+                        <input type="radio" name="tipo" value="2">Parcelado
+                        <input type="radio" name="tipo" value="3">Cadastro Manual
+                    </dd>
+                    <dt>
+                        <label>Prazo (caso seja Avista)</label>
+                    </dt>
+                    <dd>
+                        <input type="text" alt="integer" name="prazo" class="texto01"/>dias
                     </dd>
 
-                    <dt>
-                        <label>Ajuste</label>
-                    </dt>
-                    <dd>
-                        <input type="text" name="ajuste" class="texto02" id="ajuste" value="<?= @$obj->_ajuste; ?>" />%
-                    </dd>
-
-                    <dt>
-                        <label>Data de Recebimento</label>
-                    </dt>
-                    <dd>
-                        <input type="text" name="diareceber" class="texto02" id="diareceber" value="<?= @$obj->_dia_receber; ?>"/>
-                    </dd>
-                    <dt>
-                        <label>Tempo Recebimento</label>
-                    </dt>
-                    <dd>
-                        <input type="text" name="temporeceber" class="texto02" id="temporeceber" value= "<?= @$obj->_tempo_receber; ?>" />
-                        <input type="checkbox" name="arrendondamento" id="arrendondamento" <? if (@$obj->_fixar == 't') { ?>checked <? } ?>  />Fixar
-                    </dd>
-                    <dt>
-                        <label>N° Maximo de Parcelas</label>
-                    </dt>
-                    <dd>
-                        <input type="text" name="parcelas" class="texto02" id="parcelas" value= "<?= @$obj->_parcelas; ?>" />
-                    </dd>
-                    <dt>
-                        <label>Valor Mínimo da Parcela</label>
-                    </dt>
-                    <dd>
-                        <input type="text" name="parcela_minima" class="texto02" id="parcela_minima" value= "<?= @$obj->_parcela_minima; ?>" />
-                    </dd>
-                    <dt>
-                        <label>Conta</label>
-                    </dt>
-                    <dd>
-                        <select name="conta" id="conta" class="texto03">
-                            <option value="">SELECIONE</option>
-                            <? foreach ($conta as $value) { ?>
-                                <option value="<?= $value->forma_entradas_saida_id ?>" <?
-                                if (@$obj->_conta_id == $value->forma_entradas_saida_id):echo 'selected';
-                                endif;
-                                ?>><?= $value->descricao ?></option>
-                                    <? } ?>                            
-                        </select>
-                    </dd>
-                    <dt>
-                        <label>Credor/Devedor</label>
-                    </dt>
-                    <dd>
-                        <select name="credor_devedor" id="credor_devedor" class="texto03">
-                            <option value="">SELECIONE</option>
-                            <? foreach ($credor_devedor as $value) { ?>
-                                <option value="<?= $value->financeiro_credor_devedor_id ?>" <?
-                                if (@$obj->_credor_devedor == $value->financeiro_credor_devedor_id):echo 'selected';
-                                endif;
-                                ?>><?= $value->razao_social ?></option>
-                                    <? } ?>                            
-                        </select>
-                    </dd>
-                    <dt>
-                        <label for="cartao">Forma de Pagamento Cartão</label>
-                    </dt>
-                    <dd>
-                        <input type="checkbox" name="cartao" id="cartao" <? if (@$obj->_cartao == 't') { ?>checked <? } ?>  />
-                    </dd>
-                    <dt>
-                        <label for="boleto">Forma de Pagamento Boleto</label>
-                    </dt>
-                    <dd>
-                        <input type="checkbox" name="boleto" id="boleto" <? if (@$obj->_boleto == 't') { ?>checked <? } ?>  />
-                    </dd>
                 </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>
@@ -100,44 +42,44 @@
     $(function () {
         $("#accordion").accordion();
     });
-    $("#cartao").click(function () {
-        $("#boleto").removeAttr('checked');
-    });
-    $("#boleto").click(function () {
-        $("#cartao").removeAttr('checked');
-    });
-    $(document).ready(function () {
-        jQuery('#form_formapagamento').validate({
-            rules: {
-                txtNome: {
-                    required: true,
-                    minlength: 3
-                },
-                conta: {
-                    required: true
-                },
-                credor_devedor: {
-                    required: true
-                },
-                parcelas: {
-                    required: true
-                }
-            },
-            messages: {
-                txtNome: {
-                    required: "*",
-                    minlength: "!"
-                },
-                conta: {
-                    required: "*"
-                },
-                credor_devedor: {
-                    required: "*"
-                },
-                parcelas: {
-                    required: "*"
-                }
-            }
-        });
-    });
+    function prazo(){
+        alert('ola');
+        var dt = "<div class='remover'><dt><label>Prazo</label></dt>";
+        var dd = '<dd><input type="text" name="prazo" class="texto05" required=""/></dd></div>';
+        $('dl').append();
+    }
+//    $(document).ready(function () {
+//        jQuery('#form_formapagamento').validate({
+//            rules: {
+//                txtNome: {
+//                    required: true,
+//                    minlength: 3
+//                },
+//                conta: {
+//                    required: true
+//                },
+//                credor_devedor: {
+//                    required: true
+//                },
+//                parcelas: {
+//                    required: true
+//                }
+//            },
+//            messages: {
+//                txtNome: {
+//                    required: "*",
+//                    minlength: "!"
+//                },
+//                conta: {
+//                    required: "*"
+//                },
+//                credor_devedor: {
+//                    required: "*"
+//                },
+//                parcelas: {
+//                    required: "*"
+//                }
+//            }
+//        });
+//    });
 </script>
