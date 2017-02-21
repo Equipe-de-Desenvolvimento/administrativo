@@ -172,9 +172,6 @@
                     <td class="<?php echo $estilo_linha; ?>" id="textovalortotal"><span id="spantotal"> Total:</span> </td>
                     <td class="<?php echo $estilo_linha; ?>"><span id="spantotal">
                             R$ <?= number_format($valortotal, 2, ',', '.') ?>
-
-                            <img src="<?= base_url(); ?>img/form-ic-info.png" alt="Valor com Impostos: <?= number_format($valTotImposto, 2, ',', '.') ?>"
-                                 title="Valor com Impostos: <?= number_format($valTotImposto, 2, ',', '.') ?>"/>
                         </span>
                     </td>
                     <td class="<?php echo $estilo_linha; ?>">&nbsp;
