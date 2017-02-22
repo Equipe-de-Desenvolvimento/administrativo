@@ -94,10 +94,9 @@ class Formapagamento extends BaseController {
         $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
         $data['parcelas'] = $this->formapagamento->buscarformatipo($formapagamento_id);
         $data['totParcelas'] = count($data['parcelas']);
-        $data['dias'] = $data['parcelas'][0]->dias;
-        $data['prazo'] = $data['parcelas'][0]->prazo;
-//        echo "<pre>";
-//        var_dump($data['parcelas']);die;
+        $data['dias'] = @$data['parcelas'][0]->dias;
+        $data['prazo'] = @$data['parcelas'][0]->prazo;
+        
         $this->loadView('cadastros/formapagamentoparcelado', $data);
     }
 
@@ -226,14 +225,25 @@ class Formapagamento extends BaseController {
     }
 
     function gravar() {
-        $exame_formapagamento_id = $this->formapagamento->gravar();
-        if ($exame_formapagamento_id == "-1") {
+        $formapagamento_id = $this->formapagamento->gravar();
+        if ($formapagamento_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Forma. Opera&ccedil;&atilde;o cancelada.';
         } else {
             $data['mensagem'] = 'Sucesso ao gravar a Forma.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
-        redirect(base_url() . "cadastros/formapagamento");
+        if($_POST['tipo'] == '1' && $formapagamento_id != "-1"){
+            redirect(base_url() . "cadastros/formapagamento/formapagamentoavistaprazo/$formapagamento_id");
+        }
+        elseif($_POST['tipo'] == '2' && $formapagamento_id != "-1"){
+            redirect(base_url() . "cadastros/formapagamento/formapagamentoparcelado/$formapagamento_id");
+        }
+        elseif($_POST['tipo'] == '3' && $formapagamento_id != "-1"){
+            redirect(base_url() . "cadastros/formapagamento/formapagamentomanual/$formapagamento_id");
+        }
+        else{
+            redirect(base_url() . "cadastros/formapagamento");
+        }
     }
 
     function grupoadicionar($financeiro_grupo_id) {
