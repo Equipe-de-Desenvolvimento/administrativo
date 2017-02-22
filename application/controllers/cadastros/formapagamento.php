@@ -69,18 +69,17 @@ class Formapagamento extends BaseController {
         $data['formapagamento_id'] = $formapagamento_id;
         $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
         $data['faixas_parcelas'] = $this->formapagamento->buscafaixasparcelas($formapagamento_id);
-        
-        if(count($data['faixas_parcelas']) > 0){
-            
+
+        if (count($data['faixas_parcelas']) > 0) {
+
             $ind_ultima_parcela = count($data['faixas_parcelas']) - 1;
             $data['ultima_parcela'] = (int) $data['faixas_parcelas'][$ind_ultima_parcela]->parcelas_fim;
-            
+
             foreach ($data['faixas_parcelas'] as $item) {
-                $item->parcelas_fim = (int)$item->parcelas_fim;
-                if( $data['ultima_parcela'] >= $item->parcelas_fim){
+                $item->parcelas_fim = (int) $item->parcelas_fim;
+                if ($data['ultima_parcela'] >= $item->parcelas_fim) {
                     continue;
-                }
-                else {
+                } else {
                     $data['ultima_parcela'] = $item->parcelas_fim;
                 }
             }
@@ -89,7 +88,7 @@ class Formapagamento extends BaseController {
         }
         $this->loadView('cadastros/formapagamentoparcelas-form', $data);
     }
-    
+
     function formapagamentoparcelado($formapagamento_id) {
         $data['formapagamento_id'] = $formapagamento_id;
         $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
@@ -101,65 +100,64 @@ class Formapagamento extends BaseController {
 //        var_dump($data['parcelas']);die;
         $this->loadView('cadastros/formapagamentoparcelado', $data);
     }
-    
+
     function formapagamentomanual($formapagamento_id) {
         $data['formapagamento_id'] = $formapagamento_id;
         $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
         $data['parcelas'] = $this->formapagamento->buscarformatipo($formapagamento_id);
         $this->loadView('cadastros/formapagamentomanual', $data);
     }
-    
-    
+
     function formapagamentoavistaprazo($formapagamento_id) {
         $data['formapagamento_id'] = $formapagamento_id;
         $data['formapagamento'] = $this->formapagamento->buscarforma($formapagamento_id);
         $data['parcelas'] = $this->formapagamento->buscarformatipo($formapagamento_id);
         $this->loadView('cadastros/formapagamentoavistaprazo', $data);
     }
-    
-    
+
     function gravarpagamentomanual() {
         //Setando antiga parcela para false
         $formapagamento_id = $_POST['formapagamento_id'];
         $this->formapagamento->excluirparcelasantigas($formapagamento_id);
         
-        echo "<pre>";
-        var_dump($_POST);die;
-        
-        $_POST['tot_parcelas'] = (int)$_POST['tot_parcelas'];
-        $valorParcela = (float) (100/$_POST['tot_parcelas']);
-//        $diferenca = 100 - ($valor * $_POST['tot_parcelas']);
-        
-        for($i = 1; $i <= $_POST['tot_parcelas']; $i++){
-            $this->formapagamento->gravarpagamentoparcelado($i, $valorParcela);
+        //criando novas parcelas
+        $totParcelas = count($_POST['parcela']);
+        $parcela = 1;
+        foreach ($_POST['parcela'] as $chave => $item) {
+            $valor = $_POST['valor'][$chave];
+            $dias = ($_POST['dias'][$chave] != '') ? $_POST['dias'][$chave] : 0;
+            $prazo = ($_POST['prazo'][$chave] != '') ? $_POST['prazo'][$chave] : 0;
+
+            $this->formapagamento->gravarpagamentomanual($parcela, $totParcelas, $valor, $dias, $prazo);
+
+            $parcela++;
         }
-        
+
         redirect(base_url() . "cadastros/formapagamento");
     }
-    
-    
+
     function gravarpagamentoparcelado() {
         //Setando antiga parcela para false
         $formapagamento_id = $_POST['formapagamento_id'];
         $this->formapagamento->excluirparcelasantigas($formapagamento_id);
-        
-        $_POST['tot_parcelas'] = (int)$_POST['tot_parcelas'];
-        $valorParcela = (float) (100/$_POST['tot_parcelas']);
+
+        $_POST['tot_parcelas'] = (int) $_POST['tot_parcelas'];
+        $valorParcela = (float) (100 / $_POST['tot_parcelas']);
 //        $diferenca = 100 - ($valor * $_POST['tot_parcelas']);
-        
-        for($i = 1; $i <= $_POST['tot_parcelas']; $i++){
+
+        for ($i = 1; $i <= $_POST['tot_parcelas']; $i++) {
             $this->formapagamento->gravarpagamentoparcelado($i, $valorParcela);
         }
-        
+
         redirect(base_url() . "cadastros/formapagamento");
     }
-    
+
     function gravaravistaprazo() {
 //        $formapagamento_id = $_POST['formapagamento_id'];
         $this->formapagamento->gravaravistaprazo();
         redirect(base_url() . "cadastros/formapagamento");
     }
-    
+
     function gravarparcelas() {
         $formapagamento_id = $_POST['formapagamento_id'];
         $_POST['taxa'] = str_replace(",", ".", $_POST['taxa']);
@@ -177,7 +175,6 @@ class Formapagamento extends BaseController {
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/formapagamento/pesquisardescricao");
     }
-    
 
     function excluir($formapagamento_id) {
         $valida = $this->formapagamento->excluir($formapagamento_id);
@@ -189,7 +186,7 @@ class Formapagamento extends BaseController {
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/formapagamento");
     }
-    
+
     function excluirparcela($parcela_id, $formapagamento_id) {
         $this->formapagamento->excluirparcela($parcela_id);
         $this->formapagamentoparcelas($formapagamento_id);
@@ -256,7 +253,6 @@ class Formapagamento extends BaseController {
 //        $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "cadastros/formapagamento/grupoadicionar/$financeiro_grupo_id");
     }
-
 
     function gravargruponome() {
         $financeiro_grupo_id = $this->formapagamento->gravargruponome();

@@ -149,6 +149,25 @@ class formapagamento_model extends Model {
         return $return->result();
     }
 
+    function gravarpagamentomanual($parcela, $totParcelas, $valor, $dias, $prazo) {
+
+        //instanciando o banco       
+        $this->db->set('valor', $valor);
+        $this->db->set('parcela', $parcela);
+        $this->db->set('total_parcelas', $totParcelas);
+        $this->db->set('forma_pagamento_id', $_POST['formapagamento_id']);
+        $this->db->set('prazo', $prazo);
+        $this->db->set('dias', $dias);
+
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        
+        $this->db->set('data_cadastro', $horario);
+        $this->db->set('operador_cadastro', $operador_id);
+        $this->db->insert('tb_formapagamento_pacela_juros');
+    }
+    
     function gravarpagamentoparcelado($i, $valor) {
 
         //instanciando o banco       
