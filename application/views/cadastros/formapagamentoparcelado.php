@@ -10,19 +10,19 @@
                     </dt>
                     <dd>
                         <input type="hidden" name="formapagamento_id" class="texto01" value="<?= @$formapagamento[0]->forma_pagamento_id; ?>" />
-                        <input type="text" name="tot_parcelas" class="texto01" value="<?= @$obj->_nome; ?>" alt="integer"/>
+                        <input type="text" name="tot_parcelas" class="texto01" value="<?= @$totParcelas; ?>" alt="integer"/>
                     </dd>
                     <dt>
                         <label>Periodo entre parcelas</label>
                     </dt>
                     <dd>
-                        <input type="text" name="dias" class="texto01" value="<?= @$obj->_nome; ?>" alt="integer"/> dia(s)
+                        <input type="text" name="dias" class="texto01" value="<?= @$dias; ?>" alt="integer"/> dia(s)
                     </dd>
                     <dt>
                         <label>Prazo</label>
                     </dt>
                     <dd>
-                        <input type="text" name="prazo" class="texto01" alt="integer" value="0"/> dia(s)
+                        <input type="text" name="prazo" class="texto01" alt="integer" value="<?if(@$prazo != ''){ echo @$dias; } else { echo '0';} ?>"/> dia(s)
                     </dd>
                 </dl>    
                 <hr/>

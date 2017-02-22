@@ -128,6 +128,7 @@ class formapagamento_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
+
     function buscarformatipo($forma_pagamento_id) {
         $this->db->select('*');
         $this->db->from('tb_formapagamento_pacela_juros');
@@ -148,29 +149,23 @@ class formapagamento_model extends Model {
         return $return->result();
     }
 
-    function gravarpagamentoparcelado() {
+    function gravarpagamentoparcelado($i, $valor) {
 
         //instanciando o banco       
-//        $this->db->set('valor', '100.00');
-        $this->db->set('parcela', '1');
-        $this->db->set('total_parcelas', '1');
+        $this->db->set('valor', $valor);
+        $this->db->set('parcela', $i);
+        $this->db->set('total_parcelas', $_POST['tot_parcelas']);
         $this->db->set('forma_pagamento_id', $_POST['formapagamento_id']);
         $this->db->set('prazo', $_POST['prazo']);
-        
-        
+        $this->db->set('dias', $_POST['dias']);
+
+
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        if($_POST['formapagamentoparcela_id'] == ''){//insert
-            $this->db->set('data_cadastro', $horario);
-            $this->db->set('operador_cadastro', $operador_id); 
-            $this->db->insert('tb_formapagamento_pacela_juros');
-        }
-        else{//update
-            $this->db->set('data_atualizacao', $horario);
-            $this->db->set('operador_atualizacao', $operador_id); 
-            $this->db->where('formapagamento_pacela_juros_id', $_POST['formapagamentoparcela_id']); 
-            $this->db->update('tb_formapagamento_pacela_juros');
-        }
+        
+        $this->db->set('data_cadastro', $horario);
+        $this->db->set('operador_cadastro', $operador_id);
+        $this->db->insert('tb_formapagamento_pacela_juros');
     }
 
     function gravaravistaprazo() {
@@ -181,27 +176,43 @@ class formapagamento_model extends Model {
         $this->db->set('total_parcelas', '1');
         $this->db->set('forma_pagamento_id', $_POST['formapagamento_id']);
         $this->db->set('prazo', $_POST['prazo']);
-        
-        
+
+
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        if($_POST['formapagamentoparcela_id'] == ''){//insert
+        if ($_POST['formapagamentoparcela_id'] == '') {//insert
             $this->db->set('data_cadastro', $horario);
-            $this->db->set('operador_cadastro', $operador_id); 
+            $this->db->set('operador_cadastro', $operador_id);
             $this->db->insert('tb_formapagamento_pacela_juros');
-        }
-        else{//update
+        } else {//update
             $this->db->set('data_atualizacao', $horario);
-            $this->db->set('operador_atualizacao', $operador_id); 
-            $this->db->where('formapagamento_pacela_juros_id', $_POST['formapagamentoparcela_id']); 
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->where('formapagamento_pacela_juros_id', $_POST['formapagamentoparcela_id']);
             $this->db->update('tb_formapagamento_pacela_juros');
         }
+    }
+
+    function excluirparcelasantigas($forma_pagamento_id) {
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('ativo', 'f');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('forma_pagamento_id', $forma_pagamento_id);
+        $this->db->update('tb_formapagamento_pacela_juros');
     }
 
     function excluir($forma_pagamento_id) {
 
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('ativo', 'f');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('forma_pagamento_id', $forma_pagamento_id);
+        $this->db->update('tb_formapagamento_pacela_juros');
+        
         $this->db->set('ativo', 'f');
         $this->db->set('data_atualizacao', $horario);
         $this->db->set('operador_atualizacao', $operador_id);
@@ -446,7 +457,7 @@ class formapagamento_model extends Model {
             $forma_pagamento_id = $_POST['txtcadastrosformapagamentoid'];
             $this->db->set('nome', $_POST['txtNome']);
             $this->db->set('tipo', $_POST['tipo']);
-            
+
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 
@@ -492,8 +503,7 @@ class formapagamento_model extends Model {
             $this->db->where("descricao_forma_pagamento_id", $forma_pagamento_id);
             $return = $this->db->get();
             return $return->result();
-        }
-        else{
+        } else {
             return null;
         }
     }
