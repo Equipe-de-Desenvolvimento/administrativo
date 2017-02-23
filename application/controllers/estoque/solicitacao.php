@@ -89,7 +89,6 @@ class Solicitacao extends BaseController {
         header('Content-type: text/html; charset=utf-8');
         include ("boleto2/OB_init.php");
         $ob = new OB('004');
-//        die;
 
         //*
         $ob->Vendedor

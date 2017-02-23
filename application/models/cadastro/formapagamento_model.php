@@ -128,6 +128,17 @@ class formapagamento_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
+    
+    function buscardescricaopagamento($forma_pagamento_id) {
+        $this->db->select('descricao_forma_pagamento_id,
+                            boleto,
+                            nome');
+        $this->db->from('tb_descricao_forma_pagamento');
+        $this->db->where('ativo', 'true');
+        $this->db->where('descricao_forma_pagamento_id', $forma_pagamento_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
 
     function buscarformatipo($forma_pagamento_id) {
         $this->db->select('*');

@@ -544,8 +544,16 @@ class solicitacao_model extends Model {
         $this->db->select('descricao_pagamento,
                            descricao_pagamento2,
                            descricao_pagamento3,
-                           descricao_pagamento4');
+                           descricao_pagamento4,
+                           fs.nome as forma1,
+                           fs2.nome as forma2,
+                           fs3.nome as forma3,
+                           fs4.nome as forma4');
         $this->db->from('tb_estoque_solicitacao_faturamento sf');
+        $this->db->join('tb_forma_pagamento fs', 'fs.forma_pagamento_id = sf.forma_pagamento', 'left');
+        $this->db->join('tb_forma_pagamento fs2', 'fs2.forma_pagamento_id = sf.forma_pagamento2', 'left');
+        $this->db->join('tb_forma_pagamento fs3', 'fs3.forma_pagamento_id = sf.forma_pagamento3', 'left');
+        $this->db->join('tb_forma_pagamento fs4', 'fs4.forma_pagamento_id = sf.forma_pagamento4', 'left');
         $this->db->where('sf.ativo', 'true');
         $this->db->where('sf.estoque_solicitacao_id', $solicitacao_cliente_id);
         $retorno = $this->db->get()->result();
@@ -562,6 +570,7 @@ class solicitacao_model extends Model {
             $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
+            $f[0]->forma = $retorno[0]->forma1;
             if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
@@ -577,6 +586,7 @@ class solicitacao_model extends Model {
             $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento2);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
+            $f[0]->forma = $retorno[0]->forma2;
             if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
@@ -592,6 +602,7 @@ class solicitacao_model extends Model {
             $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento3);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
+            $f[0]->forma = $retorno[0]->forma3;
             if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
@@ -607,6 +618,7 @@ class solicitacao_model extends Model {
             $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento4);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
+            $f[0]->forma = $retorno[0]->forma4;
             if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }

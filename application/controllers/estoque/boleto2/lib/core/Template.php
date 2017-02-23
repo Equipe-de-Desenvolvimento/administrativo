@@ -79,7 +79,7 @@ class Template{
             $html = '';
             foreach($this->Styles as $file => $media){
                 $html .= '<link rel="stylesheet" type="text/css" media="'
-                      . $media . '" href="' . base_url() . 'estoque/boleto2/public/css/' . $file
+                      . $media . '" href="' . base_url() . 'css/boleto/css/' . $file
                       . '" />' . PHP_EOL;
             }
         }

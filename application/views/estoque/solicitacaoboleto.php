@@ -8,7 +8,7 @@
                 <select name="formapagamento" id="formapagamento" class="size4" required="">
                     <option value="">Selecione</option>
                     <? foreach ($formaspagamento as $value) : ?>
-                        <option value="<?= $value->descricao_forma_pagamento_id; ?>"><?php echo $value->descricao_pagamento; ?></option>
+                        <option value="<?= $value->descricao_forma_pagamento_id; ?>"><?php echo $value->descricao_pagamento . ' - ' . $value->forma; ?></option>
                     <? endforeach; ?>
                 </select>
             </div>

@@ -185,7 +185,7 @@
                                             if ($(this).val()) {
                                                 forma_pagamento_id = document.getElementById("formapamento1").value;
                                                 $('.carregando').show();
-                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento1: $(this).val(), ajax: true}, function (j) {
+                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamentosolicitacao/' + forma_pagamento_id + '/', {formapamento1: $(this).val(), ajax: true}, function (j) {
                                                     options = "";
                                                     parcelas = "";
                                                     document.getElementById("formapamento1_boleto").value = j[0].boleto;
@@ -221,7 +221,7 @@
                                             if ($(this).val()) {
                                                 forma_pagamento_id = document.getElementById("formapamento2").value;
                                                 $('.carregando').show();
-                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento2: $(this).val(), ajax: true}, function (j) {
+                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamentosolicitacao/' + forma_pagamento_id + '/', {formapamento2: $(this).val(), ajax: true}, function (j) {
                                                     options = "";
                                                     parcelas = "";
                                                     document.getElementById("formapamento2_boleto").value = j[0].boleto;
@@ -259,7 +259,7 @@
                                             if ($(this).val()) {
                                                 forma_pagamento_id = document.getElementById("formapamento3").value;
                                                 $('.carregando').show();
-                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento3: $(this).val(), ajax: true}, function (j) {
+                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamentosolicitacao/' + forma_pagamento_id + '/', {formapamento3: $(this).val(), ajax: true}, function (j) {
                                                     options = "";
                                                     parcelas = "";
                                                     document.getElementById("formapamento3_boleto").value = j[0].boleto;
@@ -295,7 +295,7 @@
                                             if ($(this).val()) {
                                                 forma_pagamento_id = document.getElementById("formapamento4").value;
                                                 $('.carregando').show();
-                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamento/' + forma_pagamento_id + '/', {formapamento4: $(this).val(), ajax: true}, function (j) {
+                                                $.getJSON('<?= base_url() ?>autocomplete/formapagamentosolicitacao/' + forma_pagamento_id + '/', {formapamento4: $(this).val(), ajax: true}, function (j) {
                                                     options = "";
                                                     parcelas = "";
                                                     document.getElementById("formapamento4_boleto").value = j[0].boleto;

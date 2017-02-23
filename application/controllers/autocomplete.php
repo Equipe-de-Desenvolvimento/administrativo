@@ -518,6 +518,16 @@ class Autocomplete extends Controller {
         echo json_encode($result);
     }
 
+    function formapagamentosolicitacao($forma) {
+
+        if (isset($forma)) {
+            $result = $this->formapagamento->buscardescricaopagamento($forma);
+        } else {
+            $result = $this->formapagamento->buscardescricaopagamento();
+        }
+        echo json_encode($result);
+    }
+
     function formapagamento($forma) {
 
         if (isset($forma)) {
