@@ -307,4 +307,10 @@ ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN parcela integer;
 ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN total_parcelas integer;
 ALTER TABLE ponto.tb_formapagamento_pacela_juros ADD COLUMN dias integer;
 
+--Dia 23/02/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagamento integer;
+ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagamento2 integer;
+ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagamento3 integer;
+ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagamento4 integer;
+
 

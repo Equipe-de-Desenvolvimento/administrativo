@@ -267,7 +267,7 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-    
+
     function empresaboleto() {
         $empresa = $this->session->userdata('empresa_id');
         $this->db->select('e.empresa_id,
@@ -487,7 +487,17 @@ class solicitacao_model extends Model {
         return $return;
     }
 
-    function formadepagamentoprocedimento() {
+    function formadepagamento() {
+        $this->db->select('fp.forma_pagamento_id,
+                                fp.nome');
+        $this->db->from('tb_forma_pagamento fp');
+        $this->db->where('ativo', 't');
+        $this->db->orderby('fp.nome');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function descricaodepagamento() {
         $this->db->select('fp.descricao_forma_pagamento_id,
                             fp.boleto,
                             fp.nome as nome');
@@ -531,77 +541,76 @@ class solicitacao_model extends Model {
 
     function listarformapagamentoboleto($solicitacao_cliente_id) {
 
-        $this->db->select('forma_pagamento,
-                           forma_pagamento2,
-                           forma_pagamento3,
-                           forma_pagamento4');
+        $this->db->select('descricao_pagamento,
+                           descricao_pagamento2,
+                           descricao_pagamento3,
+                           descricao_pagamento4');
         $this->db->from('tb_estoque_solicitacao_faturamento sf');
         $this->db->where('sf.ativo', 'true');
         $this->db->where('sf.estoque_solicitacao_id', $solicitacao_cliente_id);
         $retorno = $this->db->get()->result();
 
         $formasPagamento = array();
-        if ($retorno[0]->forma_pagamento != NULL) {
+        if ($retorno[0]->descricao_pagamento != NULL) {
             $this->db->select('fs.conta,
                                fs.agencia,
-                               fp.nome as forma_pagamento,
-                               fp.forma_pagamento_id,
+                               fp.nome as descricao_pagamento,
+                               fp.descricao_forma_pagamento_id,
                                fs.descricao');
-            $this->db->from('tb_forma_pagamento fp');
+            $this->db->from('tb_descricao_forma_pagamento fp');
             $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.forma_pagamento_id', $retorno[0]->forma_pagamento);
+            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
-            if(count($f)>0){
+            if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
         }
-        if ($retorno[0]->forma_pagamento2 != NULL) {
+        if ($retorno[0]->descricao_pagamento2 != NULL) {
             $this->db->select('fs.conta,
                                fs.agencia,
-                               fp.nome as forma_pagamento,
-                               fp.forma_pagamento_id,
+                               fp.nome as descricao_pagamento,
+                               fp.descricao_forma_pagamento_id,
                                fs.descricao');
-            $this->db->from('tb_forma_pagamento fp');
+            $this->db->from('tb_descricao_forma_pagamento fp');
             $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.forma_pagamento_id', $retorno[0]->forma_pagamento2);
+            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento2);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
-            if(count($f)>0){
+            if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
         }
-        if ($retorno[0]->forma_pagamento3 != NULL) {
+        if ($retorno[0]->descricao_pagamento3 != NULL) {
             $this->db->select('fs.conta,
                                fs.agencia,
-                               fp.nome as forma_pagamento,
-                               fp.forma_pagamento_id,
+                               fp.nome as descricao_pagamento,
+                               fp.descricao_forma_pagamento_id,
                                fs.descricao');
-            $this->db->from('tb_forma_pagamento fp');
+            $this->db->from('tb_descricao_forma_pagamento fp');
             $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.forma_pagamento_id', $retorno[0]->forma_pagamento3);
+            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento3);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
-            if(count($f)>0){
+            if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
         }
-        if ($retorno[0]->forma_pagamento4 != NULL) {
+        if ($retorno[0]->descricao_pagamento4 != NULL) {
             $this->db->select('fs.conta,
                                fs.agencia,
-                               fp.nome as forma_pagamento,
-                               fp.forma_pagamento_id,
+                               fp.nome as descricao_pagamento,
+                               fp.descricao_forma_pagamento_id,
                                fs.descricao');
-            $this->db->from('tb_forma_pagamento fp');
+            $this->db->from('tb_descricao_forma_pagamento fp');
             $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.forma_pagamento_id', $retorno[0]->forma_pagamento4);
+            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento4);
             $this->db->where('fp.boleto', 't');
             $f = $this->db->get()->result();
-            if(count($f)>0){
+            if (count($f) > 0) {
                 $formasPagamento[] = $f[0];
             }
         }
-        
         return $formasPagamento;
     }
 
@@ -610,11 +619,11 @@ class solicitacao_model extends Model {
         $this->db->select('fs.conta,
                             fs.agencia,
                             fp.nome as forma_pagamento,
-                            fp.forma_pagamento_id,
+                            fp.descricao_forma_pagamento_id,
                             fs.descricao');
-        $this->db->from('tb_forma_pagamento fp');
+        $this->db->from('tb_descricao_forma_pagamento fp');
         $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-        $this->db->where('fp.forma_pagamento_id', $forma_pagamento_id);
+        $this->db->where('fp.descricao_forma_pagamento_id', $forma_pagamento_id);
 //        $this->db->where('fp.boleto', 't');
         $return = $this->db->get();
         return $return->result();
@@ -849,32 +858,38 @@ class solicitacao_model extends Model {
             $operador_id = $this->session->userdata('operador_id');
 
             if ($_POST['formapamento1'] != '') {
-                $this->db->set('forma_pagamento', $_POST['formapamento1']);
+                $this->db->set('descricao_pagamento', $_POST['formapamento1']);
+                $this->db->set('forma_pagamento', $_POST['forma_pagamento_1']);
                 $this->db->set('valor1', str_replace(",", ".", $valor1));
                 $this->db->set('parcelas1', $_POST['parcela1']);
             }
             if ($_POST['formapamento2'] != '') {
-                $this->db->set('forma_pagamento2', $_POST['formapamento2']);
+                $this->db->set('descricao_pagamento2', $_POST['formapamento2']);
+                $this->db->set('forma_pagamento2', $_POST['forma_pagamento_2']);
                 $this->db->set('valor2', str_replace(",", ".", $valor2));
                 $this->db->set('parcelas2', $_POST['parcela2']);
             }
             if ($_POST['formapamento3'] != '') {
-                $this->db->set('forma_pagamento3', $_POST['formapamento3']);
+                $this->db->set('descricao_pagamento3', $_POST['formapamento3']);
+                $this->db->set('forma_pagamento3', $_POST['forma_pagamento_3']);
                 $this->db->set('valor3', str_replace(",", ".", $valor3));
                 $this->db->set('parcelas3', $_POST['parcela3']);
             }
+            if ($_POST['formapamento4'] != '') {
+                $this->db->set('descricao_pagamento4', $_POST['formapamento4']);
+                $this->db->set('forma_pagamento4', $_POST['forma_pagamento_4']);
+                $this->db->set('valor4', str_replace(",", ".", $valor4));
+                $this->db->set('parcelas4', $_POST['parcela4']);
+            }
+            
+            $this->db->set('desconto', $desconto);
             $this->db->set('valor_total', $_POST['novovalortotal']);
             $this->db->set('data_faturamento', $horario);
             $this->db->set('operador_faturamento', $operador_id);
             $this->db->set('faturado', 't');
             $this->db->where('estoque_solicitacao_id', $_POST['estoque_solicitacao_id']);
             $this->db->update('tb_estoque_solicitacao_faturamento');
-            if ($_POST['formapamento4'] != '') {
-                $this->db->set('forma_pagamento4', $_POST['formapamento4']);
-                $this->db->set('valor4', str_replace(",", ".", $valor4));
-                $this->db->set('parcelas4', $_POST['parcela4']);
-            }
-            $this->db->set('desconto', $desconto);
+            
             $this->db->set('valor_total', $_POST['novovalortotal']);
             $this->db->set('data_faturamento', $horario);
             $this->db->set('operador_faturamento', $operador_id);
@@ -1112,7 +1127,7 @@ class solicitacao_model extends Model {
     function gravaritens() {
         try {
             /* inicia o mapeamento no banco */
-            if($_POST['ipi'] == ''){
+            if ($_POST['ipi'] == '') {
                 $_POST['ipi'] = 0;
             }
             $_POST['icms'] = str_replace(",", ".", $_POST['icms']);

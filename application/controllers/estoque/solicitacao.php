@@ -66,6 +66,7 @@ class Solicitacao extends BaseController {
 //                    die;
 
         if (count($data['formaspagamento']) > 1) {
+//            die;
             $this->loadView('estoque/solicitacaoboleto', $data);
         } else {
             $pagamento_id = $data['formaspagamento'][0]->forma_pagamento_id;
@@ -84,14 +85,65 @@ class Solicitacao extends BaseController {
         $this->loadView('estoque/dadosboleto', $data);
     }
 
-    function gerarboleto() {
+    function gerarboletobanconordeste() {
+        header('Content-type: text/html; charset=utf-8');
+        include ("boleto2/OB_init.php");
+        $ob = new OB('004');
+//        die;
+
+        //*
+        $ob->Vendedor
+                ->setAgencia('0035')
+                ->setConta('0036098')
+                ->setCarteira('55') //Cobrança Simples - fichamento emitido pelo cliente
+                ->setRazaoSocial('José Claudio Medeiros de Lima')
+                ->setCpf('012.345.678-39')
+                ->setEndereco('Rua dos Mororós 111 Centro, São Paulo/SP CEP 12345-678')
+                ->setEmail('joseclaudiomedeirosdelima@uol.com.br')
+        ;
+
+        $ob->Configuracao
+                ->setLocalPagamento('Pagável em qualquer banco até o vencimento')
+                ->addInstrucao('- Sr. Caixa, cobrar multa de 2% após o vencimento')
+                ->addInstrucao('- Receber até 10 dias após o vencimento')
+                ->addInstrucao('- Em caso de dúvidas entre em contato conosco: xxxx@xxxx.com.br')
+        ;
+
+        $ob->Template
+                ->setTitle('TESTE BNB')
+                ->setTemplate('html5')
+        ;
+
+        $ob->Cliente
+                ->setNome('Maria Joelma Bezerra de Medeiros')
+                ->setCpf('111.999.888-39')
+                ->setEmail('mariajoelma85@hotmail.com')
+                ->setEndereco('')
+                ->setCidade('')
+                ->setUf('')
+                ->setCep('')
+        ;
+
+        $ob->Boleto
+                ->setValor(949.50)
+                ->setDiasVencimento(1)
+                ->setVencimento(18,2,2013)
+                ->setNossoNumero('0009946')
+                ->setNumDocumento('666688')
+                ->setQuantidade(1)
+        ;
+
+        $ob->render(); /**/
+    }
+
+    function gerarboletobancobrasil() {
         //dados 
         $data['conta'] = $this->solicitacao->listarcontaboleto($_POST['forma_pagamento_id']);
         $data['empresa'] = $this->solicitacao->empresaboleto();
         $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($_POST['solicitacao_cliente_id']);
         $data['dados_faturamento'] = $this->solicitacao->listasolicitacaofaturamento($_POST['solicitacao_cliente_id']);
         $data['data_venc'] = $_POST['vencimento'];
-        
+
         //tratando acentuações
         $data['empresa'][0]->logradouro = utf8_decode($data['empresa'][0]->logradouro);
         $data['empresa'][0]->estado = utf8_decode($data['empresa'][0]->estado);
@@ -101,7 +153,7 @@ class Solicitacao extends BaseController {
         $data['destinatario'][0]->logradouro = utf8_decode($data['destinatario'][0]->logradouro);
         $data['destinatario'][0]->municipio = utf8_decode($data['destinatario'][0]->municipio);
         $data['destinatario'][0]->estado = utf8_decode($data['destinatario'][0]->estado);
-        
+
 
         //valores
         if ((float) $data['dados_faturamento'][0]->desconto != '0') {
@@ -374,7 +426,8 @@ class Solicitacao extends BaseController {
     }
 
     function faturarsolicitacao($estoque_solicitacao_id) {
-        $data['forma_pagamento'] = $this->solicitacao->formadepagamentoprocedimento();
+        $data['descricao_pagamento'] = $this->solicitacao->descricaodepagamento();
+        $data['forma_pagamento'] = $this->solicitacao->formadepagamento();
         $data['solicitacao'] = $this->solicitacao->listarsolicitacaofaturamento($estoque_solicitacao_id);
 //        echo "<pre>";var_dump($data['solicitacao'], $estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
@@ -388,7 +441,7 @@ class Solicitacao extends BaseController {
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
         $valortotal = 0;
         foreach ($data['valor_total'] as $item) {
-        //calcula valor total
+            //calcula valor total
             $v = (float) $item->valor_venda;
             $a = (int) str_replace('.', '', $item->quantidade);
             $preco = (float) $a * $v;
@@ -405,14 +458,14 @@ class Solicitacao extends BaseController {
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
         $valortotal = 0;
         foreach ($data['valor_total'] as $item) {
-        //calcula valor total
+            //calcula valor total
             $v = (float) $item->valor_venda;
             $a = (int) str_replace('.', '', $item->quantidade);
             $preco = (float) $a * $v;
             $valortotal += $preco;
         }
 
-        $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal); 
+        $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
         redirect(base_url() . "estoque/solicitacao/faturarsolicitacao/$estoque_solicitacao_id");
     }
 

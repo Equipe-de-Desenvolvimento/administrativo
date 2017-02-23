@@ -1,12 +1,12 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
     <div class="clear"></div>
-    <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/solicitacao/gerarboleto" method="post">
+    <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/solicitacao/gerarboletobanconordeste" method="post">
         <fieldset>
             <legend>Dados da Conta</legend>
             <div>        
                 <label>Forma de Pagamento</label>
                 <input type="hidden" name="solicitacao_cliente_id" id="solicitacao_cliente_id" class="texto01" value="<?= $solicitacao_cliente_id ?>"/>
-                <input type="hidden" name="forma_pagamento_id" id="forma_pagamento_id" class="texto01" value="<?= $conta[0]->forma_pagamento_id; ?>"/>
+                <input type="hidden" name="forma_pagamento_id" id="forma_pagamento_id" class="texto01" value="<?= $conta[0]->descricao_forma_pagamento_id; ?>"/>
                 <input type="text" name="forma_pagamento" id="forma_pagamento" class="texto05" value="<?= $conta[0]->forma_pagamento; ?>" readonly />
             </div>
             <div>        
