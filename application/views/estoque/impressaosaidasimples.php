@@ -125,7 +125,7 @@
                                         <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                     </td>
                                     <td colspan="5"><span class="negrito">Rota: </span>
-                                        <span class="dados_cabecalho">DIVERSIFICADAMENTE DIVERSO</span>
+                                        <span class="dados_cabecalho"></span>
                                     </td>
                                 </tr>
 
@@ -204,7 +204,7 @@
                                                             </td>
                                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                             <td colspan="5">
-                                                                LABORATORIO ROPE
+                                                                <?= @$destinatario[0]->nome; ?>
                                                             </td>
                                                         </tr>
 
@@ -215,7 +215,7 @@
                                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
                                                             <td>
-                                                                12/02/2019
+                                                                <?= date("d/m/Y"); ?>
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -225,7 +225,7 @@
                                                             </td>
 
                                                             <td>
-                                                                122019
+                                                                <!--AQUI VEM O CODIGO-->
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -235,7 +235,7 @@
                                                             </td>
 
                                                             <td>
-                                                                12/02/2019
+                                                                <!--AQUI VEM O VENCIMENTO-->
                                                             </td>
                                                         </tr>
 
@@ -243,21 +243,21 @@
                                                             <td>
                                                                 <span class="negrito">Qtd.Tot: </span>
                                                             </td>
-                                                            <td>1</td>
+                                                            <td><!--AQUI VEM A QTDE TOTAL--></td>
 
                                                             <td align="right">
                                                                 <span class="negrito" style="text-align: right;">Peso bt: </span>
                                                             </td>
                                                             <td></td>    
                                                             <td>
-                                                                <span style="margin-left: -5pt;">0,00</span>
+                                                                <span style="margin-left: -5pt;"><!--AQUI VEM O PESO BT--></span>
                                                             </td>
                                                             <td>
                                                                 <span class="negrito">Peso liq: </span>
                                                             </td>
 
                                                             <td></td>
-                                                            <td colspan="3">0,00</td>
+                                                            <td colspan="3"><!--AQUI VEM O PESO LIQ--></td>
                                                         </tr>
                                                     </table>
 
@@ -281,7 +281,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                VENDA
+                                                                <!--AQUI VEM O "DADOS DO MOVIMENTO". EX: "VENDA"-->
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -298,7 +298,7 @@
                                         <table>
                                             <tr>
                                                 <td>
-                                                    F.Pagamento: 28 DIAS <br>
+                                                    F.Pagamento: <br>
                                                     <div style="margin-bottom: 15pt;"></div>  
                                                 </td>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
@@ -321,9 +321,11 @@
                                             <tr>
                                                 <td style="width: 75pt;"></td>
                                                 <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;">
-                                                    <span class="negrito">Assinatura</span>
+                                                <!--<td style="width: 75pt;"></td>-->
+                                                <td style="width: 150pt;" colspan="2">
+                                                <center>
+                                                        <span class="negrito">Assinatura</span>
+                                                </center>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -337,13 +339,13 @@
                                                 <td><span class="negrito">Usuário Emissão:</span></td>
                                             </tr>
                                             <tr>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td><?= @$usuario[0]->nome;?></td>
                                             </tr>
                                             <tr>
                                                 <td><span class="negrito">Data/Hora Emissão:</span></td>
                                             </tr>
                                             <tr>
-                                                <td>12/12/2019 19:52:07</td>
+                                                <td><?= date("d/m/Y H:i:s");?></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -449,7 +451,7 @@
                                         <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                     </td>
                                     <td colspan="5"><span class="negrito">Rota: </span>
-                                        <span class="dados_cabecalho">DIVERSIFICADAMENTE DIVERSO</span>
+                                        <span class="dados_cabecalho"></span>
                                     </td>
                                 </tr>
 
@@ -528,7 +530,7 @@
                                                             </td>
                                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                             <td colspan="5">
-                                                                LABORATORIO ROPE
+                                                                <?= @$destinatario[0]->nome; ?>
                                                             </td>
                                                         </tr>
 
@@ -539,7 +541,7 @@
                                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
                                                             <td>
-                                                                12/02/2019
+                                                                <?= date("d/m/Y"); ?>
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -549,7 +551,7 @@
                                                             </td>
 
                                                             <td>
-                                                                122019
+                                                                <!--AQUI VEM O CODIGO-->
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -559,7 +561,7 @@
                                                             </td>
 
                                                             <td>
-                                                                12/02/2019
+                                                                <!--AQUI VEM O VENCIMENTO-->
                                                             </td>
                                                         </tr>
 
@@ -567,21 +569,21 @@
                                                             <td>
                                                                 <span class="negrito">Qtd.Tot: </span>
                                                             </td>
-                                                            <td>1</td>
+                                                            <td><!--AQUI VEM A QTDE TOTAL--></td>
 
                                                             <td align="right">
                                                                 <span class="negrito" style="text-align: right;">Peso bt: </span>
                                                             </td>
                                                             <td></td>    
                                                             <td>
-                                                                <span style="margin-left: -5pt;">0,00</span>
+                                                                <span style="margin-left: -5pt;"><!--AQUI VEM O PESO BT--></span>
                                                             </td>
                                                             <td>
                                                                 <span class="negrito">Peso liq: </span>
                                                             </td>
 
                                                             <td></td>
-                                                            <td colspan="3">0,00</td>
+                                                            <td colspan="3"><!--AQUI VEM O PESO LIQ--></td>
                                                         </tr>
                                                     </table>
 
@@ -605,7 +607,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                VENDA
+                                                                <!--AQUI VEM O "DADOS DO MOVIMENTO". EX: "VENDA"-->
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -622,7 +624,7 @@
                                         <table>
                                             <tr>
                                                 <td>
-                                                    F.Pagamento: 28 DIAS <br>
+                                                    F.Pagamento: <br>
                                                     <div style="margin-bottom: 15pt;"></div>  
                                                 </td>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
@@ -645,9 +647,11 @@
                                             <tr>
                                                 <td style="width: 75pt;"></td>
                                                 <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;">
-                                                    <span class="negrito">Assinatura</span>
+                                                <!--<td style="width: 75pt;"></td>-->
+                                                <td style="width: 150pt;" colspan="2">
+                                                <center>
+                                                        <span class="negrito">Assinatura</span>
+                                                </center>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -661,13 +665,13 @@
                                                 <td><span class="negrito">Usuário Emissão:</span></td>
                                             </tr>
                                             <tr>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td><?= @$usuario[0]->nome;?></td>
                                             </tr>
                                             <tr>
                                                 <td><span class="negrito">Data/Hora Emissão:</span></td>
                                             </tr>
                                             <tr>
-                                                <td>12/12/2019 19:52:07</td>
+                                                <td><?= date("d/m/Y H:i:s");?></td>
                                             </tr>
                                         </table>
                                     </td>

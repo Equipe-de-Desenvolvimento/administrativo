@@ -210,11 +210,7 @@ class solicitacao_model extends Model {
 
     function calculavalortotalsolicitacao($estoque_solicitacao_id) {
         $this->db->select('esi.quantidade, 
-                           esi.valor as valor_venda,
-                           esi.icms, 
-                           esi.mva, 
-                           esi.icmsst, 
-                           esi.ipi');
+                           esi.valor as valor_venda');
         $this->db->from('tb_estoque_solicitacao_itens esi');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id');
         $this->db->where('esi.ativo', 'true');
@@ -492,21 +488,20 @@ class solicitacao_model extends Model {
     }
 
     function formadepagamentoprocedimento() {
-        $this->db->select('fp.forma_pagamento_id,
+        $this->db->select('fp.descricao_forma_pagamento_id,
                             fp.boleto,
                             fp.nome as nome');
-        $this->db->from('tb_forma_pagamento fp');
-//        $this->db->join('tb_grupo_formapagamento gf', 'gf.grupo_id = pp.grupo_pagamento_id', 'left');
-//        $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = gf.forma_pagamento_id', 'left');
+        $this->db->from('tb_descricao_forma_pagamento fp');
         $this->db->where('ativo', 't');
         $this->db->orderby('fp.nome');
         $return = $this->db->get();
         $retorno = $return->result();
 
         if (empty($retorno)) {
-            $this->db->select('fp.forma_pagamento_id,
-                            fp.nome as nome');
-            $this->db->from('tb_forma_pagamento fp');
+            $this->db->select('fp.descricao_forma_pagamento_id,
+                                fp.boleto,
+                                fp.nome as nome');
+            $this->db->from('tb_descricao_forma_pagamento fp');
             $this->db->orderby('fp.nome');
             $return = $this->db->get();
             return $return->result();
@@ -520,6 +515,16 @@ class solicitacao_model extends Model {
         $this->db->from('tb_estoque_solicitacao_faturamento');
         $this->db->where('estoque_solicitacao_id', $estoque_solicitacao_id);
         $this->db->where('ativo', 't');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function usuarioemitente() {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('nome');
+        $this->db->from('tb_operador');
+        $this->db->where('operador_id', $operador_id);
+//        $this->db->where('ativo', 't');
         $return = $this->db->get();
         return $return->result();
     }

@@ -133,12 +133,12 @@
                         <td>&nbsp;&nbsp;</td>
 
                         <td align="right"><span class="negrito">Número: </span></td>
-                        <td>443</td>
+                        <td></td>
 
                         <td>&nbsp;&nbsp;</td>
 
                         <td align="right"><span class="negrito">Cód: </span></td>
-                        <td>10890</td>
+                        <td></td>
 
                         <td>&nbsp;&nbsp;</td>
 
@@ -152,10 +152,10 @@
                         <td colspan="4"><?= @$destinatario[0]->vendedor; ?></td>
 
                         <td align="right" colspan="2"><span class="negrito">F.pgto: </span></td>
-                        <td colspan="3">28 Dias</td>
+                        <td colspan="3"></td>
 
                         <td align="right" colspan="2"><span class="negrito">Tp.Doc: </span></td>
-                        <td colspan="4">Boleto</td>
+                        <td colspan="4"></td>
 
                     </tr>
 

@@ -110,40 +110,8 @@
             ?>
             <tbody>
                 <?
-                $valorTotalProduto = 0;
-                $valorTotalIpi = 0;
-                $valorTotalIcms = 0;
-                $valorTotalIcmsSt = 0;
                 foreach ($produtos as $item) {
                     ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
-
-                    //calculando valor total dos produtos com imposto
-                    $v = (float) $item->valor_venda;
-                    $a = (int) str_replace('.', '', $item->quantidade);
-                    $preco = (float) $a * $v;
-                    $valorTotalProduto += $preco;
-
-                    $item->icms = (float) $item->icms;
-                    $icms = $preco * (($item->icms) / 100);
-                    if ($icms != 0) {
-//                        $valorBaseIcms += $preco;
-                        $valorTotalIcms += $icms;
-                    }
-
-                    $item->ipi = (float) $item->ipi;
-                    $ipi = $preco * (($item->ipi) / 100);
-                    if ($ipi != 0) {
-//                        $valorBaseIcms += $preco;
-                        $valorTotalIpi += $ipi;
-                    }
-                    if ($item->icmsst == 't') {
-                        $item->mva = (float) $item->mva;
-                        $baseIcmsSt = ($preco + $ipi) * (1 + ($item->mva / 100));
-                        $valorIcmsSt = ($baseIcmsSt * (($item->icms) / 100)) - $icms;
-
-//                        $baseTotalIcmsSt += $baseIcmsSt;
-                        $valorTotalIcmsSt += $valorIcmsSt;
-                    }
                     ?>
                     <tr>
                         <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
@@ -165,7 +133,6 @@
 
                 <?
                 }
-                $valTotImposto = $valorTotalProduto + $valorTotalIpi + $valorTotalIcms + $valorTotalIcmsSt;
                 ?>
                 <tr id="tot">
                     <td class="<?php echo $estilo_linha; ?>">&nbsp;</td>

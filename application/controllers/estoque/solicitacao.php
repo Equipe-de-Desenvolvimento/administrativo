@@ -212,6 +212,7 @@ class Solicitacao extends BaseController {
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['nome'] = $this->solicitacao->solicitacaonome($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
+        $data['usuario'] = $this->solicitacao->usuarioemitente();
 //        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
         $this->load->View('estoque/impressaosaida', $data);
     }
@@ -223,7 +224,7 @@ class Solicitacao extends BaseController {
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['nome'] = $this->solicitacao->solicitacaonome($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
-//        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+        $data['usuario'] = $this->solicitacao->usuarioemitente();
         $this->load->View('estoque/impressaosaidasimples', $data);
     }
 
@@ -385,45 +386,14 @@ class Solicitacao extends BaseController {
 
         $this->solicitacao->liberarsolicitacao($estoque_solicitacao_id);
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
-        $valorTotalProduto = 0;
-        $valorTotalIcms = 0;
-        $valorTotalIpi = 0;
-        $valorTotalIcmsSt = 0;
-
+        $valortotal = 0;
         foreach ($data['valor_total'] as $item) {
-//        //calcula valor total
-//            $v = (float) $item->valor_venda;
-//            $a = (int) str_replace('.', '', $item->quantidade);
-//            $preco = (float) $a * $v;
-//            $valortotal += $preco;
-
+        //calcula valor total
             $v = (float) $item->valor_venda;
             $a = (int) str_replace('.', '', $item->quantidade);
             $preco = (float) $a * $v;
-            $valorTotalProduto += $preco;
-
-            $item->icms = (float) $item->icms;
-            $icms = $preco * (($item->icms) / 100);
-            if ($icms != 0) {
-                $valorTotalIcms += $icms;
-            }
-
-            $item->ipi = (float) $item->ipi;
-            $ipi = $preco * (($item->ipi) / 100);
-            if ($ipi != 0) {
-                $valorTotalIpi += $ipi;
-            }
-            if ($item->icmsst == 't') {
-                $item->mva = (float) $item->mva;
-                $baseIcmsSt = ($preco + $ipi) * (1 + ($item->mva / 100));
-                $valorIcmsSt = ($baseIcmsSt * (($item->icms) / 100)) - $icms;
-
-//                        $baseTotalIcmsSt += $baseIcmsSt;
-                $valorTotalIcmsSt += $valorIcmsSt;
-            }
+            $valortotal += $preco;
         }
-
-        $valortotal = $valorTotalProduto + $valorTotalIcms + $valorTotalIpi + $valorTotalIcmsSt;
 
         $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal);
         redirect(base_url() . "estoque/solicitacao");
@@ -433,45 +403,15 @@ class Solicitacao extends BaseController {
 
         $this->solicitacao->liberarsolicitacao($estoque_solicitacao_id);
         $data['valor_total'] = $this->solicitacao->calculavalortotalsolicitacao($estoque_solicitacao_id);
-        $valorTotalProduto = 0;
-        $valorTotalIcms = 0;
-        $valorTotalIpi = 0;
-        $valorTotalIcmsSt = 0;
-
+        $valortotal = 0;
         foreach ($data['valor_total'] as $item) {
-//        //calcula valor total
-//            $v = (float) $item->valor_venda;
-//            $a = (int) str_replace('.', '', $item->quantidade);
-//            $preco = (float) $a * $v;
-//            $valortotal += $preco;
-
+        //calcula valor total
             $v = (float) $item->valor_venda;
             $a = (int) str_replace('.', '', $item->quantidade);
             $preco = (float) $a * $v;
-            $valorTotalProduto += $preco;
-
-            $item->icms = (float) $item->icms;
-            $icms = $preco * (($item->icms) / 100);
-            if ($icms != 0) {
-                $valorTotalIcms += $icms;
-            }
-
-            $item->ipi = (float) $item->ipi;
-            $ipi = $preco * (($item->ipi) / 100);
-            if ($ipi != 0) {
-                $valorTotalIpi += $ipi;
-            }
-            if ($item->icmsst == 't') {
-                $item->mva = (float) $item->mva;
-                $baseIcmsSt = ($preco + $ipi) * (1 + ($item->mva / 100));
-                $valorIcmsSt = ($baseIcmsSt * (($item->icms) / 100)) - $icms;
-
-//                        $baseTotalIcmsSt += $baseIcmsSt;
-                $valorTotalIcmsSt += $valorIcmsSt;
-            }
+            $valortotal += $preco;
         }
 
-        $valortotal = $valorTotalProduto + $valorTotalIcms + $valorTotalIpi + $valorTotalIcmsSt;
         $this->solicitacao->gravarsolicitacaofaturamento($estoque_solicitacao_id, $valortotal); 
         redirect(base_url() . "estoque/solicitacao/faturarsolicitacao/$estoque_solicitacao_id");
     }

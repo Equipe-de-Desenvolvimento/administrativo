@@ -33,7 +33,7 @@
                     <tbody>
                         <tr class="linha1">
                             <td><input type="text" name="parcela[1]" class="texto01" required="" value="1"/></td>
-                            <td><input type="text" name="dias[1]" class="texto01"/></td>
+                            <td><input type="text" name="dias[1]" class="texto01" required=""/></td>
                             <td><input type="text" name="valor[1]" class="texto01" required=""/></td>
                             <td><input type="text" name="prazo[1]" class="texto01" value="0"/></td>
                             <td>
@@ -103,15 +103,15 @@
         $('#novaParcela').click(function () {
             var linha = "<tr class='linha" + classe + "'>";
             linha += '<td><input type="text" name="parcela[' + idlinha + ']" class="texto01" required="" value="' + idlinha + '"/></td>';
-            linha += '<td><input type="text" name="dias[' + idlinha + ']" class="texto01" /></td>';
+            linha += '<td><input type="text" name="dias[' + idlinha + ']" class="texto01" required/></td>';
             linha += '<td><input type="text" name="valor[' + idlinha + ']" class="texto01" id="valor" required=""/></td>';
             linha += '<td><input type="text" name="prazo[' + idlinha + ']" class="texto01" value="0"/></td>';
             linha += "<td>";
             linha += "<a href='#' class='delete'>Excluir</a>";
             linha += "</td>";
             linha += "</tr>";
-            var anterior = idlinha-1;
-            $('input:text[name="dias['+ anterior +']"]').attr("required",true);
+//            var anterior = idlinha-1;
+//            $('input:text[name="dias['+ anterior +']"]').attr("required",true);
             idlinha++;
             classe = (classe == 1) ? 2 : 1;
             $('#cadastroParcelas').append(linha);
