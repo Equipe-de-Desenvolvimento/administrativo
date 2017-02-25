@@ -125,9 +125,9 @@ class Formapagamento extends BaseController {
         foreach ($_POST['parcela'] as $chave => $item) {
             $valor = $_POST['valor'][$chave];
             $dias = ($_POST['dias'][$chave] != '') ? $_POST['dias'][$chave] : 0;
-            $prazo = ($_POST['prazo'][$chave] != '') ? $_POST['prazo'][$chave] : 0;
+//            $prazo = ($_POST['prazo'][$chave] != '') ? $_POST['prazo'][$chave] : 0;
 
-            $this->formapagamento->gravarpagamentomanual($parcela, $totParcelas, $valor, $dias, $prazo);
+            $this->formapagamento->gravarpagamentomanual($parcela, $totParcelas, $valor, $dias);
 
             $parcela++;
         }

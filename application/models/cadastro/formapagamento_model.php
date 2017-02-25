@@ -167,7 +167,7 @@ class formapagamento_model extends Model {
         $this->db->set('parcela', $parcela);
         $this->db->set('total_parcelas', $totParcelas);
         $this->db->set('forma_pagamento_id', $_POST['formapagamento_id']);
-        $this->db->set('prazo', $prazo);
+//        $this->db->set('prazo', $prazo);
         $this->db->set('dias', $dias);
 
 
@@ -186,7 +186,7 @@ class formapagamento_model extends Model {
         $this->db->set('parcela', $i);
         $this->db->set('total_parcelas', $_POST['tot_parcelas']);
         $this->db->set('forma_pagamento_id', $_POST['formapagamento_id']);
-        $this->db->set('prazo', $_POST['prazo']);
+//        $this->db->set('prazo', $_POST['prazo']);
         $this->db->set('dias', $_POST['dias']);
 
 

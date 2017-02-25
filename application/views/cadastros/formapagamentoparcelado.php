@@ -18,12 +18,12 @@
                     <dd>
                         <input type="text" name="dias" class="texto01" value="<?= @$dias; ?>" alt="integer"/> dia(s)
                     </dd>
-                    <dt>
+<!--                    <dt>
                         <label>Prazo</label>
                     </dt>
                     <dd>
                         <input type="text" name="prazo" class="texto01" alt="integer" value="<?if(@$prazo != ''){ echo @$dias; } else { echo '0';} ?>"/> dia(s)
-                    </dd>
+                    </dd>-->
                 </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>

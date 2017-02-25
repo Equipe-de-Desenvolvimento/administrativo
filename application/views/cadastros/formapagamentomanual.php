@@ -11,7 +11,7 @@
                             <td><label>Parcela</label></td>
                             <td><label><span title="Periodo, em dias, entre esta parcela e a proxima.">Periodo (dias)</span></label></td>
                             <td><label><span title="Valor percentual que devera ser pago nessa parcela.">Valor (%)</span></label></td>
-                            <td><label><span title="Prazo para o pagamento desta parcela.">Prazo (dias)</span></label></td>
+                            <!--<td><label><span title="Prazo para o pagamento desta parcela.">Prazo (dias)</span></label></td>-->
                             <td>&nbsp;</td>
                         </tr>
                     </thead>
@@ -35,7 +35,7 @@
                             <td><input type="text" name="parcela[1]" class="texto01" required="" value="1"/></td>
                             <td><input type="text" name="dias[1]" class="texto01" required=""/></td>
                             <td><input type="text" name="valor[1]" class="texto01" required=""/></td>
-                            <td><input type="text" name="prazo[1]" class="texto01" value="0"/></td>
+                            <!--<td><input type="text" name="prazo[1]" class="texto01" value="0"/></td>-->
                             <td>
                                 <a href="#" class="delete">Excluir</a>
                             </td>
@@ -53,7 +53,7 @@
                         <th class="tabela_header" width="60">Parcela</th>
                         <th class="tabela_header">Dias</th>
                         <th class="tabela_header">Valor</th>
-                        <th class="tabela_header">Prazo</th>
+                        <!--<th class="tabela_header">Prazo</th>-->
                     </thead>
                     <tbody>
                         <?
@@ -65,7 +65,7 @@
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->parcela; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->dias; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', ''); ?> %</td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->prazo; ?></td>
+                                <td class="<?php // echo $estilo_linha; ?>"><?= $item->prazo; ?></td>
                             </tr>
                         <? } ?>
                     </tbody>
@@ -105,7 +105,6 @@
             linha += '<td><input type="text" name="parcela[' + idlinha + ']" class="texto01" required="" value="' + idlinha + '"/></td>';
             linha += '<td><input type="text" name="dias[' + idlinha + ']" class="texto01" required/></td>';
             linha += '<td><input type="text" name="valor[' + idlinha + ']" class="texto01" id="valor" required=""/></td>';
-            linha += '<td><input type="text" name="prazo[' + idlinha + ']" class="texto01" value="0"/></td>';
             linha += "<td>";
             linha += "<a href='#' class='delete'>Excluir</a>";
             linha += "</td>";
