@@ -116,6 +116,13 @@
                                     </td>
                                 <?
                                 }
+                                if ($item->situacao == 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8)) {
+                                    ?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
+                                            <a href="<?= base_url() ?>estoque/notafiscal/carregarnotafiscalopcoes/<?= $item->estoque_solicitacao_setor_id ?>">N. Fiscal</a>
+                                        </div>
+                                    </td>
+                                <? }
                                 if ($item->situacao != 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8)) {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  

@@ -15,10 +15,6 @@
                         <option value='saida'>Saida</option>
                     <? endif;?>
                     
-                    <?if($solicitacao[0]->situacao == "FECHADA"):?>
-                        <option value='nota'>Nota Fiscal</option>
-                    <? endif;?>
-                    
                     <option value='recibo'>Recibo</option>
                 </select>
             </div>

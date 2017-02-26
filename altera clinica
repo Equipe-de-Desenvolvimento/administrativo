@@ -313,4 +313,29 @@ ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagame
 ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagamento3 integer;
 ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN descricao_pagamento4 integer;
 
+-- Dia 26/02/2017
+CREATE TABLE ponto.tb_notafiscal
+(
+  notafiscal_id serial NOT NULL,
+  solicitacao_cliente_id integer,
+  gerada boolean DEFAULT false,
+  data_geracao timestamp without time zone,
+  assinada boolean DEFAULT false,
+  data_assinatura timestamp without time zone,
+  cancelada boolean DEFAULT false,
+  data_cancelamento timestamp without time zone,
+  validada boolean DEFAULT false,
+  data_validacao timestamp without time zone,
+  danfe boolean DEFAULT false,
+  data_danfe timestamp without time zone,
+  xml character varying(50000),
+  observacao character varying(2000),
+  ativo boolean NOT NULL DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_notafiscal_pkey PRIMARY KEY (notafiscal_id)
+);
+
 

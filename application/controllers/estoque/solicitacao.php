@@ -87,7 +87,8 @@ class Solicitacao extends BaseController {
 
     function gerarboletobanconordeste() {
         header('Content-type: text/html; charset=utf-8');
-        include ("boleto2/OB_init.php");
+        $pathObjectBoleto = "/home/johnny/projetos/administrativo/application/libraries/boleto/objectBoleto";
+        include ("$pathObjectBoleto/OB_init.php");
         $ob = new OB('004');
 
         //*
@@ -167,10 +168,11 @@ class Solicitacao extends BaseController {
         $taxa_boleto = (float) str_replace(',', '.', str_replace('.', '', $_POST['taxa_boleto']));
 
         $data['valor_cobrado'] = (float) $data['dados_faturamento'][0]->valor_total - (float) $deducoes + (float) $multa + (float) $acrescimos + $taxa_boleto;
-
-        include ("boleto/boleto_bb.php");
-        include ("boleto/include/funcoes_bb.php");
-        include ("boleto/include/layout_bb.php");
+        
+        $pathBoletoPHP = "/home/johnny/projetos/administrativo/application/libraries/boleto/boletoPHP";
+        include ("$pathBoletoPHP/boleto_bb.php");
+        include ("$pathBoletoPHP/include/funcoes_bb.php");
+        include ("$pathBoletoPHP/include/layout_bb.php");
     }
 
     function carregarimpressoes($estoque_solicitacao_id) {
