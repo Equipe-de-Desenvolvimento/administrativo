@@ -112,6 +112,7 @@ else
 | And away we go...
 |
 */
+require_once APPPATH.'libraries/autoload.php';
 require_once BASEPATH.'codeigniter/CodeIgniter'.EXT;
 
 /* End of file index.php */
