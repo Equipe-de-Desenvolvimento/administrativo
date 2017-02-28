@@ -1,11 +1,11 @@
 <?php
 // +----------------------------------------------------------------------+
-// | BoletoPhp - Versï¿½o Beta                                              |
+// | BoletoPhp - Versão Beta                                              |
 // +----------------------------------------------------------------------+
-// | Este arquivo estï¿½ disponï¿½vel sob a Licenï¿½a GPL disponï¿½vel pela Web   |
+// | Este arquivo está disponível sob a Licença GPL disponível pela Web   |
 // | em http://pt.wikipedia.org/wiki/GNU_General_Public_License           |
-// | Vocï¿½ deve ter recebido uma cï¿½pia da GNU Public License junto com     |
-// | esse pacote; se nï¿½o, escreva para:                                   |
+// | Você deve ter recebido uma cópia da GNU Public License junto com     |
+// | esse pacote; se não, escreva para:                                   |
 // |                                                                      |
 // | Free Software Foundation, Inc.                                       |
 // | 59 Temple Place - Suite 330                                          |
@@ -13,16 +13,16 @@
 // +----------------------------------------------------------------------+
 
 // +----------------------------------------------------------------------+
-// | Originado do Projeto BBBoletoFree que tiveram colaboraï¿½ï¿½es de Daniel |
+// | Originado do Projeto BBBoletoFree que tiveram colaborações de Daniel |
 // | William Schultz e Leandro Maniezo que por sua vez foi derivado do	  |
-// | PHPBoleto de Joï¿½o Prado Maia e Pablo Martins F. Costa                |
+// | PHPBoleto de João Prado Maia e Pablo Martins F. Costa                |
 // |                                                                      |
 // | Se vc quer colaborar, nos ajude a desenvolver p/ os demais bancos :-)|
 // | Acesse o site do Projeto BoletoPhp: www.boletophp.com.br             |
 // +----------------------------------------------------------------------+
 
 // +---------------------------------------------------------------------------------+
-// | Equipe Coordenaï¿½ï¿½o Projeto BoletoPhp: <boletophp@boletophp.com.br>              |
+// | Equipe Coordenação Projeto BoletoPhp: <boletophp@boletophp.com.br>              |
 // | Desenvolvimento Boleto Banco do Brasil: Daniel William Schultz / Leandro Maniezo|
 // +---------------------------------------------------------------------------------+
 ?>
@@ -32,8 +32,7 @@
 <head>
 <title><?php echo $dadosboleto["identificacao"]; ?></title>
 <META http-equiv=Content-Type content=text/html charset=ISO-8859-1>
-<meta name="Generator" content="Projeto BoletoPHP - www.boletophp.com.br - Licenï¿½a GPL" />
-<!-- <meta charset="utf8" /> -->
+<meta name="Generator" content="Projeto BoletoPHP - www.boletophp.com.br - Licença GPL" />
 	
 <style type="text/css">
 <!--
@@ -502,7 +501,7 @@ div.barcode {
 
 	<div id="">
 <!--
-  Use no lugar do <div id=""> caso queira imprimir sem o logotipo e instruï¿½ï¿½es
+  Use no lugar do <div id=""> caso queira imprimir sem o logotipo e instruções
   <div id="instructions">
  -->
 		
@@ -542,7 +541,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 		<table class="header" border=0 cellspacing="0" cellpadding="0">
 		<tbody>
 		<tr>
-			<td width=150><IMG SRC="<?= base_url(); ?>img/boleto/logobb.jpg" /></td>
+			<td width=150><IMG SRC="imagens/logobb.jpg"></td>
 			<td width=50>
         <div class="field_cod_banco"><?php echo $dadosboleto["codigo_banco_com_dv"]?></div>
 			</td>
@@ -600,11 +599,11 @@ do Sacado</b></div></TD></tr></tbody></table>
 			<td class="valor_cobrado">(=) Valor cobrado</td>
 		</tr>
 		<tr class="campos">
-			<td class="desconto"><?php echo $desconto ?></td>
-			<td class="outras_deducoes"><?php echo $deducoes ?></td>
-			<td class="mora_multa"><?php echo $multa ?></td>
-			<td class="outros_acrescimos"><?php echo $acrescimos ?></td>
-			<td class="valor_cobrado"><?php echo number_format($data['valor_cobrado'], 2, ',', '') ?></td>
+			<td class="desconto">&nbsp;</td>
+			<td class="outras_deducoes">&nbsp;</td>
+			<td class="mora_multa">&nbsp;</td>
+			<td class="outros_acrescimos">&nbsp;</td>
+			<td class="valor_cobrado">&nbsp;</td>
 		</tr>
 		</tbody>
 		</table>
@@ -635,7 +634,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 		<table class="header" border=0 cellspacing="0" cellpadding="0">
 		<tbody>
 		<tr>
-			<td width=150><IMG SRC="<?= base_url(); ?>img/boleto/logobb.jpg"></td>
+			<td width=150><IMG SRC="imagens/logobb.jpg"></td>
 			<td width=50>
         <div class="field_cod_banco"><?php echo $dadosboleto["codigo_banco_com_dv"]?></div>
 			</td>
@@ -651,8 +650,7 @@ do Sacado</b></div></TD></tr></tbody></table>
 			<td class="vencimento2">Vencimento</td>
 		</tr>
 		<tr class="campos">
-			<td class="local_pagto">Pag&aacute;vel em qualquer 
-banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.</td>
+			<td class="local_pagto">QUALQUER BANCO AT&Eacute; O VENCIMENTO</td>
 			<td class="vencimento2"><?php echo $dadosboleto["data_vencimento"]?></td>
 		</tr>
 		</tbody>
@@ -697,7 +695,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 		<tr class="titulos">
 			<td class="reservado">Uso do  banco</td>
 			<td class="carteira">Carteira</td>
-			<td class="especie2">Esp&eacute;cie</td>
+			<td class="especie2">Espécie</td>
 			<td class="qtd2">Quantidade</td>
 			<td class="xvalor">x Valor</td>
 			<td class="valor_doc2">(=) Valor documento</td>
@@ -746,7 +744,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 				<td class="desconto2">(-) Desconto / Abatimento</td>
 			</tr>
 			<tr class="campos">
-				<td class="desconto2"><?php echo $desconto ?></td>
+				<td class="desconto2">&nbsp;</td>
 			</tr>
 			</tbody>
 			</table>
@@ -759,7 +757,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 				<td class="outras_deducoes2">(-) Outras dedu&ccedil;&otilde;es</td>
 			</tr>
 			<tr class="campos">
-				<td class="outras_deducoes2"><?php echo $deducoes ?></td>
+				<td class="outras_deducoes2">&nbsp;</td>
 			</tr>
 			</tbody>
 			</table>
@@ -772,7 +770,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 				<td class="mora_multa2">(+) Mora / Multa</td>
 			</tr>
 			<tr class="campos">
-				<td class="mora_multa2"><?php echo $multa ?></td>
+				<td class="mora_multa2">&nbsp;</td>
 			</tr>
 			</tbody>
 			</table>
@@ -785,7 +783,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 				<td class="outros_acrescimos2">(+) Outros Acr&eacute;scimos</td>
 			</tr>
 			<tr class="campos">
-				<td class="outros_acrescimos2"><?php echo $acrescimos ?></td>
+				<td class="outros_acrescimos2">&nbsp;</td>
 			</tr>
 			</tbody>
 			</table>
@@ -798,7 +796,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 				<td class="valor_cobrado2">(=) Valor cobrado</td>
 			</tr>
 			<tr class="campos">
-				<td class="valor_cobrado2"><?php echo number_format($data['valor_cobrado'], 2, ',', '') ?></td>
+				<td class="valor_cobrado2">&nbsp;</td>
 			</tr>
 			</tbody>
 			</table>
@@ -833,7 +831,7 @@ banco at&eacute; o vencimento. Ap&oacute;s, atualize o boleto no site bb.com.br.
 		</tr>
 		</tbody>
 		</table>		
-    <table cellspacing=0 cellpadding=0 width=666 border=0><TBODY><TR><TD width=666 align=right ><font style="font-size: 10px;">Autentica&ccedil;&atilde;o mec&acirc;nica - Ficha de Compensa&ccedil;&atilde;o</font></TD></tr></tbody></table>
+    <table cellspacing=0 cellpadding=0 width=666 border=0><TBODY><TR><TD width=666 align=right ><font style="font-size: 10px;">Autentica&ccedil;&atilde;o mec&acirc;nica - Ficha de Compensação</font></TD></tr></tbody></table>
 		<div class="barcode">
 			<p><?php fbarcode($dadosboleto["codigo_barras"]); ?></p>
 		</div>

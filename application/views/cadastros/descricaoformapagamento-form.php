@@ -121,9 +121,9 @@
                     required: true
 
                 },
-                credor_devedor: {
-                    required: true
-                },
+//                credor_devedor: {
+//                    required: true
+//                },
                 parcelas: {
                     required: true
                 }
@@ -138,9 +138,9 @@
                     required: "*"
 
                 },
-                credor_devedor: {
-                    required: "*"
-                },
+//                credor_devedor: {
+//                    required: "*"
+//                },
                 parcelas: {
                     required: "*"
                 }

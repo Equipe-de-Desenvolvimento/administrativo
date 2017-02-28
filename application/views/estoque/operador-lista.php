@@ -50,7 +50,7 @@
                                 <?}?>
                                                                 <?if($item->ativo == 't'){?>
                                 <td class="<?php echo $estilo_linha; ?>" width="60px;">
-                                    <a href="<?=base_url()?>estoque/cliente/clientesetor/<?=$item->operador_id;?>" target="_blank">Setor
+                                    <a href="<?=base_url()?>estoque/cliente/clientesetor/<?=$item->operador_id;?>" target="_blank">Cliente
 
                                     </a>
 

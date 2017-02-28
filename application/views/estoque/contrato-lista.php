@@ -20,7 +20,7 @@
                     </tr>
                     <tr>
                         <th class="tabela_header">Nome</th>
-                        <th class="tabela_header">Cliente</th>
+                        <th class="tabela_header">Credor/Devedor</th>
                         <th class="tabela_header">Nr. Contrato</th>
                         <th class="tabela_header">Tp. de Contrato</th>
                         <th class="tabela_header">Data Inicio</th>
@@ -47,12 +47,12 @@
                      ?>
                             <tr>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->contrato; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->cliente; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->credor_devedor; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->numero_contrato; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= date("d/m/Y", strtotime($item->data_inicio) ); ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= date("d/m/Y", strtotime($item->data_fim) ); ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->valor_inicial; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= number_format((float)$item->valor_inicial, 2, ',', ''); ?></td>
 
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a href="<?= base_url() ?>estoque/contrato/carregarcontrato/<?= $item->estoque_contrato_id ?>">Editar</a>

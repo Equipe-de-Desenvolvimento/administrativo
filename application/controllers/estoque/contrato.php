@@ -45,8 +45,9 @@ class Contrato extends BaseController {
     function carregarcontrato($estoque_contrato_id) {
         $obj_contrato = new contrato_model($estoque_contrato_id);
         $data['obj'] = $obj_contrato;
+        $data['descricao_pagamento'] = $this->contrato->listardescricaopagamento();
         $data['forma_pagamento'] = $this->contrato->listarformapagamento();
-        $data['clientes'] = $this->contrato->listarclientes();
+//        $data['clientes'] = $this->contrato->listarclientes();
         $data['tipo_contrato'] = $this->contrato->listartipos();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('estoque/contrato-form', $data);

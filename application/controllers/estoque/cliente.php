@@ -83,8 +83,6 @@ class Cliente extends BaseController {
     }
 
     function gravar() {
-//        echo "<pre>";
-//        var_dump($_POST); die;
         $exame_cliente_id = $this->cliente->gravar();
         if ($exame_cliente_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Cliente. Opera&ccedil;&atilde;o cancelada.';

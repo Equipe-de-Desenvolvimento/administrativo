@@ -59,33 +59,55 @@
                     <input type="text" id="txtCidade" class="texto04" name="txtCidade" value="<?= @$obj->_cidade_nome; ?>" />
                 </div>
             </fieldset>
-            
+
             <fieldset>
                 <legend>Informaçoes do Contrato</legend>
 
                 <div>
-                    <label>Cliente *</label>
-                    <select name="cliente_id" id="cliente_id" class="size8" required="">
-                        <option value="">Selecione</option>
-                        <? foreach ($clientes as $item) : ?>
-                            <option value="<?= $item->estoque_cliente_id; ?>"><?= $item->nome; ?></option>
-                        <? endforeach; ?>
+                    <label>Credor/Devedor *</label>
+                    <select name="credor_devedor" id="credor_devedor" class="size8" >
+                        <option value='' >selecione</option>
+                        <?php
+                        $credor_devedor = $this->convenio->listarcredordevedor();
+                        foreach ($credor_devedor as $item) {
+                            ?>
+
+                            <option   value =<?php echo $item->financeiro_credor_devedor_id; ?> <?
+                            if (@$obj->_credor_devedor_id == $item->financeiro_credor_devedor_id):echo 'selected';
+                            endif;
+                            ?>><?php echo $item->razao_social; ?></option>
+                                      <?php
+                                  }
+                                  ?> 
                     </select>
-<!--                </div>
-                <div>-->
-                    <label>Forma de Pagamento *</label>
-                    <select name="formapagamento_id" id="formapagamento_id" class="size8" required="">
+                    <!--                </div>
+                                    <div>-->
+                    <label>Descriçao do Pagamento *</label>
+                    <select name="descricaopagamento_id" id="descricaopagamento_id" class="size8" required="">
                         <option value="">Selecione</option>
-                        <? foreach ($forma_pagamento as $forma) : ?>
-                            <option value="<?= $forma->forma_pagamento_id; ?>"><?= $forma->nome; ?></option>
+                        <? foreach ($descricao_pagamento as $forma) : ?>
+                            <option value="<?= $forma->descricao_forma_pagamento_id; ?>"><?= $forma->nome; ?></option>
                         <? endforeach; ?>
                     </select>
                 </div>
                 <div>
                     <label>Numero do Contrato *</label>
                     <input type="text" id="numContrato" name="numContrato"  class="texto03" value="<?= @$obj->_conselho; ?>"/>
-<!--                </div>
-                <div>-->
+                    <!--                </div>
+                                    <div>-->
+                    <label>Forma de Pagamento *</label>
+                    <select name="formapagamento_id" id="formapagamento_id" class="texto03" required="">
+                        <option value="">Selecione</option>
+                        <? foreach ($forma_pagamento as $forma) : ?>
+                            <option value="<?= $forma->forma_pagamento_id; ?>"><?= $forma->nome; ?></option>
+                        <? endforeach; ?>
+                    </select>
+                    
+                </div>
+                <div>
+                    <label>Situaçao</label>
+                    <input type="text" id="situacaoContrato" class="texto04" name="situacaoContrato" value="<?= @$obj->_complemento; ?>" />
+                    
                     <label>Tipo do Contrato *</label>
                     <select name="tipoContrato" id="tipoContrato" class="texto03" required="">
                         <option value="">Selecione</option>
@@ -93,24 +115,24 @@
                             <option value="<?= $tipo->tipo_id; ?>"><?= $tipo->descricao; ?></option>
                         <? endforeach; ?>
                     </select>
-                </div>
-                <div>
-                    <label>Situaçao</label>
-                    <input type="text" id="situacaoContrato" class="texto06" name="situacaoContrato" value="<?= @$obj->_complemento; ?>" />
+                   
                 </div>
                 <div>
                     <label>Data Assinatura</label>
                     <input type="text" name="txtdata_assinatura" id="txtdata_assinatura" alt="date" class="texto02"/>
-                </div>
-                <div>
+<!--                </div>
+                <div>-->
                     <label>Valor Inicial</label>
                     <input type="text" id="valorInicial" class="texto02" alt="decimal" name="valorInicial" value="<?= @$obj->_complemento; ?>" />
                 </div>
+                 
+                    
                 <div>
                     <label>Calçao</label>
                     <input type="text" id="calcao" class="texto02" alt="decimal" name="calcao" value="<?= @$obj->_complemento; ?>" />
                 </div>
-                
+                    
+
 
             </fieldset>
 

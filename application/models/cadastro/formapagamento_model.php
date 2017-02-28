@@ -451,7 +451,9 @@ class formapagamento_model extends Model {
             $this->db->set('fixar', $arredondamento);
             $this->db->set('cartao', $cartao);
             $this->db->set('boleto', $boleto);
-            $this->db->set('credor_devedor', $_POST['credor_devedor']);
+            if($_POST['credor_devedor'] != ''){
+                $this->db->set('credor_devedor', $_POST['credor_devedor']);
+            }
             $this->db->set('dia_receber', $diareceber);
             $this->db->set('tempo_receber', $temporeceber);
 //            $this->db->set('ativo', 't');

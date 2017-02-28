@@ -15,8 +15,10 @@
                             <label>Valor total a faturar</label>
                         </dt>
                         <dd>
-                            <input type="text" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= $solicitacao[0]->valor_total; ?>" readonly />
-                            <input type="hidden" name="estoque_solicitacao_id" id="estoque_solicitacao_id" class="texto01" value="<?= $estoque_solicitacao_id; ?>"/>
+                            <input type="text" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= @$solicitacao[0]->valor_total; ?>" readonly />
+                            <input type="hidden" name="estoque_solicitacao_id" id="estoque_solicitacao_id" class="texto01" value="<?= @$estoque_solicitacao_id; ?>"/>
+                            <input type="hidden" name="contrato_id" id="contrato_id" class="texto01" value="<?= @$solicitacao_cliente[0]->contrato_id; ?>"/>
+                            <input type="hidden" name="credor_devedor_id" id="credor_devedor_id" class="texto01" value="<?= @$solicitacao_cliente[0]->credor_devedor_id; ?>"/>
                         </dd>
                         <dt>
                             <label>Desconto</label>

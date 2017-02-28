@@ -16,6 +16,7 @@ class Solicitacao extends BaseController {
     function Solicitacao() {
         parent::Controller();
         $this->load->model('estoque/solicitacao_model', 'solicitacao');
+        $this->load->model('estoque/boleto_model', 'boleto');
         $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->model('cadastro/convenio_model', 'convenio');
         $this->load->model('cadastro/paciente_model', 'paciente');
@@ -83,96 +84,6 @@ class Solicitacao extends BaseController {
         }
         $data['conta'] = $this->solicitacao->listarcontaboleto($forma_id);
         $this->loadView('estoque/dadosboleto', $data);
-    }
-
-    function gerarboletobanconordeste() {
-        header('Content-type: text/html; charset=utf-8');
-        $pathObjectBoleto = "/home/johnny/projetos/administrativo/application/libraries/boleto/objectBoleto";
-        include ("$pathObjectBoleto/OB_init.php");
-        $ob = new OB('004');
-
-        //*
-        $ob->Vendedor
-                ->setAgencia('0035')
-                ->setConta('0036098')
-                ->setCarteira('55') //Cobrança Simples - fichamento emitido pelo cliente
-                ->setRazaoSocial('José Claudio Medeiros de Lima')
-                ->setCpf('012.345.678-39')
-                ->setEndereco('Rua dos Mororós 111 Centro, São Paulo/SP CEP 12345-678')
-                ->setEmail('joseclaudiomedeirosdelima@uol.com.br')
-        ;
-
-        $ob->Configuracao
-                ->setLocalPagamento('Pagável em qualquer banco até o vencimento')
-                ->addInstrucao('- Sr. Caixa, cobrar multa de 2% após o vencimento')
-                ->addInstrucao('- Receber até 10 dias após o vencimento')
-                ->addInstrucao('- Em caso de dúvidas entre em contato conosco: xxxx@xxxx.com.br')
-        ;
-
-        $ob->Template
-                ->setTitle('TESTE BNB')
-                ->setTemplate('html5')
-        ;
-
-        $ob->Cliente
-                ->setNome('Maria Joelma Bezerra de Medeiros')
-                ->setCpf('111.999.888-39')
-                ->setEmail('mariajoelma85@hotmail.com')
-                ->setEndereco('')
-                ->setCidade('')
-                ->setUf('')
-                ->setCep('')
-        ;
-
-        $ob->Boleto
-                ->setValor(949.50)
-                ->setDiasVencimento(1)
-                ->setVencimento(18,2,2013)
-                ->setNossoNumero('0009946')
-                ->setNumDocumento('666688')
-                ->setQuantidade(1)
-        ;
-
-        $ob->render(); /**/
-    }
-
-    function gerarboletobancobrasil() {
-        //dados 
-        $data['conta'] = $this->solicitacao->listarcontaboleto($_POST['forma_pagamento_id']);
-        $data['empresa'] = $this->solicitacao->empresaboleto();
-        $data['destinatario'] = $this->solicitacao->listaclientenotafiscal($_POST['solicitacao_cliente_id']);
-        $data['dados_faturamento'] = $this->solicitacao->listasolicitacaofaturamento($_POST['solicitacao_cliente_id']);
-        $data['data_venc'] = $_POST['vencimento'];
-
-        //tratando acentuações
-        $data['empresa'][0]->logradouro = utf8_decode($data['empresa'][0]->logradouro);
-        $data['empresa'][0]->estado = utf8_decode($data['empresa'][0]->estado);
-        $data['empresa'][0]->municipio = utf8_decode($data['empresa'][0]->municipio);
-        $data['empresa'][0]->razao_social = utf8_decode($data['empresa'][0]->razao_social);
-        $data['destinatario'][0]->nome = utf8_decode($data['destinatario'][0]->nome);
-        $data['destinatario'][0]->logradouro = utf8_decode($data['destinatario'][0]->logradouro);
-        $data['destinatario'][0]->municipio = utf8_decode($data['destinatario'][0]->municipio);
-        $data['destinatario'][0]->estado = utf8_decode($data['destinatario'][0]->estado);
-
-
-        //valores
-        if ((float) $data['dados_faturamento'][0]->desconto != '0') {
-            $desconto = (float) $data['dados_faturamento'][0]->desconto;
-        } else {
-            $desconto = '0,00';
-        }
-        $deducoes = '0,00';
-
-        $acrescimos = '0,00';
-        $multa = '0,00';
-        $taxa_boleto = (float) str_replace(',', '.', str_replace('.', '', $_POST['taxa_boleto']));
-
-        $data['valor_cobrado'] = (float) $data['dados_faturamento'][0]->valor_total - (float) $deducoes + (float) $multa + (float) $acrescimos + $taxa_boleto;
-        
-        $pathBoletoPHP = "/home/johnny/projetos/administrativo/application/libraries/boleto/boletoPHP";
-        include ("$pathBoletoPHP/boleto_bb.php");
-        include ("$pathBoletoPHP/include/funcoes_bb.php");
-        include ("$pathBoletoPHP/include/layout_bb.php");
     }
 
     function carregarimpressoes($estoque_solicitacao_id) {
@@ -402,6 +313,53 @@ class Solicitacao extends BaseController {
     function gravarfaturamento() {
         if ($_POST['valortotal'] == '0.00') {
             $verifica = $this->solicitacao->gravarfaturamento();
+
+            $contrato_id = $_POST['contrato_id'];
+            $credor_devedor_id = $_POST['credor_devedor_id'];
+            $solicitacao_id = $_POST['estoque_solicitacao_id'];
+
+            if ($_POST['formapamento1_boleto'] == 't') {
+                if ($_POST['ajuste1'] != "0") {
+                    $valor = $_POST['valorajuste1'];
+                } else {
+                    $valor = $_POST['valor1'];
+                }
+                $descricao_id = $_POST['formapamento1'];
+                $forma_id = $_POST['forma_pagamento_1'];
+                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
+            }
+
+            if ($_POST['formapamento2_boleto'] == 't') {
+                if ($_POST['ajuste1'] != "0") {
+                    $valor = $_POST['valorajuste2'];
+                } else {
+                    $valor = $_POST['valor2'];
+                }
+                $descricao_id = $_POST['formapamento2'];
+                $forma_id = $_POST['forma_pagamento_2'];
+                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
+            }
+            if ($_POST['formapamento3_boleto'] == 't') {
+                if ($_POST['ajuste1'] != "0") {
+                    $valor = $_POST['valorajuste3'];
+                } else {
+                    $valor = $_POST['valor3'];
+                }
+                $descricao_id = $_POST['formapamento3'];
+                $forma_id = $_POST['forma_pagamento_3'];
+                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
+            }
+            if ($_POST['formapamento4_boleto'] == 't') {
+                if ($_POST['ajuste1'] != "0") {
+                    $valor = $_POST['valorajuste4'];
+                } else {
+                    $valor = $_POST['valor4'];
+                }
+                $descricao_id = $_POST['formapamento4'];
+                $forma_id = $_POST['forma_pagamento_4'];
+                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
+            }
+
             if ($verifica) {
                 $data['mensagem'] = 'Faturado com sucesso.';
             } else {
@@ -430,6 +388,7 @@ class Solicitacao extends BaseController {
         $data['descricao_pagamento'] = $this->solicitacao->descricaodepagamento();
         $data['forma_pagamento'] = $this->solicitacao->formadepagamento();
         $data['solicitacao'] = $this->solicitacao->listarsolicitacaofaturamento($estoque_solicitacao_id);
+        $data['solicitacao_cliente'] = $this->solicitacao->listarsolicitacaofaturamentocliente($estoque_solicitacao_id);
 //        echo "<pre>";var_dump($data['solicitacao'], $estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['valor'] = 0.00;
@@ -488,6 +447,56 @@ class Solicitacao extends BaseController {
         $this->loadView('estoque/solicitacao-lista', $args);
 
 //            $this->carregarView($data);
+    }
+
+    function teste() {
+        header('Content-type: text/html; charset=utf-8');
+        $path = "/home/johnny/projetos/administrativo/application/libraries/boleto/objectBoleto";
+        include ("$path/OB_init.php");
+
+        $ob = new OB('004');
+
+        //*
+        $ob->Vendedor
+                ->setAgencia('0016')
+                ->setConta('1193')
+                ->setCarteira('55')
+                ->setRazaoSocial('José Claudio Medeiros de Lima')
+                ->setCpf('012.345.678-39')
+                ->setEndereco('Rua dos Mororós 111 Centro, São Paulo/SP CEP 12345-678')
+                ->setEmail('joseclaudiomedeirosdelima@uol.com.br')
+        ;
+
+        $ob->Configuracao
+                ->setLocalPagamento('Pagável em qualquer banco até o vencimento')
+        ;
+
+        $ob->Template
+                ->setTitle('PHP->OB ObjectBoleto')
+                ->setTemplate('html5')
+                ->set('instrucao', array('linha1', 'linha2', 'linha3'))
+        ;
+
+        $ob->Cliente
+                ->setNome('Maria Joelma Bezerra de Medeiros')
+                ->setCpf('111.999.888-39')
+                ->setEmail('mariajoelma85@hotmail.com')
+                ->setEndereco('')
+                ->setCidade('')
+                ->setUf('')
+                ->setCep('')
+        ;
+
+        $ob->Boleto
+                ->setValor(1000)
+                //->setDiasVencimento(5)
+                ->setVencimento(10, 9, 2000)
+                ->setNossoNumero('1234567')
+                ->setNumDocumento('27.030195.10')
+                ->setQuantidade(1)
+        ;
+
+        $ob->render(); /**/
     }
 
     function entregador($args = array()) {

@@ -41,11 +41,13 @@ class solicitacao_model extends Model {
     function listarautocompleteclientecontrato($parametro = null) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('ec.nome as contrato, ec.estoque_contrato_id, etc.descricao as tipo');
-        $this->db->from('tb_estoque_contrato ec');
+        $this->db->from('tb_estoque_cliente cli');
+        $this->db->join('tb_estoque_contrato ec', 'ec.credor_devedor_id = cli.credor_devedor_id', 'left');
         $this->db->join('tb_estoque_tipo_contrato etc', 'etc.estoque_tipo_contrato_id = ec.tipo_contrato_id', 'left');
+//        $this->db->join('tb_financeiro_credor_devedor fcd', 'fcd.financeiro_credor_devedor_id = ec.credor_devedor_id', 'left');
         $this->db->where('ec.ativo', 'true');
         if ($parametro != null) {
-            $this->db->where('ec.cliente_id', $parametro);
+            $this->db->where('cli.estoque_cliente_id', $parametro);
         }
         $return = $this->db->get();
         return $return->result();
@@ -267,7 +269,19 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-
+    
+    function listarsolicitacaofaturamentocliente($estoque_solicitacao_id) {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('esc.contrato_id, 
+                           ec.credor_devedor_id');
+        $this->db->from('tb_estoque_solicitacao_cliente esc');
+        $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
+        $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('esc.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+    
     function empresaboleto() {
         $empresa = $this->session->userdata('empresa_id');
         $this->db->select('e.empresa_id,
@@ -895,13 +909,9 @@ class solicitacao_model extends Model {
             }
             
             $this->db->set('desconto', $desconto);
-            $this->db->set('valor_total', $_POST['novovalortotal']);
-            $this->db->set('data_faturamento', $horario);
-            $this->db->set('operador_faturamento', $operador_id);
-            $this->db->set('faturado', 't');
-            $this->db->where('estoque_solicitacao_id', $_POST['estoque_solicitacao_id']);
-            $this->db->update('tb_estoque_solicitacao_faturamento');
-            
+            if( (float) $desconto != 0){
+                $this->db->set('data_desconto', date("Y-m-d"));
+            }
             $this->db->set('valor_total', $_POST['novovalortotal']);
             $this->db->set('data_faturamento', $horario);
             $this->db->set('operador_faturamento', $operador_id);

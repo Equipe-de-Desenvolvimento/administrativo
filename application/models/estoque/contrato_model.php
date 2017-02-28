@@ -46,10 +46,10 @@ class contrato_model extends Model {
                            ect.data_fim,
                            ect.valor_inicial,
                            tc.descricao as tipo,
-                           ec.nome as cliente');
+                           ec.razao_social as credor_devedor');
         $this->db->from('tb_estoque_contrato ect');
         $this->db->where('ect.ativo', 'true');
-        $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = ect.cliente_id', 'left');
+        $this->db->join('tb_financeiro_credor_devedor ec', 'ec.financeiro_credor_devedor_id = ect.credor_devedor_id', 'left');
         $this->db->join('tb_estoque_tipo_contrato tc', 'tc.estoque_tipo_contrato_id = ect.tipo_contrato_id', 'left');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('ect.nome ilike', "%" . $args['nome'] . "%");
@@ -71,6 +71,18 @@ class contrato_model extends Model {
                             nome');
         $this->db->from('tb_estoque_cliente');
         $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listardescricaopagamento() {
+        $this->db->select('fp.descricao_forma_pagamento_id,
+                            fp.nome as nome');
+        $this->db->from('tb_descricao_forma_pagamento fp');
+//        $this->db->join('tb_grupo_formapagamento gf', 'gf.grupo_id = pp.grupo_pagamento_id', 'left');
+//        $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = gf.forma_pagamento_id', 'left');
+        $this->db->where('ativo', 't');
+        $this->db->orderby('fp.nome');
         $return = $this->db->get();
         return $return->result();
     }
@@ -308,11 +320,14 @@ class contrato_model extends Model {
             if ($_POST['tipoContrato'] != '') {
                 $this->db->set('tipo_contrato_id', $_POST['tipoContrato']);
             }
-            if ($_POST['cliente_id'] != '') {
-                $this->db->set('cliente_id', $_POST['cliente_id']);
+            if ($_POST['credor_devedor'] != '') {
+                $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
             }
             if ($_POST['formapagamento_id'] != '') {
                 $this->db->set('formapagamento_id', $_POST['formapagamento_id']);
+            }
+            if ($_POST['descricaopagamento_id'] != '') {
+                $this->db->set('descricaopagamento_id', $_POST['descricaopagamento_id']);
             }
             
             $this->db->set('data_assinatura', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_assinatura']) ) ));

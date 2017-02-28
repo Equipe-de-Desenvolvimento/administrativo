@@ -338,4 +338,50 @@ CREATE TABLE ponto.tb_notafiscal
   CONSTRAINT tb_notafiscal_pkey PRIMARY KEY (notafiscal_id)
 );
 
+-- Dia 27/02/2017
+ALTER TABLE ponto.tb_forma_entradas_saida ADD COLUMN digito character varying(10);
+ALTER TABLE ponto.tb_estoque_contrato DROP COLUMN cliente_id;
+ALTER TABLE ponto.tb_estoque_contrato ADD COLUMN credor_devedor_id integer;
+ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN credor_devedor_id integer;
+ALTER TABLE ponto.tb_estoque_contrato ADD COLUMN descricaopagamento_id integer;
+ALTER TABLE ponto.tb_estoque_contrato DROP COLUMN numero_contrato;
+ALTER TABLE ponto.tb_estoque_contrato ADD COLUMN numero_contrato character varying(100);
+ALTER TABLE ponto.tb_estoque_solicitacao_faturamento ADD COLUMN data_desconto date;
+CREATE TABLE ponto.tb_estoque_boleto
+(
+  estoque_boleto_id serial NOT NULL,
+  credor_devedor_id integer,
+  contrato_id integer,
+  solicitacao_cliente_id integer,
+  valor numeric(10,2),
+  registrado boolean DEFAULT false,
+  data_registro date,
+  pagado boolean DEFAULT false,
+  data_pagamento date,
+  data_vencimento date,
+  numero_documento character varying(200),
+  nosso_numero character varying(200),
+  seu_numero character varying(200),
+  baixa boolean DEFAULT false,
+  ativo boolean NOT NULL DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_estoque_boleto_pkey PRIMARY KEY (estoque_boleto_id)
+);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN descricaopagamento_id integer;
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN formapagamento_id integer;
+
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN mensagem_cedente character varying(200);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN especie_documento character varying(200);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN carteira character varying(200);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN aceite character varying(200);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN servico character varying(200);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN instrucao_boleto character varying(200);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN juros numeric(10,2);
+
+
+
+
 

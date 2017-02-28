@@ -1,9 +1,0 @@
-{
-"config":
-        {
-            "vendor-dir": "application/libraries"
-        },
-            "require": {
-                        "nfephp-org/nfephp": "dev-develop"
-            }
-}

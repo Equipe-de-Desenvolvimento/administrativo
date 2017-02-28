@@ -64,6 +64,13 @@
                     </dd>
                     
                     <dt>
+                    <label>CEP</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="txtCep" alt="cep" class="texto02" name="txtCep" value="<?= @$obj->_cep; ?>" />
+                    </dd>
+                    
+                    <dt>
                     <label>Município</label>
                     </dt>
                     <dd>

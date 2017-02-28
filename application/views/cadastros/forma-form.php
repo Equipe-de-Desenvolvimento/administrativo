@@ -10,19 +10,28 @@
                     </dt>
                     <dd>
                         <input type="hidden" name="txtcadastrosformaid" class="texto10" value="<?= @$obj->_forma_entradas_saida_id; ?>" />
-                        <input type="text" name="txtNome" class="texto10" value="<?= @$obj->_descricao; ?>" />
+                        <input type="text" name="txtNome" class="texto10" value="<?= @$obj->_descricao; ?>" required=""/>
                     </dd>
                     <dt>
                     <label>Agencia</label>
                     </dt>
                     <dd>
-                        <input type="text" name="txtagencia" class="texto04" value="<?= @$obj->_agencia; ?>" />
+                        <input type="text" name="txtagencia" class="texto04" value="<?= @$obj->_agencia; ?>" 
+                               required="" maxlength="4" pattern="\d{4}" title="Apenas numero"/>
                     </dd>
                     <dt>
                     <label>Conta</label>
                     </dt>
                     <dd>
-                        <input type="text" name="txtconta" class="texto04" value="<?= @$obj->_conta; ?>" />
+                        <input type="text" name="txtconta" class="texto04" value="<?= @$obj->_conta; ?>" 
+                               required="" maxlength="7" pattern="\d{7}" title="Apenas numero"/>
+                    </dd>
+                    <dt>
+                        <label>Digito</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtdigito" class="texto00" value="<?= @$obj->_digito; ?>" 
+                               required="" maxlength="1" pattern="\d{1}" title="Apenas numero"/>
                     </dd>
                 </dl>    
                 <hr/>
