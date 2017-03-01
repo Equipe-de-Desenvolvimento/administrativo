@@ -18,8 +18,8 @@
                 <tr>
                     <?
                     $this->load->helper('directory');
-//                    /home/johnny/projetos/administrativo/upload/nfe/209
-                    $path = "/home/johnny/projetos/administrativo/upload/nfe";
+//                    /home/sisprod/projetos/administrativo/upload/nfe/209
+                    $path = "/home/sisprod/projetos/administrativo/upload/nfe";
                     $arquivo_pasta = directory_map("$path/$solicitacao_cliente_id");
                     if ($arquivo_pasta):
                         foreach ($arquivo_pasta as $value):

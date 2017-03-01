@@ -51,7 +51,7 @@
 
                 <div>
                     <fieldset>
-                        <span class="title">Data de Registro</span>
+                        <span class="title">Data do Pagamento</span>
                         <span class="conteudo"><center><?= $dataPagamento ?></center></span>
                     </fieldset>
                 </div>
@@ -154,16 +154,20 @@
     }
     .red{
         color: #b30707;
+        font-size: 9pt;
+        font-weight:501;
     }
     .green{
         color: green;
+        font-size: 9pt;
+        font-weight:501;
     }
     table {
         padding: 50pt;
     }
     div fieldset{
         min-height: 22pt;
-        min-width: 60pt;
+        min-width: 75pt;
         font-weight: bold;
         display: inline;
         position: relative;
@@ -171,8 +175,8 @@
 
     div span.title{
         font-size: 9pt;
-        color: black;
         font-weight:501;
+        color: black;
         position: absolute;
         margin-top: -5pt; 
     }

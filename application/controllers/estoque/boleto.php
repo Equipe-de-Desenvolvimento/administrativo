@@ -61,7 +61,7 @@ class Boleto extends BaseController {
         $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
         $data['empresa'] = $this->boleto->empresaboleto();
         
-//        $path = "/home/johnny/projetos/administrativo/application/libraries/boleto/boletoPHP";
+//        $path = "/home/sisprod/projetos/administrativo/application/libraries/boleto/boletoPHP";
 //        include ("$path/boleto_bb.php");
 //        include ("$path/include/funcoes_bb.php");
 //        include ("$path/include/layout_bb.php");
@@ -317,10 +317,10 @@ class Boleto extends BaseController {
         $nomeArquivo = $data['destinatario'][0]->nome.$nossoNumero;
         $pasta = $data['destinatario'][0]->nome;
         
-        $pathRoot = "/home/johnny/projetos/administrativo/upload/cnab";
+        $pathRoot = "/home/sisprod/projetos/administrativo/upload/cnab";
         if (!is_dir("$pathRoot/$pasta")) {
-            mkdir("$pathRoot/$pasta");
-            chmod("$pathRoot", 0777);
+            mkdir("$pathRoot/$pasta", 0777);
+            chmod("$pathRoot");
         }
         
         $txt = fopen("$pathRoot/$pasta/$nomeArquivo.txt", "w+");
