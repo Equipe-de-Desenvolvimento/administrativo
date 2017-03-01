@@ -59,6 +59,13 @@ class Boleto extends BaseController {
     function imprimirboletobnb($estoque_boleto_id) {
         $data['estoque_boleto_id'] = $estoque_boleto_id;
         $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
+        $data['empresa'] = $this->boleto->empresaboleto();
+        
+//        $path = "/home/johnny/projetos/administrativo/application/libraries/boleto/boletoPHP";
+//        include ("$path/boleto_bb.php");
+//        include ("$path/include/funcoes_bb.php");
+//        include ("$path/include/layout_bb.php");
+        
         
         $this->load->view('estoque/impressaoboletobnb', $data);
     }

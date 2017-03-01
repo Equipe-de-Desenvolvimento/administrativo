@@ -47,7 +47,10 @@
     .text{
         font-weight: normal;
     }
-    div fieldset{
+    .boletos{
+        /*position: absolute;*/
+    }
+    .boletos div fieldset{
         font-weight: bold;
         min-height: 22pt;
         min-width: 60pt;

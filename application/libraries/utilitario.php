@@ -13,6 +13,159 @@ class Utilitario {
         }
     }
 
+    function filler($tamanho) {
+
+        $filler = "";
+        for ($i = 0; $i < $tamanho; $i++) {
+            $filler .= "_";
+        }
+        $filler = str_replace("_", " ", $filler);
+        return $filler;
+    }
+
+    function zeros($tamanho) {
+
+        $zero = "";
+        for ($i = 0; $i < $tamanho; $i++) {
+            $zero .= "0";
+        }
+        return $zero;
+    }
+
+    function fatorVencimentoBNB($vencimento) {
+
+        $dtVenc = new DateTime($vencimento);
+        $dtBase = new DateTime('1997-10-07');
+
+        $intervalo = $dtVenc->diff($dtBase);
+        return $intervalo->days;
+    }
+
+    function dvCodigoBNB($linha) {
+        $linha = (string) $linha;
+        $totAlg = strlen($linha);
+        
+        $soma = 0;
+        $fatorMultiplicador = 2;
+        for ($i = $totAlg - 1; $i >= 0; $i--) {
+            //GERAR DINAMICAMENTE O ARRAY DOS ALGARISMOS 
+            $numero = (int)substr($linha, $i,1);
+            $resParcial =  $numero * $fatorMultiplicador;
+            $soma += $resParcial;
+            $fatorMultiplicador = ($fatorMultiplicador == 9)? 2 : $fatorMultiplicador+1;
+        }
+        $modulo = $soma % 11;
+        $digitoVerificador = (($modulo == 0) || ($modulo == 1) || ($modulo == 10) ) ? 1 : 11 - $modulo;
+        return $digitoVerificador;
+    }
+
+    function dvLinhaBNB($campo) {
+        $campo = (string) $campo;
+        $totAlg = strlen($campo);
+        if ($totAlg == 9) { //Primeiro Campo da Linha
+            $algarismos = array(
+                (int) substr($campo, 0, 1),
+                (int) substr($campo, 1, 1),
+                (int) substr($campo, 2, 1),
+                (int) substr($campo, 3, 1),
+                (int) substr($campo, 4, 1),
+                (int) substr($campo, 5, 1),
+                (int) substr($campo, 7, 1),
+                (int) substr($campo, 8, 1),
+                (int) substr($campo, 9, 1)
+            );
+            $fatorMultiplicador = 2;
+            $soma = 0;
+            for ($i = count($algarismos) - 1; $i >= 0; $i--) {
+                $res = $algarismos[$i] * $fatorMultiplicador;
+                $resParcial = ($res > 9) ? $res - 9 : $res;
+                $soma += $resParcial;
+                $fatorMultiplicador = ($fatorMultiplicador == 2) ? 1 : 2;
+            }
+            $modulo = $soma % 10;
+            $digitoVerificador = ($modulo > 0) ? 10 - $modulo : 0;
+            return $digitoVerificador;
+        } 
+        elseif ($totAlg == 10) { //Outros Campo da Linha
+            $algarismos = array(
+                (int) substr($campo, 0, 1),
+                (int) substr($campo, 1, 1),
+                (int) substr($campo, 2, 1),
+                (int) substr($campo, 3, 1),
+                (int) substr($campo, 4, 1),
+                (int) substr($campo, 5, 1),
+                (int) substr($campo, 7, 1),
+                (int) substr($campo, 8, 1),
+                (int) substr($campo, 9, 1),
+                (int) substr($campo, 10, 1)
+            );
+            $fatorMultiplicador = 2;
+            $soma = 0;
+            for ($i = count($algarismos) - 1; $i >= 0; $i--) {
+                $res = $algarismos[$i] * $fatorMultiplicador;
+                $resParcial = ($res > 9) ? $res - 9 : $res;
+                $soma += $resParcial;
+                $fatorMultiplicador = ($fatorMultiplicador == 2) ? 1 : 2;
+            }
+            $modulo = $soma % 10;
+            $digitoVerificador = ($modulo > 0) ? 10 - $modulo : 0;
+            return $digitoVerificador;
+        } 
+        else {
+            return false;
+        }
+    }
+
+    function digito_nosso_numeroBNB($nossoNum) {
+        $nossoNum = (string) $nossoNum;
+        $algarismos = array(
+            "um" => (int) substr($nossoNum, 0, 1),
+            "dois" => (int) substr($nossoNum, 1, 1),
+            "tres" => (int) substr($nossoNum, 2, 1),
+            "quatro" => (int) substr($nossoNum, 3, 1),
+            "cinco" => (int) substr($nossoNum, 4, 1),
+            "seis" => (int) substr($nossoNum, 5, 1),
+            "sete" => (int) substr($nossoNum, 6, 1)
+        );
+        $soma = 0;
+        $i = 8;
+        foreach ($algarismos as $value) {
+            $soma += $value * $i;
+            $i--;
+        }
+        $modulo = $soma % 11;
+        if ($modulo === 0 || $modulo === 1) {
+            $digito = 0;
+        } else {
+            $digito = 11 - $modulo;
+        }
+        return $digito;
+    }
+
+    function tamanho_string($texto, $tamCampo, $tipo = 'text') {
+        if ($tipo == 'text') {
+            $tamanho = strlen($texto);
+            if ($tamanho < $tamCampo) {
+                $diferenca = (int) $tamCampo - (int) $tamanho;
+                $texto .= $this->filler($diferenca);
+            } elseif ($tamanho > $tamCampo) {
+                $texto = substr($texto, 0, $tamCampo);
+            }
+            return $texto;
+        } else {
+            $tamanho = strlen($texto);
+            $zeros = '';
+            if ($tamanho < $tamCampo) {
+                $diferenca = (int) $tamCampo - (int) $tamanho;
+                $zeros .= $this->zeros($diferenca);
+            } elseif ($tamanho > $tamCampo) {
+                $texto = substr($texto, 0, $tamCampo);
+            }
+            $texto = $zeros . $texto;
+            return $texto;
+        }
+    }
+
     function preencherDireita($valor, $tamanho, $caractere = "") {
         $i = strlen($valor);
 
@@ -80,7 +233,7 @@ class Utilitario {
         }
     }
 
-    function barcode($text = "0", $filepath = "",  $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
+    function barcode($text = "0", $filepath = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
 //        var_dump($text, $filepath , $print);die;
         $code_string = "";
         // Translate the $text into barcode the correct $code_type
@@ -195,11 +348,10 @@ class Utilitario {
             imagepng($image, $filepath);
             imagedestroy($image);
         }
-        
+
         return $filepath;
-        
+
         // necessita instalar gd-library no ubuntu -> sudo apt-get install php5-gd
-        
     }
 
 }

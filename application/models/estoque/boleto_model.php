@@ -171,6 +171,10 @@ class boleto_model extends Model {
                             eb.baixa,
                             eb.descricaopagamento_id,
                             dfp.nome as descricao,
+                            fes.descricao as conta_descricao,
+                            fes.agencia as conta_agencia,
+                            fes.conta as empresa_conta,
+                            fes.digito as conta_digito,
                             eb.formapagamento_id,
                             fp.nome as forma_pagamento,
                             eb.credor_devedor_id,
@@ -194,6 +198,7 @@ class boleto_model extends Model {
                             ec.situacao as contrato_situacao');
         $this->db->from('tb_estoque_boleto eb');
         $this->db->join('tb_descricao_forma_pagamento dfp', 'dfp.descricao_forma_pagamento_id = eb.descricaopagamento_id', 'left');
+        $this->db->join('tb_forma_entradas_saida fes', 'fes.forma_entradas_saida_id = dfp.conta_id', 'left');
         $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = eb.formapagamento_id', 'left');
         $this->db->join('tb_financeiro_credor_devedor fcd', 'fcd.financeiro_credor_devedor_id = eb.credor_devedor_id', 'left');
         $this->db->join('tb_estoque_solicitacao_cliente esc', 'esc.estoque_solicitacao_setor_id = eb.solicitacao_cliente_id', 'left');
