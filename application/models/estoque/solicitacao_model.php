@@ -269,7 +269,7 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-    
+
     function listarsolicitacaofaturamentocliente($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('esc.contrato_id, 
@@ -281,7 +281,7 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-    
+
     function empresaboleto() {
         $empresa = $this->session->userdata('empresa_id');
         $this->db->select('e.empresa_id,
@@ -907,9 +907,9 @@ class solicitacao_model extends Model {
                 $this->db->set('valor4', str_replace(",", ".", $valor4));
                 $this->db->set('parcelas4', $_POST['parcela4']);
             }
-            
+
             $this->db->set('desconto', $desconto);
-            if( (float) $desconto != 0){
+            if ((float) $desconto != 0) {
                 $this->db->set('data_desconto', date("Y-m-d"));
             }
             $this->db->set('valor_total', $_POST['novovalortotal']);
@@ -1158,9 +1158,7 @@ class solicitacao_model extends Model {
             $this->db->set('icms', $_POST['icms']);
             $this->db->set('ipi', $_POST['ipi']);
             $this->db->set('mva', $_POST['mva']);
-            if ($_POST['cfop_id'] != '') {
-                $this->db->set('cfop_id', $_POST['cfop_id']);
-            }
+            $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']) );
 
             $this->db->set('solicitacao_cliente_id', $_POST['txtestoque_solicitacao_id']);
             $this->db->set('quantidade', $_POST['txtqtde']);

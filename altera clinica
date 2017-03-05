@@ -382,6 +382,23 @@ ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN instrucao_boleto character varyin
 ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN juros numeric(10,2);
 
 
+-- Dia 04/03/2017
+ALTER TABLE ponto.tb_empresa ADD COLUMN inscricao_estadual_st character varying(20);
+ALTER TABLE ponto.tb_empresa ADD COLUMN inscricao_municipal character varying(20);
+ALTER TABLE ponto.tb_empresa ADD COLUMN cnae character varying(20);
+ALTER TABLE ponto.tb_empresa ADD COLUMN cod_regime_tributario character varying(20);
+ALTER TABLE ponto.tb_empresa ADD COLUMN certificado_nome character varying(200);
+ALTER TABLE ponto.tb_empresa ADD COLUMN certificado_nome character varying(200);
+ALTER TABLE ponto.tb_empresa ADD COLUMN certificado_senha character varying(200);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ALTER COLUMN cfop_id TYPE character varying(8);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens RENAME COLUMN cfop_id TO codigo_cfop;
+
+
+
+
+
+
+
 
 
 

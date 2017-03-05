@@ -43,9 +43,9 @@
             </div>
 
             <div style="width: 100%;">
-                <a href="#" title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
+                <span title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
                     <label for="cfop">CFOP</label>
-                </a>
+                </span>
                 <input type="hidden" name="cfop_id" id="cfop_id" class="texto01"/>
                 <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
                 <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" readonly/>
@@ -53,33 +53,33 @@
 
 
             <div style="margin-right: 0;">
-                <a href="#" title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none">
+                <span title="Imposto sobre Circulação de Mercadorias e Prestação de Serviços" style="text-decoration: none">
                     <label for="icms">ICMS (%)</label>
-                </a>
+                </span>
                 <input type="text" name="icms" id="icms" alt="decimal" class="texto01"/>
             </div>
 
             <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Imposto sobre Produtos Industrializados" style="text-decoration: none">
+                <span title="Imposto sobre Produtos Industrializados" style="text-decoration: none">
                     <label for="ipi">IPI (%)</label>
-                </a>
+                </span>
                 <input type="text" name="ipi" id="ipi" alt="decimal" class="texto01"/>
             </div>
 
             <div style="margin-left: 10pt; margin-right: 0;">
-                <a href="#" title="Margem de Valor Agregado" style="text-decoration: none">
+                <span title="Margem de Valor Agregado" style="text-decoration: none">
                     <label for="mva">MVA</label>
-                </a>
+                </span>
                 <input type="text" name="mva" id="mva" alt="decimal" class="texto01"/>
             </div>
 
             <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Código de Situação Tributaria" style="text-decoration: none"><label for="sit_trib">Sit. Trib.</label></a>
+                <span title="Código de Situação Tributaria" style="text-decoration: none"><label for="sit_trib">Sit. Trib.</label></span>
                 <input type="text" name="sit_trib" id="sit_trib" alt="999" class="texto01" maxlength="3"/>
             </div>
 
             <div style="margin-left: -10pt; margin-right: 0;">
-                <a href="#" title="Usa ICMS de Situação Tributaria" style="text-decoration: none"><label for="icmsst">ICMS ST</label></a>
+                <span title="Usa ICMS de Situação Tributaria" style="text-decoration: none"><label for="icmsst">ICMS ST</label></span>
                 <input type="checkbox" name="icmsst" id="icmsst"/>
             </div>
 

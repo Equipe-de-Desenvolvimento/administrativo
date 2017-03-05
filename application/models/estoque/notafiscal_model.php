@@ -60,7 +60,14 @@ class notafiscal_model extends Model {
                             e.bairro,
                             e.telefone,
                             e.inscricao_estadual,
+                            e.inscricao_estadual_st,
+                            e.inscricao_municipal,
+                            e.cnae,
+                            e.cod_regime_tributario,
                             e.email,
+                            e.certificado_nome,
+                            e.certificado_senha,
+                            m.codigo_ibge,
                             m.estado,
                             m.nome as municipio,
                             e.numero');
@@ -99,7 +106,6 @@ class notafiscal_model extends Model {
                             esi.icms, 
                             esi.ipi, 
                             esi.icmsst, 
-                            c.cfop_id, 
                             c.codigo_cfop, 
                             c.descricao_cfop,
                             esi.mva,    
@@ -110,7 +116,7 @@ class notafiscal_model extends Model {
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = es.produto_id');
         $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id= ep.unidade_id');
         $this->db->join('tb_estoque_solicitacao_itens esi', 'esi.estoque_solicitacao_itens_id = es.estoque_solicitacao_itens_id', 'left');
-        $this->db->join('tb_cfop c', 'c.cfop_id = esi.cfop_id', 'left');
+        $this->db->join('tb_cfop c', 'c.codigo_cfop = esi.codigo_cfop', 'left');
         $this->db->where('es.solicitacao_cliente_id', $estoque_solicitacao_id);
         $this->db->where('es.ativo', 'true');
         $this->db->orderby('es.estoque_saida_id');

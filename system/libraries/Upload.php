@@ -585,6 +585,9 @@ class CI_Upload {
 		{
 			return FALSE;
 		}
+                else{
+                        return TRUE;
+                }
 
 		// Images get some additional checks
 		$image_types = array('gif', 'jpg', 'jpeg', 'png', 'jpe');

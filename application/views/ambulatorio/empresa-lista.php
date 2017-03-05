@@ -22,7 +22,7 @@
                         <th class="tabela_header">Nome</th>
                         <th class="tabela_header">CNPJ</th>
                         <th class="tabela_header">Raz&atilde;o social</th>
-                        <th class="tabela_header">Detalhes</th>
+                        <th class="tabela_header" colspan="2"><center>Detalhes</center></th>
                     </tr>
                 </thead>
                 <?php
@@ -46,9 +46,13 @@
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->cnpj; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->razao_social; ?></td>
 
-                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link_new">
                                     <a href="<?= base_url() ?>ambulatorio/empresa/carregarempresa/<?= $item->empresa_id ?>">Editar</a></div>
-                            </td>
+                                </td>
+                                
+                                <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link_new">
+                                    <a href="<?= base_url() ?>ambulatorio/empresa/carregarempresacertificado/<?= $item->empresa_id ?>">Certificado</a></div>
+                                </td>
 
                         </tr>
 

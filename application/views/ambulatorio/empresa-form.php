@@ -24,18 +24,54 @@
                     <dd>
                         <input type="text" name="txtCNPJ" maxlength="14" alt="cnpj" class="texto03" value="<?= @$obj->_cnpj; ?>" />
                     </dd>
-                    <dt>
-                    <label>CNES</label>
+                    
+<!--                    <dt>
+                        <label>CNES</label>
                     </dt>
                     <dd>
-                        <input type="text" name="txtCNES" maxlength="14" class="texto03" value="<?= @$obj->_cnes; ?>" />
+                        <input type="text" name="txtCNES" maxlength="14" class="texto03" value="<?= @$obj->_cnes; ?>" />-->
+                    <!--</dd>-->
+                    
+                    <dt>
+                    <label>Inscrição Municipal</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="inscricaomunicipal" class="texto04" name="inscricaomunicipal" value="<?= @$obj->_inscricao_municipal; ?>" />
                     </dd>
+                    
+                    <dt>
+                    <label>CNAE</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="txtCnae" class="texto03" maxlength="19" name="txtCnae" value="<?= @$obj->_cnae; ?>" />
+                    </dd>
+                    
                     <dt>
                     <label>Inscrição Estadual</label>
                     </dt>
                     <dd>
                         <input type="text" id="inscricaoestadual" class="texto04" name="inscricaoestadual" alt="99.999.9999-9" value="<?= @$obj->_inscricao_estadual; ?>" />
                     </dd>
+                    
+                    <dt>
+                    <label>Inscrição Estadual St</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="inscricaoestadualst" class="texto04" name="inscricaoestadualst" alt="99.999.9999-9" value="<?= @$obj->_inscricao_estadual_st; ?>" />
+                    </dd>
+                    
+                    <dt>
+                    <label>Regime Tributario</label>
+                    </dt>
+                    <dd>
+                        <select name="crt" id="crt" required="">
+                            <option value="">Selecione</option>
+                            <option value="1" <?= (@$obj->_cod_regime_tributario == '1')?'selected': ''?> >Simples Nacional</option>
+                            <option value="2" <?= (@$obj->_cod_regime_tributario == '2')?'selected': ''?>>Simples Nacional - excesso de sublimite da receita bruta</option>
+                            <option value="3" <?= (@$obj->_cod_regime_tributario == '3')?'selected': ''?>>Regime Normal</option>
+                        </select>
+                    </dd>
+                    
                     <dt>
                         <label>Email</label>
                     </dt>

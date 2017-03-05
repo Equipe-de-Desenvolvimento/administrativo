@@ -16,7 +16,11 @@ class empresa_model extends Model {
     var $_municipio_id = null;
     var $_cep = null;
     var $_cnes = null;
+    var $_cnae = null;
     var $_inscricao_estadual = null;
+    var $_inscricao_estadual_st = null;
+    var $_inscricao_municipal = null;
+    var $_cod_regime_tributario = null;
     var $_email = null;
 
     function Empresa_model($exame_empresa_id = null) {
@@ -65,6 +69,30 @@ class empresa_model extends Model {
         return $return->result();
     }
 
+    function salvarcertificado() {
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('certificado_nome', $_FILES["userfile"]['name']);
+        $this->db->set('certificado_senha', $_POST['senha'] );
+        $this->db->where('empresa_id', $_POST['empresa_id']);
+        $this->db->update('tb_empresa');
+    }
+
+    function removercertificado($empresa_id) {
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('certificado_nome', '');
+        $this->db->set('certificado_senha', '');
+        $this->db->where('empresa_id', $empresa_id);
+        $this->db->update('tb_empresa');
+    }
+
     function excluir($exame_empresa_id) {
 
         $horario = date("Y-m-d H:i:s");
@@ -88,6 +116,10 @@ class empresa_model extends Model {
             $this->db->set('razao_social', $_POST['txtrazaosocial']);
             $this->db->set('cep', $_POST['CEP']);
             $this->db->set('cnes', $_POST['txtCNES']);
+            $this->db->set('cnae', $_POST['txtCnae']);
+            $this->db->set('inscricao_municipal', $_POST['inscricaomunicipal']);
+            $this->db->set('inscricao_estadual_st', $_POST['inscricaoestadualst']);
+            $this->db->set('cod_regime_tributario', $_POST['crt']);
             if ($_POST['txtCNPJ'] != '') {
                 $this->db->set('cnpj', str_replace("-", "", str_replace("/", "", str_replace(".", "", $_POST['txtCNPJ']))));
             }
@@ -148,8 +180,12 @@ class empresa_model extends Model {
                                numero,
                                bairro,
                                inscricao_estadual,
+                               inscricao_estadual_st,
+                               inscricao_municipal,
+                               cod_regime_tributario,
                                email,
                                cnes,
+                               cnae,
                                f.municipio_id,
                                c.nome as municipio,
                                c.estado,
@@ -180,6 +216,10 @@ class empresa_model extends Model {
             $this->_estado = $return[0]->estado;
             $this->_cep = $return[0]->cep;
             $this->_cnes = $return[0]->cnes;
+            $this->_cnae = $return[0]->cnae;
+            $this->_inscricao_estadual_st = $return[0]->inscricao_estadual_st;
+            $this->_inscricao_municipal = $return[0]->inscricao_municipal;
+            $this->_cod_regime_tributario = $return[0]->cod_regime_tributario;
         } else {
             $this->_empresa_id = null;
         }
