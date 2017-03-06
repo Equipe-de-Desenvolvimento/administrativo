@@ -393,6 +393,14 @@ ALTER TABLE ponto.tb_empresa ADD COLUMN certificado_senha character varying(200)
 ALTER TABLE ponto.tb_estoque_solicitacao_itens ALTER COLUMN cfop_id TYPE character varying(8);
 ALTER TABLE ponto.tb_estoque_solicitacao_itens RENAME COLUMN cfop_id TO codigo_cfop;
 
+-- Dia 05/03/2017
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN natureza_operacao character varying(200);
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN indicador_presenca character varying(50);
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN tipo_nf character varying(50);
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN modelo_nf character varying(50);
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN finalidade_nf character varying(50);
+
+
 
 
 

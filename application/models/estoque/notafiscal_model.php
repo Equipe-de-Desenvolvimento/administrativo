@@ -28,7 +28,7 @@ class notafiscal_model extends Model {
             $this->instanciar($estoque_contrato_id);
         }
     }
-    
+
     function listar($args = array()) {
         $this->db->select('ect.estoque_contrato_id,
                            ect.nome as contrato, 
@@ -48,7 +48,6 @@ class notafiscal_model extends Model {
         return $this->db;
     }
 
-    
     function empresa() {
         $empresa = $this->session->userdata('empresa_id');
         $this->db->select('e.empresa_id,
@@ -77,7 +76,7 @@ class notafiscal_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-    
+
     function listaclientenotafiscal($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('ec.*, m.estado, 
@@ -93,7 +92,38 @@ class notafiscal_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-    
+
+    function instanciarnotafiscal($notafiscal_id) {
+        $this->db->select(' notafiscal_id, 
+                            solicitacao_cliente_id, 
+                            gerada, 
+                            data_geracao, 
+                            assinada, 
+                            data_assinatura, 
+                            cancelada, 
+                            data_cancelamento, 
+                            validada, 
+                            data_validacao, 
+                            danfe, 
+                            data_danfe, 
+                            xml, 
+                            observacao, 
+                            ativo, 
+                            data_cadastro, 
+                            operador_cadastro, 
+                            data_atualizacao, 
+                            operador_atualizacao, 
+                            natureza_operacao, 
+                            indicador_presenca, 
+                            tipo_nf, 
+                            modelo_nf, 
+                            finalidade_nf');
+        $this->db->from('tb_notafiscal');
+        $this->db->where('notafiscal_id', $notafiscal_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarsolicitacaosnota($estoque_solicitacao_id) {
         $this->db->select(' es.estoque_saida_id,
                             ep.descricao,
@@ -122,6 +152,43 @@ class notafiscal_model extends Model {
         $this->db->orderby('es.estoque_saida_id');
         $return = $this->db->get();
         return $return->result();
+    }
+
+    function listarresumosolicitacao($estoque_solicitacao_id) {
+        $this->db->select('p.descricao,
+                            esi.valor,
+                            sum(esi.quantidade) as qtde_total,
+                            (esi.valor * sum(esi.quantidade)) as valor_total ');
+        $this->db->from('tb_estoque_solicitacao_itens esi');
+        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = esi.produto_id');
+        $this->db->where('esi.solicitacao_cliente_id', $estoque_solicitacao_id);
+        $this->db->where('esi.ativo', 'true');
+        $this->db->groupby('p.descricao, esi.valor');
+        $this->db->orderby('p.descricao');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function gravarnotafiscaleletronica() {
+        /* inicia o mapeamento no banco */
+        $this->db->set('solicitacao_cliente_id', $_POST['estoque_cliente_id']);
+        $this->db->set('observacao', $_POST['observacoes']);
+        $this->db->set('natureza_operacao', $_POST['natOperacap']);
+        $this->db->set('indicador_presenca', $_POST['indicadorPresenca']);
+        $this->db->set('tipo_nf', $_POST['tpNF']);
+        $this->db->set('modelo_nf', $_POST['modeloNota']);
+        $this->db->set('finalidade_nf', $_POST['finalidadeNota']);
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('data_cadastro', $horario);
+        $this->db->set('operador_cadastro', $operador_id);
+        $this->db->insert('tb_notafiscal');
+        $erro = $this->db->_error_message();
+        if (trim($erro) != "") // erro de banco
+            return -1;
+        else
+            $notafiscal_id = $this->db->insert_id();
     }
 
     function gravarcontratos() {
@@ -166,11 +233,11 @@ class notafiscal_model extends Model {
         try {
             /* inicia o mapeamento no banco */
             $estoque_contrato_id = $_POST['contrato_id'];
-            
+
             $this->db->set('nome', $_POST['nome']);
-            $this->db->set('data_inicio', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_inicio']) ) ) );
-            $this->db->set('data_fim', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_fim']) ) ));
-            
+            $this->db->set('data_inicio', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio']))));
+            $this->db->set('data_fim', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim']))));
+
             $this->db->set('logradouro', $_POST['endereco']);
             $this->db->set('numero', $_POST['numero']);
             $this->db->set('bairro', $_POST['bairro']);
@@ -178,7 +245,7 @@ class notafiscal_model extends Model {
             if ($_POST['municipio_id'] != '') {
                 $this->db->set('municipio_id', $_POST['municipio_id']);
             }
-            
+
             $this->db->set('numero_contrato', $_POST['numContrato']);
             $this->db->set('situacao', $_POST['situacaoContrato']);
             if ($_POST['tipoContrato'] != '') {
@@ -190,11 +257,11 @@ class notafiscal_model extends Model {
             if ($_POST['formapagamento_id'] != '') {
                 $this->db->set('formapagamento_id', $_POST['formapagamento_id']);
             }
-            
-            $this->db->set('data_assinatura', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_assinatura']) ) ));
-            $this->db->set('valor_inicial', str_replace(',','.',str_replace('.', '', $_POST['valorInicial']) ) );
-            $this->db->set('calcao', str_replace(',','.',str_replace('.', '', $_POST['calcao']) ) );
-            
+
+            $this->db->set('data_assinatura', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_assinatura']))));
+            $this->db->set('valor_inicial', str_replace(',', '.', str_replace('.', '', $_POST['valorInicial'])));
+            $this->db->set('calcao', str_replace(',', '.', str_replace('.', '', $_POST['calcao'])));
+
             $this->db->set('observacao', $_POST['observacoes']);
             $this->db->set('clasulas', $_POST['clasulas']);
 

@@ -33,10 +33,27 @@ class Notafiscal extends BaseController {
         $this->loadView('estoque/notafiscal-lista', $args);
     }
 
-    function carregarnotafiscalopcoes($solicitacao_cliente_id) {
-//        die('morreu');
+    function carregarnotafiscalopcoes($solicitacao_cliente_id, $notafiscal_id = null) {
         $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
+        $data['notafiscal_id'] = $notafiscal_id;
+        $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
+        $data['produtos'] = $this->notafiscal->listarresumosolicitacao($solicitacao_cliente_id);
+//        echo "<pre>";
+//        var_dump($data['produtos']);die;
         $this->loadView('estoque/notafiscal-ficha', $data);
+    }
+
+    function informacoesnotafiscal($solicitacao_cliente_id, $notafiscal_id = null) {
+        $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
+        $data['notafiscal_id'] = $notafiscal_id;
+        $this->loadView('estoque/notafiscal-form', $data);
+    }
+
+    function gravarnotafiscaleletronica() {
+        $solicitacao_id = $_POST['estoque_cliente_id'];
+        $notafiscal_id = $this->notafiscal->gravarnotafiscaleletronica();
+        $this->gerarnotafiscal($solicitacao_id, $notafiscal_id);
+        redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_id/$notafiscal_id");
     }
 
     function geraconfignfephp() {
@@ -55,7 +72,7 @@ class Notafiscal extends BaseController {
                 "pathMDFeFiles":"",
                 "pathCLeFiles":"",
                 "pathNFSeFiles":"",
-                "pathCertsFiles":"\/home\/johnny\/projetos\/administrativo\/upload\/certificado\/'. $data['empresa'][0]->empresa_id. '\/",
+                "pathCertsFiles":"\/home\/johnny\/projetos\/administrativo\/upload\/certificado\/' . $data['empresa'][0]->empresa_id . '\/",
                 "siteUrl":"' . base_url() . '\/ambulatorio\/empresa",
                 "schemesNFe":"PL_008i2",
                 "schemesCTe":"PL_CTe_200",
@@ -119,46 +136,38 @@ class Notafiscal extends BaseController {
         return $json;
     }
 
-    function gerarnotafiscal($solicitacao_cliente_id) {
-        
+    function gerarnotafiscal($solicitacao_cliente_id, $notafiscal_id) {
+
+        $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
         $data['empresa'] = $this->notafiscal->empresa();
         $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
         $data['produtos'] = $this->notafiscal->listarsolicitacaosnota($solicitacao_cliente_id);
-        foreach ($data['produtos'] as $value) {
-            if ($value->descricao_cfop != ''){
-                $natureza_operacao = $value->descricao_cfop;
-                break;
-            }
-            else{
-                continue;
-            }
-        }
-//        $natureza = descricao_cfop
 
         $config = $this->geraconfignfephp();
         $dadosNFe = array(
             /* Dados da NFe - infNFe */
-            'cUF' => '23', //codigo do estado (IBGE)
-            'cMunFG' => $data['empresa'][0]->codigo_ibge, //codigo do municipio da empresa (IBGE)
-            'cNF' => $this->utilitario->tamanho_string($solicitacao_cliente_id, 8, 'numero'),
-            'naturezaOpe' => $natureza_operacao,
-            'numSerie' => 1, //deve ser incrementado a cada nova nota_fiscal gerada
-            'numNF' => $solicitacao_cliente_id,
-            'tipoNF' => '1', // 0 = entrada | 1 = saida
-            'identificaDestOp' => '1', // Olhar se as UF's da empresa e do destinatario sao as mesmas.
-            'indPres' => '1', //Tipo de Compra. (1=Presencial, 2=Nao Presencial e etc...)
             'verProc' => '1.0', //Versao do SISTEMA STG
-            
-            
+            'cUF' => '23', //codigo do estado (IBGE)
+            'identificaDestOp' => '1', // Olhar se as UF's da empresa e do destinatario sao as mesmas.
+            'cNF' => $this->utilitario->tamanho_string($solicitacao_cliente_id, 8, 'numero'),
+            'cMunFG' => $data['empresa'][0]->codigo_ibge, //codigo do municipio da empresa (IBGE)
+            'naturezaOpe' => $notafiscal[0]->natureza_operacao,
+            'modeloNota' => $notafiscal[0]->modelo_nf,
+            'numSerie' => $notafiscal[0]->notafiscal_id, //deve ser incrementado a cada nova nota_fiscal gerada
+            'numNF' => $notafiscal[0]->notafiscal_id,
+            'tipoNF' => $notafiscal[0]->tipo_nf, // 0 = entrada | 1 = saida
+            'indPres' => $notafiscal[0]->indicador_presenca, // Tipo de Compra. (1=Presencial, 2=Nao Presencial e etc...)
+            'finalidadeNFe' => $notafiscal[0]->finalidade_nf
         );
         /*
          * POR ALGUM MOTIVO, O PHP NÃO PERMITE O USO DO COMANDO 'USE'
          * DENTRO DE UMA FUNÇÃO/METODO, POR ISSO, TODO O XML DA NFe SERA 
          * GERADO DENTRO DO ARQUIVO 'geraXml.php'
          */
+        
+        //endereco do emitente
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
-
     }
 
 }

@@ -12,18 +12,22 @@
     $nfeTools = new NFePHP\NFe\ToolsNFe($config);
 
     //Dados da NFe - infNFe
-    $cUF = '23'; //codigo numerico do estado
-    $cNF = '00000010'; //numero aleatório da NF
-    $natOp = 'Venda de Produto'; //natureza da operação
+    $cUF = $dadosNFe['cUF']; //codigo numerico do estado
+    $cNF = $dadosNFe['cNF']; //numero aleatório da NF
+    $natOp = $dadosNFe['naturezaOpe']; //natureza da operação
+
     $indPag = '1'; //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
-    $mod = '55'; //modelo da NFe 55 ou 65 essa última NFCe
-    $serie = '1'; //serie da NFe
-    $nNF = '10'; // numero da NFe
+
+    $mod = $dadosNFe['modeloNota']; //modelo da NFe 55 ou 65 essa última NFCe
+    $serie = $dadosNFe['numSerie']; //serie da NFe
+    $nNF = $dadosNFe['numNF']; // numero da NFe
     $dhEmi = date("Y-m-d\TH:i:sP");//Formato: “AAAA-MM-DDThh:mm:ssTZD” (UTC - Universal Coordinated Time).
     $dhSaiEnt = date("Y-m-d\TH:i:sP");//Não informar este campo para a NFC-e.
-    $tpNF = '1';
+    $tpNF = $dadosNFe['tipoNF'];
+
     $idDest = '1'; //1=Operação interna; 2=Operação interestadual; 3=Operação com exterior.
-    $cMunFG = '5200258';
+
+    $cMunFG = $dadosNFe['cMunFG'];
     $tpImp = '1'; //0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem;
                   //3=DANFE Simplificado; 4=DANFE NFC-e; 5=DANFE NFC-e em mensagem eletrônica
                   //(o envio de mensagem eletrônica pode ser feita de forma simultânea com a impressão do DANFE;
@@ -38,9 +42,10 @@
                    //9=Contingência off-line da NFC-e (as demais opções de contingência são válidas também para a NFC-e);
                    //Nota: Para a NFC-e somente estão disponíveis e são válidas as opções de contingência 5 e 9.
     $tpAmb = '2'; //1=Produção; 2=Homologação
-    $finNFe = '1'; //1=NF-e normal; 2=NF-e complementar; 3=NF-e de ajuste; 4=Devolução/Retorno.
+    
+    $finNFe = $dadosNFe['finalidadeNFe']; //1=NF-e normal; 2=NF-e complementar; 3=NF-e de ajuste; 4=Devolução/Retorno.
     $indFinal = '0'; //0=Normal; 1=Consumidor final;
-    $indPres = '9'; //0=Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste);
+    $indPres = $dadosNFe['indPres']; //0=Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste);
                    //1=Operação presencial;
                    //2=Operação não presencial, pela Internet;
                    //3=Operação não presencial, Teleatendimento;
@@ -50,7 +55,7 @@
                     //1=Emissão de NF-e avulsa pelo Fisco;
                     //2=Emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco;
                     //3=Emissão NF-e pelo contribuinte com aplicativo fornecido pelo Fisco.
-    $verProc = '4.0.43'; //versão do aplicativo emissor
+    $verProc = $dadosNFe['verProc']; //versão do aplicativo emissor
     $dhCont = ''; //entrada em contingência AAAA-MM-DDThh:mm:ssTZD
     $xJust = ''; //Justificativa da entrada em contingência
 
