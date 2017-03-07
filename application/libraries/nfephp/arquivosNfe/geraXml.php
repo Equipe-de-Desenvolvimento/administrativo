@@ -16,7 +16,7 @@
     $cNF = $dadosNFe['cNF']; //numero aleatório da NF
     $natOp = $dadosNFe['naturezaOpe']; //natureza da operação
 
-    $indPag = '1'; //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
+    $indPag = dadosNFe['indicadorPagamento']; //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
 
     $mod = $dadosNFe['modeloNota']; //modelo da NFe 55 ou 65 essa última NFCe
     $serie = $dadosNFe['numSerie']; //serie da NFe
@@ -25,7 +25,7 @@
     $dhSaiEnt = date("Y-m-d\TH:i:sP");//Não informar este campo para a NFC-e.
     $tpNF = $dadosNFe['tipoNF'];
 
-    $idDest = '1'; //1=Operação interna; 2=Operação interestadual; 3=Operação com exterior.
+    $idDest = $dadosNFe['identificaDestOp']; //1=Operação interna; 2=Operação interestadual; 3=Operação com exterior.
 
     $cMunFG = $dadosNFe['cMunFG'];
     $tpImp = '1'; //0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem;
@@ -72,40 +72,6 @@
     //tag IDE
     $resp = $nfe->tagide($cUF, $cNF, $natOp, $indPag, $mod, $serie, $nNF, $dhEmi, $dhSaiEnt, $tpNF, $idDest, $cMunFG, $tpImp, $tpEmis, $cDV, $tpAmb, $finNFe, $indFinal, $indPres, $procEmi, $verProc, $dhCont, $xJust);
 
-    //refNFe NFe referenciada  
-    //$refNFe = '12345678901234567890123456789012345678901234';
-    //$resp = $nfe->tagrefNFe($refNFe);
-
-    //refNF Nota Fiscal 1A referenciada
-    //$cUF = '35';
-    //$AAMM = '1312';
-    //$CNPJ = '12345678901234';
-    //$mod = '1A';
-    //$serie = '0';
-    //$nNF = '1234';
-    //$resp = $nfe->tagrefNF($cUF, $AAMM, $CNPJ, $mod, $serie, $nNF);
-
-    //NFPref Nota Fiscal Produtor Rural referenciada
-    //$cUF = '35';
-    //$AAMM = '1312';
-    //$CNPJ = '12345678901234';
-    //$CPF = '123456789';
-    //$IE = '123456';
-    //$mod = '1';
-    //$serie = '0';
-    //$nNF = '1234';
-    //$resp = $nfe->tagrefNFP($cUF, $AAMM, $CNPJ, $CPF, $IE, $mod, $serie, $nNF);
-
-    //CTeref CTe referenciada
-    //$refCTe = '12345678901234567890123456789012345678901234';
-    //$resp = $nfe->tagrefCTe($refCTe);
-
-    //ECFref ECF referenciada
-    //$mod = '90';
-    //$nECF = '12243';
-    //$nCOO = '111';
-    //$resp = $nfe->tagrefECF($mod, $nECF, $nCOO);
-
     //Dados do emitente - (Importando dados do config.json)
     $CNPJ = $nfeTools->aConfig['cnpj'];
     $CPF = ''; // Utilizado para CPF na nota
@@ -119,78 +85,44 @@
     $resp = $nfe->tagemit($CNPJ, $CPF, $xNome, $xFant, $IE, $IEST, $IM, $CNAE, $CRT);
 
     //endereço do emitente
-    $xLgr = 'Av. Rio de Janeiro';
-    $nro = 's/n';
-    $xCpl = 'Qd. 38 Lt. 4,5 e 34';
-    $xBairro = 'Jardim Pinheiros I';
-    $cMun = '5200258';
-    $xMun = 'Águas Lindas de Goiás';
-    $UF = 'GO';
-    $CEP = '72910000';
+    $xLgr = $dadosNFe['logradouro'];
+    $nro = $dadosNFe['numero'];
+    $xCpl = $dadosNFe['complemento'];
+    $xBairro = $dadosNFe['bairro'];
+    $cMun = $dadosNFe['codMunicipio'];
+    $xMun = $dadosNFe['nomMunicipio'];
+    $UF = $dadosNFe['UF'];
+    $CEP = $dadosNFe['cep'];
     $cPais = '1058';
     $xPais = 'Brasil';
-    $fone = '6239324097';
+    $fone = $dadosNFe['fone'];
     $resp = $nfe->tagenderEmit($xLgr, $nro, $xCpl, $xBairro, $cMun, $xMun, $UF, $CEP, $cPais, $xPais, $fone);
             
     //destinatário
-    $CNPJ = '23401454000170';
-    $CPF = '';
+    $CNPJ = $dadosNFe['destCNPJ'];
+    $CPF = $dadosNFe['destCPF'];
     $idEstrangeiro = '';
-    $xNome = 'Chinnon Santos - Tecnologia e Assessoria em Softwares';
-    $indIEDest = '1';
-    $IE = '';
+    $xNome = $dadosNFe['destNOME'];
+    $indIEDest = $dadosNFe['destIND_IE'];
+    $IE = $dadosNFe['destIE'];
     $ISUF = '';
-    $IM = '4128095';
-    $email = 'nfe@chinnonsantos.com';
+    $IM = $dadosNFe['destIM'];
+    $email = $dadosNFe['destEMAIL'];
     $resp = $nfe->tagdest($CNPJ, $CPF, $idEstrangeiro, $xNome, $indIEDest, $IE, $ISUF, $IM, $email);
 
     //Endereço do destinatário
-    $xLgr = 'Av. Vila Alpes';
-    $nro = 's/n';
-    $xCpl = '';
-    $xBairro = 'Vila Alpes';
-    $cMun = '5208707';
-    $xMun = 'Goiânia';
-    $UF = 'GO';
-    $CEP = '74310010';
+    $xLgr = $dadosNFe['destLOG'];
+    $nro = $dadosNFe['destNUM'];
+    $xCpl = $dadosNFe['destCOMP'];
+    $xBairro = $dadosNFe['destBAIRRO'];
+    $cMun = $dadosNFe['destCOD_MUN'];
+    $xMun = $dadosNFe['destMUN'];
+    $UF = $dadosNFe['destUF'];
+    $CEP = $dadosNFe['destCEP'];
     $cPais = '1058';
     $xPais = 'Brasil';
-    $fone = '6292779404';
+    $fone = $dadosNFe['destFONE'];
     $resp = $nfe->tagenderDest($xLgr, $nro, $xCpl, $xBairro, $cMun, $xMun, $UF, $CEP, $cPais, $xPais, $fone);
-
-    //Identificação do local de retirada (se diferente do emitente)
-    //$CNPJ = '12345678901234';
-    //$CPF = '';
-    //$xLgr = 'Rua Vanish';
-    //$nro = '000';
-    //$xCpl = 'Ghost';
-    //$xBairro = 'Assombrado';
-    //$cMun = '3509502';
-    //$xMun = 'Campinas';
-    //$UF = 'SP';
-    //$resp = $nfe->tagretirada($CNPJ, $CPF, $xLgr, $nro, $xCpl, $xBairro, $cMun, $xMun, $UF);
-
-    //Identificação do local de Entrega (se diferente do destinatário)
-    //$CNPJ = '12345678901234';
-    //$CPF = '';
-    //$xLgr = 'Viela Mixuruca';
-    //$nro = '2';
-    //$xCpl = 'Quabrada do malandro';
-    //$xBairro = 'Favela Mau Olhado';
-    //$cMun = '3509502';
-    //$xMun = 'Campinas';
-    //$UF = 'SP';
-    //$resp = $nfe->tagentrega($CNPJ, $CPF, $xLgr, $nro, $xCpl, $xBairro, $cMun, $xMun, $UF);
-
-    //Identificação dos autorizados para fazer o download da NFe (somente versão 3.1)
-    /*$aAut = array('23401454000170');
-    foreach ($aAut as $aut) {
-        if (strlen($aut) == 14) {
-            $resp = $nfe->tagautXML($aut);
-        } else {
-            $resp = $nfe->tagautXML('', $aut);
-        }
-    }*/
 
     //produtos 1 (Limite da API é de 56 itens por Nota)
     $aP[] = array(

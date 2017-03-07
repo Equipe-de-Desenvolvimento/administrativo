@@ -56,6 +56,8 @@ class notafiscal_model extends Model {
                             e.cep,
                             e.razao_social,
                             e.logradouro,
+                            e.complemento,
+                            e.numero,
                             e.bairro,
                             e.telefone,
                             e.inscricao_estadual,
@@ -81,6 +83,7 @@ class notafiscal_model extends Model {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('ec.*, m.estado, 
                            m.nome as municipio,  
+                           m.codigo_ibge, 
                            esc.data_fechamento, 
                            ct.valor_frete ');
         $this->db->from('tb_estoque_solicitacao_cliente esc');

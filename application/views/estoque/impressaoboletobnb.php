@@ -84,7 +84,7 @@ if ($boleto[0]->instrucao_boleto == '05') {
     $instrucao = "Sem Instruções – Acata as instruções da Carteira do Cedente.";
 }
 
-$boleto[0]->numero_documento = substr($boleto[0]->numero_documento, 10, 10);
+$boleto[0]->numero_documento = substr($boleto[0]->numero_documento, 10);
 
 function esquerda($entra, $comp) {
     return substr($entra, 0, $comp);
@@ -125,10 +125,7 @@ function fbarcode($valor) {
 //Desenho da barra
 //Guarda inicial
     ?>
-    <img src="<?= base_url() ?>img/boleto/p.png" width=<?php echo $fino ?> height=<?php echo $altura ?> border=0>
-    <img src="<?= base_url() ?>img/boleto/b.png" width=<?php echo $fino ?> height=<?php echo $altura ?> border=0>
-    <img src="<?= base_url() ?>img/boleto/p.png" width=<?php echo $fino ?> height=<?php echo $altura ?> border=0>
-    <img src="<?= base_url() ?>img/boleto/b.png" width=<?php echo $fino ?> height=<?php echo $altura ?> border=0>
+
     <img <?php
     $texto = $valor;
     if ((strlen($texto) % 2) <> 0) {
@@ -174,7 +171,7 @@ function fbarcode($valor) {
 <html>
     <head>
         <title>Boleto Banco do Nordeste</title>
-        <link rel="stylesheet" type="text/css" media="all" href="<?= base_url() ?>css/boleto/css/default.css" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url() ?>css/boleto/css/default.css" />
         <meta charset="utf-8"/>
     </head>
 

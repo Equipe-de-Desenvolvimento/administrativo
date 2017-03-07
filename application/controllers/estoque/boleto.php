@@ -1,4 +1,5 @@
 <?php
+
 require_once APPPATH . 'controllers/base/BaseController.php';
 
 /**
@@ -60,13 +61,23 @@ class Boleto extends BaseController {
         $data['estoque_boleto_id'] = $estoque_boleto_id;
         $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
         $data['empresa'] = $this->boleto->empresaboleto();
-        
-//        $path = "/home/sisprod/projetos/administrativo/application/libraries/boleto/boletoPHP";
-//        include ("$path/boleto_bb.php");
-//        include ("$path/include/funcoes_bb.php");
-//        include ("$path/include/layout_bb.php");
-        
-        
+
+//        $this->load->plugin('mpdf');
+//        
+//        ini_set('display_errors',1);
+//        ini_set('display_startup_erros',1);
+//        error_reporting(E_ALL);
+//        
+////        include('mpdf.php');
+//        $mpdf = new mPDF();
+//        $html = $this->load->view('estoque/impressaoboletobnb', $data, true);
+//        $stylesheet = file_get_contents('./css/boleto/css/default.css');
+//        $mpdf->WriteHTML($stylesheet, 1);
+//        $mpdf->WriteHTML($html, 2);
+//        $mpdf->Output();
+//        exit;
+
+//        pdf($html);
         $this->load->view('estoque/impressaoboletobnb', $data);
     }
 
@@ -77,6 +88,7 @@ class Boleto extends BaseController {
 
     function criarboletobanconordeste() {
         $data['boleto'] = $this->boleto->instanciarboleto($_POST['estoque_boleto_id']);
+        $nosso_numero = $_POST['estoque_boleto_id'];
 
         $_POST['mensagem'] = mb_strtoupper($this->remover_caracter(utf8_decode($_POST['mensagem'])));
         $_POST['juros'] = str_replace(',', '.', str_replace('.', '', $_POST['juros']));
@@ -130,7 +142,7 @@ class Boleto extends BaseController {
         if ($tipo == 'text') {
             $tamanho = strlen($texto);
             if ($tamanho < $tamCampo) {
-                $diferenca = (int)$tamCampo  - (int) $tamanho;
+                $diferenca = (int) $tamCampo - (int) $tamanho;
                 $texto .= $this->filler($diferenca);
             } elseif ($tamanho > $tamCampo) {
                 $texto = substr($texto, 0, $tamCampo);
@@ -140,7 +152,7 @@ class Boleto extends BaseController {
             $tamanho = strlen($texto);
             $zeros = '';
             if ($tamanho < $tamCampo) {
-                $diferenca = (int)$tamCampo  - (int)$tamanho ;
+                $diferenca = (int) $tamCampo - (int) $tamanho;
                 $zeros .= $this->zeros($diferenca);
             } elseif ($tamanho > $tamCampo) {
                 $texto = substr($texto, 0, $tamCampo);
@@ -187,7 +199,7 @@ class Boleto extends BaseController {
         $nossoNumero = $this->tamanho_string($data['boleto'][0]->nosso_numero, 7, 'numero');
         $seuNumero = $this->tamanho_string($data['boleto'][0]->seu_numero, 10, 'numero');
         $numeroDoc = $this->tamanho_string($data['boleto'][0]->numero_documento, 25, 'numero');
-        
+
         $carteira = $data['boleto'][0]->carteira;
         $especie = $data['boleto'][0]->especie_documento;
         $aceite = $data['boleto'][0]->aceite;
@@ -292,7 +304,7 @@ class Boleto extends BaseController {
             "complemento_sacado" => $this->tamanho_string($data['destinatario'][0]->complemento, 12), //@@ 
             "cep_sacado" => $data['destinatario'][0]->cep, //@@ 8 digitos
             "cidade_sacado" => $this->tamanho_string($data['destinatario'][0]->municipio, 15), //@@ 
-            "uf" => "CE", //@@
+            "uf" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'), //@@
 
             /* INFORMAÇÃO */
             "mensagem_cedente" => $this->tamanho_string($mensagem, 40), //**
@@ -310,24 +322,28 @@ class Boleto extends BaseController {
         $txtHeader = implode('', $header);
         $txtTransacao = implode('', $transacao);
         $txtTrailer = implode('', $trailer);
-        
+
         $txtCnab = $txtHeader . chr(13) . chr(10) . $txtTransacao . chr(13) . chr(10) . $txtTrailer . chr(13) . chr(10) . chr(26);
-        
+
         //criando o arquivo CNAB txt
-        $nomeArquivo = $data['destinatario'][0]->nome.$nossoNumero;
+        $nomeArquivo = $data['destinatario'][0]->nome . $nossoNumero;
         $pasta = $data['destinatario'][0]->nome;
-        
-        $pathRoot = "/home/sisprod/projetos/administrativo/upload/cnab";
-        if (!is_dir("$pathRoot/$pasta")) {
-            mkdir("$pathRoot/$pasta", 0777);
-            chmod("$pathRoot");
+
+//        $pathRoot = "/home/sisprod/projetos/administrativo/";
+        if (!is_dir("./upload/cnab/$pasta")) {
+            mkdir("./upload/cnab/$pasta", 0777);
+            chmod("./upload/cnab", 0777);
         }
-        
-        $txt = fopen("$pathRoot/$pasta/$nomeArquivo.txt", "w+");
+
+        $txt = fopen("./upload/cnab/$pasta/$nomeArquivo.txt", "w+");
         $inserindo = fwrite($txt, $txtCnab);
         fclose($txt);
-        chmod("$pathRoot/$pasta/$nomeArquivo.txt", 0777);
-//        echo "<pre>" . $txtCnab . "</pre>";
+        chmod("./upload/cnab/$pasta/$nomeArquivo.txt", 0777);
+
+        $solicitacao_cliente_id = $data['boleto'][0]->solicitacao_cliente_id;
+        $mensagem = 'Arquivo de Remessa salvo com sucesso.';
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "estoque/boleto/solicitacaoboleto/$estoque_boleto_id");
     }
 
 }

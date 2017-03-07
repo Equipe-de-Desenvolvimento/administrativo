@@ -80,7 +80,7 @@ class Notafiscal extends BaseController {
                 "schemesCLe":"","schemesNFSe":"",
                 "razaosocial":"' . $data['empresa'][0]->razao_social . '",
                 "nomefantasia":"' . $data['empresa'][0]->empresa . '",
-                "siglaUF":"CE",
+                "siglaUF":"'.$this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'sigla').'",
                 "cnpj":"' . $this->utilitario->remover_caracter($data['empresa'][0]->cnpj) . '",
                 "ie":"' . $this->utilitario->remover_caracter($data['empresa'][0]->inscricao_estadual) . '",
                 "im":"' . $this->utilitario->remover_caracter($data['empresa'][0]->inscricao_municipal) . '",
@@ -142,13 +142,20 @@ class Notafiscal extends BaseController {
         $data['empresa'] = $this->notafiscal->empresa();
         $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
         $data['produtos'] = $this->notafiscal->listarsolicitacaosnota($solicitacao_cliente_id);
-
+        if($this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge) == $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge)){
+            $data['identificaDestOp'] = '1';
+        }
+        else {
+            $data['identificaDestOp'] = '2';
+        }
+        
         $config = $this->geraconfignfephp();
+        
         $dadosNFe = array(
             /* Dados da NFe - infNFe */
             'verProc' => '1.0', //Versao do SISTEMA STG
-            'cUF' => '23', //codigo do estado (IBGE)
-            'identificaDestOp' => '1', // Olhar se as UF's da empresa e do destinatario sao as mesmas.
+            'cUF' => $this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'codigo'), //codigo do estado (IBGE)
+            'identificaDestOp' => $data['identificaDestOp'], // Olhar se as UF's da empresa e do destinatario sao as mesmas.
             'cNF' => $this->utilitario->tamanho_string($solicitacao_cliente_id, 8, 'numero'),
             'cMunFG' => $data['empresa'][0]->codigo_ibge, //codigo do municipio da empresa (IBGE)
             'naturezaOpe' => $notafiscal[0]->natureza_operacao,
@@ -157,7 +164,39 @@ class Notafiscal extends BaseController {
             'numNF' => $notafiscal[0]->notafiscal_id,
             'tipoNF' => $notafiscal[0]->tipo_nf, // 0 = entrada | 1 = saida
             'indPres' => $notafiscal[0]->indicador_presenca, // Tipo de Compra. (1=Presencial, 2=Nao Presencial e etc...)
-            'finalidadeNFe' => $notafiscal[0]->finalidade_nf
+            'finalidadeNFe' => $notafiscal[0]->finalidade_nf,
+            'indicadorPagamento' => '0', //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
+            
+            /*ENDEREÇO DO EMITENTE*/
+            "logradouro" => $data['empresa'][0]->logradouro,
+            "numero" => $data['empresa'][0]->numero,
+            "complemento" => $data['empresa'][0]->complemento,
+            "bairro" => $data['empresa'][0]->bairro,
+            "codMunicipio" => $data['empresa'][0]->codigo_ibge,
+            "nomMunicipio" => $data['empresa'][0]->municipio,
+            "UF" => $this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'sigla'),
+            "cep" => $this->utilitario->remover_caracter($data['empresa'][0]->cep),
+            "fone" => $this->utilitario->remover_caracter($data['empresa'][0]->telefone), 
+            
+            /*DADOS DO DESTINATARIO*/
+            "destCNPJ" => $data['destinatario'][0]->cnpj,
+            "destCPF" => '',
+            "destNOME" => $data['destinatario'][0]->nome,
+            "destIND_IE" => '1', //criar um novo campo na tb_estoque_cliente (VERIFICAR SE O CLIENTE É ISENTO DE IE)
+            "destIE" => $data['destinatario'][0]->inscricao_estadual, 
+            "destIM" => '', //criar um novo campo na tb_estoque_cliente
+            "destEMAIL" => $data['destinatario'][0]->email,
+            "destLOG" => $data['destinatario'][0]->logradouro, 
+            "destNUM" => $data['destinatario'][0]->numero, 
+            "destCOMP" => $data['destinatario'][0]->complemento, 
+            "destBAIRRO" => $data['destinatario'][0]->bairro,
+            "destCOD_MUN" => $data['destinatario'][0]->codigo_ibge,
+            "destMUN" => $data['destinatario'][0]->municipio, 
+            "destUF" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'),
+            "destCEP" => $data['destinatario'][0]->cep,
+            "destFONE" => $this->utilitario->remover_caracter($data['destinatario'][0]->telefone),
+            
+            /*DADOS DOS PRODUTOS*/
         );
         /*
          * POR ALGUM MOTIVO, O PHP NÃO PERMITE O USO DO COMANDO 'USE'
