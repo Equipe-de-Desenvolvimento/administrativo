@@ -37,7 +37,7 @@ class contrato_model extends Model {
         $return = $this->db->get();
         return $return->result();
     }
-    
+
     function listar($args = array()) {
         $this->db->select('ect.estoque_contrato_id,
                            ect.nome as contrato, 
@@ -200,7 +200,7 @@ class contrato_model extends Model {
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 //            var_dump($_POST['tipo_id']);die;
-            if($_POST['tipo_id'] == '0' || $_POST['tipo_id'] == ''){
+            if ($_POST['tipo_id'] == '0' || $_POST['tipo_id'] == '') {
                 $this->db->set('data_cadastro', $horario);
                 $this->db->set('operador_cadastro', $operador_id);
                 $this->db->insert('tb_estoque_tipo_contrato');
@@ -210,7 +210,7 @@ class contrato_model extends Model {
                 else
                     $tipo_id = $this->db->insert_id();
             }
-            else{
+            else {
                 $this->db->set('data_atualizacao', $horario);
                 $this->db->set('operador_atualizacao', $operador_id);
                 $this->db->where('estoque_tipo_contrato_id', $_POST['tipo_id']);
@@ -299,66 +299,85 @@ class contrato_model extends Model {
     }
 
     function gravar() {
-        try {
-            /* inicia o mapeamento no banco */
-            $estoque_contrato_id = $_POST['contrato_id'];
-            
-            $this->db->set('nome', $_POST['nome']);
-            $this->db->set('data_inicio', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_inicio']) ) ) );
-            $this->db->set('data_fim', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_fim']) ) ));
-            
-            $this->db->set('logradouro', $_POST['endereco']);
-            $this->db->set('numero', $_POST['numero']);
-            $this->db->set('bairro', $_POST['bairro']);
-            $this->db->set('complemento', $_POST['complemento']);
-            if ($_POST['municipio_id'] != '') {
-                $this->db->set('municipio_id', $_POST['municipio_id']);
-            }
-            
-            $this->db->set('numero_contrato', $_POST['numContrato']);
-            $this->db->set('situacao', $_POST['situacaoContrato']);
-            if ($_POST['tipoContrato'] != '') {
-                $this->db->set('tipo_contrato_id', $_POST['tipoContrato']);
-            }
-            if ($_POST['credor_devedor'] != '') {
-                $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
-            }
-            if ($_POST['formapagamento_id'] != '') {
-                $this->db->set('formapagamento_id', $_POST['formapagamento_id']);
-            }
-            if ($_POST['descricaopagamento_id'] != '') {
-                $this->db->set('descricaopagamento_id', $_POST['descricaopagamento_id']);
-            }
-            
-            $this->db->set('data_assinatura', date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_assinatura']) ) ));
-            $this->db->set('valor_inicial', str_replace(',','.',str_replace('.', '', $_POST['valorInicial']) ) );
-            $this->db->set('calcao', str_replace(',','.',str_replace('.', '', $_POST['calcao']) ) );
-            
-            $this->db->set('observacao', $_POST['observacoes']);
-            $this->db->set('clasulas', $_POST['clasulas']);
+        $estoque_contrato_id = $_POST['contrato_id'];
 
-            $horario = date("Y-m-d H:i:s");
-            $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('nome', $_POST['nome']);
+        $this->db->set('data_inicio', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio']))));
+        $this->db->set('data_fim', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim']))));
 
-            if ($_POST['contrato_id'] == "") {// insert
-                $this->db->set('data_cadastro', $horario);
-                $this->db->set('operador_cadastro', $operador_id);
-                $this->db->insert('tb_estoque_contrato');
-                $erro = $this->db->_error_message();
-                if (trim($erro) != "") // erro de banco
-                    return -1;
-                else
-                    $estoque_contrato_id = $this->db->insert_id();
+        $this->db->set('logradouro', $_POST['endereco']);
+        $this->db->set('numero', $_POST['numero']);
+        $this->db->set('bairro', $_POST['bairro']);
+        $this->db->set('complemento', $_POST['complemento']);
+        if ($_POST['municipio_id'] != '') {
+            $this->db->set('municipio_id', $_POST['municipio_id']);
+        }
+
+        $this->db->set('numero_contrato', $_POST['numContrato']);
+        $this->db->set('situacao', $_POST['situacaoContrato']);
+        if ($_POST['tipoContrato'] != '') {
+            $this->db->set('tipo_contrato_id', $_POST['tipoContrato']);
+        }
+        if ($_POST['credor_devedor'] != '') {
+            $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
+        }
+
+        $this->db->set('data_assinatura', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_assinatura']))));
+        $this->db->set('valor_inicial', str_replace(',', '.', str_replace('.', '', $_POST['valorInicial'])));
+        $this->db->set('calcao', str_replace(',', '.', str_replace('.', '', $_POST['calcao'])));
+
+        $this->db->set('observacao', $_POST['observacoes']);
+        $this->db->set('clasulas', $_POST['clasulas']);
+
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+
+        if ($_POST['contrato_id'] == "") {// insert
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_estoque_contrato');
+            $erro = $this->db->_error_message();
+            if (trim($erro) != "") // erro de banco
+                return -1;
+            else
+                $estoque_contrato_id = $this->db->insert_id();
+        }
+        else { // update
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->where('estoque_contrato_id', $estoque_contrato_id);
+            $this->db->update('tb_estoque_contrato');
+        }
+        
+            /* Atualizando as Parcelas */
+        $this->db->set('ativo', 'f');
+        $this->db->set('contrato_id', $estoque_contrato_id);
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('estoque_contrato_id', $estoque_contrato_id);
+        $this->db->update('tb_estoque_contrato_pagamento');
+        
+        $dataVencimento = date("Y-m-d", strtotime( str_replace('/', '-', $_POST['txtdata_vencimento']) ) );
+        $_POST['valorParcela'] = str_replace(',', '.', str_replace('.', '', $_POST['valorParcela']));
+        $intervalo = (int)str_replace('.', '', $_POST['intervalo']);
+        for($i = 1; $i <= (int)$_POST['numParcela']; $i++){
+            
+            $this->db->set('valor', $_POST['valorParcela']);
+            $this->db->set('contrato_id', $estoque_contrato_id);
+            $this->db->set('parcela', $i);
+            $this->db->set('data', $dataVencimento);
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_estoque_contrato_pagamento');
+            
+            if($_POST['tipoPagamento'] == 'fixo'){
+                $dataVencimento = date("Y-m-d", strtotime("+1 month", strtotime($dataVencimento)));
+//                $dataVencimento = date("Y-m-d", strtotime("+1 month", $dataVencimento));
             }
-            else { // update
-                $this->db->set('data_atualizacao', $horario);
-                $this->db->set('operador_atualizacao', $operador_id);
-                $this->db->where('estoque_contrato_id', $estoque_contrato_id);
-                $this->db->update('tb_estoque_contrato');
+            else{
+                $dataVencimento = date("Y-m-d", strtotime("+$intervalo days", strtotime($dataVencimento)));
+//                $dataVencimento = date("Y-m-d", strtotime("+$intervalo days", $dataVencimento));
             }
-            return $estoque_contrato_id;
-        } catch (Exception $exc) {
-            return -1;
         }
     }
 

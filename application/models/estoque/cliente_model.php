@@ -167,12 +167,12 @@ class cliente_model extends Model {
 
     function gravar() {
         try {
-            $credor_devedor_id = $_POST['credor_devedor'];
-            if (isset($_POST['criarcredor']) && $_POST['txtestoqueclienteid'] == "" && $credor_devedor_id == "") {
-                $this->db->set('razao_social', $_POST['txtfantasia']);
-                $this->db->set('cep', $_POST['txtCep']);
+            if ($_POST['criarcredor'] == "on") {
+                $this->db->set('razao_social', $_POST['txtrazaosocial']);
                 if ($_POST['txtCNPJ'] != '') {
-                    $this->db->set('cnpj', str_replace("/", "", str_replace(".", "", $_POST['txtCNPJ'])));
+                    $this->db->set('cnpj', str_replace("/", "", str_replace("-", "", str_replace(".", "", $_POST['txtCNPJ']))));
+                } else {
+                    $this->db->set('cnpj', null);
                 }
                 $this->db->set('telefone', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['telefone']))));
                 $this->db->set('celular', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['celular']))));
@@ -188,15 +188,17 @@ class cliente_model extends Model {
                 $this->db->set('complemento', $_POST['complemento']);
                 $horario = date("Y-m-d H:i:s");
                 $operador_id = $this->session->userdata('operador_id');
-
                 $this->db->set('data_cadastro', $horario);
                 $this->db->set('operador_cadastro', $operador_id);
                 $this->db->insert('tb_financeiro_credor_devedor');
-                if (trim($erro) != "") // erro de banco
-                    return -1;
-                else
-                    $credor_devedor_id = $this->db->insert_id();
-                
+                $financeiro_credor_devedor_id = $this->db->insert_id();
+            }
+
+
+            if ($_POST['criarcredor'] == "on") {
+                $this->db->set('credor_devedor_id', $financeiro_credor_devedor_id);
+            } elseif ($_POST['credor_devedor'] != "") {
+                $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
             }
             
             /* inicia o mapeamento no banco */
@@ -227,9 +229,6 @@ class cliente_model extends Model {
 
             if ($_POST['municipio_id'] != '') {
                 $this->db->set('municipio_id', $_POST['municipio_id']);
-            }
-            if ($credor_devedor_id != '') {
-                $this->db->set('credor_devedor_id', $credor_devedor_id);
             }
             if ($_POST['txttipo_id'] != '') {
                 $this->db->set('tipo_logradouro_id', $_POST['txttipo_id']);

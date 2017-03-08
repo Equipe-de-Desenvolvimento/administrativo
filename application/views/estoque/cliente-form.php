@@ -107,6 +107,13 @@
                     </dd>
                     
                     <dt>
+                        <label>Inscrição Municipal</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="inscricaomunicipal" class="texto04" name="inscricaomunicipal" alt="" />
+                    </dd>
+                    
+                    <dt>
                         <label>Criar Credor</label>
                     </dt>
                     <dd>

@@ -400,6 +400,22 @@ ALTER TABLE ponto.tb_notafiscal ADD COLUMN tipo_nf character varying(50);
 ALTER TABLE ponto.tb_notafiscal ADD COLUMN modelo_nf character varying(50);
 ALTER TABLE ponto.tb_notafiscal ADD COLUMN finalidade_nf character varying(50);
 
+-- Dia 07/03/2017
+CREATE TABLE ponto.tb_estoque_contrato_pagamento
+(
+  estoque_contrato_pagamento_id serial NOT NULL,
+  valor numeric(10,2),
+  parcela character varying(3),
+  numero_parcela character varying(3),
+  contrato_id integer,
+  data date,
+  ativo boolean DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_estoque_contrato_pagamento_pkey PRIMARY KEY (estoque_contrato_pagamento_id)
+);
 
 
 

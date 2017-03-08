@@ -80,26 +80,12 @@
                                   }
                                   ?> 
                     </select>
-                    <!--                </div>
-                                    <div>-->
-                    <label>Descriçao do Pagamento *</label>
-                    <select name="descricaopagamento_id" id="descricaopagamento_id" class="size8" required="">
+                    
+                    <label>Tipo do Contrato *</label>
+                    <select name="tipoContrato" id="tipoContrato" class="size8" required="">
                         <option value="">Selecione</option>
-                        <? foreach ($descricao_pagamento as $forma) : ?>
-                            <option value="<?= $forma->descricao_forma_pagamento_id; ?>"><?= $forma->nome; ?></option>
-                        <? endforeach; ?>
-                    </select>
-                </div>
-                <div>
-                    <label>Numero do Contrato *</label>
-                    <input type="text" id="numContrato" name="numContrato"  class="texto03" value="<?= @$obj->_conselho; ?>"/>
-                    <!--                </div>
-                                    <div>-->
-                    <label>Forma de Pagamento *</label>
-                    <select name="formapagamento_id" id="formapagamento_id" class="texto03" required="">
-                        <option value="">Selecione</option>
-                        <? foreach ($forma_pagamento as $forma) : ?>
-                            <option value="<?= $forma->forma_pagamento_id; ?>"><?= $forma->nome; ?></option>
+                        <? foreach ($tipo_contrato as $tipo) : ?>
+                            <option value="<?= $tipo->tipo_id; ?>"><?= $tipo->descricao; ?></option>
                         <? endforeach; ?>
                     </select>
                     
@@ -108,14 +94,10 @@
                     <label>Situaçao</label>
                     <input type="text" id="situacaoContrato" class="texto04" name="situacaoContrato" value="<?= @$obj->_complemento; ?>" />
                     
-                    <label>Tipo do Contrato *</label>
-                    <select name="tipoContrato" id="tipoContrato" class="texto03" required="">
-                        <option value="">Selecione</option>
-                        <? foreach ($tipo_contrato as $tipo) : ?>
-                            <option value="<?= $tipo->tipo_id; ?>"><?= $tipo->descricao; ?></option>
-                        <? endforeach; ?>
-                    </select>
                    
+                    <label>Numero do Contrato *</label>
+                    <input type="text" id="numContrato" name="numContrato"  class="texto03" value="<?= @$obj->_conselho; ?>"/>
+                    
                 </div>
                 <div>
                     <label>Data Assinatura</label>
@@ -137,6 +119,47 @@
             </fieldset>
 
             <fieldset>
+                <legend>Dados do Pagamento</legend>
+                
+                <div>
+                    <label>Valor da Parcela</label>
+                    <input type="text" id="valorParcela" class="texto02" alt="decimal" name="valorParcela"/>
+                </div>
+                
+                <div>
+                    <label>N° de Parcelas</label>
+                    <input type="text" name="numParcela" id="numParcela" class="texto01" alt="integer"/>
+                </div>
+                 
+                    
+                <div>
+                    <label>Tipo</label>
+                    
+                    <input type="radio" name="tipoPagamento" value="fixo" id="fixo" required=""/>
+                    <label for="fixo" style="display: inline; color: black; font-size: 9pt">
+                        Dia Fixo
+                    </label>
+                    <input type="radio" name="tipoPagamento" value="periodico" id="periodico" required=""/>
+                    <label for="periodico" style="display: inline; color: black; font-size: 9pt">
+                        Periodico
+                    </label>
+                </div>
+                <div style="width: 100%" id="adcionaisPagamento">
+                    <hr>    
+                    
+                    <!--<legend>Informaçoes Adicionais</legend>-->
+
+                    <div>
+                        <label>Data do Primeiro Vencimento</label>
+                        <input type="text" id="txtdata_vencimento" class="texto02" alt="date" name="txtdata_vencimento" value="" />
+                    </div>
+
+                    <div id="intervalo">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
                 <legend>Adcionais</legend>
                 <div>
                     <label>Clasulas</label>
@@ -144,7 +167,7 @@
                 </div>
                 <div>
                     <label>Observaçoes</label>
-                    <textarea name="observacoes" id="observacoes" rows="15" cols="60"  ><?= @$obj->_carimbo; ?></textarea>
+                    <textarea name="observacoes" id="observacoes" rows="15" cols="60"  ><?= @$obj->_observacoes; ?></textarea>
                 </div>
             </fieldset>
 
@@ -162,7 +185,25 @@
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
-
+    
+    $(function(){
+        $("input[type=radio][name=tipoPagamento]").click(function() {
+            var tipoPagamento = $("input[type=radio][name=tipoPagamento]:checked").val();
+            if(tipoPagamento == 'periodico'){
+                if( $("#intervalo label").length == 0){
+                    var label = '<label>Intervalo (em dias)</label>';
+                    var input = '<input type="text" name="intervalo" class="texto01" alt="integer" required/>';
+                    var campo = label+input;
+                    $("#intervalo").append(campo);
+                }
+            }
+            else{
+                $("#intervalo label").remove();
+                $("#intervalo input").remove();
+            }
+        });
+    });
+    
     $(function () {
         $("#txtdata_assinatura").datepicker({
             autosize: true,
@@ -175,6 +216,17 @@
         });
     });
 
+    $(function () {
+        $("#txtdata_vencimento").datepicker({
+            autosize: true,
+            changeYear: true,
+            changeMonth: true,
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            buttonImage: '<?= base_url() ?>img/form/date.png',
+            dateFormat: 'dd/mm/yy'
+        });
+    });
     $(function () {
         $("#txtdata_inicio").datepicker({
             autosize: true,

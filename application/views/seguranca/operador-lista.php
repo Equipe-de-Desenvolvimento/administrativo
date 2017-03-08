@@ -67,11 +67,6 @@
                                         </a>
             <!--                                        href="<?= base_url() ?>seguranca/operador/alterar/<?= $item->operador_id ?>"-->
                                     </td>
-                                    <td class="<?php echo $estilo_linha; ?>" width="140px;">
-                                        <a  onclick="javascript:window.open('<?= base_url() . "seguranca/operador/operadorconvenio/$item->operador_id"; ?> ', '_blank');">Convenio
-                                        </a>
-            <!--                           href="<?= base_url() ?>seguranca/operador/operadorconvenio/<?= $item->operador_id ?>"-->
-                                    </td>
                                     <td class="<?php echo $estilo_linha; ?>">
                                         <a  onclick="javascript:window.open('<?= base_url() . "seguranca/operador/associarempresas/$item->operador_id"; ?> ', '_blank');">Empresas
                                         </a>

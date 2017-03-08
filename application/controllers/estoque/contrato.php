@@ -117,10 +117,8 @@ class Contrato extends BaseController {
     }
 
     function gravar() {
-//        echo "<pre>";
-//        var_dump($_POST); die;
-        $exame_contrato_id = $this->contrato->gravar();
-        if ($exame_contrato_id == "-1") {
+        $contrato_id = $this->contrato->gravar();
+        if ($contrato_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Contrato. Opera&ccedil;&atilde;o cancelada.';
         } else {
             $data['mensagem'] = 'Sucesso ao gravar a Contrato.';

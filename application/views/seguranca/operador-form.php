@@ -154,7 +154,7 @@
                 <div>
                     <label>Senha *</label>
 
-                    <input type="password" name="txtSenha" id="txtSenha" class="texto04" value="<?= @$obj->_senha; ?>" />
+                    <input type="password" name="txtSenha" id="txtSenha" class="texto04"/>
                 </div>
                 <div>
                     <label>Tipo perfil *</label>
@@ -296,9 +296,9 @@
 <link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">
-                        $('#btnVoltar').click(function () {
-                            $(location).attr('href', '<?= base_url(); ?>sca/operador');
-                        });
+//                        $('#btnVoltar').click(function () {
+//                            $(location).attr('href', '<?= base_url(); ?>sca/operador');
+//                        });
 
 
                         $(function () {
