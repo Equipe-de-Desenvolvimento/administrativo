@@ -62,7 +62,7 @@ $terCampo = substr($parametroDV3, 0, 5) . '.' .substr($parametroDV3, 5) . $terCa
 
 $quaCampo = $dvCodBarra; //definido na hora de criar o cod de barras
 
-$quiCampo = $fatorVencimento //definido na hora de criar o cod de barras
+$quiCampo = $fatorVencimento //definido na hora de criar o cod de barras  
             . $this->utilitario->tamanho_string(str_replace('.', '', $boleto[0]->valor), 10, 'numero'); 
 
 $linha = "{$priCampo} {$segCampo} {$terCampo} {$quaCampo} {$quiCampo}"; 
@@ -172,6 +172,7 @@ function fbarcode($valor) {
     <head>
         <title>Boleto Banco do Nordeste</title>
         <link rel="stylesheet" type="text/css" href="<?= base_url() ?>css/boleto/css/default.css" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url() ?>css/barcode.css" />
         <meta charset="utf-8"/>
     </head>
 
@@ -442,8 +443,18 @@ function fbarcode($valor) {
 
                 <!--  codigo_barras  -->
                 <div id="codigo_barras" class="">
-                    <div style="margin: 4pt;">
-                        <?php fbarcode($codigo); ?>
+                    <div style="margin: 4pt; font-family: 'barcode';">
+                        <?php 
+                            include ('/home/johnny/projetos/administrativo/application/libraries/barcode_i2_5.php');
+                            ini_set('display_errors',1);
+                            ini_set('display_startup_erros',1);
+                            error_reporting(E_ALL);
+                            $bc = new BarcodeI25();
+                            $bc->tipoRetorno = 1;
+                            $bc->SetCode($codigo);
+                            $bc->Generate();
+                        ?>
+                        <img src="<?= base_url() ?>upload/codigoboleto/<?=$codigo?>"/>
                     </div>
                     <div class="">
                         <!--<span>Autenticação Mecânica</span> / <span>Ficha de Compensação</span>-->

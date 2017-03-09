@@ -194,10 +194,32 @@ class Notafiscal extends BaseController {
             "destMUN" => $data['destinatario'][0]->municipio, 
             "destUF" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'),
             "destCEP" => $data['destinatario'][0]->cep,
-            "destFONE" => $this->utilitario->remover_caracter($data['destinatario'][0]->telefone),
-            
-            /*DADOS DOS PRODUTOS*/
+            "destFONE" => $this->utilitario->remover_caracter($data['destinatario'][0]->telefone)
         );
+        
+        /* DADOS DOS PRODUTOS */
+        for($i = 1; $i <= count($data['produtos']); $i++){
+            $dadosProdutos[$i] = array(
+                /* Dados Basicos */
+                "numItem" => $i,
+                "codigoProduto" => $i,
+                "cEAN" => $i, //codigo de barras do produto (cod GTIN). Caso não possua, não criar esta TAG.
+                "nomeProd" => $i,
+                "ncm" => $i,
+                "ex_tipi" => $i,
+                "cfop" => $i,
+                "unCompra" => $i,
+                "qtdeCompra" => $i,
+                "valUniComp" => $i,
+                "valProduto" => $i,
+                "cEAN_Trib" => $i,
+                "uniTrib" => $i,
+                "valorFrete" => $i,
+                "valorSeguro" => $i,
+                "valorDesconto" => $i,
+            );
+        }
+        
         /*
          * POR ALGUM MOTIVO, O PHP NÃO PERMITE O USO DO COMANDO 'USE'
          * DENTRO DE UMA FUNÇÃO/METODO, POR ISSO, TODO O XML DA NFe SERA 

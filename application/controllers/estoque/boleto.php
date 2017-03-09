@@ -19,6 +19,7 @@ class Boleto extends BaseController {
         $this->load->model('cadastro/convenio_model', 'convenio');
         $this->load->model('estoque/fornecedor_model', 'fornecedor');
         $this->load->library('mensagem');
+//        $this->load->library('barcode_i2_5');
         $this->load->library('utilitario');
         $this->load->library('pagination');
         $this->load->library('validation');

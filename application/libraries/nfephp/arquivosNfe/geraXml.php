@@ -128,7 +128,7 @@
     $aP[] = array(
             'nItem' => 1,
             'cProd' => '15',
-            'cEAN' => '97899072659522',
+            'cEAN' => '97899072659522', /* CASO O PRODUTO POSSUA */
             'xProd' => 'Chopp Pilsen - Barril 30 Lts',
             'NCM' => '22030000',
             'EXTIPI' => '',
