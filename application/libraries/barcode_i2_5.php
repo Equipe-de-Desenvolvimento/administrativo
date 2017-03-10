@@ -64,8 +64,8 @@ class BarcodeI25
     function BarcodeI25($code='')
     {
         //Construtor da classe
-		$this->ignoreTable = false;
-		$this->errors       = 0;
+	$this->ignoreTable = false;
+	$this->errors       = 0;
         $this->ebf          = 1;
         $this->ebg          = 3;
         $this->altb         = 50;
@@ -74,7 +74,7 @@ class BarcodeI25
         $this->mixed_code   = "";
         $this->bc_string    = "";
         $this->tamanhoTotal = 0;
-	$this->tipoRetorno	= 0; // -> Adicionando esta linha para considerar como padrao HTML
+	$this->tipoRetorno  = 0; // -> Adicionando esta linha para considerar como padrao HTML
         
         if ( $code !== '' )
         {

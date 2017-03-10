@@ -62,23 +62,6 @@ class Boleto extends BaseController {
         $data['estoque_boleto_id'] = $estoque_boleto_id;
         $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
         $data['empresa'] = $this->boleto->empresaboleto();
-
-//        $this->load->plugin('mpdf');
-//        
-//        ini_set('display_errors',1);
-//        ini_set('display_startup_erros',1);
-//        error_reporting(E_ALL);
-//        
-////        include('mpdf.php');
-//        $mpdf = new mPDF();
-//        $html = $this->load->view('estoque/impressaoboletobnb', $data, true);
-//        $stylesheet = file_get_contents('./css/boleto/css/default.css');
-//        $mpdf->WriteHTML($stylesheet, 1);
-//        $mpdf->WriteHTML($html, 2);
-//        $mpdf->Output();
-//        exit;
-
-//        pdf($html);
         $this->load->view('estoque/impressaoboletobnb', $data);
     }
 

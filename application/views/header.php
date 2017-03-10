@@ -381,6 +381,16 @@ function debug($object) {
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/grupospagamento">Forma de Pagamento Grupo</a></span></ul>
                             <? } ?>
                         </li> 
+<!--                        <li><span class="folder">Tabelas/Impostos</span>
+                            <? if ($perfil_id == 1) { ?>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/pesquisardescricao">Manter Natureza de Operação</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tipo">Manter CFOP</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter CST</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/classe">Manter NCM</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter CEST</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter cEAN / cEANTrib</a></span></ul>
+                            <? } ?>
+                        </li> -->
                         <li><span class="folder">Administrativas</span>
                             <? if ($perfil_id == 1 || $perfil_id == 3) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador">Listar Profissionais</a></span></ul>    

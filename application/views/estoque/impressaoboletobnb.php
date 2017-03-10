@@ -52,11 +52,12 @@ $priCampo = '0049' . substr($boleto[0]->conta_agencia, 0 ,1). '.'
             . substr($boleto[0]->empresa_conta, 0, 1)
             . $priCampoDv;
 
-$parametroDV2 = substr($codigo, 24, 10); 
+$parametroDV2 = substr($boleto[0]->empresa_conta, 1) . $boleto[0]->conta_digito . substr($boleto[0]->nosso_numero, 0, 3); 
 $segCampoDv = $this->utilitario->dvLinhaBNB($parametroDV2);
 $segCampo = substr($parametroDV2, 0, 5) . '.' .substr($parametroDV2, 5) . $segCampoDv;
 
-$parametroDV3 = substr($codigo, 34, 10); 
+
+$parametroDV3 = substr($boleto[0]->nosso_numero, 3).$this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero).$carteira.'000'; 
 $terCampoDv = $this->utilitario->dvLinhaBNB($parametroDV3);
 $terCampo = substr($parametroDV3, 0, 5) . '.' .substr($parametroDV3, 5) . $terCampoDv;
 
@@ -64,6 +65,7 @@ $quaCampo = $dvCodBarra; //definido na hora de criar o cod de barras
 
 $quiCampo = $fatorVencimento //definido na hora de criar o cod de barras  
             . $this->utilitario->tamanho_string(str_replace('.', '', $boleto[0]->valor), 10, 'numero'); 
+
 
 $linha = "{$priCampo} {$segCampo} {$terCampo} {$quaCampo} {$quiCampo}"; 
 
@@ -93,77 +95,6 @@ function esquerda($entra, $comp) {
 function direita($entra, $comp) {
     return substr($entra, strlen($entra) - $comp, $comp);
 }
-
-function fbarcode($valor) {
-
-    $fino = 1;
-    $largo = 3;
-    $altura = 50;
-
-    $barcodes[0] = "00110";
-    $barcodes[1] = "10001";
-    $barcodes[2] = "01001";
-    $barcodes[3] = "11000";
-    $barcodes[4] = "00101";
-    $barcodes[5] = "10100";
-    $barcodes[6] = "01100";
-    $barcodes[7] = "00011";
-    $barcodes[8] = "10010";
-    $barcodes[9] = "01010";
-    for ($f1 = 9; $f1 >= 0; $f1--) {
-        for ($f2 = 9; $f2 >= 0; $f2--) {
-            $f = ($f1 * 10) + $f2;
-            $texto = "";
-            for ($i = 1; $i < 6; $i++) {
-                $texto .= substr($barcodes[$f1], ($i - 1), 1) . substr($barcodes[$f2], ($i - 1), 1);
-            }
-            $barcodes[$f] = $texto;
-        }
-    }
-
-
-//Desenho da barra
-//Guarda inicial
-    ?>
-
-    <img <?php
-    $texto = $valor;
-    if ((strlen($texto) % 2) <> 0) {
-        $texto = "0" . $texto;
-    }
-
-// Draw dos dados
-    while (strlen($texto) > 0) {
-        $i = round(esquerda($texto, 2));
-        $texto = direita($texto, strlen($texto) - 2);
-        $f = $barcodes[$i];
-        for ($i = 1; $i < 11; $i+=2) {
-            if (substr($f, ($i - 1), 1) == "0") {
-                $f1 = $fino;
-            } else {
-                $f1 = $largo;
-            }
-            ?>
-                src="<?= base_url() ?>img/boleto/p.png" width=<?php echo $f1 ?> height=<?php echo $altura ?> border=0><img 
-                <?php
-                if (substr($f, $i, 1) == "0") {
-                    $f2 = $fino;
-                } else {
-                    $f2 = $largo;
-                }
-                ?>
-                src="<?= base_url() ?>img/boleto/b.png" width=<?php echo $f2 ?> height=<?php echo $altura ?> border=0><img 
-                <?php
-            }
-        }
-
-// Draw guarda final
-        ?>
-        src="<?= base_url() ?>img/boleto/p.png" width=<?php echo $largo ?> height=<?php echo $altura ?> border=0><img 
-        src="<?= base_url() ?>img/boleto/b.png" width=<?php echo $fino ?> height=<?php echo $altura ?> border=0><img 
-        src="<?= base_url() ?>img/boleto/p.png" width=<?php echo 1 ?> height=<?php echo $altura ?> border=0> 
-        <?php
-    }
 
 //Fim da função
     ?>
@@ -220,7 +151,7 @@ function fbarcode($valor) {
                     <!-- Nosso Número -->
                     <div class="nosso_numero item">
                         <label>Nosso Número</label>
-                        <?= $boleto[0]->nosso_numero; ?>        
+                        <?= $boleto[0]->nosso_numero; ?> - <?= $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero);?>
                     </div>
                 </div>
 
@@ -404,7 +335,7 @@ function fbarcode($valor) {
                     </div>
                     <div class="">
                         <label>Nosso número</label>
-                        <?= $boleto[0]->nosso_numero; ?>                   
+                        <?= $boleto[0]->nosso_numero; ?> - <?= $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero);?>              
                     </div>
                     <div class="">
                         <label>(=) Valor do documento</label>
@@ -443,14 +374,13 @@ function fbarcode($valor) {
 
                 <!--  codigo_barras  -->
                 <div id="codigo_barras" class="">
-                    <div style="margin: 4pt; font-family: 'barcode';">
+                    <div style="margin: 4pt;">
                         <?php 
                             include ('/home/johnny/projetos/administrativo/application/libraries/barcode_i2_5.php');
-                            ini_set('display_errors',1);
-                            ini_set('display_startup_erros',1);
-                            error_reporting(E_ALL);
                             $bc = new BarcodeI25();
                             $bc->tipoRetorno = 1;
+                            $bc->ebf = 1.5; //espessura da barra fina
+                            $bc->ebg = 2 * $bc->ebf; //espessura da barra grossa
                             $bc->SetCode($codigo);
                             $bc->Generate();
                         ?>

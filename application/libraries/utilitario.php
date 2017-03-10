@@ -183,10 +183,11 @@ class Utilitario {
                 (int) substr($campo, 3, 1),
                 (int) substr($campo, 4, 1),
                 (int) substr($campo, 5, 1),
+                (int) substr($campo, 6, 1),
                 (int) substr($campo, 7, 1),
-                (int) substr($campo, 8, 1),
-                (int) substr($campo, 9, 1)
+                (int) substr($campo, 8, 1)
             );
+            
             $fatorMultiplicador = 2;
             $soma = 0;
             for ($i = count($algarismos) - 1; $i >= 0; $i--) {
@@ -195,6 +196,7 @@ class Utilitario {
                 $soma += $resParcial;
                 $fatorMultiplicador = ($fatorMultiplicador == 2) ? 1 : 2;
             }
+            
             $modulo = $soma % 10;
             $digitoVerificador = ($modulo > 0) ? 10 - $modulo : 0;
             return $digitoVerificador;
@@ -207,13 +209,14 @@ class Utilitario {
                 (int) substr($campo, 3, 1),
                 (int) substr($campo, 4, 1),
                 (int) substr($campo, 5, 1),
+                (int) substr($campo, 6, 1),
                 (int) substr($campo, 7, 1),
                 (int) substr($campo, 8, 1),
-                (int) substr($campo, 9, 1),
-                (int) substr($campo, 10, 1)
+                (int) substr($campo, 9, 1)
             );
             $fatorMultiplicador = 2;
             $soma = 0;
+            
             for ($i = count($algarismos) - 1; $i >= 0; $i--) {
                 $res = $algarismos[$i] * $fatorMultiplicador;
                 $resParcial = ($res > 9) ? $res - 9 : $res;

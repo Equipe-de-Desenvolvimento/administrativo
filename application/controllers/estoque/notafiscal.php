@@ -198,25 +198,28 @@ class Notafiscal extends BaseController {
         );
         
         /* DADOS DOS PRODUTOS */
-        for($i = 1; $i <= count($data['produtos']); $i++){
+        for($i = 0, $n = 1; $i <= count($data['produtos']); $i++, $n++){
             $dadosProdutos[$i] = array(
                 /* Dados Basicos */
-                "numItem" => $i,
-                "codigoProduto" => $i,
-                "cEAN" => $i, //codigo de barras do produto (cod GTIN). Caso não possua, não criar esta TAG.
-                "nomeProd" => $i,
-                "ncm" => $i,
-                "ex_tipi" => $i,
-                "cfop" => $i,
-                "unCompra" => $i,
-                "qtdeCompra" => $i,
-                "valUniComp" => $i,
-                "valProduto" => $i,
-                "cEAN_Trib" => $i,
-                "uniTrib" => $i,
-                "valorFrete" => $i,
-                "valorSeguro" => $i,
-                "valorDesconto" => $i,
+                "numItem" => $n,
+                "codigoProduto" => 'CFOP'.$data['produtos'][$i]->codigo_cfop, //CFOPXXXX
+                "cEAN" => $data['produtos'][$i]->codigo,
+                "nomeProd" => $data['produtos'][$i]->descricao,
+                "ncm" => $data['produtos'][$i]->ncm, 
+                "ex_tipi" => '',
+                "cfop" => $data['produtos'][$i]->codigo_cfop,
+                "unCompra" => $data['produtos'][$i]->unidade,
+                "qtdeCompra" => $data['produtos'][$i]->quantidade,
+                "valUniComp" => '',
+                "valProduto" => '',
+                "cEAN_Trib" => '',
+                "uniTrib" => '',
+                "valorFrete" => '', //deixar em branco
+                "valorSeguro" => '', //deixar em branco
+                "valorDesconto" => '', //deixar em branco   
+                "indTot" => 1, // 1 = somar ao valor total da NFe / 0 = nao somar ao vlr tot da nota
+                "numPedido" => $solicitacao_cliente_id, 
+                "itemPedido" => $n,
             );
         }
         
