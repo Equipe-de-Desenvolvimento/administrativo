@@ -11,25 +11,23 @@
             <fieldset>
                 <legend>Dados Cadastrais</legend>
                 <div>
-                    <label>Nome *</label>                      
-                    <input type="hidden" name ="contrato_id" value ="<?= @$obj->_contrato_id; ?>" id ="txtcontratoId">
-                    <input type="text" id="txtNome" name="nome"  class="texto09" value="<?= @$obj->_nome; ?>" required=""/>
+                    <label>Nome</label>                      
+                    <input type="hidden" name ="contrato_id" value ="<?= @$obj->_estoque_contrato_id; ?>" id ="txtcontratoId">
+                    <input type="text" id="txtNome" name="nome"  class="texto09" value="<?= @$obj->_nome; ?>" />
                 </div>
                 <div>
                     <label>Data inicio</label>
-                    <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" class="texto02" required=""/>
+                    <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" class="texto02" required="" value="<?= @$obj->_dt_inicio; ?>"/>
                 </div>
                 <div>
                     <label>Data Termino</label>
-                    <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" class="texto02" required=""/>
+                    <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" class="texto02" required="" value="<?= @$obj->_dt_fim; ?>"/>
                 </div>
             </fieldset>
             <fieldset>
                 <legend>Local do Contrato</legend>
                 <div>
                     <label>Endere&ccedil;o</label>
-
-
                     <input type="text" id="txtendereco" class="texto10" name="endereco" value="<?= @$obj->_logradouro; ?>" />
                 </div>
                 <div>
@@ -40,8 +38,6 @@
                 </div>
                 <div>
                     <label>Bairro</label>
-
-
                     <input type="text" id="txtBairro" class="texto03" name="bairro" value="<?= @$obj->_bairro; ?>" />
                 </div>
                 <div>
@@ -55,8 +51,8 @@
                     <label>Município</label>
 
 
-                    <input type="hidden" id="txtCidadeID" class="texto_id" name="municipio_id" value="<?= @$obj->_cidade; ?>" readonly="true" />
-                    <input type="text" id="txtCidade" class="texto04" name="txtCidade" value="<?= @$obj->_cidade_nome; ?>" />
+                    <input type="hidden" id="txtCidadeID" class="texto_id" name="municipio_id" value="<?= @$obj->_municipio_id; ?>" readonly="true" />
+                    <input type="text" id="txtCidade" class="texto04" name="txtCidade" value="<?= @$obj->_municipio_nome; ?>" />
                 </div>
             </fieldset>
 
@@ -73,85 +69,107 @@
                             ?>
 
                             <option   value =<?php echo $item->financeiro_credor_devedor_id; ?> <?
-                            if (@$obj->_credor_devedor_id == $item->financeiro_credor_devedor_id):echo 'selected';
+                            if (@$obj->_credor_devedor == $item->financeiro_credor_devedor_id):echo 'selected';
                             endif;
                             ?>><?php echo $item->razao_social; ?></option>
                                       <?php
                                   }
                                   ?> 
                     </select>
-                    
+
                     <label>Tipo do Contrato *</label>
                     <select name="tipoContrato" id="tipoContrato" class="size8" required="">
                         <option value="">Selecione</option>
                         <? foreach ($tipo_contrato as $tipo) : ?>
-                            <option value="<?= $tipo->tipo_id; ?>"><?= $tipo->descricao; ?></option>
+                            <option value="<?= $tipo->tipo_id; ?>" <?
+                            if (@$obj->_tipo_contrato == $tipo->tipo_id):echo 'selected';
+                            endif;
+                            ?>>
+                                <?= $tipo->descricao; ?></option>
                         <? endforeach; ?>
                     </select>
-                    
+
                 </div>
                 <div>
                     <label>Situaçao</label>
-                    <input type="text" id="situacaoContrato" class="texto04" name="situacaoContrato" value="<?= @$obj->_complemento; ?>" />
-                    
-                   
+                    <input type="text" id="situacaoContrato" class="texto04" name="situacaoContrato" value="<?= @$obj->_situacao; ?>" />
+
+
                     <label>Numero do Contrato *</label>
-                    <input type="text" id="numContrato" name="numContrato"  class="texto03" value="<?= @$obj->_conselho; ?>"/>
-                    
+                    <input type="text" id="numContrato" name="numContrato"  class="texto03" value="<?= @$obj->_numero_contrato; ?>"/>
+
                 </div>
                 <div>
                     <label>Data Assinatura</label>
-                    <input type="text" name="txtdata_assinatura" id="txtdata_assinatura" alt="date" class="texto02"/>
-<!--                </div>
-                <div>-->
+                    <input type="text" name="txtdata_assinatura" id="txtdata_assinatura" alt="date" class="texto02" value="<?= @$obj->_dt_assinatura; ?>"/>
+                    <!--                </div>
+                                    <div>-->
                     <label>Valor Inicial</label>
-                    <input type="text" id="valorInicial" class="texto02" alt="decimal" name="valorInicial" value="<?= @$obj->_complemento; ?>" />
+                    <input type="text" id="valorInicial" class="texto02" alt="decimal" name="valorInicial" value="<?= @$obj->_valor_inicial; ?>" />
                 </div>
-                 
-                    
+
+
                 <div>
                     <label>Calçao</label>
-                    <input type="text" id="calcao" class="texto02" alt="decimal" name="calcao" value="<?= @$obj->_complemento; ?>" />
+                    <input type="text" id="calcao" class="texto02" alt="decimal" name="calcao" value="<?= @$obj->_calcao; ?>" />
                 </div>
-                    
+
 
 
             </fieldset>
 
             <fieldset>
                 <legend>Dados do Pagamento</legend>
-                
+                <?
+                $readonly = '';
+                $required = 'required="true"';
+                if (@$obj->_faturado == 't'): $readonly = 'readonly="true"'; $required = '';
+                    ?>
+                    <h4 style="color: red; font-weight: bold; text-decoration: underline">Esse contrato ja foi faturado! Nao sera possivel alterar esses dados.</h4>
+                <? endif; ?>
+
+                <div>
+                    <label>Conta</label>
+                    <select name="conta" id="conta" class="texto03">
+                        <option value="">SELECIONE</option>
+                        <? foreach ($conta as $value) { ?>
+                            <option value="<?= $value->forma_entradas_saida_id ?>" <?
+                            if (@$obj->_conta_id == $value->forma_entradas_saida_id):echo 'selected';
+                            endif;
+                            ?>><?= $value->descricao ?></option>
+                                <? } ?>                            
+                    </select>
+                </div>
                 <div>
                     <label>Valor da Parcela</label>
-                    <input type="text" id="valorParcela" class="texto02" alt="decimal" name="valorParcela"/>
+                    <input type="hidden" id="faturado" class="texto02" name="faturado" value="<?= @$obj->_faturado ?>"/>
+                    <input type="text" id="valorParcela" class="texto02" alt="decimal" name="valorParcela" <?= $readonly ?> value="<?= @$dados_pagamento[0]->valor ?>"/>
                 </div>
-                
+
                 <div>
                     <label>N° de Parcelas</label>
-                    <input type="text" name="numParcela" id="numParcela" class="texto01" alt="integer"/>
+                    <input type="text" name="numParcela" id="numParcela" class="texto01" alt="integer" <?= $readonly ?> value="<?= count(@$dados_pagamento) ?>"/>
                 </div>
-                 
-                    
+
+
                 <div>
                     <label>Tipo</label>
-                    
-                    <input type="radio" name="tipoPagamento" value="fixo" id="fixo" required=""/>
+
+                    <input type="radio" name="tipoPagamento" value="fixo" id="fixo" <?= $required ?>/>
                     <label for="fixo" style="display: inline; color: black; font-size: 9pt">
                         Dia Fixo
                     </label>
-                    <input type="radio" name="tipoPagamento" value="periodico" id="periodico" required=""/>
+                    <input type="radio" name="tipoPagamento" value="periodico" id="periodico" <?= $required ?>/>
                     <label for="periodico" style="display: inline; color: black; font-size: 9pt">
                         Periodico
                     </label>
                 </div>
                 <div style="width: 100%" id="adcionaisPagamento">
                     <hr>    
-                    
-                    <!--<legend>Informaçoes Adicionais</legend>-->
 
                     <div>
                         <label>Data do Primeiro Vencimento</label>
-                        <input type="text" id="txtdata_vencimento" class="texto02" alt="date" name="txtdata_vencimento" value="" />
+                        <input type="text" id="txtdata_vencimento" class="texto02" alt="date" name="txtdata_vencimento" value="<?= @date("d//m/Y", strtotime($dados_pagamento[0]->data)) ?>" <?= $readonly ?>/>
                     </div>
 
                     <div id="intervalo">
@@ -163,7 +181,7 @@
                 <legend>Adcionais</legend>
                 <div>
                     <label>Clasulas</label>
-                    <textarea name="clasulas" id="clasulas" rows="15" cols="60"  ><?= @$obj->_carimbo; ?></textarea>
+                    <textarea name="clasulas" id="clasulas" rows="15" cols="60"  ><?= @$obj->_clasulas; ?></textarea>
                 </div>
                 <div>
                     <label>Observaçoes</label>
@@ -185,25 +203,25 @@
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
-    
-    $(function(){
-        $("input[type=radio][name=tipoPagamento]").click(function() {
+
+    $(function () {
+        $("input[type=radio][name=tipoPagamento]").click(function () {
             var tipoPagamento = $("input[type=radio][name=tipoPagamento]:checked").val();
-            if(tipoPagamento == 'periodico'){
-                if( $("#intervalo label").length == 0){
+            if (tipoPagamento == 'periodico') {
+                if ($("#intervalo label").length == 0) {
                     var label = '<label>Intervalo (em dias)</label>';
-                    var input = '<input type="text" name="intervalo" class="texto01" alt="integer" required/>';
-                    var campo = label+input;
+                    var input = '<input type="text" name="intervalo" class="texto01" alt="integer" required <?= $readonly ?>/>';
+                    var campo = label + input;
                     $("#intervalo").append(campo);
                 }
-            }
-            else{
+            } else {
                 $("#intervalo label").remove();
                 $("#intervalo input").remove();
             }
         });
     });
-    
+
+
     $(function () {
         $("#txtdata_assinatura").datepicker({
             autosize: true,
@@ -216,17 +234,21 @@
         });
     });
 
-    $(function () {
-        $("#txtdata_vencimento").datepicker({
-            autosize: true,
-            changeYear: true,
-            changeMonth: true,
-            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-            buttonImage: '<?= base_url() ?>img/form/date.png',
-            dateFormat: 'dd/mm/yy'
+<? if (@$obj->_faturado != 't'): ?>
+
+        $(function () {
+            $("#txtdata_vencimento").datepicker({
+                autosize: true,
+                changeYear: true,
+                changeMonth: true,
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                buttonImage: '<?= base_url() ?>img/form/date.png',
+                dateFormat: 'dd/mm/yy'
+            });
         });
-    });
+
+<? endif; ?>
     $(function () {
         $("#txtdata_inicio").datepicker({
             autosize: true,

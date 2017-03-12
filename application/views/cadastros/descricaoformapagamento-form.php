@@ -13,7 +13,7 @@
                         <input type="text" name="txtNome" class="texto05" value="<?= @$descricao[0]->nome; ?>" />
                     </dd>
 
-                    <dt>
+<!--                    <dt>
                         <label>Ajuste</label>
                     </dt>
                     <dd>
@@ -44,7 +44,7 @@
                     </dt>
                     <dd>
                         <input type="text" name="parcela_minima" class="texto02" id="parcela_minima" value= "<?= @$descricao[0]->parcela_minima; ?>" />
-                    </dd>
+                    </dd>-->
                     <dt>
                         <label>Conta</label>
                     </dt>
@@ -104,9 +104,11 @@
 
     $("#cartao").click(function () {
         $("#boleto").removeAttr('checked');
+        $("#dinheiro").removeAttr('checked');
     });
     $("#boleto").click(function () {
         $("#cartao").removeAttr('checked');
+        $("#dinheiro").removeAttr('checked');
     });
 
 

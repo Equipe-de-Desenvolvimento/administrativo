@@ -34,7 +34,7 @@
             </div>
             <div>
                 <label for="txtqtde">Quantidade</label>
-                <input type="text" name="txtqtde" id="txtqtde" class="texto01" alt="integer" required/>
+                <input type="text" name="txtqtde" id="txtqtde" class="texto01" alt="integer" value="1" required/>
             </div>
 
             <div style="margin-left: -10pt; margin-right: 0;">

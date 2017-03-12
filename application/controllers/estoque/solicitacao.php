@@ -359,6 +359,8 @@ class Solicitacao extends BaseController {
                 $forma_id = $_POST['forma_pagamento_4'];
                 $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
             }
+            
+            $this->solicitacao->gravarfinanceirofaturamento();
 
             if ($verifica) {
                 $data['mensagem'] = 'Faturado com sucesso.';

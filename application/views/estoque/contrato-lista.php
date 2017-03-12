@@ -26,7 +26,7 @@
                         <th class="tabela_header">Data Inicio</th>
                         <th class="tabela_header">Data Fim</th>
                         <th class="tabela_header">Vlr. Inicial</th>
-                        <th class="tabela_header" width="70px;" colspan="2"><center>Detalhes</center></th>
+                        <th class="tabela_header" width="70px;" colspan="7"><center>Detalhes</center></th>
                     </tr>
                 </thead>
                 <?php
@@ -56,11 +56,24 @@
 
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a href="<?= base_url() ?>estoque/contrato/carregarcontrato/<?= $item->estoque_contrato_id ?>">Editar</a>
-                            </td>
+                                </td>
+                                
+                                <? if($item->faturado == 'f'): ?>
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
                                     <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Contrato?');" href="<?= base_url() ?>estoque/contrato/excluir/<?= $item->estoque_contrato_id ?>">Excluir</a>
-                            </td>
-                        </tr>
+                                </td>
+                                
+                                <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                    <a onclick="javascript: return confirm('Deseja realmente faturar esse Contrato?');" href="<?= base_url() ?>estoque/contrato/faturarcontrato/<?= $item->estoque_contrato_id ?>">Faturar</a>
+                                </td>
+                                
+                                <? else: ?>
+                                <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                    <span style="color:green;font-weight: bold">Faturado</span>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="70px;"></td>
+                                <?  endif;?>
+                            </tr>
 
                         </tbody>
                         <?php
@@ -69,7 +82,7 @@
                         ?>
                         <tfoot>
                             <tr>
-                                <th class="tabela_footer" colspan="9">
+                                <th class="tabela_footer" colspan="15">
                                    <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
                                 </th>

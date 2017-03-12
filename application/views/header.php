@@ -381,16 +381,18 @@ function debug($object) {
                                 <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/grupospagamento">Forma de Pagamento Grupo</a></span></ul>
                             <? } ?>
                         </li> 
-<!--                        <li><span class="folder">Tabelas/Impostos</span>
+                        <li><span class="folder">Tabelas</span>
                             <? if ($perfil_id == 1) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/pesquisardescricao">Manter Natureza de Operação</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tipo">Manter CFOP</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter CST</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/classe">Manter NCM</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter CEST</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter cEAN / cEANTrib</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarnaturezaoperacao">Manter Natureza de Operação</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcfop">Manter CFOP</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (ICMS)</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (IPI)</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (PIS/COFINS)</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarncm">Manter NCM</a></span></ul>
+                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcest">Manter CEST</a></span></ul>
+                                <!--<ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcean">Manter cEAN / cEANTrib</a></span></ul>-->
                             <? } ?>
-                        </li> -->
+                        </li> 
                         <li><span class="folder">Administrativas</span>
                             <? if ($perfil_id == 1 || $perfil_id == 3) { ?>
                                 <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador">Listar Profissionais</a></span></ul>    

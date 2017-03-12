@@ -124,56 +124,34 @@
     $fone = $dadosNFe['destFONE'];
     $resp = $nfe->tagenderDest($xLgr, $nro, $xCpl, $xBairro, $cMun, $xMun, $UF, $CEP, $cPais, $xPais, $fone);
 
-    //produtos 1 (Limite da API é de 56 itens por Nota)
-    $aP[] = array(
-            'nItem' => 1,
-            'cProd' => '15',
-            'cEAN' => '97899072659522', /* CASO O PRODUTO POSSUA */
-            'xProd' => 'Chopp Pilsen - Barril 30 Lts',
-            'NCM' => '22030000',
-            'EXTIPI' => '',
-            'CFOP' => '5101',
-            'uCom' => 'Un',
-            'qCom' => '4',
-            'vUnCom' => '210.00',
-            'vProd' => '840.00',
-            'cEANTrib' => '',
-            'uTrib' => 'Lt',
-            'qTrib' => '120',
-            'vUnTrib' => '7.00',
-            'vFrete' => '',
-            'vSeg' => '',
-            'vDesc' => '',
-            'vOutro' => '',
-            'indTot' => '1',
-            'xPed' => '16',
-            'nItemPed' => '1',
-            'nFCI' => '');
-    //produtos 2        
-    $aP[] = array(
-            'nItem' => 2,
-            'cProd' => '56',
-            'cEAN' => '7896030801822',
-            'xProd' => 'Copo Personalizado Klima 300ml',
-            'NCM' => '39241000',
-            'EXTIPI' => '',
-            'CFOP' => '5102',
-            'uCom' => 'Cx',
-            'qCom' => '2',
-            'vUnCom' => '180.00',
-            'vProd' => '360.00',
-            'cEANTrib' => '',
-            'uTrib' => 'Cx',
-            'qTrib' => '2',
-            'vUnTrib' => '180.00',
-            'vFrete' => '',
-            'vSeg' => '',
-            'vDesc' => '',
-            'vOutro' => '',
-            'indTot' => '1',
-            'xPed' => '16',
-            'nItemPed' => '2',
-            'nFCI' => '');
+    //produtos (Limite da API é de 56 itens por Nota)
+    foreach ($dadosProdutos as $produto) {
+        $aP[] = array(
+                'nItem' => $produto['numItem'],
+                'cProd' => $produto['codigoProduto'],
+                'cEAN' => $produto['cEAN'], /* CASO O PRODUTO POSSUA */
+                'CEST' => $produto['prodCEST'], 
+                'xProd' => $produto['nomeProd'],
+                'NCM' => $produto['ncm'],
+                'EXTIPI' => $produto['ex_tipi'],
+                'CFOP' => $produto['cfop'],
+                'uCom' => $produto['unCompra'],
+                'qCom' => $produto['qtdeCompra'],
+                'vUnCom' => $produto['valUniComp'],
+                'vProd' => $produto['valProduto'],
+                'cEANTrib' => $produto['cEAN_Trib'],
+                'uTrib' => $produto['uniTrib'],
+                'qTrib' => $produto['qtdeTrib'],
+                'vUnTrib' => $produto['valUniTrib'],
+                'vFrete' => $produto['valorFrete'],
+                'vSeg' => $produto['valorSeguro'],
+                'vDesc' => $produto['valorDesconto'],
+                'vOutro' => $produto['valorOutros'],
+                'indTot' => $produto['indTot'],
+                'xPed' => $produto['numPedido'],
+                'nItemPed' => $produto['itemPedido'],
+                'nFCI' => '');
+    }
 
     foreach ($aP as $prod) {
         $nItem = $prod['nItem'];
@@ -201,15 +179,21 @@
         $nFCI = $prod['nFCI'];
         $resp = $nfe->tagprod($nItem, $cProd, $cEAN, $xProd, $NCM, $EXTIPI, $CFOP, $uCom, $qCom, $vUnCom, $vProd, $cEANTrib, $uTrib, $qTrib, $vUnTrib, $vFrete, $vSeg, $vDesc, $vOutro, $indTot, $xPed, $nItemPed, $nFCI);
     }
-    $nfe->tagCEST(1, '2345');
-    $nfe->tagCEST(2, '9999');
+
+    foreach ($aP as $prod) {
+        $nfe->tagCEST($prod['nItem'], $prod['CEST']);
+    }
     // Informações adicionais na linha do Produto
     /*$nItem = 1; //produtos 1
     $vDesc = 'Barril 30 Litros Chopp Tipo Pilsen - Pedido Nº15';
     $resp = $nfe->taginfAdProd($nItem, $vDesc);*/
-    $nItem = 2; //produtos 2
-    $vDesc = 'Caixa com 1000 unidades';
-    $resp = $nfe->taginfAdProd($nItem, $vDesc);
+    // $nItem = 2; //produtos 2
+    // $vDesc = 'Caixa com 1000 unidades';
+    // $resp = $nfe->taginfAdProd($nItem, $vDesc);
+
+    foreach ($aP as $prod) {
+        $resp = $nfe->taginfAdProd($prod['nItem'], $prod['prodDescricao']);
+    }
 
     //DI - Declaração de Importação
     /*$nItem = '1';
@@ -245,84 +229,67 @@
     //$qExport = '100';
     //$resp = $nfe->tagdetExport($nItem, $nDraw, $exportInd, $nRE, $chNFe, $qExport);
 
-    //Impostos
-    $nItem = 1; //produtos 1
-    $vTotTrib = '449.90'; // 226.80 ICMS + 51.50 ICMSST + 50.40 IPI + 39.36 PIS + 81.84 CONFIS
-    $resp = $nfe->tagimposto($nItem, $vTotTrib);
-    $nItem = 2; //produtos 2
-    $vTotTrib = '74.34'; // 61.20 ICMS + 2.34 PIS + 10.80 CONFIS
-    $resp = $nfe->tagimposto($nItem, $vTotTrib);
+    // //Impostos
+    // $nItem = 1; //produtos 1
+    // $vTotTrib = '449.90'; // 226.80 ICMS + 51.50 ICMSST + 50.40 IPI + 39.36 PIS + 81.84 CONFIS
+    // $resp = $nfe->tagimposto($nItem, $vTotTrib);
+    // $nItem = 2; //produtos 2
+    // $vTotTrib = '74.34'; // 61.20 ICMS + 2.34 PIS + 10.80 CONFIS
+    // $resp = $nfe->tagimposto($nItem, $vTotTrib);
 
-    //ICMS - Imposto sobre Circulação de Mercadorias e Serviços
-    $nItem = 1; //produtos 1
-    $orig = '0';
-    $cst = '00'; // Tributado Integralmente
-    $modBC = '3';
-    $pRedBC = '';
-    $vBC = '840.00'; // = $qTrib * $vUnTrib
-    $pICMS = '27.00'; // Alíquota do Estado de GO p/ 'NCM 2203.00.00 - Cervejas de Malte, inclusive Chope'
-    $vICMS = '226.80'; // = $vBC * ( $pICMS / 100 )
-    $vICMSDeson = '';
-    $motDesICMS = '';
-    $modBCST = '';
-    $pMVAST = '';
-    $pRedBCST = '';
-    $vBCST = '';
-    $pICMSST = '';
-    $vICMSST = '';
-    $pDif = '';
-    $vICMSDif = '';
-    $vICMSOp = '';
-    $vBCSTRet = '';
-    $vICMSSTRet = '';
-    $resp = $nfe->tagICMS($nItem, $orig, $cst, $modBC, $pRedBC, $vBC, $pICMS, $vICMS, $vICMSDeson, $motDesICMS, $modBCST, $pMVAST, $pRedBCST, $vBCST, $pICMSST, $vICMSST, $pDif, $vICMSDif, $vICMSOp, $vBCSTRet, $vICMSSTRet);
 
-    $nItem = 2; //produtos 2
-    $orig = '0';
-    $cst = '00';
-    $modBC = '3';
-    $pRedBC = '';
-    $vBC = '360.00'; // = $qTrib * $vUnTrib
-    $pICMS = '17.00'; // Alíquota Interna do Estado de GO 
-    $vICMS = '61.20'; // = $vBC * ( $pICMS / 100 )
-    $vICMSDeson = '';
-    $motDesICMS = '';
-    $modBCST = '';
-    $pMVAST = '';
-    $pRedBCST = '';
-    $vBCST = ''; 
-    $pICMSST = '';
-    $vICMSST = '';
-    $pDif = '';
-    $vICMSDif = '';
-    $vICMSOp = '';
-    $vBCSTRet = '';
-    $vICMSSTRet = '';
-    $resp = $nfe->tagICMS($nItem, $orig, $cst, $modBC, $pRedBC, $vBC, $pICMS, $vICMS, $vICMSDeson, $motDesICMS, $modBCST, $pMVAST, $pRedBCST, $vBCST, $pICMSST, $vICMSST, $pDif, $vICMSDif, $vICMSOp, $vBCSTRet, $vICMSSTRet);
+    foreach ($dadosProdutos as $produto) {
+        $nItem = $prod['nItem']; 
+        $vTotTrib = $prod['valTotImposto']; 
+        $resp = $nfe->tagimposto($nItem, $vTotTrib);
 
-    //ICMS 10
-    $nItem = 1; //produtos 1
-    $orig = '0';
-    $cst = '10'; // Tributada e com cobrança do ICMS por substituição tributária
-    $modBC = '3';
-    $pRedBC = '';
-    $vBC = '840.00';
-    $pICMS = '27.00'; // Alíquota do Estado de GO p/ 'NCM 2203.00.00 - Cervejas de Malte, inclusive Chope'
-    $vICMS = '226.80'; // = $vBC * ( $pICMS / 100 )
-    $vICMSDeson = '';
-    $motDesICMS = '';
-    $modBCST = '5'; // Calculo Por Pauta (valor)
-    $pMVAST = '';
-    $pRedBCST = '';
-    $vBCST = '1030.80'; // Pauta do Chope Claro 1000ml em GO R$ 8,59 x 60 Litros
-    $pICMSST = '27.00'; // GO para GO
-    $vICMSST = '51.50'; // = (Valor da Pauta * Alíquota ICMS ST) - Valor ICMS Próprio
-    $pDif = '';
-    $vICMSDif = '';
-    $vICMSOp = '';
-    $vBCSTRet = '';
-    $vICMSSTRet = '';
-    $resp = $nfe->tagICMS($nItem, $orig, $cst, $modBC, $pRedBC, $vBC, $pICMS, $vICMS, $vICMSDeson, $motDesICMS, $modBCST, $pMVAST, $pRedBCST, $vBCST, $pICMSST, $vICMSST, $pDif, $vICMSDif, $vICMSOp, $vBCSTRet, $vICMSSTRet);
+        //ICMS - Imposto sobre Circulação de Mercadorias e Serviços
+        $orig = $prod['orig_ICMS'];
+        $cst = $prod['cst_ICMS']; // Tributado Integralmente
+        $modBC = $prod['modBC_ICMS'];
+        $pRedBC = '';
+        $vBC = $prod['valorBC_ICMS']; // = $qTrib * $vUnTrib
+        $pICMS = $prod['percICMS_ICMS']; 
+        $vICMS = $prod['valorICMS_ICMS']; // = $vBC * ( $pICMS / 100 )
+        $vICMSDeson = '';
+        $motDesICMS = '';
+        $modBCST = '';
+        $pMVAST = '';
+        $pRedBCST = '';
+        $vBCST = '';
+        $pICMSST = '';
+        $vICMSST = '';
+        $pDif = '';
+        $vICMSDif = '';
+        $vICMSOp = '';
+        $vBCSTRet = '';
+        $vICMSSTRet = '';
+        $resp = $nfe->tagICMS($nItem, $orig, $cst, $modBC, $pRedBC, $vBC, $pICMS, $vICMS, $vICMSDeson, $motDesICMS, $modBCST, $pMVAST, $pRedBCST, $vBCST, $pICMSST, $vICMSST, $pDif, $vICMSDif, $vICMSOp, $vBCSTRet, $vICMSSTRet);
+    }
+
+    // //ICMS 10
+    // $nItem = 1; //produtos 1
+    // $orig = '0';
+    // $cst = '10'; // Tributada e com cobrança do ICMS por substituição tributária
+    // $modBC = '3';
+    // $pRedBC = '';
+    // $vBC = '840.00';
+    // $pICMS = '27.00'; // Alíquota do Estado de GO p/ 'NCM 2203.00.00 - Cervejas de Malte, inclusive Chope'
+    // $vICMS = '226.80'; // = $vBC * ( $pICMS / 100 )
+    // $vICMSDeson = '';
+    // $motDesICMS = '';
+    // $modBCST = '5'; // Calculo Por Pauta (valor)
+    // $pMVAST = '';
+    // $pRedBCST = '';
+    // $vBCST = '1030.80'; // Pauta do Chope Claro 1000ml em GO R$ 8,59 x 60 Litros
+    // $pICMSST = '27.00'; // GO para GO
+    // $vICMSST = '51.50'; // = (Valor da Pauta * Alíquota ICMS ST) - Valor ICMS Próprio
+    // $pDif = '';
+    // $vICMSDif = '';
+    // $vICMSOp = '';
+    // $vBCSTRet = '';
+    // $vICMSSTRet = '';
+    // $resp = $nfe->tagICMS($nItem, $orig, $cst, $modBC, $pRedBC, $vBC, $pICMS, $vICMS, $vICMSDeson, $motDesICMS, $modBCST, $pMVAST, $pRedBCST, $vBCST, $pICMSST, $vICMSST, $pDif, $vICMSDif, $vICMSOp, $vBCSTRet, $vICMSSTRet);
 
     $vST = $vICMSST; // Total de ICMS ST
 
@@ -335,53 +302,57 @@
     //ICMSSN - Tributação ICMS pelo Simples Nacional - CRT (Código de Regime Tributário) = 1 
     //$resp = $nfe->tagICMSSN($nItem, $orig, $csosn, $modBC, $vBC, $pRedBC, $pICMS, $vICMS, $pCredSN, $vCredICMSSN, $modBCST, $pMVAST, $pRedBCST, $vBCST, $pICMSST, $vICMSST, $vBCSTRet, $vICMSSTRet);
 
-    //IPI - Imposto sobre Produto Industrializado
-    $nItem = 1; //produtos 1
-    $cst = '50'; // 50 - Saída Tributada (Código da Situação Tributária)
-    $clEnq = '';
-    $cnpjProd = '';
-    $cSelo = '';
-    $qSelo = '';
-    $cEnq = '999';
-    $vBC = '840.00';
-    $pIPI = '6.00'; //Calculo por alíquota - 6% Alíquota GO.
-    $qUnid = '';
-    $vUnid = '';
-    $vIPI = '50.40'; // = $vBC * ( $pIPI / 100 )
-    $resp = $nfe->tagIPI($nItem, $cst, $clEnq, $cnpjProd, $cSelo, $qSelo, $cEnq, $vBC, $pIPI, $qUnid, $vUnid, $vIPI);
+    foreach ($dadosProdutos as $produto) {
+        //IPI - Imposto sobre Produto Industrializado
+        $nItem = $prod['nItem']; //produtos 1
+        $cst = $prod['cst_IPI']; // 50 - Saída Tributada (Código da Situação Tributária)
+        $clEnq = '';
+        $cnpjProd = '';
+        $cSelo = '';
+        $qSelo = '';
+        $cEnq = $prod['codEnq_IPI'];
+        $vBC = $prod['valorBC_IPI'];
+        $pIPI = $prod['percIPI_IPI']; //Calculo por alíquota - 6% Alíquota GO.
+        $qUnid = '';
+        $vUnid = '';
+        $vIPI = $prod['valorIPI_IPI']; // = $vBC * ( $pIPI / 100 )
+        $resp = $nfe->tagIPI($nItem, $cst, $clEnq, $cnpjProd, $cSelo, $qSelo, $cEnq, $vBC, $pIPI, $qUnid, $vUnid, $vIPI);
+    }
 
-    $nItem = 2; //produtos 2
-    $cst = '53'; // 53 - Saída Não-Tributada
-    $clEnq = '';
-    $cnpjProd = '';
-    $cSelo = '';
-    $qSelo = '';
-    $cEnq = '999';
-    $vBC = '';
-    $pIPI = '';
-    $qUnid = '';
-    $vUnid = '';
-    $vIPI = ''; // = $vBC * ( $pIPI / 100 )
-    $resp = $nfe->tagIPI($nItem, $cst, $clEnq, $cnpjProd, $cSelo, $qSelo, $cEnq, $vBC, $pIPI, $qUnid, $vUnid, $vIPI);
+    // $nItem = 2; //produtos 2
+    // $cst = '53'; // 53 - Saída Não-Tributada
+    // $clEnq = '';
+    // $cnpjProd = '';
+    // $cSelo = '';
+    // $qSelo = '';
+    // $cEnq = '999';
+    // $vBC = '';
+    // $pIPI = '';
+    // $qUnid = '';
+    // $vUnid = '';
+    // $vIPI = ''; // = $vBC * ( $pIPI / 100 )
+    // $resp = $nfe->tagIPI($nItem, $cst, $clEnq, $cnpjProd, $cSelo, $qSelo, $cEnq, $vBC, $pIPI, $qUnid, $vUnid, $vIPI);
 
-    //PIS - Programa de Integração Social
-    $nItem = 1; //produtos 1
-    $cst = '03'; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
-    $vBC = ''; 
-    $pPIS = '';
-    $vPIS = '39.36';
-    $qBCProd = '60.00';
-    $vAliqProd = '0.3280';
-    $resp = $nfe->tagPIS($nItem, $cst, $vBC, $pPIS, $vPIS, $qBCProd, $vAliqProd);
+    foreach ($dadosProdutos as $produto) {
+        //PIS - Programa de Integração Social
+        $nItem = $prod['nItem']; //produtos 1
+        $cst = $prod['cst_PIS']; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
+        $vBC = $prod['valorBC_PIS']; 
+        $pPIS = $prod['percPIS_PIS'];
+        $vPIS = $prod['valorPIS_PIS'];
+        $qBCProd = $prod['nItem'];
+        $vAliqProd = $prod['nItem'];
+        $resp = $nfe->tagPIS($nItem, $cst, $vBC, $pPIS, $vPIS, $qBCProd, $vAliqProd);
+    }
 
-    $nItem = 2; //produtos 2
-    $cst = '01'; //Operação Tributável (base de cálculo = (valor da operação * alíquota normal) / 100
-    $vBC = '180.00'; 
-    $pPIS = '0.6500';
-    $vPIS = '2.34';
-    $qBCProd = '';
-    $vAliqProd = '';
-    $resp = $nfe->tagPIS($nItem, $cst, $vBC, $pPIS, $vPIS, $qBCProd, $vAliqProd);
+    // $nItem = 2; //produtos 2
+    // $cst = '01'; //Operação Tributável (base de cálculo = (valor da operação * alíquota normal) / 100
+    // $vBC = '180.00'; 
+    // $pPIS = '0.6500';
+    // $vPIS = '2.34';
+    // $qBCProd = '';
+    // $vAliqProd = '';
+    // $resp = $nfe->tagPIS($nItem, $cst, $vBC, $pPIS, $vPIS, $qBCProd, $vAliqProd);
 
     //PISST
     //$resp = $nfe->tagPISST($nItem, $vBC, $pPIS, $qBCProd, $vAliqProd, $vPIS);
@@ -640,7 +611,13 @@
     if ($resp) {
         // header('Content-type: text/xml; charset=UTF-8');
         $xml = $nfe->getXML();
-        $filename = "/home/johnny/projetos/administrativo/upload/nfe/204/{$chave}-nfe.xml"; // Ambiente Linux
+        
+        if (!is_dir("./home/johnny/projetos/administrativo/upload/nfe/$solicitacao_cliente_id")) {
+            mkdir("./home/johnny/projetos/administrativo/upload/nfe/$solicitacao_cliente_id");
+            $destino = "./home/johnny/projetos/administrativo/upload/nfe/$solicitacao_cliente_id";
+            chmod($destino, 0777);
+        }
+        $filename = "/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/{$chave}-nfe.xml"; // Ambiente Linux
         $arq = fopen($filename, 'w+');
         fwrite($arq, $xml);
         fclose($arq);

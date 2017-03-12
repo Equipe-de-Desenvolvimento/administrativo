@@ -45,11 +45,11 @@ class Contrato extends BaseController {
     function carregarcontrato($estoque_contrato_id) {
         $obj_contrato = new contrato_model($estoque_contrato_id);
         $data['obj'] = $obj_contrato;
-        $data['descricao_pagamento'] = $this->contrato->listardescricaopagamento();
-        $data['forma_pagamento'] = $this->contrato->listarformapagamento();
-//        $data['clientes'] = $this->contrato->listarclientes();
+        
         $data['tipo_contrato'] = $this->contrato->listartipos();
-        //$this->carregarView($data, 'giah/servidor-form');
+        $data['conta'] = $this->contrato->listarforma();
+        $data['dados_pagamento'] = $this->contrato->listardadospagamento($estoque_contrato_id);
+//        var_dump($data['dados_pagamento']);die;
         $this->loadView('estoque/contrato-form', $data);
     }
 
@@ -79,6 +79,18 @@ class Contrato extends BaseController {
         redirect(base_url() . "estoque/contrato");
     }
 
+    
+    function faturarcontrato($estoque_contrato_id) {
+        $erro = $this->contrato->faturarcontrato($estoque_contrato_id);
+        if ($erro) {
+            $data['mensagem'] = 'Erro ao gravar ao faturar contrato. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao faturar contrato.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/contrato");
+    }
+    
     function contratosetor($operador_id) {
 
         $data['operadores'] = $this->contrato->listaroperadores($operador_id);

@@ -149,6 +149,7 @@ class Notafiscal extends BaseController {
             $data['identificaDestOp'] = '2';
         }
         
+        //Essa variavel de configuração sera usada para carregar as configurações iniciais da NFe
         $config = $this->geraconfignfephp();
         
         $dadosNFe = array(
@@ -199,10 +200,20 @@ class Notafiscal extends BaseController {
         
         /* DADOS DOS PRODUTOS */
         for($i = 0, $n = 1; $i <= count($data['produtos']); $i++, $n++){
+            
+            $percPis = 0.65;
+            $valBC = ((int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda );
+            $valTotICMS = $valBC * ( ((float)$data['produtos'][$i]->icms)/100 );
+            $valTotIPI = $valBC * ( ((float)$data['produtos'][$i]->ipi)/100 );
+            $valTotPIS = $valBC * ( $percPis/100 );
+            
+            
+            $valTotImpostos = $valTotICMS+$valTotIPI+$valTotPIS;
+            
             $dadosProdutos[$i] = array(
                 /* Dados Basicos */
                 "numItem" => $n,
-                "codigoProduto" => 'CFOP'.$data['produtos'][$i]->codigo_cfop, //CFOPXXXX
+                "codigoProduto" => $data['produtos'][$i]->estoque_produto_id, // Codigo de controle no sistema do cliente
                 "cEAN" => $data['produtos'][$i]->codigo,
                 "nomeProd" => $data['produtos'][$i]->descricao,
                 "ncm" => $data['produtos'][$i]->ncm, 
@@ -210,16 +221,66 @@ class Notafiscal extends BaseController {
                 "cfop" => $data['produtos'][$i]->codigo_cfop,
                 "unCompra" => $data['produtos'][$i]->unidade,
                 "qtdeCompra" => $data['produtos'][$i]->quantidade,
-                "valUniComp" => '',
-                "valProduto" => '',
+                "valUniComp" => $data['produtos'][$i]->valor_venda,
+                "valProduto" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
                 "cEAN_Trib" => '',
-                "uniTrib" => '',
+                "uniTrib" => $data['produtos'][$i]->unidade,
+                "qtdeTrib" => $data['produtos'][$i]->quantidade,
+                "valUniTrib" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
                 "valorFrete" => '', //deixar em branco
                 "valorSeguro" => '', //deixar em branco
                 "valorDesconto" => '', //deixar em branco   
-                "indTot" => 1, // 1 = somar ao valor total da NFe / 0 = nao somar ao vlr tot da nota
+                "valorOutros" => '', //deixar em branco   
+                "indTot" => 1, // | 1 = somar ao valor total da NFe | 0 = nao somar ao vlr tot da nota |
                 "numPedido" => $solicitacao_cliente_id, 
                 "itemPedido" => $n,
+                "prodCEST" => $data['produtos'][$i]->cest,
+                
+                /* DESCRIÇÃO DO PRODUTO(informações adicionais. Ex: Validade, Lote e etc) */
+                "prodDescricao" => '',
+                
+                /* CALCULO DE IMPOSTOS 
+                +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+                * EXISTEM VARIAS MODALIDADES PARA O CALCULO DO ICMS, E CADA UMA DELAS 
+                * DIFERE EM ALGUNS DETALHES. 
+                  EXEMPLOS: 
+                    + icms 00,
+                    + icms 10,                         
+                    + icms 20,                         
+                    + icms 30,                         
+                    + icms 41 entre outros.
+                * CASO NECESSITE MUDAR O TIPO DE ICMS É BOM QUE OLHE NO ARQUIVO 'geraXml.php'
+                * PARA ENTENDER QUAIS AS TAGS NECESSARIAS QUE DEVEM SER ACRESCENTADAS 
+                * ENTRE OUTRAS INFORMAÇÕES          
+                +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++     */
+                //ICMS
+                "orig_ICMS" => substr($data['produtos'][$i]->cst, 0, 1),
+                "cst_ICMS" => substr($data['produtos'][$i]->cst, 1),
+                //CASO SEJA 40, 41 OU 50, SERÃO NECESSARIAS APENAS AS INFORMAÇÕES ACIMAS
+                "modBC_ICMS" => '3',
+                "valorBC_ICMS" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
+                "percICMS_ICMS" => $data['produtos'][$i]->icms, //tag pICMS
+                "valorICMS_ICMS" => $valTotICMS,
+                
+                //IPI
+                "codEnq_IPI" => '999',
+                "cst_IPI" => '', //CRIAR UM CST EXCLUSIVO PARA O IPI
+                "valorBC_IPI" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
+                "percIPI_IPI" => $data['produtos'][$i]->ipi,
+                "valorIPI_IPI" => $valTotIPI,
+                
+                //PIS
+                "cst_PIS" => '', 
+                "valorBC_PIS" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
+                "percPIS_PIS" => $percPis,
+                "valorPIS_PIS" => $valTotPIS,
+                "qBCProd" => '',
+                "vAliqProd" => '',
+                
+                //CONFINS
+                
+                /* VALOR TOTAL DE IMPOSTO */
+                "valTotImposto" => '',
             );
         }
         
@@ -229,7 +290,6 @@ class Notafiscal extends BaseController {
          * GERADO DENTRO DO ARQUIVO 'geraXml.php'
          */
         
-        //endereco do emitente
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
     }
