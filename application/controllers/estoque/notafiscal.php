@@ -43,6 +43,26 @@ class Notafiscal extends BaseController {
         $this->loadView('estoque/notafiscal-ficha', $data);
     }
 
+    function impostosaida($solicitacao_itens_id) {
+        $data['solicitacao_itens_id'] = $solicitacao_itens_id;
+        
+        $data['cst_icms'] = $this->notafiscal->listarcsticms();
+//        var_dump($data['cst_icms']);die;
+        $data['cst_ipi'] = $this->notafiscal->listarcstipi();
+        $data['cst_pis_cofins'] = $this->notafiscal->listarcstpiscofins();
+        
+        $data['produto'] = $this->notafiscal->listardadositem($solicitacao_itens_id);
+        $this->load->view('estoque/impostosaida-form', $data);
+    }
+
+    function gravarimpostosaida() {
+        $this->notafiscal->gravarimpostosaida();
+        
+        echo "<script type='text/javascript'> 
+                    window.close();
+                </script>";
+    }
+
     function informacoesnotafiscal($solicitacao_cliente_id, $notafiscal_id = null) {
         $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
         $data['notafiscal_id'] = $notafiscal_id;
@@ -201,11 +221,13 @@ class Notafiscal extends BaseController {
         /* DADOS DOS PRODUTOS */
         for($i = 0, $n = 1; $i <= count($data['produtos']); $i++, $n++){
             
+            $percCofins = 0.65;
             $percPis = 0.65;
             $valBC = ((int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda );
             $valTotICMS = $valBC * ( ((float)$data['produtos'][$i]->icms)/100 );
             $valTotIPI = $valBC * ( ((float)$data['produtos'][$i]->ipi)/100 );
             $valTotPIS = $valBC * ( $percPis/100 );
+            $valTotCOFINS = $valBC * ( $percCofins/100 );
             
             
             $valTotImpostos = $valTotICMS+$valTotIPI+$valTotPIS;
@@ -277,7 +299,11 @@ class Notafiscal extends BaseController {
                 "qBCProd" => '',
                 "vAliqProd" => '',
                 
-                //CONFINS
+                //COFINS
+                "cst_COFINS" => '', 
+                "valorBC_COFINS" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
+                "percPIS_COFINS" => $percCofins,
+                "valorCOFINS_COFINS" => $valTotCOFINS,
                 
                 /* VALOR TOTAL DE IMPOSTO */
                 "valTotImposto" => '',

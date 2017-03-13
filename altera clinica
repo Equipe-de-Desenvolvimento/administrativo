@@ -423,6 +423,46 @@ ALTER TABLE ponto.tb_estoque_contrato ADD COLUMN faturado boolean DEFAULT false;
 -- Dia 12/03/2017
 ALTER TABLE ponto.tb_estoque_contrato ADD COLUMN conta_id integer;
 ALTER TABLE ponto.tb_estoque_contrato ADD COLUMN data_faturamento timestamp without time zone;
+ALTER TABLE ponto.tb_estoque_entrada ADD COLUMN codigo_cfop character varying(8);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens DROP COLUMN cst;
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst_icms character varying(10);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst_ipi character varying(10);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst_pis character varying(10);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cst_cofins character varying(10);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN pis numeric(10,2);
+ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN cofins numeric(10,2);
+
+
+DROP TABLE ponto.tb_cst;
+CREATE TABLE ponto.tb_cst_icms
+(
+  cst_icms_id serial NOT NULL,
+  cst character varying(600),
+  tipo character varying(600),
+  situacao_tributaria character varying(5000),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_cst_icms_pkey PRIMARY KEY (cst_icms_id)
+);
+
+CREATE TABLE ponto.tb_cst_ipi
+(
+  cst_ipi_id serial NOT NULL,
+  cst character varying(600),
+  situacao_tributaria character varying(5000),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_cst_ipi_pkey PRIMARY KEY (cst_ipi_id)
+);
+
+CREATE TABLE ponto.tb_cst_pis_cofins
+(
+  cst_pis_cofins_id serial NOT NULL,
+  cst character varying(600),
+  situacao_tributaria character varying(5000),
+  ativo boolean DEFAULT true,
+  CONSTRAINT tb_cst_pis_cofins_pkey PRIMARY KEY (cst_pis_cofins_id)
+);
+
+
 
 
 

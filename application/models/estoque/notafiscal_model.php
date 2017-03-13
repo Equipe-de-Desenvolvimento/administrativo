@@ -159,16 +159,57 @@ class notafiscal_model extends Model {
         return $return->result();
     }
 
+    function listarcsticms() {
+        $this->db->select('');
+        $this->db->from('tb_cst_icms');
+        $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listarcstipi() {
+        $this->db->select('');
+        $this->db->from('tb_cst_ipi');
+        $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listarcstpiscofins() {
+        $this->db->select('');
+        $this->db->from('tb_cst_pis_cofins');
+        $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listardadositem($solicitacao_itens_id) {
+        $this->db->select('p.descricao,
+                            es.valor_venda as valor,
+                            es.estoque_solicitacao_itens_id,
+                            sum(es.quantidade) as qtde_total,
+                            (es.valor_venda * sum(es.quantidade)) as valor_total ');
+        $this->db->from('tb_estoque_saida es');
+        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = es.produto_id');
+        $this->db->where('es.estoque_solicitacao_itens_id', $solicitacao_itens_id);
+        $this->db->where('es.ativo', 'true');
+        $this->db->groupby('p.descricao, es.valor_venda, es.estoque_solicitacao_itens_id');
+        $this->db->orderby('p.descricao');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarresumosolicitacao($estoque_solicitacao_id) {
         $this->db->select('p.descricao,
-                            esi.valor,
-                            sum(esi.quantidade) as qtde_total,
-                            (esi.valor * sum(esi.quantidade)) as valor_total ');
-        $this->db->from('tb_estoque_solicitacao_itens esi');
-        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = esi.produto_id');
-        $this->db->where('esi.solicitacao_cliente_id', $estoque_solicitacao_id);
-        $this->db->where('esi.ativo', 'true');
-        $this->db->groupby('p.descricao, esi.valor');
+                            es.valor_venda as valor,
+                            es.estoque_solicitacao_itens_id,
+                            sum(es.quantidade) as qtde_total,
+                            (es.valor_venda * sum(es.quantidade)) as valor_total ');
+        $this->db->from('tb_estoque_saida es');
+        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = es.produto_id');
+        $this->db->where('es.solicitacao_cliente_id', $estoque_solicitacao_id);
+        $this->db->where('es.ativo', 'true');
+        $this->db->groupby('p.descricao, es.valor_venda, es.estoque_solicitacao_itens_id');
         $this->db->orderby('p.descricao');
         $return = $this->db->get();
         return $return->result();

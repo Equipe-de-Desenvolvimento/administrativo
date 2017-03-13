@@ -7,7 +7,7 @@
 
                 <dl class="dl_desconto_lista">
                     <dt>
-                    <label>Produto</label>
+                        <label>Produto</label>
                     </dt>
                     <dd>
                         <input type="hidden" name="txtestoque_entrada_id" id="txtestoque_entrada_id" value="<?= @$obj->_estoque_entrada_id; ?>" />
@@ -15,57 +15,72 @@
                         <input type="text" name="txtprodutolabel" id="txtprodutolabel" class="texto10" value="<?= @$obj->_produto; ?>" required/>
                     </dd>
                     <dt>
-                    <label>Fornecedor</label>
+                        <label>Fornecedor</label>
                     </dt>
                     <dd>
                         <input type="hidden" name="txtfornecedor" id="txtfornecedor" value="<?= @$obj->_fornecedor_id; ?>" />
                         <input type="text" name="txtfornecedorlabel" id="txtfornecedorlabel" class="texto10" value="<?= @$obj->_fornecedor; ?>" required/>
                     </dd>
                     <dt>
-                    <label>Armazem</label>
+                        <label>Armazem</label>
                     </dt>
                     <dd>
                         <select name="txtarmazem" id="txtarmazem" class="size4">
                             <? foreach ($sub as $value) : ?>
                                 <option value="<?= $value->estoque_armazem_id; ?>"<?
-                            if(@$obj->_armazem_id == $value->estoque_armazem_id):echo'selected';
-                            endif;?>><?php echo $value->descricao; ?></option>
+                                if (@$obj->_armazem_id == $value->estoque_armazem_id):echo'selected';
+                                endif;
+                                ?>><?php echo $value->descricao; ?></option>
                                     <? endforeach; ?>
                         </select>
                     </dd>
                     <dt>
-                    <label>Valor de compra</label>
+                        <span title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
+                            <label for="cfop">CFOP</label>
+                        </span>
+                    </dt>
+                    <dd>
+                        <input type="hidden" name="cfop_id" id="cfop_id" class="texto01"/>
+                        <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
+                        <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" readonly/>
+                    </dd>
+                    <dt>
+                        <label>Valor de compra</label>
                     </dt>
                     <dd>
                         <input type="text" id="compra" alt="decimal" class="texto02" name="compra" value="<?= @$obj->_valor_compra; ?>" />
                     </dd>
                     <dt>
-                    <label>Quantidade</label>
+                        <label>Quantidade</label>
                     </dt>
                     <dd>
                         <input type="text" id="quantidade" class="texto02" alt="integer" name="quantidade" value="<?= @$obj->_quantidade; ?>" />
                     </dd>
                     <dt>
-                    <label>Nota Fiscal</label>
+                        <label>Nota Fiscal</label>
                     </dt>
                     <dd>
                         <input type="text" id="nota" alt="integer" class="texto02" name="nota" value="<?= @$obj->_nota_fiscal; ?>" />
                     </dd>
-                    
+
                     <dt>
-                    <label>Validade</label>
+                        <label>Validade</label>
                     </dt>
                     <dd>
-                        <input type="text" id="validade" class="texto02" name="validade" value="<? if( isset($obj->_validade) ){ echo date("d/m/Y", strtotime($obj->_validade)); } ?>" required/>
+                        <input type="text" id="validade" class="texto02" name="validade" value="<?
+                        if (isset($obj->_validade)) {
+                            echo date("d/m/Y", strtotime($obj->_validade));
+                        }
+                        ?>" required/>
                     </dd>
-                    
+
                     <dt>
-                    <label>Lote</label>
+                        <label>Lote</label>
                     </dt>
                     <dd>
                         <input type="text" id="lote" class="texto02" name="lote" value="<?= @$obj->_nota_fiscal; ?>" required/>
                     </dd>
-                 </dl>    
+                </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>
                 <button type="reset" name="btnLimpar">Limpar</button>
@@ -78,54 +93,71 @@
 <link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css">
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">
-    
-    $(function() {
-        $( "#txtfornecedorlabel" ).autocomplete({
+
+    $(function () {
+        $("#txtfornecedorlabel").autocomplete({
             source: "<?= base_url() ?>index.php?c=autocomplete&m=fornecedor",
             minLength: 2,
-            focus: function( event, ui ) {
-                $( "#txtfornecedorlabel" ).val( ui.item.label );
+            focus: function (event, ui) {
+                $("#txtfornecedorlabel").val(ui.item.label);
                 return false;
             },
-            select: function( event, ui ) {
-                $( "#txtfornecedorlabel" ).val( ui.item.value );
-                $( "#txtfornecedor" ).val( ui.item.id );
+            select: function (event, ui) {
+                $("#txtfornecedorlabel").val(ui.item.value);
+                $("#txtfornecedor").val(ui.item.id);
                 return false;
             }
         });
     });
 
-    $(function() {
-        $( "#txtprodutolabel" ).autocomplete({
+    $(function () {
+        $("#cfop").autocomplete({
+            source: "<?= base_url() ?>index.php?c=autocomplete&m=autocompletecfop",
+            minLength: 1,
+            focus: function (event, ui) {
+                $("#cfop").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#descricao_cfop").val(ui.item.descricao);
+                $("#cfop").val(ui.item.cfop);
+                $("#cfop_id").val(ui.item.id);
+                return false;
+            }
+        });
+    });
+
+    $(function () {
+        $("#txtprodutolabel").autocomplete({
             source: "<?= base_url() ?>index.php?c=autocomplete&m=produto",
             minLength: 2,
-            focus: function( event, ui ) {
-                $( "#txtprodutolabel" ).val( ui.item.label );
+            focus: function (event, ui) {
+                $("#txtprodutolabel").val(ui.item.label);
                 return false;
             },
-            select: function( event, ui ) {
-                $( "#txtprodutolabel" ).val( ui.item.value );
-                $( "#txtproduto" ).val( ui.item.id );
+            select: function (event, ui) {
+                $("#txtprodutolabel").val(ui.item.value);
+                $("#txtproduto").val(ui.item.id);
                 return false;
             }
         });
     });
 
-    $(function() {
-        $( "#validade" ).datepicker({
+    $(function () {
+        $("#validade").datepicker({
             autosize: true,
             changeYear: true,
             changeMonth: true,
-            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
             buttonImage: '<?= base_url() ?>img/form/date.png',
             dateFormat: 'dd/mm/yy'
         });
     });
-    
-    
-    $(document).ready(function(){
-        jQuery('#form_entrada').validate( {
+
+
+    $(document).ready(function () {
+        jQuery('#form_entrada').validate({
             rules: {
                 txtproduto: {
                     required: true
@@ -136,7 +168,7 @@
                 compra: {
                     required: true
                 }
-   
+
             },
             messages: {
                 txtproduto: {
@@ -151,9 +183,9 @@
             }
         });
     });
-    
 
-    $(function() {
-        $( "#accordion" ).accordion();
+
+    $(function () {
+        $("#accordion").accordion();
     });
 </script>

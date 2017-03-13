@@ -56,6 +56,7 @@
                         <th class="tabela_header">Valor Unitario</th>
                         <th class="tabela_header">QTDE</th>
                         <th class="tabela_header">Valor Total</th>
+                        <th class="tabela_header" colspan="2">Detalhes</th>
                     </tr>
                 </thead>
                 <? $estilo_linha = "tabela_content01";
@@ -66,6 +67,11 @@
                            <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', ''); ?></td>
                            <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->qtde_total, 0 , ',', ''); ?></td>
                            <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor_total, 2, ',', ''); ?></td>
+                           <td class="<?php echo $estilo_linha; ?>"colspan="2">
+                               <a onclick="javascript:window.open('<?= base_url() ?>estoque/notafiscal/impostosaida/<?=$item->estoque_solicitacao_itens_id?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=1000,height=500');">
+                                   <button type="button">IMPOSTOS</button>
+                               </a>
+                           </td>
                        </tr>
                 <? endforeach; ?>
             </table>

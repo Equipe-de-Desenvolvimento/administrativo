@@ -202,22 +202,6 @@
                 $("#ipi").val(valIpi);
             }
 
-            $(function () {
-                $("#cfop").autocomplete({
-                    source: "<?= base_url() ?>index.php?c=autocomplete&m=autocompletecfop",
-                    minLength: 1,
-                    focus: function (event, ui) {
-                        $("#cfop").val(ui.item.label);
-                        return false;
-                    },
-                    select: function (event, ui) {
-                        $("#descricao_cfop").val(ui.item.descricao);
-                        $("#cfop").val(ui.item.cfop);
-                        $("#cfop_id").val(ui.item.id);
-                        return false;
-                    }
-                });
-            });
 
             $(function () {
                 $("#sit_trib").autocomplete({
@@ -233,7 +217,22 @@
                     }
                 });
             });
-
+ $(function () {
+        $("#cfop").autocomplete({
+            source: "<?= base_url() ?>index.php?c=autocomplete&m=autocompletecfop",
+            minLength: 1,
+            focus: function (event, ui) {
+                $("#cfop").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#descricao_cfop").val(ui.item.descricao);
+                $("#cfop").val(ui.item.cfop);
+                $("#cfop_id").val(ui.item.id);
+                return false;
+            }
+        });
+    });
 
             $(function () {
                 $('#produto_id').change(function () {

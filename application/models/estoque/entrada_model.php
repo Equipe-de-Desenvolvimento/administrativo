@@ -542,6 +542,7 @@ class entrada_model extends Model {
             $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $_POST['quantidade'])));
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
             $this->db->set('lote', $_POST['lote']);
+            $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
             
             if ($_POST['validade'] != "//") {
                 $this->db->set('validade', $_POST['validade']);

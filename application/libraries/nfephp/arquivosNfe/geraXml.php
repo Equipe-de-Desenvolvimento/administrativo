@@ -357,24 +357,25 @@
     //PISST
     //$resp = $nfe->tagPISST($nItem, $vBC, $pPIS, $qBCProd, $vAliqProd, $vPIS);
 
-    //COFINS - Contribuição para o Financiamento da Seguridade Social
-    $nItem = 1; //produtos 1
-    $cst = '03'; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
-    $vBC = '';
-    $pCOFINS = '';
-    $vCOFINS = '81.84';
-    $qBCProd = '60.00';
-    $vAliqProd = '0.682';
-    $resp = $nfe->tagCOFINS($nItem, $cst, $vBC, $pCOFINS, $vCOFINS, $qBCProd, $vAliqProd);
-
-    $nItem = 2; //produtos 2
-    $cst = '01'; //Operação Tributável (base de cálculo = (valor da operação * alíquota normal) / 100
-    $vBC = '180.00';
-    $pCOFINS = '3.00';
-    $vCOFINS = '10.80';
-    $qBCProd = '';
-    $vAliqProd = '';
-    $resp = $nfe->tagCOFINS($nItem, $cst, $vBC, $pCOFINS, $vCOFINS, $qBCProd, $vAliqProd);
+    foreach ($dadosProdutos as $produto) {
+        //COFINS - Contribuição para o Financiamento da Seguridade Social
+        $nItem = $prod['nItem']; //produtos 1
+        $cst = $prod['cst_COFINS']; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
+        $vBC = '';
+        $pCOFINS = '';
+        $vCOFINS = '81.84';
+        $qBCProd = '60.00';
+        $vAliqProd = '0.682';
+        $resp = $nfe->tagCOFINS($nItem, $cst, $vBC, $pCOFINS, $vCOFINS, $qBCProd, $vAliqProd);
+    }
+    // $nItem = 2; //produtos 2
+    // $cst = '01'; //Operação Tributável (base de cálculo = (valor da operação * alíquota normal) / 100
+    // $vBC = '180.00';
+    // $pCOFINS = '3.00';
+    // $vCOFINS = '10.80';
+    // $qBCProd = '';
+    // $vAliqProd = '';
+    // $resp = $nfe->tagCOFINS($nItem, $cst, $vBC, $pCOFINS, $vCOFINS, $qBCProd, $vAliqProd);
 
     //COFINSST
     //$resp = $nfe->tagCOFINSST($nItem, $vBC, $pCOFINS, $qBCProd, $vAliqProd, $vCOFINS);
