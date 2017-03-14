@@ -72,8 +72,7 @@ class Notafiscal extends BaseController {
     function gravarnotafiscaleletronica() {
         $solicitacao_id = $_POST['estoque_cliente_id'];
         $notafiscal_id = $this->notafiscal->gravarnotafiscaleletronica();
-        $this->gerarnotafiscal($solicitacao_id, $notafiscal_id);
-        redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_id/$notafiscal_id");
+        redirect(base_url() . "estoque/notafiscal/gerarnotafiscal/$solicitacao_id/$notafiscal_id");
     }
 
     function geraconfignfephp() {
@@ -162,6 +161,8 @@ class Notafiscal extends BaseController {
         $data['empresa'] = $this->notafiscal->empresa();
         $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
         $data['produtos'] = $this->notafiscal->listarsolicitacaosnota($solicitacao_cliente_id);
+//        echo "<pre>";
+//        var_dump($data['produtos']);die;
         if($this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge) == $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge)){
             $data['identificaDestOp'] = '1';
         }
@@ -218,17 +219,32 @@ class Notafiscal extends BaseController {
             "destFONE" => $this->utilitario->remover_caracter($data['destinatario'][0]->telefone)
         );
         
+        $totalBC = 0;
+        $totalICMS = 0;
+        $totalIPI = 0;
+        $totalPIS = 0;
+        $totalCOFINS = 0;
+        $totalProduto = 0;
+        $totalImposto = 0;
         /* DADOS DOS PRODUTOS */
-        for($i = 0, $n = 1; $i <= count($data['produtos']); $i++, $n++){
+        for($i = 0, $n = 1; $i < count($data['produtos']); $i++, $n++){
             
-            $percCofins = 0.65;
-            $percPis = 0.65;
             $valBC = ((int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda );
             $valTotICMS = $valBC * ( ((float)$data['produtos'][$i]->icms)/100 );
             $valTotIPI = $valBC * ( ((float)$data['produtos'][$i]->ipi)/100 );
-            $valTotPIS = $valBC * ( $percPis/100 );
-            $valTotCOFINS = $valBC * ( $percCofins/100 );
+            $valTotPIS = $valBC * ( ((float)$data['produtos'][$i]->pis)/100 );
+            $valTotCOFINS = $valBC * ( ((float)$data['produtos'][$i]->cofins)/100 );
+            $totImpostoItem = $valTotICMS + $valTotIPI + $valTotPIS + $valTotCOFINS;
+            $totProdItem = (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda;
             
+            /* CALCULANDO VALORES TOTAIS DA NOTA */
+            $totalBC += $totalBC;
+            $totalICMS += $valTotICMS;
+            $totalIPI += $valTotIPI;
+            $totalPIS += $valTotPIS;
+            $totalCOFINS += $valTotCOFINS;
+            $totalProduto += $totProdItem;
+            $totalImposto += $totImpostoItem;
             
             $valTotImpostos = $valTotICMS+$valTotIPI+$valTotPIS;
             
@@ -236,7 +252,7 @@ class Notafiscal extends BaseController {
                 /* Dados Basicos */
                 "numItem" => $n,
                 "codigoProduto" => $data['produtos'][$i]->estoque_produto_id, // Codigo de controle no sistema do cliente
-                "cEAN" => $data['produtos'][$i]->codigo,
+                "cEAN" => '', //FALTA ESSE
                 "nomeProd" => $data['produtos'][$i]->descricao,
                 "ncm" => $data['produtos'][$i]->ncm, 
                 "ex_tipi" => '',
@@ -276,8 +292,8 @@ class Notafiscal extends BaseController {
                 * ENTRE OUTRAS INFORMAÇÕES          
                 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++     */
                 //ICMS
-                "orig_ICMS" => substr($data['produtos'][$i]->cst, 0, 1),
-                "cst_ICMS" => substr($data['produtos'][$i]->cst, 1),
+                "orig_ICMS" => substr($data['produtos'][$i]->cst_icms, 0, 1),
+                "cst_ICMS" => substr($data['produtos'][$i]->cst_icms, 1),
                 //CASO SEJA 40, 41 OU 50, SERÃO NECESSARIAS APENAS AS INFORMAÇÕES ACIMAS
                 "modBC_ICMS" => '3',
                 "valorBC_ICMS" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
@@ -286,29 +302,41 @@ class Notafiscal extends BaseController {
                 
                 //IPI
                 "codEnq_IPI" => '999',
-                "cst_IPI" => '', //CRIAR UM CST EXCLUSIVO PARA O IPI
+                "cst_IPI" => $data['produtos'][$i]->cst_ipi, //CRIAR UM CST EXCLUSIVO PARA O IPI
                 "valorBC_IPI" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
                 "percIPI_IPI" => $data['produtos'][$i]->ipi,
                 "valorIPI_IPI" => $valTotIPI,
                 
                 //PIS
-                "cst_PIS" => '', 
+                "cst_PIS" => $data['produtos'][$i]->cst_pis, 
                 "valorBC_PIS" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
-                "percPIS_PIS" => $percPis,
+                "percPIS_PIS" => $data['produtos'][$i]->pis,
                 "valorPIS_PIS" => $valTotPIS,
                 "qBCProd" => '',
                 "vAliqProd" => '',
                 
                 //COFINS
-                "cst_COFINS" => '', 
+                "cst_COFINS" => $data['produtos'][$i]->cst_cofins, 
                 "valorBC_COFINS" => (int)$data['produtos'][$i]->quantidade * (float)$data['produtos'][$i]->valor_venda,
-                "percPIS_COFINS" => $percCofins,
+                "percPIS_COFINS" => $data['produtos'][$i]->cofins,
                 "valorCOFINS_COFINS" => $valTotCOFINS,
                 
                 /* VALOR TOTAL DE IMPOSTO */
-                "valTotImposto" => '',
+                "valTotImposto" => $totImpostoItem
             );
         }
+        
+        //VALORES TOTAIS DA NOTA
+        $totalNota = array(
+            "totalBC" => $totalBC,
+            "totalICMS" => $totalICMS,
+            "totalIPI" => $totalIPI,
+            "totalPIS" => $totalPIS,
+            "totalCOFINS" => $totalCOFINS,
+            "totalProduto" => $totalProduto,
+            "totalImposto" => $totalImposto
+        );
+        
         
         /*
          * POR ALGUM MOTIVO, O PHP NÃO PERMITE O USO DO COMANDO 'USE'
@@ -316,8 +344,20 @@ class Notafiscal extends BaseController {
          * GERADO DENTRO DO ARQUIVO 'geraXml.php'
          */
         
+        
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+        
+//ini_set('display_errors',1);
+//ini_set('display_startup_erros',1);
+//error_reporting(E_ALL);
+//
+//echo "<pre>";
+//var_dump($config);die;
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
+        
+        die('gerou');
+        
+        redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
     }
 
 }

@@ -97,6 +97,7 @@ class notafiscal_model extends Model {
     }
 
     function instanciarnotafiscal($notafiscal_id) {
+//        var_dump($notafiscal_id);die;
         $this->db->select(' notafiscal_id, 
                             solicitacao_cliente_id, 
                             gerada, 
@@ -132,21 +133,27 @@ class notafiscal_model extends Model {
                             ep.descricao,
                             ep.estoque_produto_id,
                             ep.codigo, 
-                            ep.ncm,
-                            ep.cest,
                             esi.estoque_solicitacao_itens_id, 
                             es.validade,
                             es.quantidade,
-                            esi.cst,
+                            ep.ncm,
+                            ep.cest,
+                            esi.cst_icms,
+                            esi.cst_ipi,
+                            esi.cst_pis,
+                            esi.cst_cofins,
                             esi.icms, 
                             esi.ipi, 
+                            esi.pis, 
+                            esi.cofins, 
                             esi.icmsst, 
+                            esi.mva,    
+                            esi.valor as valor_venda,            
+                            esi.quantidade as quantidade_solicitada,
                             c.codigo_cfop, 
                             c.descricao_cfop,
-                            esi.mva,    
-                            esi.valor as valor_venda, 
-                            eu.descricao as unidade,                          
-                            esi.quantidade as quantidade_solicitada');
+                            eu.descricao as unidade
+                            ');
         $this->db->from('tb_estoque_saida es');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = es.produto_id');
         $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id= ep.unidade_id');
@@ -201,15 +208,17 @@ class notafiscal_model extends Model {
 
     function listarresumosolicitacao($estoque_solicitacao_id) {
         $this->db->select('p.descricao,
+                            esi.imposto,
                             es.valor_venda as valor,
                             es.estoque_solicitacao_itens_id,
                             sum(es.quantidade) as qtde_total,
                             (es.valor_venda * sum(es.quantidade)) as valor_total ');
         $this->db->from('tb_estoque_saida es');
         $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = es.produto_id');
+        $this->db->join('tb_estoque_solicitacao_itens esi', 'esi.estoque_solicitacao_itens_id = es.estoque_solicitacao_itens_id');
         $this->db->where('es.solicitacao_cliente_id', $estoque_solicitacao_id);
         $this->db->where('es.ativo', 'true');
-        $this->db->groupby('p.descricao, es.valor_venda, es.estoque_solicitacao_itens_id');
+        $this->db->groupby('p.descricao, es.valor_venda, es.estoque_solicitacao_itens_id, esi.imposto');
         $this->db->orderby('p.descricao');
         $return = $this->db->get();
         return $return->result();
@@ -224,6 +233,7 @@ class notafiscal_model extends Model {
         $this->db->set('tipo_nf', $_POST['tpNF']);
         $this->db->set('modelo_nf', $_POST['modeloNota']);
         $this->db->set('finalidade_nf', $_POST['finalidadeNota']);
+        $this->db->set('tipo_pagamento', $_POST['tpPag']);
 
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
@@ -235,6 +245,26 @@ class notafiscal_model extends Model {
             return -1;
         else
             $notafiscal_id = $this->db->insert_id();
+        
+        return $notafiscal_id;
+    }
+
+    function gravarimpostosaida() {
+        $this->db->set('imposto', 't');
+        $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
+        
+        $this->db->set('icms', str_replace(',', '.', str_replace('.', '',$_POST['icms']) ) );
+        $this->db->set('ipi', str_replace(',', '.', str_replace('.', '',$_POST['ipi']) ));
+        $this->db->set('pis', str_replace(',', '.', str_replace('.', '',$_POST['pis']) ));
+        $this->db->set('cofins', str_replace(',', '.', str_replace('.', '',$_POST['cofins']) ));
+        
+        $this->db->set('cst_icms', $this->utilitario->tamanho_string($_POST['cst_icms'], 3, 'numerico') );
+        $this->db->set('cst_ipi', $this->utilitario->tamanho_string($_POST['cst_ipi'], 2, 'numerico'));
+        $this->db->set('cst_pis', $this->utilitario->tamanho_string($_POST['cst_pis'], 2, 'numerico'));
+        $this->db->set('cst_cofins', $this->utilitario->tamanho_string($_POST['cst_cofins'], 2, 'numerico'));
+        
+        $this->db->where('estoque_solicitacao_itens_id', $_POST['solicitacao_itens']);
+        $this->db->update('tb_estoque_solicitacao_itens');
     }
 
     function gravarcontratos() {

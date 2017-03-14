@@ -1,11 +1,7 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 'On');
-    // require_once '../../bootstrap.php';
 
     use NFePHP\NFe\MakeNFe;
     use NFePHP\NFe\ToolsNFe;
-
 
     $nfe = new NFePHP\NFe\MakeNFe();
 
@@ -16,7 +12,7 @@
     $cNF = $dadosNFe['cNF']; //numero aleatório da NF
     $natOp = $dadosNFe['naturezaOpe']; //natureza da operação
 
-    $indPag = dadosNFe['indicadorPagamento']; //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
+    $indPag = $dadosNFe['indicadorPagamento']; //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
 
     $mod = $dadosNFe['modeloNota']; //modelo da NFe 55 ou 65 essa última NFCe
     $serie = $dadosNFe['numSerie']; //serie da NFe
@@ -229,28 +225,19 @@
     //$qExport = '100';
     //$resp = $nfe->tagdetExport($nItem, $nDraw, $exportInd, $nRE, $chNFe, $qExport);
 
-    // //Impostos
-    // $nItem = 1; //produtos 1
-    // $vTotTrib = '449.90'; // 226.80 ICMS + 51.50 ICMSST + 50.40 IPI + 39.36 PIS + 81.84 CONFIS
-    // $resp = $nfe->tagimposto($nItem, $vTotTrib);
-    // $nItem = 2; //produtos 2
-    // $vTotTrib = '74.34'; // 61.20 ICMS + 2.34 PIS + 10.80 CONFIS
-    // $resp = $nfe->tagimposto($nItem, $vTotTrib);
-
-
     foreach ($dadosProdutos as $produto) {
-        $nItem = $prod['nItem']; 
-        $vTotTrib = $prod['valTotImposto']; 
+        $nItem = $produto['nItem']; 
+        $vTotTrib = $produto['valTotImposto']; 
         $resp = $nfe->tagimposto($nItem, $vTotTrib);
 
         //ICMS - Imposto sobre Circulação de Mercadorias e Serviços
-        $orig = $prod['orig_ICMS'];
-        $cst = $prod['cst_ICMS']; // Tributado Integralmente
-        $modBC = $prod['modBC_ICMS'];
+        $orig = $produto['orig_ICMS'];
+        $cst = $produto['cst_ICMS']; // Tributado Integralmente
+        $modBC = $produto['modBC_ICMS'];
         $pRedBC = '';
-        $vBC = $prod['valorBC_ICMS']; // = $qTrib * $vUnTrib
-        $pICMS = $prod['percICMS_ICMS']; 
-        $vICMS = $prod['valorICMS_ICMS']; // = $vBC * ( $pICMS / 100 )
+        $vBC = $produto['valorBC_ICMS']; // = $qTrib * $vUnTrib
+        $pICMS = $produto['percICMS_ICMS']; 
+        $vICMS = $produto['valorICMS_ICMS']; // = $vBC * ( $pICMS / 100 )
         $vICMSDeson = '';
         $motDesICMS = '';
         $modBCST = '';
@@ -304,18 +291,18 @@
 
     foreach ($dadosProdutos as $produto) {
         //IPI - Imposto sobre Produto Industrializado
-        $nItem = $prod['nItem']; //produtos 1
-        $cst = $prod['cst_IPI']; // 50 - Saída Tributada (Código da Situação Tributária)
+        $nItem = $produto['nItem']; //produtos 1
+        $cst = $produto['cst_IPI']; // 50 - Saída Tributada (Código da Situação Tributária)
         $clEnq = '';
         $cnpjProd = '';
         $cSelo = '';
         $qSelo = '';
-        $cEnq = $prod['codEnq_IPI'];
-        $vBC = $prod['valorBC_IPI'];
-        $pIPI = $prod['percIPI_IPI']; //Calculo por alíquota - 6% Alíquota GO.
+        $cEnq = $produto['codEnq_IPI'];
+        $vBC = $produto['valorBC_IPI'];
+        $pIPI = $produto['percIPI_IPI']; //Calculo por alíquota - 6% Alíquota GO.
         $qUnid = '';
         $vUnid = '';
-        $vIPI = $prod['valorIPI_IPI']; // = $vBC * ( $pIPI / 100 )
+        $vIPI = $produto['valorIPI_IPI']; // = $vBC * ( $pIPI / 100 )
         $resp = $nfe->tagIPI($nItem, $cst, $clEnq, $cnpjProd, $cSelo, $qSelo, $cEnq, $vBC, $pIPI, $qUnid, $vUnid, $vIPI);
     }
 
@@ -335,13 +322,13 @@
 
     foreach ($dadosProdutos as $produto) {
         //PIS - Programa de Integração Social
-        $nItem = $prod['nItem']; //produtos 1
-        $cst = $prod['cst_PIS']; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
-        $vBC = $prod['valorBC_PIS']; 
-        $pPIS = $prod['percPIS_PIS'];
-        $vPIS = $prod['valorPIS_PIS'];
-        $qBCProd = $prod['nItem'];
-        $vAliqProd = $prod['nItem'];
+        $nItem = $produto['nItem']; //produtos 1
+        $cst = $produto['cst_PIS']; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
+        $vBC = $produto['valorBC_PIS']; 
+        $pPIS = $produto['percPIS_PIS'];
+        $vPIS = $produto['valorPIS_PIS'];
+        $qBCProd = $produto['nItem'];
+        $vAliqProd = $produto['nItem'];
         $resp = $nfe->tagPIS($nItem, $cst, $vBC, $pPIS, $vPIS, $qBCProd, $vAliqProd);
     }
 
@@ -359,13 +346,13 @@
 
     foreach ($dadosProdutos as $produto) {
         //COFINS - Contribuição para o Financiamento da Seguridade Social
-        $nItem = $prod['nItem']; //produtos 1
-        $cst = $prod['cst_COFINS']; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
-        $vBC = '';
-        $pCOFINS = '';
-        $vCOFINS = '81.84';
-        $qBCProd = '60.00';
-        $vAliqProd = '0.682';
+        $nItem = $produto['nItem']; //produtos 1
+        $cst = $produto['cst_COFINS']; //Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
+        $vBC = $produto['valorBC_COFINS'];
+        $pCOFINS = $produto['percPIS_COFINS'];
+        $vCOFINS = $produto['valorCOFINS_COFINS'];
+        $qBCProd = '';
+        $vAliqProd = '';
         $resp = $nfe->tagCOFINS($nItem, $cst, $vBC, $pCOFINS, $vCOFINS, $qBCProd, $vAliqProd);
     }
     // $nItem = 2; //produtos 2
@@ -404,22 +391,22 @@
     $vISS = isset($vISS) ? $vISS : 0;
 
     //total
-    $vBC = '1200.00';
-    $vICMS = '288.00';
+    $vBC = $totalNota['totalBC'];
+    $vICMS = $totalNota['totalICMS'];
     $vICMSDeson = '0.00';
-    $vBCST = '1030.80';
-    $vST = '51.50';
-    $vProd = '1200.00';
+    $vBCST = '0.00';
+    $vST = '0.00';
+    $vProd = $totalNota['totalProduto'];
     $vFrete = '0.00';
     $vSeg = '0.00';
     $vDesc = '0.00';
     $vII = '0.00';
-    $vIPI = '50.40';
-    $vPIS = '41.70';
-    $vCOFINS = '92.64';
+    $vIPI = $totalNota['totalIPI'];
+    $vPIS = $totalNota['totalPIS'];
+    $vCOFINS = $totalNota['totalCOFINS'];
     $vOutro = '0.00';
     $vNF = number_format($vProd-$vDesc-$vICMSDeson+$vST+$vFrete+$vSeg+$vOutro+$vII+$vIPI, 2, '.', '');
-    $vTotTrib = number_format($vICMS+$vST+$vII+$vIPI+$vPIS+$vCOFINS+$vIOF+$vISS, 2, '.', '');
+    $vTotTrib = number_format($totalNota['totalImposto'], 2, '.', '');
     $resp = $nfe->tagICMSTot($vBC, $vICMS, $vICMSDeson, $vBCST, $vST, $vProd, $vFrete, $vSeg, $vDesc, $vII, $vIPI, $vPIS, $vCOFINS, $vOutro, $vNF, $vTotTrib);
 
     //frete
@@ -427,14 +414,14 @@
     $resp = $nfe->tagtransp($modFrete);
 
     //transportadora
-    //$CNPJ = '';
-    //$CPF = '12345678901';
-    //$xNome = 'Ze da Carroca';
-    //$IE = '';
-    //$xEnder = 'Beco Escuro';
-    //$xMun = 'Campinas';
-    //$UF = 'SP';
-    //$resp = $nfe->tagtransporta($CNPJ, $CPF, $xNome, $IE, $xEnder, $xMun, $UF);
+    $CNPJ = '';
+    $CPF = '';
+    $xNome = '';
+    $IE = '';
+    $xEnder = '';
+    $xMun = '';
+    $UF = '';
+    $resp = $nfe->tagtransporta($CNPJ, $CPF, $xNome, $IE, $xEnder, $xMun, $UF);
 
     //valores retidos para transporte
     //$vServ = '258,69'; //Valor do Serviço
@@ -466,41 +453,44 @@
     //}
 
     //Dados dos Volumes Transportados
-    $aVol = array(
-        array('4','Barris','','','120.000','120.000',''),
-        array('2','Volume','','','10.000','10.000','')
-    );
-    foreach ($aVol as $vol) {
-        $qVol = $vol[0]; //Quantidade de volumes transportados
-        $esp = $vol[1]; //Espécie dos volumes transportados
-        $marca = $vol[2]; //Marca dos volumes transportados
-        $nVol = $vol[3]; //Numeração dos volume
-        $pesoL = intval($vol[4]); //Kg do tipo Int, mesmo que no manual diz que pode ter 3 digitos verificador...
-        $pesoB = intval($vol[5]); //...se colocar Float não vai passar na expressão regular do Schema. =\
-        $aLacres = $vol[6];
-        $resp = $nfe->tagvol($qVol, $esp, $marca, $nVol, $pesoL, $pesoB, $aLacres);
-    }
+    // $aVol = array(
+    //     array('4','Barris','','','120.000','120.000',''),
+    //     array('2','Volume','','','10.000','10.000','')
+    // );
+    // foreach ($aVol as $vol) {
+    //     $qVol = $vol[0]; //Quantidade de volumes transportados
+    //     $esp = $vol[1]; //Espécie dos volumes transportados
+    //     $marca = $vol[2]; //Marca dos volumes transportados
+    //     $nVol = $vol[3]; //Numeração dos volume
+    //     $pesoL = intval($vol[4]); //Kg do tipo Int, mesmo que no manual diz que pode ter 3 digitos verificador...
+    //     $pesoB = intval($vol[5]); //...se colocar Float não vai passar na expressão regular do Schema. =\
+    //     $aLacres = $vol[6];
+    //     $resp = $nfe->tagvol($qVol, $esp, $marca, $nVol, $pesoL, $pesoB, $aLacres);
+    // }
 
+/*ESSES DADOS SERÁ PREENCHIHDO COM AS FORMAS DE PAGAMENDO
     //dados da fatura
-    $nFat = '000035342';
-    $vOrig = '1200.00';
+    $nFat = '';
+    $vOrig = '';
     $vDesc = '';
-    $vLiq = '1200.00';
+    $vLiq = '';
     $resp = $nfe->tagfat($nFat, $vOrig, $vDesc, $vLiq);
 
     //dados das duplicatas (Pagamentos)
-    $aDup = array(
-        array('35342-1','2016-06-20','300.00'),
-        array('35342-2','2016-07-20','300.00'),
-        array('35342-3','2016-08-20','300.00'),
-        array('35342-4','2016-09-20','300.00')
-    );
-    foreach ($aDup as $dup) {
-        $nDup = $dup[0]; //Código da Duplicata
-        $dVenc = $dup[1]; //Vencimento
-        $vDup = $dup[2]; // Valor
-        $resp = $nfe->tagdup($nDup, $dVenc, $vDup);
-    }
+    $nDup = ''; //Código da Duplicata
+    $dVenc = ''; //Vencimento
+    $vDup = $totalNota[]; // Valor
+    $resp = $nfe->tagdup($nDup, $dVenc, $vDup);
+*/
+
+    // $aDup = array(
+    //     array('35342-1','2016-06-20','300.00'),
+    //     array('35342-2','2016-07-20','300.00'),
+    //     array('35342-3','2016-08-20','300.00'),
+    //     array('35342-4','2016-09-20','300.00')
+    // );
+    // foreach ($aDup as $dup) {
+    // }
 
 
     //*************************************************************
@@ -517,95 +507,17 @@
     //**************************************************************
 
     // Calculo de carga tributária similar ao IBPT - Lei 12.741/12
-    $federal = number_format($vII+$vIPI+$vIOF+$vPIS+$vCOFINS, 2, ',', '.');
-    $estadual = number_format($vICMS+$vST, 2, ',', '.');
-    $municipal = number_format($vISS, 2, ',', '.');
-    $totalT = number_format($federal+$estadual+$municipal, 2, ',', '.');
-    $textoIBPT = "Valor Aprox. Tributos R$ {$totalT} - {$federal} Federal, {$estadual} Estadual e {$municipal} Municipal.";
+    // $federal = number_format($vII+$vIPI+$vIOF+$vPIS+$vCOFINS, 2, ',', '.');
+    // $estadual = number_format($vICMS+$vST, 2, ',', '.');
+    // $municipal = number_format($vISS, 2, ',', '.');
+    // $totalT = number_format($federal+$estadual+$municipal, 2, ',', '.');
+    // $textoIBPT = "Valor Aprox. Tributos R$ {$totalT} - {$federal} Federal, {$estadual} Estadual e {$municipal} Municipal.";
 
     //Informações Adicionais
     //$infAdFisco = "SAIDA COM SUSPENSAO DO IPI CONFORME ART 29 DA LEI 10.637";
     $infAdFisco = "";
-    $infCpl = "Pedido Nº16 - {$textoIBPT} ";
+    $infCpl = "";
     $resp = $nfe->taginfAdic($infAdFisco, $infCpl);
-
-    //observações emitente
-    //$aObsC = array(
-    //    array('email','roberto@x.com.br'),
-    //    array('email','rodrigo@y.com.br'),
-    //    array('email','rogerio@w.com.br'));
-    //foreach ($aObsC as $obs) {
-    //    $xCampo = $obs[0];
-    //    $xTexto = $obs[1];
-    //    $resp = $nfe->tagobsCont($xCampo, $xTexto);
-    //}
-
-    //observações fisco
-    //$aObsF = array(
-    //    array('email','roberto@x.com.br'),
-    //    array('email','rodrigo@y.com.br'),
-    //    array('email','rogerio@w.com.br'));
-    //foreach ($aObsF as $obs) {
-    //    $xCampo = $obs[0];
-    //    $xTexto = $obs[1];
-    //    //$resp = $nfe->tagobsFisco($xCampo, $xTexto);
-    //}
-
-    //Dados do processo
-    //0=SEFAZ; 1=Justiça Federal; 2=Justiça Estadual; 3=Secex/RFB; 9=Outros
-    //$aProcRef = array(
-    //    array('nProc1','0'),
-    //    array('nProc2','1'),
-    //    array('nProc3','2'),
-    //    array('nProc4','3'),
-    //    array('nProc5','9')
-    //);
-    //foreach ($aProcRef as $proc) {
-    //    $nProc = $proc[0];
-    //    $indProc = $proc[1];
-    //    //$resp = $nfe->tagprocRef($nProc, $indProc);
-    //}
-
-    //dados exportação
-    //$UFSaidaPais = 'SP';
-    //$xLocExporta = 'Maritimo';
-    //$xLocDespacho = 'Porto Santos';
-    //$resp = $nfe->tagexporta($UFSaidaPais, $xLocExporta, $xLocDespacho);
-
-    //dados de compras
-    //$xNEmp = '';
-    //$xPed = '12345';
-    //$xCont = 'A342212';
-    //$resp = $nfe->tagcompra($xNEmp, $xPed, $xCont);
-
-    //dados da colheita de cana
-    //$safra = '2014';
-    //$ref = '01/2014';
-    //$resp = $nfe->tagcana($safra, $ref);
-    //$aForDia = array(
-    //    array('1', '100', '1400', '1000', '1400'),
-    //    array('2', '100', '1400', '1000', '1400'),
-    //    array('3', '100', '1400', '1000', '1400'),
-    //    array('4', '100', '1400', '1000', '1400'),
-    //    array('5', '100', '1400', '1000', '1400'),
-    //    array('6', '100', '1400', '1000', '1400'),
-    //    array('7', '100', '1400', '1000', '1400'),
-    //    array('8', '100', '1400', '1000', '1400'),
-    //    array('9', '100', '1400', '1000', '1400'),
-    //    array('10', '100', '1400', '1000', '1400'),
-    //    array('11', '100', '1400', '1000', '1400'),
-    //    array('12', '100', '1400', '1000', '1400'),
-    //    array('13', '100', '1400', '1000', '1400'),
-    ///    array('14', '100', '1400', '1000', '1400')
-    //);
-    //foreach ($aForDia as $forDia) {
-    //    $dia = $forDia[0];
-    //    $qtde = $forDia[1];
-    //    $qTotMes = $forDia[2];
-    //    $qTotAnt = $forDia[3];
-    //    $qTotGer = $forDia[4];
-    //    //$resp = $nfe->tagforDia($dia, $qtde, $qTotMes, $qTotAnt, $qTotGer);
-    //}
 
     //monta a NFe e retorna na tela
     $resp = $nfe->montaNFe();

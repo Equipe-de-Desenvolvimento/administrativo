@@ -6,6 +6,7 @@
                 <div>        
                     <input type="hidden" name="estoque_cliente_id" id="estoque_cliente_id" value="<?=@$solicitacao_cliente_id?>">
                     <input type="hidden" name="nota_fiscal_id" id="nota_fiscal_id" value="<?=@$notafiscal_id?>">
+                    <input type="hidden" name="modeloNota" id="modeloNota" value="55"> <!-- NF-e -->
                     
                     <label>Tipo de NF*</label>
                     <select name="tpNF" required="" class="size2">
@@ -15,12 +16,22 @@
                     </select>
                 </div>
                 
-                <div> 
+<!--                <div> 
                     <label>Modelo de Nota *</label>
                     <select name="modeloNota" required="" class="size1">
                         <option value="">Selecione</option>
                         <option value="55" selected="">NF-e</option>
                         <option value="65">NFC-e</option>
+                    </select>
+                </div>-->
+                
+                <div> 
+                    <label>Tipo de Pagamento *</label>
+                    <select name="tpPag" required="" class="size6">
+                        <option value="">Selecione</option>
+                        <option value="0" selected="">Pagamento à vista</option>
+                        <option value="1">Pagamento a prazo</option>
+                        <option value="2">Outros</option>
                     </select>
                 </div>
                 

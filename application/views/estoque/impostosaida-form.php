@@ -17,12 +17,12 @@
             });
         })(jQuery);
     </script>
+
     <style>
         form fieldset div {display: inline-block}
         form fieldset div fieldset{
             min-height: 22pt;
             min-width: 75pt;
-            /*font-weight: bold;*/
             display: inline;
             position: relative;
         }
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <td colspan="4">
-                            <input type="hidden" value="<? ?>" readonly="" id="solicitacao_itens" name="solicitacao_itens">
+                            <input type="hidden" value="<?= $solicitacao_itens_id ?>" readonly="" id="solicitacao_itens" name="solicitacao_itens">
                             <input type="text" value="<?= $produto[0]->descricao ?>" readonly="" id="produto_id" name="produto_id" style="width: 400pt">
 
                         </td>
@@ -68,6 +68,34 @@
                     </tr>
                 </table>
             </fieldset>
+
+            <fieldset>
+                <legend>CFOP</legend>
+                <table cellspacing="5">
+                    <tr>
+                        <td>
+                            <label for="cfop">Codigo</label>
+                        </td>
+                        <td>
+                            <label>Descrição</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="cfop_id" id="cfop_id" class="texto01"/>
+                            <input type="text" name="cfop" id="cfop" alt="integer" class="texto01" required="" style="width: 50pt"/>
+                        </td>
+                        <td>
+                            <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" readonly style="width: 400pt"/>
+                        </td>
+                    </tr>
+                </table>
+                
+                <hr>
+                <div>
+                    <button type="submit">Cadastrar</button>
+                </div>
+            </fieldset>
             <fieldset>
                 <legend>Impostos</legend>
                 <div>
@@ -85,7 +113,9 @@
                                         <select name="cst_icms" id="cst_icms" style="width: 100pt">
                                             <option>Selecione</option>
                                             <? foreach ($cst_icms as $value) : ?>
-                                                <option value="<?= $value->cst ?>"><?= $value->cst ?> - <?= $value->situacao_tributaria ?></option>
+                                                <option value="<?= $value->cst ?>" <?= ((int) $value->cst == 340) ? 'selected' : ''; ?>>
+                                                    <?= $value->cst ?> - <?= $value->situacao_tributaria ?>
+                                                </option>
                                             <? endforeach; ?>
                                         </select>
                                     </td>
@@ -106,10 +136,12 @@
                                 <tr>
                                     <td><input type="text" name="ipi" id="ipi" alt="decimal" class="texto01" style="width: 50pt"/></td>
                                     <td>
-                                        <select name="cst_ipi" id="cst_ipi" style="width: 100pt">
+                                        <select name="cst_ipi" id="cst_ipi" style="width: 100pt" required="">
                                             <option>Selecione</option>
                                             <? foreach ($cst_ipi as $value) : ?>
-                                                <option value="<?= $value->cst ?>"><?= $value->cst ?> - <?= $value->situacao_tributaria ?></option>
+                                                <option value="<?= $value->cst ?>" <?= ((int) $value->cst == 52) ? 'selected' : ''; ?>>
+                                                    <?= $value->cst ?> - <?= $value->situacao_tributaria ?>
+                                                </option>
                                             <? endforeach; ?>
                                         </select>
                                     </td>
@@ -128,12 +160,14 @@
                                     <td><label>CST</label></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" name="pis" id="pis" alt="decimal" class="texto01" value="0,65" style="width: 50pt"/></td>
+                                    <td><input type="text" name="pis" id="pis" alt="decimal" class="texto01" style="width: 50pt"/></td>
                                     <td>
-                                        <select name="cst_pis" id="cst_pis" style="width: 100pt">
+                                        <select name="cst_pis" id="cst_pis" style="width: 100pt" required="">
                                             <option>Selecione</option>
                                             <? foreach ($cst_pis_cofins as $value) : ?>
-                                                <option value="<?= $value->cst ?>"><?= $value->cst ?> - <?= $value->situacao_tributaria ?></option>
+                                                <option value="<?= $value->cst ?>" <?= ((int) $value->cst == 7) ? 'selected' : ''; ?>>
+                                                    <?= $value->cst ?> - <?= $value->situacao_tributaria ?>
+                                                </option>
                                             <? endforeach; ?>
                                         </select>
                                     </td>
@@ -154,10 +188,12 @@
                                 <tr>
                                     <td><input type="text" name="cofins" id="cofins" alt="decimal" class="texto01" style="width: 50pt"/></td>
                                     <td>
-                                        <select name="cst_cofins" id="cst_cofins" style="width: 100pt">
+                                        <select name="cst_cofins" id="cst_cofins" style="width: 100pt" required="">
                                             <option>Selecione</option>
                                             <? foreach ($cst_pis_cofins as $value) : ?>
-                                                <option value="<?= $value->cst ?>"><?= $value->cst ?> - <?= $value->situacao_tributaria ?></option>
+                                                <option value="<?= $value->cst ?>" <?= ((int) $value->cst == 7) ? 'selected' : ''; ?>>
+                                                    <?= $value->cst ?> - <?= $value->situacao_tributaria ?>
+                                                </option>
                                             <? endforeach; ?>
                                         </select>
                                     </td>
@@ -167,7 +203,31 @@
                     </fieldset>
                 </div>
             </fieldset>
+
         </form>
 
     </div> <!-- Final da DIV content -->
 </body>
+<link href="<?= base_url() ?>css/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+
+//        var jQuery = jQuery.noConflict();
+
+        jQuery(function () {
+            jQuery("#cfop").autocomplete({
+                source: "<?= base_url() ?>index.php?c=autocomplete&m=autocompletecfop",
+                minLength: 1,
+                focus: function (event, ui) {
+                    jQuery("#cfop").val(ui.item.label);
+                    return false;
+                },
+                select: function (event, ui) {
+                    jQuery("#descricao_cfop").val(ui.item.descricao);
+                    jQuery("#cfop").val(ui.item.cfop);
+                    jQuery("#cfop_id").val(ui.item.id);
+                    return false;
+                }
+            });
+        });
+
+</script>

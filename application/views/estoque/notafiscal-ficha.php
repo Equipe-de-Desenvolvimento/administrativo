@@ -1,19 +1,43 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
+    <?
+    //So ira mostrar a opçao de gerar nota apos 
+    //todos os impostos e infomaçoes necessarias terem sido preenchidas
+    $impostos = true;
+    if (count($produtos) == 0) {
+        $impostos = false;
+    } else {
+        foreach ($produtos as $item) :
+            if ($item->imposto == 'f') {
+                $impostos = false;
+                break;
+            }
+        endforeach;
+    }
+    ?>
     <form name="form_sala" id="form_sala" method="post">
-
-        <div>        
-            <a href="<?= base_url() ?>estoque/notafiscal/informacoesnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
-                <button type="button" id="novaParcela">Gerar NF-e</button>
-            </a>
-            <a href="#">
-                <button type="button" id="novaParcela">Cancelar NF-e</button>
-            </a>
-            <a href="#">
-                <button type="button" id="novaParcela">Imprimir DANFe</button>
-            </a>
-        </div>
-
-        <br>
+        <? if ($impostos): ?>
+            <div>     
+                <!-- NF-e -->
+                <a href="<?= base_url() ?>estoque/notafiscal/informacoesnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
+                    <button type="button" id="novaParcela">Gerar NF-e</button>
+                </a>
+                
+                <!-- Futuramente criar opçao de criar NFC-e -->
+                <a href="#">
+                    <button type="button" id="novaParcela">Cancelar NF-e</button>
+                </a>
+                <a href="#">
+                    <button type="button" id="novaParcela">Imprimir DANFe</button>
+                </a>
+            </div>
+            <br>
+        <? else: 
+            if (count($produtos) == 0) { ?>
+                <h3 style="font-weight: bold">Impossibilitado de gerar NF-e, não há produtos nessa solicitação.</h3> 
+            <? } else {?>
+                <h3 style="font-weight: bold">Só é possivel gerar NF-e após informar as informaçoes para todos os produtos.</h3>
+            <?}
+        endif; ?>
 
         <fieldset>
             <legend>Dados do Cliente</legend>
@@ -59,20 +83,22 @@
                         <th class="tabela_header" colspan="2">Detalhes</th>
                     </tr>
                 </thead>
-                <? $estilo_linha = "tabela_content01";
-                   foreach ($produtos as $item) :
-                       ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";?>
-                       <tr>
-                           <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
-                           <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', ''); ?></td>
-                           <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->qtde_total, 0 , ',', ''); ?></td>
-                           <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor_total, 2, ',', ''); ?></td>
-                           <td class="<?php echo $estilo_linha; ?>"colspan="2">
-                               <a onclick="javascript:window.open('<?= base_url() ?>estoque/notafiscal/impostosaida/<?=$item->estoque_solicitacao_itens_id?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=1000,height=500');">
-                                   <button type="button">IMPOSTOS</button>
-                               </a>
-                           </td>
-                       </tr>
+                <?
+                $estilo_linha = "tabela_content01";
+                foreach ($produtos as $item) :
+                    ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
+                    ?>
+                    <tr>
+                        <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', ''); ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->qtde_total, 0, ',', ''); ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor_total, 2, ',', ''); ?></td>
+                        <td class="<?php echo $estilo_linha; ?>"colspan="2">
+                            <a onclick="javascript:window.open('<?= base_url() ?>estoque/notafiscal/impostosaida/<?= $item->estoque_solicitacao_itens_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=1300,height=500');">
+                                <input type="button" class="imposto <?= $item->imposto ?>" value="IMPOSTO" style="font-weight: bold; color: white; font-size: 9pt">
+                            </a>
+                        </td>
+                    </tr>
                 <? endforeach; ?>
             </table>
         </fieldset>
@@ -83,6 +109,11 @@
 
 </div> <!-- Final da DIV content -->
 <style>
+    /*imposto pendente*/
+    .imposto.t{background-color: #097109;}
+    /*imposto cadastrado*/
+    .imposto.f{background-color: #E3000E;}
+
     #novaParcela{
         width: 150pt;
         height: 22pt;
@@ -136,39 +167,39 @@
 </style>
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $("#accordion").accordion();
-    });
+                                $(function () {
+                                    $("#accordion").accordion();
+                                });
 
-    $(function () {
-        $("#vencimento").datepicker({
-            autosize: true,
+                                $(function () {
+                                    $("#vencimento").datepicker({
+                                        autosize: true,
 //            minDate: <?= date("d/m/Y") ?>,
-            changeYear: true,
-            changeMonth: true,
-            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-            buttonImage: '<?= base_url() ?>img/form/date.png',
-            dateFormat: 'dd/mm/yy'
-        });
-    });
+                                        changeYear: true,
+                                        changeMonth: true,
+                                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                                        dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                                        buttonImage: '<?= base_url() ?>img/form/date.png',
+                                        dateFormat: 'dd/mm/yy'
+                                    });
+                                });
 
-    $(function () {
-        $('#convenio1').change(function () {
-            if ($(this).val()) {
-                $('.carregando').show();
-                $.getJSON('<?= base_url() ?>autocomplete/procedimentoconvenio', {convenio1: $(this).val(), ajax: true}, function (j) {
-                    options = '<option value=""></option>';
-                    for (var c = 0; c < j.length; c++) {
-                        options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
-                    }
-                    $('#procedimento1').html(options).show();
-                    $('.carregando').hide();
-                });
-            } else {
-                $('#procedimento1').html('<option value="">Selecione</option>');
-            }
-        });
-    });
+                                $(function () {
+                                    $('#convenio1').change(function () {
+                                        if ($(this).val()) {
+                                            $('.carregando').show();
+                                            $.getJSON('<?= base_url() ?>autocomplete/procedimentoconvenio', {convenio1: $(this).val(), ajax: true}, function (j) {
+                                                options = '<option value=""></option>';
+                                                for (var c = 0; c < j.length; c++) {
+                                                    options += '<option value="' + j[c].procedimento_convenio_id + '">' + j[c].procedimento + '</option>';
+                                                }
+                                                $('#procedimento1').html(options).show();
+                                                $('.carregando').hide();
+                                            });
+                                        } else {
+                                            $('#procedimento1').html('<option value="">Selecione</option>');
+                                        }
+                                    });
+                                });
 
 </script>
