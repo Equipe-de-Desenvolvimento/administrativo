@@ -86,12 +86,12 @@ class Notafiscal extends BaseController {
                 "pathXmlUrlFileMDFe":"mdf2_ws1.xml",
                 "pathXmlUrlFileCLe":"",
                 "pathXmlUrlFileNFSe":"",
-                "pathNFeFiles":"\/home\/johnny\/projetos\/administrativo\/upload\/nfe\/",
+                "pathNFeFiles":"\/home\/sisprod\/projetos\/administrativo\/upload\/nfe\/",
                 "pathCTeFiles":"",
                 "pathMDFeFiles":"",
                 "pathCLeFiles":"",
                 "pathNFSeFiles":"",
-                "pathCertsFiles":"\/home\/johnny\/projetos\/administrativo\/upload\/certificado\/' . $data['empresa'][0]->empresa_id . '\/",
+                "pathCertsFiles":"\/home\/sisprod\/projetos\/administrativo\/upload\/certificado\/' . $data['empresa'][0]->empresa_id . '\/",
                 "siteUrl":"' . base_url() . '\/ambulatorio\/empresa",
                 "schemesNFe":"PL_008i2",
                 "schemesCTe":"PL_CTe_200",
@@ -117,9 +117,9 @@ class Notafiscal extends BaseController {
                         "format":"L",
                         "paper":"A4",
                         "southpaw":"1",
-                        "pathLogoFile":"\/home\/johnny\/projetos\/administrativo\/img\/notafiscal\/empresa.jpg",
-                        "pathLogoNFe":"\/home\/johnny\/projetos\/administrativo\/img\/notafiscal\/logo-nfe.png",
-                        "pathLogoNFCe":"\/home\/johnny\/projetos\/administrativo\/img\/notafiscal\/logo-nfce.png",
+                        "pathLogoFile":"\/home\/sisprod\/projetos\/administrativo\/img\/notafiscal\/empresa.jpg",
+                        "pathLogoNFe":"\/home\/sisprod\/projetos\/administrativo\/img\/notafiscal\/logo-nfe.png",
+                        "pathLogoNFCe":"\/home\/sisprod\/projetos\/administrativo\/img\/notafiscal\/logo-nfce.png",
                         "logoPosition":"L",
                         "font":"Times",
                         "printer":""
@@ -345,7 +345,7 @@ class Notafiscal extends BaseController {
          */
         
         
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
         
 //ini_set('display_errors',1);
 //ini_set('display_startup_erros',1);
@@ -353,7 +353,7 @@ class Notafiscal extends BaseController {
 //
 //echo "<pre>";
 //var_dump($config);die;
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
         
         die('gerou');
         

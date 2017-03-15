@@ -49,14 +49,14 @@ class Empresa extends BaseController {
             chmod($destino, 0777);
         }
 
-        $verifica = $data['arquivo_pasta'] = directory_map("/home/johnny/projetos/administrativo/upload/certificado/$empresa_id");
+        $verifica = $data['arquivo_pasta'] = directory_map("/home/sisprod/projetos/administrativo/upload/certificado/$empresa_id");
         if (count($verifica) > 1) {
             $mensagem = 'Erro. Ja ha um certificado para esta empresa.';
         } else {
 
             $extensao = explode('.', $_FILES["userfile"]['name']);
             if ($extensao[1] == 'pfx') {
-                $config['upload_path'] = "/home/johnny/projetos/administrativo/upload/certificado/" . $empresa_id . "/";
+                $config['upload_path'] = "/home/sisprod/projetos/administrativo/upload/certificado/" . $empresa_id . "/";
                 $config['allowed_types'] = 'pfx';
                 $config['overwrite'] = TRUE;
                 $config['encrypt_name'] = TRUE;
@@ -97,11 +97,11 @@ class Empresa extends BaseController {
         $data['empresa_id'] = $empresa_id;
         $this->load->helper('directory');
 
-        $data['arquivo_pasta'] = directory_map("/home/johnny/projetos/administrativo/upload/certificado/$empresa_id");
+        $data['arquivo_pasta'] = directory_map("/home/sisprod/projetos/administrativo/upload/certificado/$empresa_id");
         if ($data['arquivo_pasta'] != false) {
             sort($data['arquivo_pasta']);
         }
-        $data['arquivos_deletados'] = directory_map("/home/johnny/projetos/administrativo/upload/certificado/$empresa_id/excluidos");
+        $data['arquivos_deletados'] = directory_map("/home/sisprod/projetos/administrativo/upload/certificado/$empresa_id/excluidos");
         $this->loadView('ambulatorio/empresacertificado', $data);
     }
 
