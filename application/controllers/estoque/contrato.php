@@ -130,10 +130,10 @@ class Contrato extends BaseController {
 
     function gravar() {
         $contrato_id = $this->contrato->gravar();
-        if ($contrato_id == "-1") {
-            $data['mensagem'] = 'Erro ao gravar a Contrato. Opera&ccedil;&atilde;o cancelada.';
-        } else {
+        if ($contrato_id == true) {
             $data['mensagem'] = 'Sucesso ao gravar a Contrato.';
+        } else {
+            $data['mensagem'] = $contrato_id;
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/contrato");

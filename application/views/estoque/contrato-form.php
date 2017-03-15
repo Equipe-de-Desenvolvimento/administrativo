@@ -17,11 +17,11 @@
                 </div>
                 <div>
                     <label>Data inicio</label>
-                    <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" class="texto02" required="" value="<?= @$obj->_dt_inicio; ?>"/>
+                    <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" class="texto02" value="<?= @$obj->_dt_inicio; ?>"/>
                 </div>
                 <div>
                     <label>Data Termino</label>
-                    <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" class="texto02" required="" value="<?= @$obj->_dt_fim; ?>"/>
+                    <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" class="texto02" value="<?= @$obj->_dt_fim; ?>"/>
                 </div>
             </fieldset>
             <fieldset>
@@ -61,7 +61,7 @@
 
                 <div>
                     <label>Credor/Devedor *</label>
-                    <select name="credor_devedor" id="credor_devedor" class="size8" >
+                    <select name="credor_devedor" id="credor_devedor" class="size8" required="">
                         <option value='' >selecione</option>
                         <?php
                         $credor_devedor = $this->convenio->listarcredordevedor();
@@ -79,7 +79,7 @@
 
                     <label>Tipo do Contrato *</label>
                     <select name="tipoContrato" id="tipoContrato" class="size8" required="">
-                        <option value="">Selecione</option>
+                        <option value="">Selecione</option>required
                         <? foreach ($tipo_contrato as $tipo) : ?>
                             <option value="<?= $tipo->tipo_id; ?>" <?
                             if (@$obj->_tipo_contrato == $tipo->tipo_id):echo 'selected';
@@ -125,7 +125,7 @@
                 $required = 'required="true"';
                 if (@$obj->_faturado == 't'): $readonly = 'readonly="true"'; $required = '';
                     ?>
-                    <h4 style="color: red; font-weight: bold; text-decoration: underline">Esse contrato ja foi faturado! Nao sera possivel alterar esses dados.</h4>
+                    <h4 style="color: red; font-weight: bold; text-decoration: underline">Esse contrato ja foi faturado! Nao sera possivel alterar os dados do pagamento.</h4>
                 <? endif; ?>
 
                 <div>
@@ -155,11 +155,11 @@
                 <div>
                     <label>Tipo</label>
 
-                    <input type="radio" name="tipoPagamento" value="fixo" id="fixo" <?= $required ?>/>
+                    <input type="radio" name="tipoPagamento" value="fixo" id="fixo" <?//echo $required; ?>/>
                     <label for="fixo" style="display: inline; color: black; font-size: 9pt">
                         Dia Fixo
                     </label>
-                    <input type="radio" name="tipoPagamento" value="periodico" id="periodico" <?= $required ?>/>
+                    <input type="radio" name="tipoPagamento" value="periodico" id="periodico" <?//echo $required; ?>/>
                     <label for="periodico" style="display: inline; color: black; font-size: 9pt">
                         Periodico
                     </label>

@@ -206,8 +206,8 @@ class contrato_model extends Model {
 
         $data = date("Y-m-d");
         foreach ($parcelas as $item) {
-            if($item->credor_devedor_id == '' || $item->conta_id == ''){
-                return true;    
+            if ($item->credor_devedor_id == '' || $item->conta_id == '') {
+                return true;
             }
 
             if (strtotime($item->data) <= strtotime($data)) {
@@ -426,8 +426,12 @@ class contrato_model extends Model {
         $estoque_contrato_id = $_POST['contrato_id'];
 
         $this->db->set('nome', $_POST['nome']);
-        $this->db->set('data_inicio', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio']))));
-        $this->db->set('data_fim', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim']))));
+        if ($_POST['txtdata_inicio'] != '') {
+            $this->db->set('data_inicio', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio']))));
+        }
+        if ($_POST['txtdata_fim'] != '') {
+            $this->db->set('data_fim', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim']))));
+        }
 
         $this->db->set('logradouro', $_POST['endereco']);
         $this->db->set('numero', $_POST['numero']);
@@ -446,14 +450,16 @@ class contrato_model extends Model {
             $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
         }
 
-        $this->db->set('data_assinatura', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_assinatura']))));
+        if ($_POST['txtdata_assinatura'] != '') {
+            $this->db->set('data_assinatura', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_assinatura']))));
+        }
         $this->db->set('valor_inicial', str_replace(',', '.', str_replace('.', '', $_POST['valorInicial'])));
         $this->db->set('calcao', str_replace(',', '.', str_replace('.', '', $_POST['calcao'])));
 
         $this->db->set('observacao', $_POST['observacoes']);
         $this->db->set('clasulas', $_POST['clasulas']);
 
-        if ($_POST['faturado'] != 't') {
+        if ($_POST['faturado'] != 't' && $_POST['conta'] != '') {
             $this->db->set('conta_id', $_POST['conta']);
         }
 
@@ -478,6 +484,23 @@ class contrato_model extends Model {
         }
 
         if ($_POST['faturado'] != 't') {
+            if ($_POST['txtdata_vencimento'] == '') {
+                $messagem = "Erro ao gravar Parcelas. Data do primeiro vencimento nao informada.";
+                return $messagem;
+            }
+            if ($_POST['valorParcela'] == '') {
+                $messagem = "Erro ao gravar Parcelas. Valor da parcela nao informado.";
+                return $messagem;
+            }
+            if ($_POST['numParcela'] == '') {
+                $messagem = "Erro ao gravar Parcelas. Numero de parcelas nao informado.";
+                return $messagem;
+            }
+            if ($_POST['tipoPagamento'] != 'fixo' && $_POST['intervalo'] == '') {
+                $messagem = "Erro ao gravar Parcelas. Intervalo entre parcelas nao informado.";
+                return $messagem;
+            }
+            
             /* Atualizando as Parcelas */
             $this->db->set('ativo', 'f');
             $this->db->set('contrato_id', $estoque_contrato_id);
@@ -506,6 +529,7 @@ class contrato_model extends Model {
                 }
             }
         }
+        return true;
     }
 
     private function instanciar($estoque_contrato_id) {
