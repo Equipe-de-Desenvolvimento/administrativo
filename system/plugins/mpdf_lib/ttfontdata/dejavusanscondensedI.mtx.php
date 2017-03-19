@@ -13,7 +13,7 @@ $desc=array (
 );
 $up=-63;
 $ut=44;
-$ttffile='/home/sisprod/projetos/clinica/system/plugins/mpdf_lib/ttfonts/DejaVuSansCondensed-Oblique.ttf';
+$ttffile='/home/johnny/projetos/clinica/system/plugins/mpdf_lib/ttfonts/DejaVuSansCondensed-Oblique.ttf';
 $TTCfontID='0';
 $originalsize=489032;
 $sip=false;

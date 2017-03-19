@@ -121,7 +121,8 @@ class notafiscal_model extends Model {
                             indicador_presenca, 
                             tipo_nf, 
                             modelo_nf, 
-                            finalidade_nf');
+                            finalidade_nf,
+                            chave_nfe');
         $this->db->from('tb_notafiscal');
         $this->db->where('notafiscal_id', $notafiscal_id);
         $return = $this->db->get();
@@ -245,24 +246,37 @@ class notafiscal_model extends Model {
             return -1;
         else
             $notafiscal_id = $this->db->insert_id();
-        
+
         return $notafiscal_id;
+    }
+
+    function gravarchave($chave, $nota_id) {
+        $horario = date("Y-m-d H:i:s");
+        $this->db->set('chave_nfe', $chave);
+        
+        $this->db->set('gerada', 't');
+        $this->db->set('data_geracao', $horario);
+        $this->db->set('assinada', 't');
+        $this->db->set('data_assinatura', $horario);
+        
+        $this->db->where('notafiscal_id', $nota_id);
+        $this->db->update('tb_notafiscal');
     }
 
     function gravarimpostosaida() {
         $this->db->set('imposto', 't');
         $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
-        
-        $this->db->set('icms', str_replace(',', '.', str_replace('.', '',$_POST['icms']) ) );
-        $this->db->set('ipi', str_replace(',', '.', str_replace('.', '',$_POST['ipi']) ));
-        $this->db->set('pis', str_replace(',', '.', str_replace('.', '',$_POST['pis']) ));
-        $this->db->set('cofins', str_replace(',', '.', str_replace('.', '',$_POST['cofins']) ));
-        
-        $this->db->set('cst_icms', $this->utilitario->tamanho_string($_POST['cst_icms'], 3, 'numerico') );
+
+        $this->db->set('icms', str_replace(',', '.', str_replace('.', '', $_POST['icms'])));
+        $this->db->set('ipi', str_replace(',', '.', str_replace('.', '', $_POST['ipi'])));
+        $this->db->set('pis', str_replace(',', '.', str_replace('.', '', $_POST['pis'])));
+        $this->db->set('cofins', str_replace(',', '.', str_replace('.', '', $_POST['cofins'])));
+
+        $this->db->set('cst_icms', $this->utilitario->tamanho_string($_POST['cst_icms'], 3, 'numerico'));
         $this->db->set('cst_ipi', $this->utilitario->tamanho_string($_POST['cst_ipi'], 2, 'numerico'));
         $this->db->set('cst_pis', $this->utilitario->tamanho_string($_POST['cst_pis'], 2, 'numerico'));
         $this->db->set('cst_cofins', $this->utilitario->tamanho_string($_POST['cst_cofins'], 2, 'numerico'));
-        
+
         $this->db->where('estoque_solicitacao_itens_id', $_POST['solicitacao_itens']);
         $this->db->update('tb_estoque_solicitacao_itens');
     }

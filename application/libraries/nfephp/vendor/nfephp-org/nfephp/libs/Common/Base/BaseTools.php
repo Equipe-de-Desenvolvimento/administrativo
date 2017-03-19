@@ -232,6 +232,7 @@ class BaseTools
      */
     public function __construct($configJson = '')
     {
+        // var_dump($configJson);
         if ($configJson == '') {
             $msg = 'O arquivo de configuração no formato JSON deve ser passado para a classe.';
             throw new Exception\InvalidArgumentException($msg);
@@ -240,7 +241,7 @@ class BaseTools
             $configJson = Files\FilesFolders::readFile($configJson);
         }
         //carrega os dados de configuração
-        $this->aConfig    = (array) json_decode($configJson);
+        $this->aConfig    = (array) json_decode($configJson, true);
         $this->aDocFormat = (array) $this->aConfig['aDocFormat'];
         $this->aProxyConf = (array) $this->aConfig['aProxyConf'];
         $this->aMailConf  = (array) $this->aConfig['aMailConf'];

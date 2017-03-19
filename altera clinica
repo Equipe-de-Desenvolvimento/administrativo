@@ -462,11 +462,12 @@ CREATE TABLE ponto.tb_cst_pis_cofins
   CONSTRAINT tb_cst_pis_cofins_pkey PRIMARY KEY (cst_pis_cofins_id)
 );
 
---Dia 14/03/2017
+-- Dia 14/03/2017
 ALTER TABLE ponto.tb_estoque_solicitacao_itens ADD COLUMN imposto boolean DEFAULT false; 
 ALTER TABLE ponto.tb_notafiscal ADD COLUMN tipo_pagamento character varying(50);
 
-
+-- Dia 18/03/2017
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN chave_nfe character varying(1000);
 
 
 

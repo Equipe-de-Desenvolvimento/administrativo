@@ -270,6 +270,7 @@ class Pkcs12
         $ignoreValidity = false,
         $ignoreOwner = false
     ) {
+//        var_dump("<pre>",$pfxContent, "<br>", $password, "<br>"); die;
         if ($password == '') {
             throw new Exception\InvalidArgumentException(
                 "A senha de acesso para o certificado pfx não pode ser vazia."

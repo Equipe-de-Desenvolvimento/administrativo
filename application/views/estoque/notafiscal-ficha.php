@@ -26,7 +26,7 @@
                 <a href="#">
                     <button type="button" id="novaParcela">Cancelar NF-e</button>
                 </a>
-                <a href="#">
+                <a href="<?= base_url() ?>estoque/notafiscal/impressaodanfe/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                     <button type="button" id="novaParcela">Imprimir DANFe</button>
                 </a>
             </div>

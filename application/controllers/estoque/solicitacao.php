@@ -453,7 +453,7 @@ class Solicitacao extends BaseController {
 
     function teste() {
         header('Content-type: text/html; charset=utf-8');
-        $path = "/home/sisprod/projetos/administrativo/application/libraries/boleto/objectBoleto";
+        $path = "/home/johnny/projetos/administrativo/application/libraries/boleto/objectBoleto";
         include ("$path/OB_init.php");
 
         $ob = new OB('004');
