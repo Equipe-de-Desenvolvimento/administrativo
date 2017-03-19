@@ -153,12 +153,15 @@ class notafiscal_model extends Model {
                             esi.quantidade as quantidade_solicitada,
                             c.codigo_cfop, 
                             c.descricao_cfop,
-                            eu.descricao as unidade
+                            eu.descricao as unidade,
+                            ee.validade,
+                            ee.lote
                             ');
         $this->db->from('tb_estoque_saida es');
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = es.produto_id');
         $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id= ep.unidade_id');
         $this->db->join('tb_estoque_solicitacao_itens esi', 'esi.estoque_solicitacao_itens_id = es.estoque_solicitacao_itens_id', 'left');
+        $this->db->join('tb_estoque_entrada ee', 'ee.estoque_entrada_id = es.estoque_entrada_id', 'left');
         $this->db->join('tb_cfop c', 'c.codigo_cfop = esi.codigo_cfop', 'left');
         $this->db->where('es.solicitacao_cliente_id', $estoque_solicitacao_id);
         $this->db->where('es.ativo', 'true');

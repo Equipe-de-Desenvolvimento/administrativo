@@ -214,7 +214,7 @@ class Notafiscal extends BaseController {
             "nomMunicipio" => $data['empresa'][0]->municipio,
             "UF" => $this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'sigla'),
             "cep" => $this->utilitario->remover_caracter($data['empresa'][0]->cep),
-            "fone" => $this->utilitario->remover_caracter($data['empresa'][0]->telefone),
+            "fone" => $this->utilitario->remover_caracter(str_replace(' ', '', $data['empresa'][0]->telefone)),
             /* DADOS DO DESTINATARIO */
             "destCNPJ" => $this->utilitario->remover_caracter($data['destinatario'][0]->cnpj),
             "destCPF" => '',
@@ -231,7 +231,7 @@ class Notafiscal extends BaseController {
             "destMUN" => $data['destinatario'][0]->municipio,
             "destUF" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'),
             "destCEP" => $data['destinatario'][0]->cep,
-            "destFONE" => $this->utilitario->remover_caracter($data['destinatario'][0]->telefone)
+            "destFONE" => $this->utilitario->remover_caracter(str_replace(' ', '', $data['destinatario'][0]->telefone))
         );
 
         $totalBC = 0;
@@ -244,13 +244,13 @@ class Notafiscal extends BaseController {
         /* DADOS DOS PRODUTOS */
         for ($i = 0, $n = 1; $i < count($data['produtos']); $i++, $n++) {
 
-            $valBC = ((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda );
-            $valTotICMS = $valBC * ( ((float) $data['produtos'][$i]->icms) / 100 );
-            $valTotIPI = $valBC * ( ((float) $data['produtos'][$i]->ipi) / 100 );
-            $valTotPIS = $valBC * ( ((float) $data['produtos'][$i]->pis) / 100 );
-            $valTotCOFINS = $valBC * ( ((float) $data['produtos'][$i]->cofins) / 100 );
-            $totImpostoItem = $valTotICMS + $valTotIPI + $valTotPIS + $valTotCOFINS;
-            $totProdItem = (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda;
+            $valBC = number_format(((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda ), 2, '.', '');
+            $valTotICMS = number_format($valBC * ( ((float) $data['produtos'][$i]->icms) / 100 ), 2, '.', '');
+            $valTotIPI = number_format($valBC * ( ((float) $data['produtos'][$i]->ipi) / 100 ), 2, '.', '');
+            $valTotPIS = number_format($valBC * ( ((float) $data['produtos'][$i]->pis) / 100 ), 2, '.', '');
+            $valTotCOFINS = number_format($valBC * ( ((float) $data['produtos'][$i]->cofins) / 100 ), 2, '.', '');
+            $totImpostoItem = number_format( ($valTotICMS + $valTotIPI + $valTotPIS + $valTotCOFINS), 2, '.', '');
+            $totProdItem = number_format(( (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda), 2, '.', '');
 
             /* CALCULANDO VALORES TOTAIS DA NOTA */
             $totalBC += $totalBC;
@@ -266,7 +266,7 @@ class Notafiscal extends BaseController {
             $dadosProdutos[$i] = array(
                 /* Dados Basicos */
                 "numItem" => $n,
-                "codigoProduto" => $data['produtos'][$i]->estoque_produto_id, // Codigo de controle no sistema do cliente
+                "codigoProduto" => $data['produtos'][$i]->codigo, // Codigo de controle no sistema do cliente
                 "cEAN" => '', //FALTA ESSE
                 "nomeProd" => $data['produtos'][$i]->descricao,
                 "ncm" => $data['produtos'][$i]->ncm,
@@ -275,11 +275,11 @@ class Notafiscal extends BaseController {
                 "unCompra" => $data['produtos'][$i]->unidade,
                 "qtdeCompra" => $data['produtos'][$i]->quantidade,
                 "valUniComp" => $data['produtos'][$i]->valor_venda,
-                "valProduto" => (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda,
+                "valProduto" => number_format((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
                 "cEAN_Trib" => '',
                 "uniTrib" => $data['produtos'][$i]->unidade,
                 "qtdeTrib" => $data['produtos'][$i]->quantidade,
-                "valUniTrib" => (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda,
+                "valUniTrib" => number_format((float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
                 "valorFrete" => '', //deixar em branco
                 "valorSeguro" => '', //deixar em branco
                 "valorDesconto" => '', //deixar em branco   
@@ -289,7 +289,7 @@ class Notafiscal extends BaseController {
                 "itemPedido" => $n,
                 "prodCEST" => $data['produtos'][$i]->cest,
                 /* DESCRIÇÃO DO PRODUTO(informações adicionais. Ex: Validade, Lote e etc) */
-                "prodDescricao" => '',
+                "prodDescricao" =>'Lote: '.$data['produtos'][$i]->lote.' - '. date('d/m/Y', strtotime($data['produtos'][$i]->validade)),
                 /* CALCULO DE IMPOSTOS 
                   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                  * EXISTEM VARIAS MODALIDADES PARA O CALCULO DO ICMS, E CADA UMA DELAS 
@@ -309,25 +309,25 @@ class Notafiscal extends BaseController {
                 "cst_ICMS" => substr($data['produtos'][$i]->cst_icms, 1),
                 //CASO SEJA 40, 41 OU 50, SERÃO NECESSARIAS APENAS AS INFORMAÇÕES ACIMAS
                 "modBC_ICMS" => '3',
-                "valorBC_ICMS" => (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda,
+                "valorBC_ICMS" => number_format((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
                 "percICMS_ICMS" => $data['produtos'][$i]->icms, //tag pICMS
                 "valorICMS_ICMS" => $valTotICMS,
                 //IPI
                 "codEnq_IPI" => '999',
                 "cst_IPI" => $data['produtos'][$i]->cst_ipi, //CRIAR UM CST EXCLUSIVO PARA O IPI
-                "valorBC_IPI" => (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda,
+                "valorBC_IPI" => number_format((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
                 "percIPI_IPI" => $data['produtos'][$i]->ipi,
                 "valorIPI_IPI" => $valTotIPI,
                 //PIS
                 "cst_PIS" => $data['produtos'][$i]->cst_pis,
-                "valorBC_PIS" => (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda,
+                "valorBC_PIS" => number_format((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
                 "percPIS_PIS" => $data['produtos'][$i]->pis,
                 "valorPIS_PIS" => $valTotPIS,
                 "qBCProd" => '',
                 "vAliqProd" => '',
                 //COFINS
                 "cst_COFINS" => $data['produtos'][$i]->cst_cofins,
-                "valorBC_COFINS" => (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda,
+                "valorBC_COFINS" => number_format((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
                 "percPIS_COFINS" => $data['produtos'][$i]->cofins,
                 "valorCOFINS_COFINS" => $valTotCOFINS,
                 /* VALOR TOTAL DE IMPOSTO */
@@ -337,15 +337,14 @@ class Notafiscal extends BaseController {
 
         //VALORES TOTAIS DA NOTA
         $totalNota = array(
-            "totalBC" => $totalBC,
-            "totalICMS" => $totalICMS,
-            "totalIPI" => $totalIPI,
-            "totalPIS" => $totalPIS,
-            "totalCOFINS" => $totalCOFINS,
-            "totalProduto" => $totalProduto,
-            "totalImposto" => $totalImposto
+            "totalBC" => number_format($totalBC, 2, '.', ''),
+            "totalICMS" => number_format($totalICMS, 2, '.', ''),
+            "totalIPI" => number_format($totalIPI, 2, '.', ''),
+            "totalPIS" => number_format($totalPIS, 2, '.', ''),
+            "totalCOFINS" => number_format($totalCOFINS, 2, '.', ''),
+            "totalProduto" => number_format($totalProduto, 2, '.', ''),
+            "totalImposto" => number_format($totalImposto, 2, '.', '')
         );
-
 
         /*
          * POR ALGUM MOTIVO, O PHP NÃO PERMITE O USO DO COMANDO 'USE'
@@ -362,11 +361,12 @@ class Notafiscal extends BaseController {
         // GERA AS TAGS DA ASSINATURA DIGITAL
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
         
+//        echo 'ola';
         // VALIDA O XML POR MEIO DE UM SCHEMA XSD
         require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
         
         // ENVIA O XML PARA A SEFAZ
-//        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
+        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
 
         $this->notafiscal->gravarchave($chave, $notafiscal_id);
 

@@ -123,10 +123,10 @@ class produto_model extends Model {
                 $this->db->set('codigo', $_POST['codigo']);
             }
             if($_POST['ncm'] != ''){
-                $this->db->set('ncm', $_POST['ncm']);
+                $this->db->set('ncm', $this->utilitario->remover_caracter($_POST['ncm']));
             }
             if($_POST['cest'] != ''){
-                $this->db->set('ncm', $_POST['cest']);
+                $this->db->set('cest', $this->utilitario->remover_caracter($_POST['cest']));
             }
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');

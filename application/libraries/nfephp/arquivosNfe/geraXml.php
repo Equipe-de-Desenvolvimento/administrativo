@@ -150,8 +150,6 @@
 
         $resp = $nfe->taginfAdProd($produto['numItem'], $produto['prodDescricao']);
 
-        /*
-        ESSAS TAGS DE IMPOSTOS A DIAGNOSTIC NÃO USA (segundo o Fred).
 
         //VALOR TOTAL DE IMPOSTOS
         $nItem = $produto['numItem']; 
@@ -217,9 +215,7 @@
         $vAliqProd = '';
         $resp = $nfe->tagCOFINS($nItem, $cst, $vBC, $pCOFINS, $vCOFINS, $qBCProd, $vAliqProd);
 
-        */
     }
-
 
     $vST = isset($vICMSST) ? $vICMSST : 0;; // Total de ICMS ST
 

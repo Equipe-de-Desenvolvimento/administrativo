@@ -10,7 +10,8 @@ $tpAmb = '2';
 $aXml = file_get_contents("/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
 
 if (! $nfe->validarXml($xml) || sizeof($nfeTools->errors)) {
-    echo "<h3>Eita !?! Tem bicho na linha .... </h3>";    
+    echo "<meta charset='utf-8'/>"
+    . "<h3>Erros na estrutura do XML... </h3>";    
     foreach ($nfe->errors as $erro) {
         if (is_array($erro)) { 
             foreach ($erro as $err) {
