@@ -129,6 +129,7 @@ class Contrato extends BaseController {
     }
 
     function gravar() {
+//        echo "<pre>"; var_dump($_POST); die;
         $contrato_id = $this->contrato->gravar();
         if ($contrato_id == true) {
             $data['mensagem'] = 'Sucesso ao gravar a Contrato.';

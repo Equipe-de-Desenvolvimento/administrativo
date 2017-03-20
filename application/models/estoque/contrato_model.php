@@ -424,12 +424,12 @@ class contrato_model extends Model {
 
     function gravar() {
         $estoque_contrato_id = $_POST['contrato_id'];
-
+//        var_dump(); die; 
         $this->db->set('nome', $_POST['nome']);
-        if ($_POST['txtdata_inicio'] != '') {
+        if ($_POST['txtdata_inicio'] != '' && isset($_POST['txtdata_inicio'])) {
             $this->db->set('data_inicio', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio']))));
         }
-        if ($_POST['txtdata_fim'] != '') {
+        if ($_POST['txtdata_fim'] != ''  && isset($_POST['txtdata_fim'])) {
             $this->db->set('data_fim', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim']))));
         }
 
@@ -450,7 +450,7 @@ class contrato_model extends Model {
             $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
         }
 
-        if ($_POST['txtdata_assinatura'] != '') {
+        if ($_POST['txtdata_assinatura'] != ''  && isset($_POST['txtdata_assinatura'])) {
             $this->db->set('data_assinatura', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_assinatura']))));
         }
         $this->db->set('valor_inicial', str_replace(',', '.', str_replace('.', '', $_POST['valorInicial'])));
@@ -484,7 +484,7 @@ class contrato_model extends Model {
         }
 
         if ($_POST['faturado'] != 't') {
-            if ($_POST['txtdata_vencimento'] == '') {
+            if ($_POST['txtdata_vencimento'] == '' || !isset($_POST['txtdata_vencimento']) ) {
                 $messagem = "Erro ao gravar Parcelas. Data do primeiro vencimento nao informada.";
                 return $messagem;
             }

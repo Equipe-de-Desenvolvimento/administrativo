@@ -169,7 +169,7 @@
 
                     <div>
                         <label>Data do Primeiro Vencimento</label>
-                        <input type="text" id="txtdata_vencimento" class="texto02" alt="date" name="txtdata_vencimento" value="<?= @date("d//m/Y", strtotime($dados_pagamento[0]->data)) ?>" <?= $readonly ?>/>
+                        <input type="text" id="txtdata_vencimento" class="texto02" alt="date" name="txtdata_vencimento" value="<?=  (@$dados_pagamento[0]->data != '') ? @date("d//m/Y", strtotime($dados_pagamento[0]->data)): '' ?>" <?= $readonly ?>/>
                     </div>
 
                     <div id="intervalo">

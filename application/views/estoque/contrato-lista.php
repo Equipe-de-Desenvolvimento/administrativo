@@ -50,8 +50,8 @@
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->credor_devedor; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->numero_contrato; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= date("d/m/Y", strtotime($item->data_inicio) ); ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= date("d/m/Y", strtotime($item->data_fim) ); ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= ($item->data_inicio != '')? date("d/m/Y", strtotime($item->data_inicio) ): ''; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= ($item->data_fim != '')? date("d/m/Y", strtotime($item->data_fim) ): '';  ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= number_format((float)$item->valor_inicial, 2, ',', ''); ?></td>
 
                                 <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
