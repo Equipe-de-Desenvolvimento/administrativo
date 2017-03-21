@@ -251,15 +251,15 @@ class Guia extends BaseController {
 
 
 //        foreach ($exames as $value) {
-//            if (!is_dir("/home/johnny/projetos/clinica/upload/barcodeimg/")) {
-//                mkdir("/home/johnny/projetos/clinica/upload/barcodeimg/");
-//                chmod("/home/johnny/projetos/clinica/upload/barcodeimg/", 0777);
+//            if (!is_dir("/home/sisprod/projetos/clinica/upload/barcodeimg/")) {
+//                mkdir("/home/sisprod/projetos/clinica/upload/barcodeimg/");
+//                chmod("/home/sisprod/projetos/clinica/upload/barcodeimg/", 0777);
 //            }
-//            if (!is_dir("/home/johnny/projetos/clinica/upload/barcodeimg/$value->paciente_id/")) {
-//                mkdir("/home/johnny/projetos/clinica/upload/barcodeimg/$value->paciente_id/");
-//                chmod("/home/johnny/projetos/clinica/upload/barcodeimg/$value->paciente_id/", 0777);
+//            if (!is_dir("/home/sisprod/projetos/clinica/upload/barcodeimg/$value->paciente_id/")) {
+//                mkdir("/home/sisprod/projetos/clinica/upload/barcodeimg/$value->paciente_id/");
+//                chmod("/home/sisprod/projetos/clinica/upload/barcodeimg/$value->paciente_id/", 0777);
 //            }
-//            $this->utilitario->barcode($value->agenda_exames_id, "/home/johnny/projetos/clinica/upload/barcodeimg/$value->paciente_id/$value->agenda_exames_id.png", $size = "20", "horizontal", "code128", true, 1);
+//            $this->utilitario->barcode($value->agenda_exames_id, "/home/sisprod/projetos/clinica/upload/barcodeimg/$value->paciente_id/$value->agenda_exames_id.png", $size = "20", "horizontal", "code128", true, 1);
 //        }
 //
 //        // criar codigo de barras (fim)
@@ -577,8 +577,8 @@ class Guia extends BaseController {
             $destino = "./upload/guia/$guia_id";
             chmod($destino, 0777);
         }
-//        $data['arquivo_pasta'] = directory_map("/home/johnny/projetos/clinica/upload/$paciente_id/");
-        $data['arquivo_pasta'] = directory_map("/home/johnny/projetos/clinica/upload/guia/$guia_id/");
+//        $data['arquivo_pasta'] = directory_map("/home/sisprod/projetos/clinica/upload/$paciente_id/");
+        $data['arquivo_pasta'] = directory_map("/home/sisprod/projetos/clinica/upload/guia/$guia_id/");
         if ($data['arquivo_pasta'] != false) {
             sort($data['arquivo_pasta']);
         }
@@ -594,7 +594,7 @@ class Guia extends BaseController {
             chmod($destino, 0777);
         }
 
-        $config['upload_path'] = "/home/johnny/projetos/clinica/upload/guia/" . $guia_id . "/";
+        $config['upload_path'] = "/home/sisprod/projetos/clinica/upload/guia/" . $guia_id . "/";
         $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xls|xlsx|ppt';
         $config['max_size'] = '0';
         $config['overwrite'] = FALSE;

@@ -1,5 +1,5 @@
 <?php
-require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
 use NFePHP\NFe\ToolsNFe;
 
@@ -8,7 +8,7 @@ $nfe->setModelo('55');
 
 $aResposta = array();
 $tpAmb = '2';
-$aXml = file_get_contents("/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
+$aXml = file_get_contents("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
 $idLote = '';
 $indSinc = '1';
 $flagZip = false;

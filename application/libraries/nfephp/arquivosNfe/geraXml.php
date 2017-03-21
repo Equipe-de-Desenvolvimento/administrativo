@@ -272,18 +272,18 @@
         // header('Content-type: text/xml; charset=UTF-8');
         $xml = $nfe->getXML();
         
-        if (!is_dir("/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}")) {
-            mkdir("/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}");
-            $destino = "/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}";
+        if (!is_dir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}")) {
+            mkdir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}");
+            $destino = "/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}";
             chmod($destino, 0777);
         }
 
-        if (!is_dir("/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada")) {
-            mkdir("/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada");
-            $destino = "/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada";
+        if (!is_dir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada")) {
+            mkdir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada");
+            $destino = "/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada";
             chmod($destino, 0777);
         }
-        $filename = "/home/johnny/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada/{$chave}-nfe.xml"; // Ambiente Linux
+        $filename = "/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada/{$chave}-nfe.xml"; // Ambiente Linux
         $arq = fopen($filename, 'w+');
         fwrite($arq, $xml);
         fclose($arq);

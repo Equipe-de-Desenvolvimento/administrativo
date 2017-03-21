@@ -257,7 +257,7 @@
                                             <td>Arquivos anexos:
                                                 <?
                                                 $this->load->helper('directory');
-                                                $arquivo_pasta = directory_map("/home/johnny/projetos/clinica/upload/consulta/$item->ambulatorio_laudo_id/");
+                                                $arquivo_pasta = directory_map("/home/sisprod/projetos/clinica/upload/consulta/$item->ambulatorio_laudo_id/");
 
                                                 $w = 0;
                                                 if ($arquivo_pasta != false):
@@ -321,7 +321,7 @@
                                         <tr>
                                             <?
                                             $this->load->helper('directory');
-                                            $arquivo_pastaimagem = directory_map("/home/johnny/projetos/clinica/upload/$item->exames_id/");
+                                            $arquivo_pastaimagem = directory_map("/home/sisprod/projetos/clinica/upload/$item->exames_id/");
 //        $data['arquivo_pasta'] = directory_map("/home/vivi/projetos/clinica/upload/$exame_id/");
                                             if ($arquivo_pastaimagem != false) {
                                                 sort($arquivo_pastaimagem);
@@ -356,7 +356,7 @@
                                             <td>Arquivos anexos:
                                                 <?
                                                 $this->load->helper('directory');
-                                                $arquivo_pasta = directory_map("/home/johnny/projetos/clinica/upload/consulta/$item->ambulatorio_laudo_id/");
+                                                $arquivo_pasta = directory_map("/home/sisprod/projetos/clinica/upload/consulta/$item->ambulatorio_laudo_id/");
 
                                                 $w = 0;
                                                 if ($arquivo_pasta != false):

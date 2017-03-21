@@ -77,11 +77,11 @@ class Notafiscal extends BaseController {
         } else {
             $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
             
-            require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
             $config = $this->geraconfignfephp();
             
             
-            require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
         }
     }
 
@@ -101,12 +101,12 @@ class Notafiscal extends BaseController {
             'pathXmlUrlFileMDFe' => 'mdf2_ws1.xml',
             'pathXmlUrlFileCLe' => '',
             'pathXmlUrlFileNFSe' => '',
-            'pathNFeFiles' => '/home/johnny/projetos/administrativo/upload/nfe/',
+            'pathNFeFiles' => '/home/sisprod/projetos/administrativo/upload/nfe/',
             'pathCTeFiles' => '',
             'pathMDFeFiles' => '',
             'pathCLeFiles' => '',
             'pathNFSeFiles' => '',
-            'pathCertsFiles' => '/home/johnny/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
+            'pathCertsFiles' => '/home/sisprod/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
             'siteUrl' => base_url() . '/ambulatorio/empresa',
             'schemesNFe' => 'PL_008i2',
             'schemesCTe' => 'PL_CTe_200',
@@ -132,9 +132,9 @@ class Notafiscal extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '\home\johnny\projetos\administrativo\img\notafiscal\empresa.jpg',
-                'pathLogoNFe' => '\home\johnny\projetos\administrativo\img\notafiscal\logo-nfe.png',
-                'pathLogoNFCe' => '\home\johnny\projetos\administrativo\img\notafiscal\logo-nfce.png',
+                'pathLogoFile' => '\home\sisprod\projetos\administrativo\img\notafiscal\empresa.jpg',
+                'pathLogoNFe' => '\home\sisprod\projetos\administrativo\img\notafiscal\logo-nfe.png',
+                'pathLogoNFCe' => '\home\sisprod\projetos\administrativo\img\notafiscal\logo-nfce.png',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''
@@ -353,20 +353,20 @@ class Notafiscal extends BaseController {
          */
 
 
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
         // GERA O XML PRINCIPAL
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
         
         // GERA AS TAGS DA ASSINATURA DIGITAL
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
         
 //        echo 'ola';
         // VALIDA O XML POR MEIO DE UM SCHEMA XSD
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
         
         // ENVIA O XML PARA A SEFAZ
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
 
         $this->notafiscal->gravarchave($chave, $notafiscal_id);
 
