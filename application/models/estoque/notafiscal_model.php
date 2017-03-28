@@ -66,6 +66,7 @@ class notafiscal_model extends Model {
                             e.cnae,
                             e.cod_regime_tributario,
                             e.email,
+                            e.ambiente_producao,
                             e.certificado_nome,
                             e.certificado_senha,
                             m.codigo_ibge,
@@ -241,16 +242,35 @@ class notafiscal_model extends Model {
 
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->set('data_cadastro', $horario);
-        $this->db->set('operador_cadastro', $operador_id);
-        $this->db->insert('tb_notafiscal');
-        $erro = $this->db->_error_message();
-        if (trim($erro) != "") // erro de banco
-            return -1;
-        else
-            $notafiscal_id = $this->db->insert_id();
+
+            if ($_POST['nota_fiscal_id'] == "") {// insert
+
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_notafiscal');
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $notafiscal_id = $this->db->insert_id();
+            }
+            else { // update
+                $notafiscal_id = $_POST['nota_fiscal_id'];
+                $this->db->set('data_atualizacao', $horario);
+                $this->db->set('operador_atualizacao', $operador_id);
+                $this->db->where('notafiscal_id', $notafiscal_id);
+                $this->db->update('tb_notafiscal');
+            }
 
         return $notafiscal_id;
+    }
+
+    function gravarprotocolo($protocoloRecibo, $nota_id) {
+        $horario = date("Y-m-d H:i:s");
+        $this->db->set('numero_protocolo', $protocoloRecibo);
+        
+        $this->db->where('notafiscal_id', $nota_id);
+        $this->db->update('tb_notafiscal');
     }
 
     function gravarchave($chave, $nota_id) {

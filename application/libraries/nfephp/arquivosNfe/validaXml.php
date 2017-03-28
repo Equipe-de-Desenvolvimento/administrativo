@@ -6,8 +6,8 @@ use NFePHP\NFe\ToolsNFe;
 $nfe = new ToolsNFe($config);
 $nfe->setModelo('55');
 
-$tpAmb = '2';
-$aXml = file_get_contents("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
+$tpAmb = $tipoAmbiente;
+//$aXml = file_get_contents("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
 
 if (! $nfe->validarXml($xml) || sizeof($nfeTools->errors)) {
     echo "<meta charset='utf-8'/>"

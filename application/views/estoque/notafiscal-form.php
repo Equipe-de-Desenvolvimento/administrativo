@@ -71,8 +71,7 @@
 
             <div>        
                 <label>Observações</label>
-                <textarea style="border-radius: 5pt"  name="observacoes" id="observacoes" rows="3" cols="40">
-                </textarea>
+                <input name="observacoes" id="observacoes" class="texto10" />
             </div>
             
             

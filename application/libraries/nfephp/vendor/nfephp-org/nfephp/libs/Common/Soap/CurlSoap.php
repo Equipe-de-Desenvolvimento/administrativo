@@ -307,7 +307,7 @@ class CurlSoap
         if ($this->sslProtocol !== 0) {
             curl_setopt($oCurl, CURLOPT_SSLVERSION, $this->sslProtocol);
         }
-        curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, 0);
         if ($port == 443) {
             curl_setopt($oCurl, CURLOPT_PORT, 443);

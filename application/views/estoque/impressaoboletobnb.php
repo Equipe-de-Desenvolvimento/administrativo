@@ -376,7 +376,7 @@ function direita($entra, $comp) {
                 <div id="codigo_barras" class="">
                     <div style="margin: 4pt;">
                         <?php 
-                            include ('/home/sisprod/projetos/administrativo/application/libraries/barcode_i2_5.php');
+                            include ('/home/johnny/projetos/administrativo/application/libraries/barcode_i2_5.php');
                             $bc = new BarcodeI25();
                             $bc->tipoRetorno = 1;
                             $bc->ebf = 1.5; //espessura da barra fina

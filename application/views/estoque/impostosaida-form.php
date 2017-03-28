@@ -139,7 +139,7 @@
                                         <select name="cst_ipi" id="cst_ipi" style="width: 100pt" required="">
                                             <option>Selecione</option>
                                             <? foreach ($cst_ipi as $value) : ?>
-                                                <option value="<?= $value->cst ?>" <?= ((int) $value->cst == 52) ? 'selected' : ''; ?>>
+                                                <option value="<?= $value->cst ?>" <?= ((int) $value->cst == 99) ? 'selected' : ''; ?>>
                                                     <?= $value->cst ?> - <?= $value->situacao_tributaria ?>
                                                 </option>
                                             <? endforeach; ?>

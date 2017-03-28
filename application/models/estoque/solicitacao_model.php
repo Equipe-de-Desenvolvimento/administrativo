@@ -1290,16 +1290,22 @@ class solicitacao_model extends Model {
     function gravaritens() {
         try {
             /* inicia o mapeamento no banco */
-            if ($_POST['ipi'] == '') {
-                $_POST['ipi'] = 0;
-            }
-            $_POST['icms'] = str_replace(",", ".", $_POST['icms']);
-            $_POST['ipi'] = str_replace(",", ".", $_POST['ipi']);
-            $_POST['mva'] = str_replace(",", ".", $_POST['mva']);
-            $this->db->set('icms', $_POST['icms']);
-            $this->db->set('ipi', $_POST['ipi']);
-            $this->db->set('mva', $_POST['mva']);
-            $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
+//            if ($_POST['ipi'] == '') {
+//                $_POST['ipi'] = 0;
+//            }
+//            $_POST['icms'] = str_replace(",", ".", $_POST['icms']);
+//            $_POST['ipi'] = str_replace(",", ".", $_POST['ipi']);
+//            $_POST['mva'] = str_replace(",", ".", $_POST['mva']);
+//            $this->db->set('icms', $_POST['icms']);
+//            $this->db->set('ipi', $_POST['ipi']);
+//            $this->db->set('mva', $_POST['mva']);
+//            $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
+//            if ($_POST['sit_trib'] != '') {
+//                $this->db->set('cst', $_POST['sit_trib']);
+//            }
+//            if (isset($_POST['icmsst'])) {
+//                $this->db->set('icmsst', 't');
+//            }
 
             $this->db->set('solicitacao_cliente_id', $_POST['txtestoque_solicitacao_id']);
             $this->db->set('quantidade', $_POST['txtqtde']);
@@ -1308,12 +1314,6 @@ class solicitacao_model extends Model {
 
             if ($_POST['lote'] != '') {
                 $this->db->set('entrada_id', $_POST['lote']);
-            }
-            if ($_POST['sit_trib'] != '') {
-                $this->db->set('cst', $_POST['sit_trib']);
-            }
-            if (isset($_POST['icmsst'])) {
-                $this->db->set('icmsst', 't');
             }
 
             $horario = date("Y-m-d H:i:s");

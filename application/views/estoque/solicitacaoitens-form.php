@@ -41,7 +41,7 @@
                 <label>Valor</label>
                 <input type="text" name="valor" id="valor" alt="decimal" class="texto01" required readonly/>
             </div>
-
+<!--
             <div style="width: 100%;">
                 <span title="Código Fiscal de Operações e Prestações" style="text-decoration: none">
                     <label for="cfop">CFOP</label>
@@ -81,7 +81,7 @@
             <div style="margin-left: -10pt; margin-right: 0;">
                 <span title="Usa ICMS de Situação Tributaria" style="text-decoration: none"><label for="icmsst">ICMS ST</label></span>
                 <input type="checkbox" name="icmsst" id="icmsst"/>
-            </div>
+            </div>-->
 
             <div style="width: 100%">
                 <hr>

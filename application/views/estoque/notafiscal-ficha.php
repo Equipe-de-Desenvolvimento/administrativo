@@ -35,7 +35,7 @@
             if (count($produtos) == 0) { ?>
                 <h3 style="font-weight: bold">Impossibilitado de gerar NF-e, não há produtos nessa solicitação.</h3> 
             <? } else {?>
-                <h3 style="font-weight: bold">Só é possivel gerar NF-e após informar as informaçoes para todos os produtos.</h3>
+                <h3 style="font-weight: bold">Só é possivel gerar NF-e após informar os detalhes para todos os produtos.</h3>
             <?}
         endif; ?>
 

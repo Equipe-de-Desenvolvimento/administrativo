@@ -469,6 +469,12 @@ ALTER TABLE ponto.tb_notafiscal ADD COLUMN tipo_pagamento character varying(50);
 -- Dia 18/03/2017
 ALTER TABLE ponto.tb_notafiscal ADD COLUMN chave_nfe character varying(1000);
 
+-- Dia 22/03/2017
+-- 1 = ambiente de producao
+-- 2 = ambiente de homologação
+ALTER TABLE ponto.tb_empresa ADD COLUMN ambiente_producao character varying(20) DEFAULT '2';
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN numero_recibo character varying(50);
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN numero_protocolo character varying(50);
 
 
 

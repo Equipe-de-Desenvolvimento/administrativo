@@ -313,7 +313,7 @@ class Boleto extends BaseController {
         $nomeArquivo = $data['destinatario'][0]->nome . $nossoNumero;
         $pasta = $data['destinatario'][0]->nome;
 
-//        $pathRoot = "/home/sisprod/projetos/administrativo/";
+//        $pathRoot = "/home/johnny/projetos/administrativo/";
         if (!is_dir("./upload/cnab/$pasta")) {
             mkdir("./upload/cnab/$pasta", 0777);
             chmod("./upload/cnab", 0777);

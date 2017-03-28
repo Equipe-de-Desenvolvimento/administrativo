@@ -36,7 +36,7 @@
                    //7=Contingência SVC-RS (SEFAZ Virtual de Contingência do RS);
                    //9=Contingência off-line da NFC-e (as demais opções de contingência são válidas também para a NFC-e);
                    //Nota: Para a NFC-e somente estão disponíveis e são válidas as opções de contingência 5 e 9.
-    $tpAmb = '2'; //1=Produção; 2=Homologação
+    $tpAmb = $tipoAmbiente; //1=Produção; 2=Homologação
     
     $finNFe = $dadosNFe['finalidadeNFe']; //1=NF-e normal; 2=NF-e complementar; 3=NF-e de ajuste; 4=Devolução/Retorno.
     $indFinal = '0'; //0=Normal; 1=Consumidor final;
@@ -272,22 +272,6 @@
         // header('Content-type: text/xml; charset=UTF-8');
         $xml = $nfe->getXML();
         
-        if (!is_dir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}")) {
-            mkdir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}");
-            $destino = "/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}";
-            chmod($destino, 0777);
-        }
-
-        if (!is_dir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada")) {
-            mkdir("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada");
-            $destino = "/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada";
-            chmod($destino, 0777);
-        }
-        $filename = "/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/homologada/{$chave}-nfe.xml"; // Ambiente Linux
-        $arq = fopen($filename, 'w+');
-        fwrite($arq, $xml);
-        fclose($arq);
-        chmod($filename, 0777);
     } else {
         header('Content-type: text/html; charset=UTF-8');
         foreach ($nfe->erros as $err) {

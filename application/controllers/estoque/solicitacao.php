@@ -261,16 +261,13 @@ class Solicitacao extends BaseController {
     function gravaritens() {
         $estoque_solicitacao_id = $_POST['txtestoque_solicitacao_id'];
         if ($_POST['produto_id'] == '') {
-            $data['mensagem'] = 'Insira um produto valido.';
+            $data['mensagem'] = 'Selecione um produto valido.';
             $this->session->set_flashdata('message', $data['mensagem']);
         } elseif ($_POST['txtqtde'] == '') {
             $data['mensagem'] = 'Insira uma quantidade valida.';
             $this->session->set_flashdata('message', $data['mensagem']);
         } elseif ($_POST['valor'] == '') {
-            $data['mensagem'] = 'Insira um valor valido.';
-            $this->session->set_flashdata('message', $data['mensagem']);
-        } elseif (($_POST['cfop'] != '' || $_POST['descricao_cfop'] != '') && $_POST['cfop_id'] == '') {
-            $data['mensagem'] = 'Insira um CFOP valido. Certifique-se de selecionar algum CFOP presente na lista.';
+            $data['mensagem'] = 'Valor do produto nao configurado adequadamente.';
             $this->session->set_flashdata('message', $data['mensagem']);
         } else {
             $_POST['valor'] = str_replace(',', '.', $_POST['valor']);
@@ -453,7 +450,7 @@ class Solicitacao extends BaseController {
 
     function teste() {
         header('Content-type: text/html; charset=utf-8');
-        $path = "/home/sisprod/projetos/administrativo/application/libraries/boleto/objectBoleto";
+        $path = "/home/johnny/projetos/administrativo/application/libraries/boleto/objectBoleto";
         include ("$path/OB_init.php");
 
         $ob = new OB('004');
