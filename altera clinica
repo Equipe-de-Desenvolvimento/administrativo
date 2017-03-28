@@ -477,10 +477,5 @@ ALTER TABLE ponto.tb_notafiscal ADD COLUMN numero_recibo character varying(50);
 ALTER TABLE ponto.tb_notafiscal ADD COLUMN numero_protocolo character varying(50);
 
 
-
-
-
-
-
-
-
+-- Dia 27/03/2017
+ALTER TABLE ponto.tb_estoque_tipo_contrato ADD COLUMN tipo_movimentacao character varying(200);

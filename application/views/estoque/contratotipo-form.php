@@ -6,11 +6,24 @@
 
                 <dl class="dl_desconto_lista">
                     <dt>
-                    <label>Nome</label>
+                        <label>Nome</label>
                     </dt>
                     <dd>
                         <input type="hidden" name="tipo_id" class="texto10" value="<?= @$tipo[0]->tipo_id; ?>" />
                         <input type="text" name="txtNome" class="texto10" value="<?= @$tipo[0]->descricao; ?>" required=""/>
+                    </dd>
+                    <dt>
+                        <label>&nbsp;</label>
+                    </dt>
+                    <dd>
+                        <input type="radio" name="tipoFinanceiro" value="ENTRADA" id="fixo" required=""/>
+                        <label for="fixo" style="display: inline; color: black; font-size: 9pt">
+                            Entrada
+                        </label>
+                        <input type="radio" name="tipoFinanceiro" value="SAIDA" id="periodico" required=""/>
+                        <label for="periodico" style="display: inline; color: black; font-size: 9pt">
+                            Saida
+                        </label>
                     </dd>
                 </dl>    
                 <hr/>
@@ -23,13 +36,13 @@
 
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
 <script type="text/javascript">
-    $(function() {
-        $( "#accordion" ).accordion();
+    $(function () {
+        $("#accordion").accordion();
     });
 
 
-    $(document).ready(function(){
-        jQuery('#form_sala').validate( {
+    $(document).ready(function () {
+        jQuery('#form_sala').validate({
             rules: {
                 txtNome: {
                     required: true,

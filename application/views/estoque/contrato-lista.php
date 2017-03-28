@@ -19,7 +19,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="tabela_header">Nome</th>
+                        <!--<th class="tabela_header">Nome</th>-->
                         <th class="tabela_header">Credor/Devedor</th>
                         <th class="tabela_header">Nr. Contrato</th>
                         <th class="tabela_header">Tp. de Contrato</th>
@@ -46,10 +46,10 @@
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
                      ?>
                             <tr>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->contrato; ?></td>
+                                <!--<td class="<?php // echo $estilo_linha; ?>"><?= $item->contrato; ?></td>-->
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->credor_devedor; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->numero_contrato; ?></td>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?> (<?= $item->tipo_movimentacao; ?>)</td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= ($item->data_inicio != '')? date("d/m/Y", strtotime($item->data_inicio) ): ''; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= ($item->data_fim != '')? date("d/m/Y", strtotime($item->data_fim) ): '';  ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= number_format((float)$item->valor_inicial, 2, ',', ''); ?></td>

@@ -123,7 +123,7 @@
                                         </div>
                                     </td>
                                 <? }
-                                if ($item->situacao != 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8)) {
+                                if ($item->situacao != 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8) && ($item->faturado != 't')) {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
                                             <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Solicitacao?');" href="<?= base_url() ?>estoque/solicitacao/excluir/<?= $item->estoque_solicitacao_setor_id ?>">Excluir</a>

@@ -17,11 +17,11 @@
                 </div>
                 <div>
                     <label>Data inicio</label>
-                    <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" class="texto02" value="<?= @$obj->_dt_inicio; ?>"/>
+                    <input type="text" name="txtdata_inicio" id="txtdata_inicio" alt="date" class="texto02" value="<?= date("d/m/Y", strtotime($obj->_dt_inicio)); ?>"/>
                 </div>
                 <div>
                     <label>Data Termino</label>
-                    <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" class="texto02" value="<?= @$obj->_dt_fim; ?>"/>
+                    <input type="text" name="txtdata_fim" id="txtdata_fim" alt="date" class="texto02" value="<?= date("d/m/Y", strtotime(@$obj->_dt_fim)); ?>"/>
                 </div>
             </fieldset>
             <fieldset>
@@ -85,7 +85,7 @@
                             if (@$obj->_tipo_contrato == $tipo->tipo_id):echo 'selected';
                             endif;
                             ?>>
-                                <?= $tipo->descricao; ?></option>
+                                <?= $tipo->descricao; ?> (<?= $tipo->tipo_movimentacao; ?>)</option>
                         <? endforeach; ?>
                     </select>
 
@@ -101,7 +101,7 @@
                 </div>
                 <div>
                     <label>Data Assinatura</label>
-                    <input type="text" name="txtdata_assinatura" id="txtdata_assinatura" alt="date" class="texto02" value="<?= @$obj->_dt_assinatura; ?>"/>
+                    <input type="text" name="txtdata_assinatura" id="txtdata_assinatura" alt="date" class="texto02" value="<?= date("d/m/Y", strtotime(@$obj->_dt_assinatura)); ?>"/>
                     <!--                </div>
                                     <div>-->
                     <label>Valor Inicial</label>
