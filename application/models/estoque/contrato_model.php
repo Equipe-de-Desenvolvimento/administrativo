@@ -203,7 +203,7 @@ class contrato_model extends Model {
         $this->db->where('contrato_id', $estoque_contrato_id);
         $parcelas = $this->db->get()->result();
 
-        $observacao = "Faturamento do Contrato de Num: " . $parcelas[0]->numero_contrato . ',  Credor/Devedor: ' . $parcelas[0]->razao_social;
+        $observacao = "Contrato de Num: " . $parcelas[0]->numero_contrato . ',  Credor/Devedor: ' . $parcelas[0]->razao_social;
         $classe = "CONTRATO " . $parcelas[0]->numero_contrato;
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
@@ -240,13 +240,15 @@ class contrato_model extends Model {
                 } else {
 
                     //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contasreceber
+                    $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
+                    
                     $this->db->set('valor', $item->valor);
                     $this->db->set('devedor', $item->credor_devedor_id);
                     $this->db->set('data', $item->data);
                     $this->db->set('parcela', $item->parcela);
                     $this->db->set('classe', $classe);
                     $this->db->set('conta', $item->conta_id);
-                    $this->db->set('observacao', $observacao);
+                    $this->db->set('observacao', $obs);
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
                     $this->db->insert('tb_financeiro_contasreceber');
@@ -283,6 +285,8 @@ class contrato_model extends Model {
                 } else {
 
                     //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contaspagar
+                    $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
+                    
                     $this->db->set('valor', $item->valor);
                     $this->db->set('credor', $item->credor_devedor_id);
                     $this->db->set('data', $item->data);
@@ -290,7 +294,7 @@ class contrato_model extends Model {
                     $this->db->set('numero_parcela', count($parcelas) );
                     $this->db->set('classe', $classe);
                     $this->db->set('conta', $item->conta_id);
-                    $this->db->set('observacao', $observacao);
+                    $this->db->set('observacao', $obs);
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
                     $this->db->insert('tb_financeiro_contaspagar');

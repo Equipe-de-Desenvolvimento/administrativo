@@ -121,7 +121,7 @@ class solicitacao_model extends Model {
 
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        $observacao = "Faturamento do Pedido de Num: " . $_POST['estoque_solicitacao_id'] . ',  Cliente: ' . $faturamento[0]->nome;
+        $observacao = "Pedido: " . $_POST['estoque_solicitacao_id'] . ',  Cliente: ' . $faturamento[0]->nome;
         $data = date("Y-m-d");
 
         $this->db->select('descricao_forma_pagamento_id,
@@ -217,7 +217,8 @@ class solicitacao_model extends Model {
                         else {
                             $data_receber = date("Y-m-d");
                             foreach ($parcelas as $item) {
-
+                                $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
+                                
                                 $percParcela = (float) $item->valor;
                                 $valorParcela = $valor[$x] * ($percParcela / 100);
                                 $periodo = $item->dias;
@@ -229,7 +230,7 @@ class solicitacao_model extends Model {
                                 $this->db->set('parcela', $item->parcela);
                                 $this->db->set('classe', $classe);
                                 $this->db->set('conta', $value->conta_id);
-                                $this->db->set('observacao', $observacao);
+                                $this->db->set('observacao', $obs);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
                                 $this->db->insert('tb_financeiro_contasreceber');
