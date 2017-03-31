@@ -123,7 +123,12 @@ class notafiscal_model extends Model {
                             tipo_nf, 
                             modelo_nf, 
                             finalidade_nf,
-                            chave_nfe');
+                            chave_nfe,
+                            numero_recibo,
+                            numero_protocolo,
+                            tipo_ambiente,
+                            data_envio,
+                            enviada');
         $this->db->from('tb_notafiscal');
         $this->db->where('notafiscal_id', $notafiscal_id);
         $return = $this->db->get();
@@ -265,17 +270,28 @@ class notafiscal_model extends Model {
         return $notafiscal_id;
     }
 
-    function gravarprotocolo($protocoloRecibo, $nota_id) {
-        $horario = date("Y-m-d H:i:s");
-        $this->db->set('numero_protocolo', $protocoloRecibo);
+    function gravarxmlfinalizado($nota_id, $xmlFinalizado, $numeroRecibo) {
+        $this->db->set('xml', $xmlFinalizado);
+        $this->db->set('numero_recibo', $numeroRecibo);
         
         $this->db->where('notafiscal_id', $nota_id);
         $this->db->update('tb_notafiscal');
     }
 
-    function gravarchave($chave, $nota_id) {
+    function gravardataenvio($nota_id) {
+        $horario = date("Y-m-d H:i:s");
+        $this->db->set('data_envio', $horario);
+        $this->db->set('enviada', 't');
+        
+        $this->db->where('notafiscal_id', $nota_id);
+        $this->db->update('tb_notafiscal');
+    }
+
+    function gravarxmlvalidado($chave, $nota_id, $tipoAmbiente, $xml) {
         $horario = date("Y-m-d H:i:s");
         $this->db->set('chave_nfe', $chave);
+        $this->db->set('tipo_ambiente', $tipoAmbiente);
+        $this->db->set('xml', $xml);
         
         $this->db->set('gerada', 't');
         $this->db->set('data_geracao', $horario);

@@ -29,9 +29,15 @@
                             <img  width="50px" height="50px" 
                                   onclick="javascript:window.open('<?= base_url() . "upload/certificado/".@$empresa_id."/".@$value ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');" 
                                   src="<?= base_url()?>/img/digital_signature-icon.png"/><br><?= @$value ?><br>
+                            <?  
+                            $e = explode('.', @$value);
+                            $extensao = $e[1];
+                            if($extensao == 'pfx'):
+                            ?>
                             <a href="<?= base_url() ?>ambulatorio/empresa/excluircertificado/<?= @$empresa_id ?>/<?= @$value ?>">
                                         Excluir
                             </a>
+                            <?endif;?>
                             </center>
                         </td>
                         <?

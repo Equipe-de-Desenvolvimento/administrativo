@@ -350,16 +350,20 @@ class ToolsNFe extends BaseTools
         }
 
         $nodeprots = $docprot->getElementsByTagName('protNFe');
+
+
         if ($nodeprots->length == 0) {
             $msg = "O arquivo indicado não contem um protocolo de autorização!";
             throw new Exception\RuntimeException($msg);
         }
+        // var_dump($nodeprots);die;
         //carrega dados da NFe
         $tpAmb = $docnfe->getNodeValue('tpAmb');
         $anomes = date(
             'Ym',
             DateTime::convertSefazTimeToTimestamp($docnfe->getNodeValue('dhEmi'))
         );
+        
         $infNFe = $docnfe->getNode("infNFe", 0);
         $versao = $infNFe->getAttribute("versao");
         $chaveId = $infNFe->getAttribute("Id");
@@ -413,9 +417,11 @@ class ToolsNFe extends BaseTools
         $protNFe->appendChild($nodep);
         //salva o xml como string em uma variável
         $procXML = $procnfe->saveXML();
+
         //remove as informações indesejadas
         $procXML = Strings::clearProt($procXML);
         if ($saveFile) {
+        echo '<pre>';
             $filename = "{$chaveNFe}-protNFe.xml";
             $this->zGravaFile(
                 'nfe',
@@ -778,6 +784,7 @@ class ToolsNFe extends BaseTools
      */
     public function sefazConsultaRecibo($recibo = '', $tpAmb = '2', &$aRetorno = array(), $saveMensagens = true)
     {
+
         if ($recibo == '') {
             $msg = "Deve ser informado um recibo.";
             throw new Exception\InvalidArgumentException($msg);
@@ -794,6 +801,7 @@ class ToolsNFe extends BaseTools
             $siglaUF,
             $tpAmb
         );
+
         if ($this->urlService == '') {
             $msg = "A consulta de NFe não está disponível na SEFAZ $siglaUF!!!";
             throw new Exception\RuntimeException($msg);
@@ -802,12 +810,14 @@ class ToolsNFe extends BaseTools
             . "<tpAmb>$tpAmb</tpAmb>"
             . "<nRec>$recibo</nRec>"
             . "</consReciNFe>";
-        //validar mensagem com xsd
-        //if (! $this->validarXml($cons)) {
-        //    $msg = 'Falha na validação. '.$this->error;
-        //    throw new Exception\RuntimeException($msg);
-        //}
+
+        // validar mensagem com xsd
+        if (! $this->validarXml($cons)) {
+           $msg = 'Falha na validação. '.$this->error;
+           throw new Exception\RuntimeException($msg);
+        }
         //montagem dos dados da mensagem SOAP
+
         $body = "<nfeDadosMsg xmlns=\"$this->urlNamespace\">$cons</nfeDadosMsg>";
         //envia a solicitação via SOAP
         $retorno = $this->oSoap->send(
@@ -817,6 +827,7 @@ class ToolsNFe extends BaseTools
             $body,
             $this->urlMethod
         );
+
         $this->soapDebug = $this->oSoap->soapDebug;
         //salva mensagens
         if ($saveMensagens) {

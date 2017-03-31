@@ -1075,6 +1075,7 @@ class FPDF
             default:
                 $this->Error('Incorrect output destination: '.$dest);
         }
+        ob_end_clean();
         return '';
     }
 

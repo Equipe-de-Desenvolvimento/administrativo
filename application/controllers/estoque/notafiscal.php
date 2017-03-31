@@ -70,18 +70,27 @@ class Notafiscal extends BaseController {
     }
 
     function impressaodanfe($solicitacao_cliente_id, $notafiscal_id = '') {
-        if ($notafiscal_id != '') {
+        if ($notafiscal_id == '') {
             $mensagem = 'A Nota Fiscal Eletronica ainda não foi gerada.';
             $this->session->set_flashdata('message', $mensagem);
             redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
         } else {
+            $config = $this->geraconfignfephp($solicitacao_cliente_id);
+
             $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
+            $chave = $notafiscal[0]->chave_nfe;
+            $data = date("Ym", strtotime($notafiscal[0]->data_envio));
+            $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
 
-            require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
-            $config = $this->geraconfignfephp();
+            if ($chave == '') {
+                $mensagem = 'Não foi possivel encontrar a Chave da Nota fiscal, por favor gere novamente.';
+                $this->session->set_flashdata('message', $mensagem);
+                redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+            }
 
 
-            require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
         }
     }
 
@@ -101,12 +110,12 @@ class Notafiscal extends BaseController {
             'pathXmlUrlFileMDFe' => 'mdf2_ws1.xml',
             'pathXmlUrlFileCLe' => '',
             'pathXmlUrlFileNFSe' => '',
-            'pathNFeFiles' => '/home/johnny/projetos/administrativo/upload/nfe/' . $solicitacao_id . '/',
+            'pathNFeFiles' => '/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_id . '/',
             'pathCTeFiles' => '',
             'pathMDFeFiles' => '',
             'pathCLeFiles' => '',
             'pathNFSeFiles' => '',
-            'pathCertsFiles' => '/home/johnny/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
+            'pathCertsFiles' => '/home/sisprod/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
             'siteUrl' => base_url() . '/ambulatorio/empresa',
             'schemesNFe' => 'PL_008i2',
             'schemesCTe' => 'PL_CTe_200',
@@ -132,9 +141,9 @@ class Notafiscal extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '\home\johnny\projetos\administrativo\img\notafiscal\empresa.jpg',
-                'pathLogoNFe' => '\home\johnny\projetos\administrativo\img\notafiscal\logo-nfe.png',
-                'pathLogoNFCe' => '\home\johnny\projetos\administrativo\img\notafiscal\logo-nfce.png',
+                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''
@@ -173,12 +182,11 @@ class Notafiscal extends BaseController {
     }
 
     function gerarnotafiscal($solicitacao_cliente_id, $notafiscal_id) {
-        $empresa_id = $this->session->userdata('empresa_id');
-        system("rm -R /home/johnny/projetos/administrativo/upload/{$empresa_id}/{$solicitacao_cliente_id}/");
-        unset($empresa_id);
+        system("rm -R /home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/");
 
         $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
         $data['empresa'] = $this->notafiscal->empresa();
+
         $tipoAmbiente = (int) $data["empresa"][0]->ambiente_producao; //1=Produção; 2=Homologação
 
         $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
@@ -195,7 +203,7 @@ class Notafiscal extends BaseController {
 
         $dadosNFe = array(
             /* Dados da NFe - infNFe */
-            'verProc' => '1.0', //Versao do SISTEMA STG
+            'verProc' => '1.0', //Versao do SISTEMA ADMINISTRATIVO
             'cUF' => $this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'codigo'), //codigo do estado (IBGE)
             'identificaDestOp' => $data['identificaDestOp'], // Olhar se as UF's da empresa e do destinatario sao as mesmas.
             'cNF' => $this->utilitario->tamanho_string($solicitacao_cliente_id, 8, 'numero'),
@@ -357,19 +365,19 @@ class Notafiscal extends BaseController {
          */
 
 
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
         // GERA O XML PRINCIPAL
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
 
         // GERA AS TAGS DA ASSINATURA DIGITAL
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
 
         // VALIDA O XML POR MEIO DE UM SCHEMA XSD
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
 
         //Salvando o XML em um arquivo
-        $caminho = "/home/johnny/projetos/administrativo/upload/nfe";
+        $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
         chmod($caminho, 0777);
 
         if (!is_dir("{$caminho}/{$solicitacao_cliente_id}")) {
@@ -384,33 +392,59 @@ class Notafiscal extends BaseController {
         fwrite($arq, $xml);
         fclose($arq);
         chmod($filename, 0777);
+        
+//        die('morreu');
+        $this->notafiscal->gravarxmlvalidado($chave, $notafiscal_id, $tipoAmbiente, $xml);
 
-        /* ENVIA O XML PARA A SEFAZ
-         * CASO TENHA OCORRIDO ALGUM PROBLEMA, 
-         * ENTRE NO ARQUIVO ABAIXO E DESCOMENTE AS LINHAS 
-         * PARA LER A MENSAGEM DE RETORNO DA SEFAZ 
-          
-         
-         Gravar chave de acesso */
-        $this->notafiscal->gravarchave($chave, $notafiscal_id);
-        
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
-        /* Gravar Protocolo de acesso (A variavel $protocoloRecibo foi criada no arquivo acima) */
-        $this->notafiscal->gravarprotocolo($protocoloRecibo, $notafiscal_id);
-        
-        /* Consultando a nota no sistema da SEFAZ */
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+        redirect(base_url() . "estoque/notafiscal/enviaNfe/$solicitacao_cliente_id/$notafiscal_id");
+    }
+
+    function enviaNfe($solicitacao_cliente_id, $notafiscal_id) {
+        $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
+        $config = $this->geraconfignfephp($solicitacao_cliente_id);
+
+        $xml = ($notafiscal[0]->xml == '') ? 'SEM XML' : $notafiscal[0]->xml; //1=Produção; 2=Homologação
+        if ($xml == 'SEM XML') {
+            $data['mensagem'] = 'Não foi possivel encontrar o XML dessa Nota Fiscal. Por favor, gere novamente.';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
+            exit;
+        }
+
+        $indSinc = '0'; //0=asíncrono, 1=síncrono
+        $tipoAmbiente = ($notafiscal[0]->tipo_ambiente == '') ? '2' : $notafiscal[0]->tipo_ambiente; //1=Produção; 2=Homologação
+        $chave = $notafiscal[0]->chave_nfe;
+        $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+
+        if ($notafiscal[0]->enviada == 'f') {
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
+            $this->notafiscal->gravardataenvio($notafiscal_id);
+
+            $data = date("Ym");
+            /* Consultando a situacao do Recibo no sistema da SEFAZ  e adcionando Tag de Protocolo */
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+        } else {
+            $data = date("Ym", strtotime($notafiscal[0]->data_envio));
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+        }
+
+        $filename = "{$caminho}/{$solicitacao_cliente_id}/validada/{$chave}-protNFe.xml"; // Ambiente Linux
+        $arq = fopen($filename, 'w+');
+        fwrite($arq, $xmlFinalizado);
+        fclose($arq);
+        chmod($filename, 0777);
+
+        $this->notafiscal->gravarxmlfinalizado($notafiscal_id, $xmlFinalizado, $numeroRecibo);
 
         header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
         exit;
     }
-    
-    function teste($solicitacao_cliente_id, $notafiscal_id){
-        
+
+    function teste($solicitacao_cliente_id, $notafiscal_id) {
+        $chave = '23170308852545000138550380000000381000001018';
         $config = $this->geraconfignfephp($solicitacao_cliente_id);
         $tipoAmbiente = 2; //1=Produção; 2=Homologação
-        $caminho = "/home/johnny/projetos/administrativo/upload/nfe";
-        require_once ('/home/johnny/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
     }
 
 }
