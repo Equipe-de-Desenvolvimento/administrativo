@@ -116,10 +116,10 @@
                                     </td>
                                 <?
                                 }
-                                if ($item->situacao == 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8)) {
+                                if ($item->situacao == 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8) && $item->notafiscal == 't') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
-                                            <a href="<?= base_url() ?>estoque/notafiscal/carregarnotafiscalopcoes/<?= $item->estoque_solicitacao_setor_id ?>">N. Fiscal</a>
+                                            <a href="<?= base_url() ?>estoque/notafiscal/carregarnotafiscalopcoes/<?= $item->estoque_solicitacao_setor_id ?>/<?= $item->notafiscal_id ?>">N. Fiscal</a>
                                         </div>
                                     </td>
                                 <? }

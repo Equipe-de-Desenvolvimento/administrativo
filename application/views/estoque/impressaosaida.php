@@ -1,3 +1,4 @@
+<head>
 <style>
     .linha_abaixo{
         border-bottom: 1px solid black;
@@ -6,31 +7,33 @@
         margin: 0 0 -30pt 0;
     }
     .cabecalho_principal{
-        font-size: 10pt;
+        font-size: 17pt;
         margin-bottom: -20pt;
         margin-top: -15pt;
     }
     .cabecalho_secundario{
-        font-size:10pt;
+        font-size:17pt;
         margin-bottom: -10pt;
     }
     .negrito{
         font-weight: bolder;
     }
     .dados_cabecalho{
-        font-size: 10pt;
+        font-size: 17pt;
     }
     .corpo{
         margin-top: 5pt;
         min-height: 150pt;
     }
     .tabela_fim{
-        font-size: 9pt;
+        font-size: 15pt;
     }
 </style>
 
 <meta charset="utf-8">
-
+<title>Saida</title>
+</head>
+<body>
 <div>
     <table style="width: 100%;">
         <tr>
@@ -252,7 +255,7 @@
                                                             </td>
 
                                                             <td>
-                                                                <!--AQUI VEM O CODIGO-->
+                                                                <?= @$solicitacao_id; ?>
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -321,20 +324,23 @@
 
                                 <tr>
                                     <!--RODAPE PARTE 2 -->
-                                    <td colspan="2">
+                                    <td colspan="3" >
                                         <table>
                                             <tr>
-                                                <td>
-                                                    F.Pagamento: <br>
-                                                    <div style="margin-bottom: 15pt;"></div>  
+                                                <td colspan="3">
+                                                    F.Pagamento: <?= @$nome[0]->forma_pagamento; ?> <br>
+                                                    <div style="margin-bottom: 15pt; width: 250pt;"></div>  
                                                 </td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="width: 250pt;"></td>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td style="width: 250pt;"></td>-->
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="border-bottom: 1px solid black;"> </td>
+                                            </tr>
+                                            <tr>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <td colspan="3" style=""> </td>
                                             </tr>
                                         </table>
                                     </td>   
@@ -347,7 +353,7 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;"></td>
+                                                <!--<td style="width: 75pt;"></td>-->
                                                 <!--<td style="width: 75pt;"></td>-->
                                                 <td style="width: 150pt;" colspan="2">
                                                 <center>
@@ -606,7 +612,7 @@
                                                             </td>
 
                                                             <td>
-                                                                <!--AQUI VEM O CODIGO-->
+                                                                <?= @$solicitacao_id; ?>
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -675,20 +681,23 @@
 
                                 <tr>
                                     <!--RODAPE PARTE 2 -->
-                                    <td colspan="2">
+                                    <td colspan="3" >
                                         <table>
                                             <tr>
-                                                <td>
-                                                    F.Pagamento: <br>
-                                                    <div style="margin-bottom: 15pt;"></div>  
+                                                <td colspan="3">
+                                                    F.Pagamento: <?= @$nome[0]->forma_pagamento; ?> <br>
+                                                    <div style="margin-bottom: 15pt; width: 250pt;"></div>  
                                                 </td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="width: 250pt;"></td>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td style="width: 250pt;"></td>-->
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="border-bottom: 1px solid black;"> </td>
+                                            </tr>
+                                            <tr>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <td colspan="3" style=""> </td>
                                             </tr>
                                         </table>
                                     </td>   
@@ -701,7 +710,7 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;"></td>
+                                                <!--<td style="width: 75pt;"></td>-->
                                                 <!--<td style="width: 75pt;"></td>-->
                                                 <td style="width: 150pt;" colspan="2">
                                                 <center>
@@ -742,3 +751,4 @@
         </tr>
     </table>
 </div>
+</body>

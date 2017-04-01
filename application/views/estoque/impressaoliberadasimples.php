@@ -1,3 +1,4 @@
+<head>
 <style>
     .linha_abaixo{
         border-bottom: 1px solid black;
@@ -31,7 +32,9 @@
 </style>
 
 <meta charset="utf-8">
-
+<title>Pedido</title>
+</head>
+<body>
 <div style="width: 100%">
     <table class="tabela_principal" cellpadding="2" cellspacing="2">
 
@@ -138,7 +141,7 @@
                         <td>&nbsp;&nbsp;</td>
 
                         <td align="right"><span class="negrito">Cód: </span></td>
-                        <td></td>
+                        <td><?= @$solicitacao_id; ?></td>
 
                         <td>&nbsp;&nbsp;</td>
 
@@ -152,7 +155,7 @@
                         <td colspan="4"><?= @$destinatario[0]->vendedor; ?></td>
 
                         <td align="right" colspan="2"><span class="negrito">F.pgto: </span></td>
-                        <td colspan="3"></td>
+                        <td colspan="3"><?= @$nome[0]->forma_pagamento; ?></td>
 
                         <td align="right" colspan="2"><span class="negrito">Tp.Doc: </span></td>
                         <td colspan="4"></td>
@@ -209,7 +212,7 @@
                                 <td><?= number_format($value->valor, 2, '.', ',') ?></td>
                                 <td><?= number_format($preco, 2, '.', ',') ?></td>
                             </tr>
-<? endforeach; ?>
+                        <? endforeach; ?>
                     </tbody>
                 </table>
             </td>
@@ -246,3 +249,4 @@
 
     </table>
 
+</body>

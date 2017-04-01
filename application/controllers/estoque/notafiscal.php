@@ -182,9 +182,17 @@ class Notafiscal extends BaseController {
     }
 
     function gerarnotafiscal($solicitacao_cliente_id, $notafiscal_id) {
-        system("rm -R /home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/");
+//        system("rm -R /home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/");
 
         $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
+
+        if ($notafiscal[0]->enviada == 't') {
+            $mensagem = 'Nota Fiscal ja foi Enviada para SEFAZ.';
+            $this->session->set_flashdata('message', $mensagem);
+            header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
+            exit;
+        }
+
         $data['empresa'] = $this->notafiscal->empresa();
 
         $tipoAmbiente = (int) $data["empresa"][0]->ambiente_producao; //1=Produção; 2=Homologação
@@ -392,7 +400,7 @@ class Notafiscal extends BaseController {
         fwrite($arq, $xml);
         fclose($arq);
         chmod($filename, 0777);
-        
+
 //        die('morreu');
         $this->notafiscal->gravarxmlvalidado($chave, $notafiscal_id, $tipoAmbiente, $xml);
 

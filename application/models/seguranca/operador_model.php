@@ -257,7 +257,7 @@ class Operador_model extends BaseModel {
         return $return->result();
     }
 
-    function listarmedicos() {
+    function listarvendedor() {
         $this->db->select('o.operador_id,
                                o.usuario,
                                o.nome,
@@ -265,7 +265,6 @@ class Operador_model extends BaseModel {
                                p.nome as perfil');
         $this->db->from('tb_operador o');
         $this->db->join('tb_perfil p', 'p.perfil_id = o.perfil_id');
-        $this->db->where('consulta', 'true');
         $this->db->where('o.ativo', 'true');
         $this->db->orderby('o.nome');
         $return = $this->db->get();

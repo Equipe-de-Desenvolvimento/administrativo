@@ -486,3 +486,8 @@ ALTER TABLE ponto.tb_notafiscal ADD COLUMN data_envio timestamp without time zon
 ALTER TABLE ponto.tb_notafiscal ADD COLUMN enviada boolean DEFAULT false;
 
 
+-- Dia 31/03/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN vendedor_id integer;
+
+-- Dia 01/03/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN notafiscal boolean DEFAULT false;

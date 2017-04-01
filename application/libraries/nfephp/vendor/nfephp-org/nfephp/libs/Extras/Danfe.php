@@ -1468,7 +1468,7 @@ class Danfe extends CommonNFePHP implements DocumentoNFePHP
             $aFont = array('font'=>$this->fontePadrao, 'size'=>48, 'style'=>'B');
             $this->pTextBox($x, $y, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $aFont = array('font'=>$this->fontePadrao, 'size'=>30, 'style'=>'B');
-            $texto = "AMBIENTE DE HOMOLOGAÇÃO";
+            $texto = ($tpAmb == 2) ? "AMBIENTE DE HOMOLOGAÇÃO": '' ;
             $this->pTextBox($x, $y+14, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $this->pdf->SetTextColor(0, 0, 0);
         } else {

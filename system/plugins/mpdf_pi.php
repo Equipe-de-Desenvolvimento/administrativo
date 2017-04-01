@@ -3,14 +3,20 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-function pdf($html, $filename = null, $cabecalho = null, $rodape=null, $grupo = '' ) {
+function pdf($html, $filename = null, $cabecalho = null, $rodape = null, $grupo = '', $paisagem = false) {
     require_once("mpdf_lib/mpdf.php");
-    
+
 //    $mpdf = new mPDF('UTF-8', array (210,148));
 //    if ($grupo == "US"){
 //    $mpdf = new mPDF('UTF-8', array (210, 297));
 //    }
-    $mpdf = new mPDF('UTF-8', array (210, 297));
+    if($paisagem == true) {
+        $mpdf = new mPDF('UTF-8', array(297, 210));
+    } else {
+        $mpdf = new mPDF('UTF-8', array(210, 297));
+    }
+//    $mpdf->DefOrientation = 'P';
+//    die;
 //    if ($grupo == "DENSITOMETRIA"){
 //    $mpdf = new mPDF('UTF-8', array (210, 297));
 //    }
@@ -39,16 +45,16 @@ function pdf($html, $filename = null, $cabecalho = null, $rodape=null, $grupo = 
     $mpdf->Output($filename, 'I');
 }
 
-function salvapdf($texto, $filename , $cabecalho = null, $rodape=null) {
+function salvapdf($texto, $filename, $cabecalho = null, $rodape = null) {
 //    var_dump($texto , $filename , $cabecalho , $rodape);
 //    die;
     require_once("mpdf_lib/mpdf.php");
-    
+
 //    $mpdf = new mPDF('UTF-8', array (210,148));
 //    if ($grupo == "US"){
 //    $mpdf = new mPDF('UTF-8', array (210, 297));
 //    }
-    $mpdf = new mPDF('UTF-8', array (210, 297));
+    $mpdf = new mPDF('UTF-8', array(210, 297));
 //    if ($grupo == "DENSITOMETRIA"){
 //    $mpdf = new mPDF('UTF-8', array (210, 297));
 //    }

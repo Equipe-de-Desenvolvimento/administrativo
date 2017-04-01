@@ -1,3 +1,4 @@
+<head>
 <style>
     .linha_abaixo{
         border-bottom: 1px solid black;
@@ -29,8 +30,11 @@
     }
 </style>
 
-<meta charset="utf-8">
 
+<meta charset="utf-8">
+<title>Saida</title>
+</head>
+<body>
 <div>
     <table style="width: 100%;">
         <tr>
@@ -57,7 +61,7 @@
                                     <td>&nbsp;&nbsp;</td>
                                     <td><span class="negrito">Fax: </span> <?= @$empresa[0]->fax; ?></td>
                                     <td>&nbsp;&nbsp;</td>
-                                    <td><span class="negrito">Cod: </span> <?= @$empresa[0]->cod; ?></td>
+                                    <td><span class="negrito">Cod: </span> <?= @$solicitacao_id; ?></td>
                                     <td>&nbsp;&nbsp;</td>
                                 </tr>
                                 <tr>
@@ -225,7 +229,7 @@
                                                             </td>
 
                                                             <td>
-                                                                <!--AQUI VEM O CODIGO-->
+                                                                <?= @$solicitacao_id; ?>
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -294,20 +298,23 @@
 
                                 <tr>
                                     <!--RODAPE PARTE 2 -->
-                                    <td colspan="2">
+                                    <td colspan="3" >
                                         <table>
                                             <tr>
-                                                <td>
-                                                    F.Pagamento: <br>
-                                                    <div style="margin-bottom: 15pt;"></div>  
+                                                <td colspan="3">
+                                                    F.Pagamento: <?= @$nome[0]->forma_pagamento; ?> <br>
+                                                    <div style="margin-bottom: 15pt; width: 250pt;"></div>  
                                                 </td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="width: 250pt;"></td>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td style="width: 250pt;"></td>-->
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="border-bottom: 1px solid black;"> </td>
+                                            </tr>
+                                            <tr>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <td colspan="3" style=""> </td>
                                             </tr>
                                         </table>
                                     </td>   
@@ -320,7 +327,7 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;"></td>
+                                                <!--<td style="width: 75pt;"></td>-->
                                                 <!--<td style="width: 75pt;"></td>-->
                                                 <td style="width: 150pt;" colspan="2">
                                                 <center>
@@ -383,7 +390,7 @@
                                     <td>&nbsp;&nbsp;</td>
                                     <td><span class="negrito">Fax: </span> <?= @$empresa[0]->fax; ?></td>
                                     <td>&nbsp;&nbsp;</td>
-                                    <td><span class="negrito">Cod: </span> <?= @$empresa[0]->cod; ?></td>
+                                    <td><span class="negrito">Cod: </span> <?= @$solicitacao_id; ?></td>
                                     <td>&nbsp;&nbsp;</td>
                                 </tr>
                                 <tr>
@@ -551,7 +558,7 @@
                                                             </td>
 
                                                             <td>
-                                                                <!--AQUI VEM O CODIGO-->
+                                                                <?= @$solicitacao_id; ?>
                                                             </td>
 
                                                             <td>&nbsp;&nbsp;</td>
@@ -620,20 +627,23 @@
 
                                 <tr>
                                     <!--RODAPE PARTE 2 -->
-                                    <td colspan="2">
+                                    <td colspan="3" >
                                         <table>
                                             <tr>
-                                                <td>
-                                                    F.Pagamento: <br>
-                                                    <div style="margin-bottom: 15pt;"></div>  
+                                                <td colspan="3">
+                                                    F.Pagamento: <?= @$nome[0]->forma_pagamento; ?> <br>
+                                                    <div style="margin-bottom: 15pt; width: 250pt;"></div>  
                                                 </td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="width: 250pt;"></td>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td style="width: 250pt;"></td>-->
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td>&nbsp;&nbsp;&nbsp;</td>
-                                                <td style="border-bottom: 1px solid black;"> </td>
+                                            </tr>
+                                            <tr>
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <td colspan="3" style=""> </td>
                                             </tr>
                                         </table>
                                     </td>   
@@ -646,7 +656,7 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 75pt;"></td>
-                                                <td style="width: 75pt;"></td>
+                                                <!--<td style="width: 75pt;"></td>-->
                                                 <!--<td style="width: 75pt;"></td>-->
                                                 <td style="width: 150pt;" colspan="2">
                                                 <center>

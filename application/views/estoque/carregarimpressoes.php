@@ -13,6 +13,7 @@
                     <?if($solicitacao[0]->situacao == "FECHADA"):?>
                         <option value='saida_simples'>Saida simples</option>  
                         <option value='saida'>Saida</option>
+                        <option value='espNota'>Espelho da Nota</option>
                     <? endif;?>
                     
                     <option value='recibo'>Recibo</option>

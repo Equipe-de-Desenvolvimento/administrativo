@@ -25,6 +25,24 @@
                             <option value="">Selecione</option>
                         </select>
                     </dd>
+                    <? $medicos = $this->operador_m->listarvendedor(); ?>
+                    <dt>
+                        <label>Vendedor</label>
+                    </dt>
+                    <dd>
+                        <select name="vendedor_id" id="vendedor_id" class="size3">
+                            <option value="">Selecione</option>
+                            <? foreach ($medicos as $value) : ?>
+                                <option value="<?= $value->operador_id ?>"><?= $value->nome ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>&nbsp;</label>
+                    </dt>
+                    <dd>
+                        <input type="checkbox" name="usanota" id="usanota"/><label for="usanota"> Usa NFe</label>
+                    </dd>
                 </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">cadastrar</button>
@@ -51,7 +69,7 @@
                 $.getJSON('<?= base_url() ?>autocomplete/contratocliente', {setor: $(this).val(), ajax: true}, function (j) {
                     options = '<option value=""></option>';
                     for (var c = 0; c < j.length; c++) {
-                        options += '<option value="' + j[c].estoque_contrato_id + '">' + j[c].contrato + ' - ' + j[c].tipo +'</option>';
+                        options += '<option value="' + j[c].estoque_contrato_id + '">' + j[c].contrato + ' - ' + j[c].tipo + '</option>';
                     }
                     $('#contrato').html(options).show();
                     $('.carregando').hide();

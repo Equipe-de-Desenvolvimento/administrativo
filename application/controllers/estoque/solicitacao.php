@@ -16,10 +16,12 @@ class Solicitacao extends BaseController {
     function Solicitacao() {
         parent::Controller();
         $this->load->model('estoque/solicitacao_model', 'solicitacao');
+        $this->load->model('estoque/notafiscal_model', 'notafiscal');
         $this->load->model('estoque/boleto_model', 'boleto');
         $this->load->model('ambulatorio/guia_model', 'guia');
         $this->load->model('cadastro/convenio_model', 'convenio');
         $this->load->model('cadastro/paciente_model', 'paciente');
+        $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -28,6 +30,87 @@ class Solicitacao extends BaseController {
 
     function index() {
         $this->pesquisar();
+    }
+
+    function geraconfignfephp($solicitacao_id) {
+        $data['empresa'] = $this->notafiscal->empresa();
+        $json = array(
+            'atualizacao' => date('Y-m-d H:i:s'),
+            'tpAmb' => (int) $data["empresa"][0]->ambiente_producao,
+            'pathXmlUrlFileNFe' => 'nfe_ws3_mod55.xml',
+            'pathXmlUrlFileCTe' => 'cte_ws2.xml',
+            'pathXmlUrlFileMDFe' => 'mdf2_ws1.xml',
+            'pathXmlUrlFileCLe' => '',
+            'pathXmlUrlFileNFSe' => '',
+            'pathNFeFiles' => '/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_id . '/',
+            'pathCTeFiles' => '',
+            'pathMDFeFiles' => '',
+            'pathCLeFiles' => '',
+            'pathNFSeFiles' => '',
+            'pathCertsFiles' => '/home/sisprod/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
+            'siteUrl' => base_url() . '/ambulatorio/empresa',
+            'schemesNFe' => 'PL_008i2',
+            'schemesCTe' => 'PL_CTe_200',
+            'schemesMDFe' => 'PL_MDFe_100',
+            'schemesCLe' => '',
+            'schemesNFSe' => '',
+            'razaosocial' => $data["empresa"][0]->razao_social,
+            'nomefantasia' => $data["empresa"][0]->empresa,
+            'siglaUF' => $this->utilitario->codigo_uf($data["empresa"][0]->codigo_ibge, "sigla"),
+            'cnpj' => $this->utilitario->remover_caracter($data["empresa"][0]->cnpj),
+            'ie' => $this->utilitario->remover_caracter($data["empresa"][0]->inscricao_estadual),
+            'im' => $this->utilitario->remover_caracter($data["empresa"][0]->inscricao_municipal),
+            'iest' => $this->utilitario->remover_caracter($data["empresa"][0]->inscricao_estadual_st),
+            'cnae' => $this->utilitario->remover_caracter($data["empresa"][0]->cnae),
+            'regime' => $this->utilitario->remover_caracter($data["empresa"][0]->cod_regime_tributario),
+            'tokenIBPT' => '',
+            'tokenNFCe' => '',
+            'tokenNFCeId' => '',
+            'certPfxName' => $data["empresa"][0]->certificado_nome,
+            'certPassword' => $data["empresa"][0]->certificado_senha,
+            'certPhrase' => '',
+            'aDocFormat' => array(
+                'format' => 'L',
+                'paper' => 'A4',
+                'southpaw' => '1',
+                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'logoPosition' => 'L',
+                'font' => 'Times',
+                'printer' => ''
+            ),
+            'aMailConf' => array(
+                'mailAuth' => '1',
+                'mailFrom' => false,
+                'mailSmtp' => '',
+                'mailUser' => '',
+                'mailPass' => '',
+                'mailProtocol' => '',
+                'mailPort' => '',
+                'mailFromMail' => false,
+                'mailFromName' => '',
+                'mailReplayToMail' => false,
+                'mailReplayToName' => '',
+                'mailImapHost' => null,
+                'mailImapPort' => null,
+                'mailImapSecurity' => null,
+                'mailImapNocerts' => null,
+                'mailImapBox' => null
+            ),
+            'aProxyConf' => array(
+                'proxyIp' => '',
+                'proxyPort' => '',
+                'proxyUser' => '',
+                'proxyPass' => ''
+            )
+        );
+
+//        $str = json_encode($json);
+//        var_dump("<pre>", $str, "<hr>");
+//        $conv = json_decode($str, true);
+//        var_dump($conv);die;
+        return json_encode($json);
     }
 
     function carregarsolicitacao($estoque_solicitacao_id) {
@@ -107,10 +190,177 @@ class Solicitacao extends BaseController {
             redirect(base_url() . "estoque/solicitacao/carregarnotafiscal/$estoque_solicitacao_id");
         } elseif ($_POST['impressao'] == 'recibo') {
             redirect(base_url() . "estoque/solicitacao/impressaorecibo/$estoque_solicitacao_id");
+        } elseif ($_POST['impressao'] == 'espNota') {
+            redirect(base_url() . "estoque/solicitacao/gerarespelhonotafiscal/$estoque_solicitacao_id");
         }
     }
 
+    function gerarespelhonotafiscal($solicitacao_cliente_id) {
+
+        $data['empresa'] = $this->notafiscal->empresa();
+
+        $tipoAmbiente = (int) $data["empresa"][0]->ambiente_producao; //1=Produção; 2=Homologação
+
+        $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
+        $data['produtos'] = $this->notafiscal->listarsolicitacaosnota($solicitacao_cliente_id);
+
+        if ($this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge) == $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge)) {
+            $data['identificaDestOp'] = '1';
+        } else {
+            $data['identificaDestOp'] = '2';
+        }
+
+        //Essa variavel de configuração sera usada para carregar as configurações iniciais da NFe
+        $config = $this->geraconfignfephp($solicitacao_cliente_id);
+
+        $dadosNFe = array(
+            /* Dados da NFe - infNFe */
+            'verProc' => '1.0', //Versao do SISTEMA ADMINISTRATIVO
+            'cUF' => $this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'codigo'), //codigo do estado (IBGE)
+            'identificaDestOp' => $data['identificaDestOp'], // Olhar se as UF's da empresa e do destinatario sao as mesmas.
+            'cNF' => $this->utilitario->tamanho_string($solicitacao_cliente_id, 8, 'numero'),
+            'cMunFG' => $data['empresa'][0]->codigo_ibge, //codigo do municipio da empresa (IBGE)
+            'naturezaOpe' => 'Venda de produtos e mercadorias',
+            'modeloNota' => '55',
+            'numSerie' => '0', //deve ser incrementado a cada nova nota_fiscal gerada
+            'numNF' => '0',
+            'tipoNF' => '1', // 0 = entrada | 1 = saida
+            'indPres' => '1', // Tipo de Compra. (1=Presencial, 2=Nao Presencial e etc...)
+            'finalidadeNFe' => '1',
+            'indicadorPagamento' => '0', //0=Pagamento à vista; 1=Pagamento a prazo; 2=Outros
+
+            /* ENDEREÇO DO EMITENTE */
+            "logradouro" => $data['empresa'][0]->logradouro,
+            "numero" => $data['empresa'][0]->numero,
+            "complemento" => $data['empresa'][0]->complemento,
+            "bairro" => $data['empresa'][0]->bairro,
+            "codMunicipio" => $data['empresa'][0]->codigo_ibge,
+            "nomMunicipio" => $data['empresa'][0]->municipio,
+            "UF" => $this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge, 'sigla'),
+            "cep" => $this->utilitario->remover_caracter($data['empresa'][0]->cep),
+            "fone" => $this->utilitario->remover_caracter(str_replace(' ', '', $data['empresa'][0]->telefone)),
+            /* DADOS DO DESTINATARIO */
+            "destCNPJ" => $this->utilitario->remover_caracter($data['destinatario'][0]->cnpj),
+            "destCPF" => '',
+            "destNOME" => $data['destinatario'][0]->nome,
+            "destIND_IE" => '1', //criar um novo campo na tb_estoque_cliente (VERIFICAR SE O CLIENTE É ISENTO DE IE)
+            "destIE" => $this->utilitario->remover_caracter($data['destinatario'][0]->inscricao_estadual),
+            "destIM" => '', //criar um novo campo na tb_estoque_cliente
+            "destEMAIL" => $data['destinatario'][0]->email,
+            "destLOG" => $data['destinatario'][0]->logradouro,
+            "destNUM" => $data['destinatario'][0]->numero,
+            "destCOMP" => $data['destinatario'][0]->complemento,
+            "destBAIRRO" => $data['destinatario'][0]->bairro,
+            "destCOD_MUN" => $data['destinatario'][0]->codigo_ibge,
+            "destMUN" => $data['destinatario'][0]->municipio,
+            "destUF" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'),
+            "destCEP" => $this->utilitario->remover_caracter(str_replace(' ', '', $data['destinatario'][0]->cep)),
+            "destFONE" => $this->utilitario->remover_caracter(str_replace(' ', '', $data['destinatario'][0]->telefone))
+        );
+
+        $totalProduto = 0;
+        /* DADOS DOS PRODUTOS */
+        for ($i = 0, $n = 1; $i < count($data['produtos']); $i++, $n++) {
+            $totProdItem = number_format(( (int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda), 2, '.', '');
+
+            /* CALCULANDO VALORES TOTAIS DA NOTA */
+            $totalProduto += $totProdItem;
+
+            $dadosProdutos[$i] = array(
+                /* Dados Basicos */
+                "numItem" => $n,
+                "codigoProduto" => $data['produtos'][$i]->codigo, // Codigo de controle no sistema do cliente
+                "cEAN" => '', //FALTA ESSE
+                "nomeProd" => $data['produtos'][$i]->descricao,
+                "ncm" => $data['produtos'][$i]->ncm,
+                "ex_tipi" => '',
+                "cfop" => $data['produtos'][$i]->codigo_cfop,
+                "unCompra" => $data['produtos'][$i]->unidade,
+                "qtdeCompra" => $data['produtos'][$i]->quantidade,
+                "valUniComp" => $data['produtos'][$i]->valor_venda,
+                "valProduto" => number_format((int) $data['produtos'][$i]->quantidade * (float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
+                "cEAN_Trib" => '',
+                "uniTrib" => $data['produtos'][$i]->unidade,
+                "qtdeTrib" => $data['produtos'][$i]->quantidade,
+                "valUniTrib" => number_format((float) $data['produtos'][$i]->valor_venda, 2, '.', ''),
+                "valorFrete" => '', //deixar em branco
+                "valorSeguro" => '', //deixar em branco
+                "valorDesconto" => '', //deixar em branco   
+                "valorOutros" => '', //deixar em branco   
+                "indTot" => 1, // | 1 = somar ao valor total da NFe | 0 = nao somar ao vlr tot da nota |
+                "numPedido" => $solicitacao_cliente_id,
+                "itemPedido" => $n,
+                "prodCEST" => $data['produtos'][$i]->cest,
+                /* DESCRIÇÃO DO PRODUTO(informações adicionais. Ex: Validade, Lote e etc) */
+                "prodDescricao" => 'Lote: ' . $data['produtos'][$i]->lote . ' - ' . date('d/m/Y', strtotime($data['produtos'][$i]->validade)),
+                //ICMS
+                "orig_ICMS" => '0',
+                "cst_ICMS" => '40',
+                //CASO SEJA 40, 41 OU 50, SERÃO NECESSARIAS APENAS AS INFORMAÇÕES ACIMAS
+                "modBC_ICMS" => '3',
+                "valorBC_ICMS" => 0,
+                "percICMS_ICMS" => 0, //tag pICMS
+                "valorICMS_ICMS" => 0,
+                //IPI
+                "codEnq_IPI" => '999',
+                "cst_IPI" => 99, //CRIAR UM CST EXCLUSIVO PARA O IPI
+                "valorBC_IPI" => 0,
+                "percIPI_IPI" => 0,
+                "valorIPI_IPI" => 0,
+                //PIS
+                "cst_PIS" => 7,
+                "valorBC_PIS" => 0,
+                "percPIS_PIS" => 0,
+                "valorPIS_PIS" => 0,
+                "qBCProd" => '',
+                "vAliqProd" => '',
+                //COFINS
+                "cst_COFINS" => 7,
+                "valorBC_COFINS" => 0,
+                "percPIS_COFINS" => 0,
+                "valorCOFINS_COFINS" => 0,
+                /* VALOR TOTAL DE IMPOSTO */
+                "valTotImposto" => 0
+            );
+        }
+
+        //VALORES TOTAIS DA NOTA
+        $totalNota = array(
+            "totalBC" => number_format(0, 2, '.', ''),
+            "totalICMS" => number_format(0, 2, '.', ''),
+            "totalIPI" => number_format(0, 2, '.', ''),
+            "totalPIS" => number_format(0, 2, '.', ''),
+            "totalCOFINS" => number_format(0, 2, '.', ''),
+            "totalProduto" => number_format($totalProduto, 2, '.', ''),
+            "totalImposto" => number_format(0, 2, '.', '')
+        );
+
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+
+        // GERA O XML PRINCIPAL
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraEspelhoNota.php');
+
+        $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+        if (is_dir("{$caminho}/{$solicitacao_cliente_id}")) {
+            system("rm -R {$caminho}/{$solicitacao_cliente_id}");
+        }
+        mkdir("{$caminho}/{$solicitacao_cliente_id}");
+        mkdir("{$caminho}/{$solicitacao_cliente_id}/espelho");
+        chmod($caminho, 0777);
+
+        $filename = "{$caminho}/{$solicitacao_cliente_id}/espelho/{$chave}-nfe.xml"; // Ambiente Linux
+        $arq = fopen($filename, 'w+');
+        fwrite($arq, $xml);
+        fclose($arq);
+        chmod($filename, 0777);
+
+        // GERANDO DANFE
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraEspelhoDanfe.php');
+    }
+
     function impressaorecibo($estoque_solicitacao_id) {
+
+        $this->load->plugin('mpdf');
 
         $data['emissao'] = date("d-m-Y");
         $empresa_id = $this->session->userdata('empresa_id');
@@ -151,7 +401,8 @@ class Solicitacao extends BaseController {
 
         $dataFuturo = date("Y-m-d");
 
-        $this->load->View('estoque/impressaorecibo', $data);
+        $html = $this->load->View('estoque/impressaorecibo', $data, true);
+        pdf($html);
     }
 
     function imprimirsaida($estoque_solicitacao_id) {
@@ -170,7 +421,8 @@ class Solicitacao extends BaseController {
     }
 
     function imprimir($estoque_solicitacao_id) {
-
+        $this->load->plugin('mpdf');
+        $data['solicitacao_id'] = $estoque_solicitacao_id;
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
@@ -178,32 +430,43 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
         $data['usuario'] = $this->solicitacao->usuarioemitente();
 //        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
-        $this->load->View('estoque/impressaosaida', $data);
+        $html = $this->load->View('estoque/impressaosaida', $data, true);
+        
+        pdf($html, null, null,null,'',true);
     }
 
     function imprimirsimples($estoque_solicitacao_id) {
+        $this->load->plugin('mpdf');
 
+        $data['solicitacao_id'] = $estoque_solicitacao_id;
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['nome'] = $this->solicitacao->solicitacaonome($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
         $data['usuario'] = $this->solicitacao->usuarioemitente();
-        $this->load->View('estoque/impressaosaidasimples', $data);
+//        $this->load->View('estoque/impressaosaidasimples', $data);
+        $html = $this->load->View('estoque/impressaosaidasimples', $data, true);
+        pdf($html, null, null,null,'',true);
     }
 
     function imprimirliberadasimples($estoque_solicitacao_id) {
-
+        $this->load->plugin('mpdf');
+        $data['solicitacao_id'] = $estoque_solicitacao_id;
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
-        $this->load->View('estoque/impressaoliberadasimples', $data);
+        $html = $this->load->View('estoque/impressaoliberadasimples', $data, true);
+        pdf($html);
+        
     }
 
     function imprimirliberada($estoque_solicitacao_id) {
 
+        $this->load->plugin('mpdf');
+        $data['solicitacao_id'] = $estoque_solicitacao_id;
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
@@ -211,7 +474,8 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
 
 //        echo '<pre>';        var_dump($data);die;
-        $this->load->View('estoque/impressaoliberada', $data);
+        $html = $this->load->View('estoque/impressaoliberada', $data, true);
+        pdf($html);
     }
 
     function saidaitens($estoque_solicitacao_itens_id, $estoque_solicitacao_id) {
@@ -356,7 +620,7 @@ class Solicitacao extends BaseController {
                 $forma_id = $_POST['forma_pagamento_4'];
                 $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
             }
-            
+
             $this->solicitacao->gravarfinanceirofaturamento();
 
             if ($verifica) {
