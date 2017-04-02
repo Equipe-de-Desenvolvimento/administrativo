@@ -33,7 +33,8 @@ class menu_model extends Model {
     function listarprodutos() {
         $this->db->select('p.estoque_produto_id,
                             p.descricao,
-                            p.valor_venda');
+                            p.valor_venda,
+                            p.valor_compra');
         $this->db->from('tb_estoque_produto p');
         $this->db->where('p.ativo', 'true');
         $this->db->orderby('p.descricao');
@@ -95,6 +96,7 @@ class menu_model extends Model {
     function listarautocompleteprodutosporsubclasse($subclasse_id) {
         $this->db->select('p.estoque_produto_id,
                             p.descricao,
+                            p.valor_compra,
                             p.valor_venda');
         $this->db->from('tb_estoque_sub_classe sc');
         $this->db->join('tb_estoque_produto p', 'p.sub_classe_id = sc.estoque_sub_classe_id', 'left');
@@ -216,12 +218,13 @@ class menu_model extends Model {
             return 0;
     }
 
-    function gravaritens() {
+    function gravaritens($valor, $menu_id, $produto_id) {
         try {
             /* inicia o mapeamento no banco */
-            $this->db->set('valor', $_POST['valor']);
-            $this->db->set('menu_id', $_POST['txtestoque_menu_id']);
-            $this->db->set('produto', $_POST['produto_id']);
+            $this->db->set('valor', $valor);
+            $this->db->set('menu_id', $menu_id);
+            $this->db->set('produto', $produto_id);
+            
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
             $this->db->set('data_cadastro', $horario);

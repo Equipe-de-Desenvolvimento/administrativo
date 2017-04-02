@@ -338,8 +338,8 @@ class entrada_model extends Model {
     }
 
     function relatorioentradaarmazem() {
-        $datainicio = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $datafim = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+        $datainicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $datafim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $datahorainicio = $datainicio . ' 00:00:00';
         $datahorafim = $datafim . ' 23:59:59';
         $this->db->select('es.nota_fiscal,
@@ -378,8 +378,8 @@ class entrada_model extends Model {
     }
 
     function relatorioentradaarmazemcontador() {
-        $datainicio = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $datafim = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+        $datainicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $datafim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $datahorainicio = $datainicio . ' 00:00:00';
         $datahorafim = $datafim . ' 23:59:59';
         $this->db->select('es.nota_fiscal,
@@ -413,8 +413,8 @@ class entrada_model extends Model {
     }
 
     function relatoriosaidaarmazem() {
-        $datainicio = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $datafim = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+        $datainicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $datafim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $datahorainicio = $datainicio . ' 00:00:00';
         $datahorafim = $datafim . ' 23:59:59';
         $this->db->select('es.nota_fiscal,
@@ -462,8 +462,8 @@ class entrada_model extends Model {
     }
 
     function relatoriosaidaarmazemcontador() {
-        $datainicio = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $datafim = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+        $datainicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $datafim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $datahorainicio = $datainicio . ' 00:00:00';
         $datahorafim = $datafim . ' 23:59:59';
         $this->db->select('es.nota_fiscal,
@@ -508,22 +508,22 @@ class entrada_model extends Model {
         $this->db->set('operador_atualizacao', $operador_id);
         $this->db->where('estoque_entrada_id', $estoque_entrada_id);
         $this->db->update('tb_estoque_entrada');
-        
+
         //atualizando tabela estoque_saldo
         $this->db->set('ativo', 'f');
         $this->db->set('data_atualizacao', $horario);
         $this->db->set('operador_atualizacao', $operador_id);
         $this->db->where('estoque_entrada_id', $estoque_entrada_id);
         $this->db->update('tb_estoque_saldo');
-        
+
         //atualizando tabela estoque_saida
         $this->db->set('ativo', 'f');
         $this->db->set('data_atualizacao', $horario);
         $this->db->set('operador_atualizacao', $operador_id);
         $this->db->where('estoque_entrada_id', $estoque_entrada_id);
         $this->db->update('tb_estoque_saida');
-        
-        
+
+
         $erro = $this->db->_error_message();
         if (trim($erro) != "") // erro de banco
             return -1;
@@ -534,6 +534,13 @@ class entrada_model extends Model {
     function gravar() {
         try {
             /* inicia o mapeamento no banco */
+            //atualiza com o ultimo valor de compra
+            $qtde = str_replace(",", ".", str_replace(".", "", $_POST['quantidade']));
+            $vlr = str_replace(",", ".", str_replace(".", "", $_POST['compra']));
+            $this->db->set('valor_compra', $vlr/$qtde);
+            $this->db->where('estoque_produto_id', $_POST['txtproduto']);
+            $this->db->update('tb_estoque_produto');
+            
             $estoque_entrada_id = $_POST['txtestoque_entrada_id'];
             $this->db->set('produto_id', $_POST['txtproduto']);
             $this->db->set('fornecedor_id', $_POST['txtfornecedor']);
@@ -543,11 +550,11 @@ class entrada_model extends Model {
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
             $this->db->set('lote', $_POST['lote']);
             $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
-            
+
             if ($_POST['validade'] != "//") {
                 $this->db->set('validade', $_POST['validade']);
             }
-            
+
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 

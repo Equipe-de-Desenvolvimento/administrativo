@@ -201,12 +201,18 @@ a#login_sair{
     width:100%;
 }
 .footer_conteiner {
+    margin-top: 10pt;
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    position: fixed;
+    bottom: 0px;
+    clear: both;
 }
 .footer_conteiner_back{
     height: 40px;
+}
+.correcaoEstilo{
+    position: relative;
+    height:auto;
 }
 .footer {
     padding: 0;

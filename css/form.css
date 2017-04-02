@@ -413,6 +413,7 @@ label2 {
     margin: 15px 0;
     background: #eee;
     border-radius:5px;
+    display: block;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
 }
@@ -427,6 +428,9 @@ label2 {
 }
 .ficha_ceatox form input, .ficha_ceatox form select{
 
+}
+.correcaoEstilo{
+    /*border: 5pt solid red;*/
 }
 .ficha_ceatox div{
     float: left;

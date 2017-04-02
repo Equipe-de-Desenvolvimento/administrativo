@@ -43,20 +43,25 @@ class Menu extends BaseController {
 
     function gravaritens() {
         $estoque_menu_id = $_POST['txtestoque_menu_id'];
-        if ($_POST['produto_id'] == '') {
-            $data['mensagem'] = 'Selecione um produto.';
-            $this->session->set_flashdata('message', $data['mensagem']);
-        }
-        else {
-            $_POST['valor'] = str_replace(',', '.', $_POST['valor']);
-            $this->menu->gravaritens();        
+        foreach ($_POST['valor'] as $chave => $item) {
+            if($_POST['configTodosItens'] == 'true'){
+                if( !isset($_POST['ativo'][$chave]) ){
+                    continue;
+                }
+            }
+            
+            $_POST['valor'][$chave] = str_replace(',', '.', $_POST['valor'][$chave]);
+            $valor = str_replace(',', '.', $_POST['valor'][$chave]);
+            $menu_id = $_POST['txtestoque_menu_id'];
+            $produto_id = ($_POST['produto_id_item'] != '')?$_POST['produto_id_item']:$_POST['produto_id'][$chave];
+            $this->menu->gravaritens($valor, $menu_id, $produto_id);
         }
         redirect(base_url() . "estoque/menu/criarmenu/$estoque_menu_id");
-//        $this->criarmenu($estoque_menu_id);
+        
     }
 
     function excluirmenu($estoque_menu_produtos_id, $estoque_menu_id) {
-        $this->menu->excluirmenuproduto($estoque_menu_produtos_id);  
+        $this->menu->excluirmenuproduto($estoque_menu_produtos_id);
         $data['mensagem'] = 'Sucesso ao excluir a Menu';
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/menu/criarmenu/$estoque_menu_id");

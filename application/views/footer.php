@@ -1,3 +1,5 @@
+</div> <!-- Essa div abre no inicio do Header (Depois do cabecalho) -->
+</div> <!-- Essa div abre no inicio do Header (class='container') -->
 <div class="footer_conteiner">
     <div class="decoration_footer"></div>
     <div class="footer">

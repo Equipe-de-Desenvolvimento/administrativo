@@ -271,351 +271,352 @@ function debug($object) {
         <!-- FIM BATEPAPO -->
 
         <!-- Fim do Cabeçalho -->
-        <div class="barraMenus" style="float: left;">
-            <ul id="menu" class="filetree">
-                <li><span class="folder">Estoque</span>
-                    <ul>
-                        <li><span class="folder">Rotinas</span>
-                            <? if ($perfil_id != 9 && $perfil_id != 2 && $perfil_id != 11 && $perfil_id != 12) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao">Manter Pedido</a></span></ul>
-                            <? } if ($perfil_id == 1 || $perfil_id == 8) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada">Manter Entrada</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/inventario">Manter Inventario</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/fornecedor">Manter Fornecedor</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/produto">Manter Produto</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/transportadora">Manter Transportadora</a></span></ul>
-                            <? } ?>
-                        </li> 
-                        <li><span class="folder">Relatorios</span>
-                            <? if ($perfil_id == 1 || $perfil_id == 8) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatorioentradaarmazem">Relatorio Entrada Produtos</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaidaarmazem">Relatorio Saida Produtos</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaldoarmazem">Relatorio Saldo Produtos/Entrada</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaldo">Relatorio Saldo Produtos</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriominimo">Relatorio Estoque Minimo</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatorioprodutos">Relatorio Produtos</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriofornecedores">Relatorio Fornecedores</a></span></ul>
+        <div class="correcaoEstilo">
+            <div class="barraMenus" style="float: left;">
+                <ul id="menu" class="filetree">
+                    <li><span class="folder">Estoque</span>
+                        <ul>
+                            <li><span class="folder">Rotinas</span>
+                                <? if ($perfil_id != 9 && $perfil_id != 2 && $perfil_id != 11 && $perfil_id != 12) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao">Manter Pedido</a></span></ul>
+                                <? } if ($perfil_id == 1 || $perfil_id == 8) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada">Manter Entrada</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/inventario">Manter Inventario</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/fornecedor">Manter Fornecedor</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/produto">Manter Produto</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/transportadora">Manter Transportadora</a></span></ul>
+                                <? } ?>
+                            </li> 
+                            <li><span class="folder">Relatorios</span>
+                                <? if ($perfil_id == 1 || $perfil_id == 8) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatorioentradaarmazem">Relatorio Entrada Produtos</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaidaarmazem">Relatorio Saida Produtos</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaldoarmazem">Relatorio Saldo Produtos/Entrada</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriosaldo">Relatorio Saldo Produtos</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriominimo">Relatorio Estoque Minimo</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatorioprodutos">Relatorio Produtos</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/entrada/relatoriofornecedores">Relatorio Fornecedores</a></span></ul>
 
-                            <? } ?>
-                        </li> 
-                    </ul>
-                </li>
+                                <? } ?>
+                            </li> 
+                        </ul>
+                    </li>
 
-                <li><span class="folder">Contratos</span>
-                    <? if ($perfil_id == 1) { ?>          
-                        <ul><span class="file"><a href="<?= base_url() ?>estoque/contrato">Manter Contrato</a></span></ul>
-                        <ul><span class="file"><a href="<?= base_url() ?>estoque/contrato/pesquisarcontratotipo">Manter Contrato Tipo</a></span></ul>
-                    <? } ?>
-                </li> 
-                <li><span class="folder">Financeiro</span>
-                    <ul>
-                        <li><span class="folder">Rotinas</span>
-                            <? if ($perfil_id == 1) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa">Manter Entrada</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/pesquisar2">Manter Saida</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/contaspagar">Manter Contas a pagar</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/contasreceber">Manter Contas a Receber</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/pesquisar3">Manter Sangria</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/fornecedor">Manter Credor/Devedor</a></span></ul>
-                            <? }
-                            ?>
-                        </li> 
-                        <li><span class="folder">Relatorios</span>
-                            <?
-                            if ($perfil_id == 1) {
-                                ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatoriosaida">Relatorio Saida</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatoriosaidagrupo">Relatorio Saida Tipo</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatorioentrada">Relatorio Entrada</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatorioentradagrupo">Relatorio Entrada Conta</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/contaspagar/relatoriocontaspagar">Relatorio Contas a pagar</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/contasreceber/relatoriocontasreceber">Relatorio Contas a Receber</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatoriomovitamentacao">Relatorio Moviten&ccedil;&atilde;o</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriovalormedio">Relatorio Valor Medio</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatorionotafiscal">Relatorio Nota</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatorioresumogeral">Relatorio Resumo</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatorioacompanhamentodecontas">Relatorio Acompanhamento de contas</a></span></ul>
-                                <?
-                            }
-                            if ($perfil_id == 1 || $perfil_id == 5) {
-                                ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixa">Relatorio Caixa</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixafaturado">Relatorio Caixa Faturamento</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixacartao">Relatorio Caixa Cartao</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixacartaoconsolidado">Relatorio Consolidado Cartao</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatorioindicacao">Relatorio Indicacao</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriomedicoconveniofinanceiro">Relatorio Produ&ccedil;&atilde;o M&eacute;dica</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriomedicoconvenioprevisaofinanceiro">Relatorio Previs&atilde;o M&eacute;dica</a></span></ul>
-                                <?
-                            }
-                            ?>
-
-                        </li> 
-
-                    </ul>
-                </li>
-
-                <li><span class="folder">Configura&ccedil;&atilde;o</span>
-                    <ul>
-
-                        <li><span class="folder">Estoque</span>
-                            <? if ($perfil_id == 1 || $perfil_id == 8) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/menu">Manter Menu</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/tipo">Manter Tipo</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/classe">Manter Classe</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/subclasse">Manter Sub-Classe</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/unidade">Manter Medida</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/armazem">Manter Armazem</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/cliente">Manter Cliente</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao/entregador">Manter Entregador</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador/operadorsetor">Listar Operadores</a></span></ul>
-                            <? } ?>
-                        </li> 
-                        <li><span class="folder">Financeiro</span>
-                            <? if ($perfil_id == 1) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/tipo">Manter Tipo</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/classe">Manter Classe</a></span></ul>
-    <!--                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/subclasse">Manter Sub-Classe</a></span></ul>-->
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter Conta</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/pesquisardescricao">Manter Descricao do Pagamento</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento">Manter Forma de Pagamento</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/grupospagamento">Forma de Pagamento Grupo</a></span></ul>
-                            <? } ?>
-                        </li> 
-<!--                        <li><span class="folder">Tabelas</span>
-                        <? if ($perfil_id == 1) { ?>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarnaturezaoperacao">Manter Natureza de Operação</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcfop">Manter CFOP</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (ICMS)</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (IPI)</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (PIS/COFINS)</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarncm">Manter NCM</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcest">Manter CEST</a></span></ul>
-                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcean">Manter cEAN / cEANTrib</a></span></ul>
+                    <li><span class="folder">Contratos</span>
+                        <? if ($perfil_id == 1) { ?>          
+                            <ul><span class="file"><a href="<?= base_url() ?>estoque/contrato">Manter Contrato</a></span></ul>
+                            <ul><span class="file"><a href="<?= base_url() ?>estoque/contrato/pesquisarcontratotipo">Manter Contrato Tipo</a></span></ul>
                         <? } ?>
-                        </li> -->
-                        <li><span class="folder">Administrativas</span>
-                            <? if ($perfil_id == 1 || $perfil_id == 3) { ?>
-                                <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador">Listar Profissionais</a></span></ul>    
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/empresa">Manter Empresa</a></span></ul>
-                                <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/versao">Vers&atilde;o</a></span></ul>
-                            <? } ?>
-                        </li> 
-                    </ul>
-                </li>
-                <li><span class="file"><a onclick="javascript: return confirm('Deseja realmente sair da aplicação?');"
-                                          href="<?= base_url() ?>login/sair">Sair</a></span>
-                </li>
-            </ul>                       
-            <!-- Fim da Barra Lateral -->
-        </div>
-        <div class="mensagem"><?
-            if (isset($mensagem)): echo $mensagem;
-            endif;
-            ?></div>
-        <script type="text/javascript">
-            $("#menu").treeview({
-                animated: "normal",
-                persist: "cookie",
-                collapsed: true,
-                unique: true
-            });
-
-            jQuery(function () {
-
-                jQuery("#contatos_chat_lista").click(function () {
-
-                    var classe = jQuery("#contatos_chat_lista").attr("class");
-
-                    //verificando se o usuario ja clicou no icone de batepapo
-                    if (classe == 'nao_clicado') {
-                        //mostrando a lista de contatos
-                        carregacontatos();
-                        jQuery("#contatos_chat_lista").attr("class", 'clicado');
-
-                        jQuery("#principalChat #usuarios_online").mouseleave(function () {
-                            jQuery("#principalChat #usuarios_online ul li").remove();
-                            jQuery("#contatos_chat_lista").attr("class", 'nao_clicado');
-                        });
-                    }
-                });
-
-            });
-
-            jQuery(".total_mensagens").css("opacity", "0.4");//define opacidade inicial
-            //faz o numero de mensagens nao lidas piscar
-            setInterval(function () {
-                if ($(".total_mensagens").css("opacity") == 0) {
-                    $(".total_mensagens").css("opacity", "1");
-                } else {
-                    $(".total_mensagens").css("opacity", "0");
-                }
-            }, 600);
-
-
-            //abrindo a janelas de batepapo
-            jQuery(function () {
-                jQuery("#principalChat #usuarios_online ul li a").live('click', function () {
-//                    console.log('teste');
-                    var id = jQuery(this).attr("id");
-                    jQuery(this).removeClass("comecarChat");
-
-                    var status = jQuery(this).next().attr("class");
-//                    console.log(status);
-                    var splitId = id.split(":");
-                    var idJanela = Number(splitId[1]);
-
-                    if (jQuery("#janela_" + idJanela).length == 0) {
-                        var nome = jQuery(this).text();
-                        adicionarJanela(id, nome, status);
-                        retorna_historico(idJanela);
-                    } else {
-                        jQuery(this).removeClass("comecarChat");
-                    }
-                });
-            });
-
-            //minimizando as janelas
-            jQuery(function () {
-                jQuery("#principalChat .cabecalho_janela_chat").live('click', function () {
-                    var corpo_janela_chat = jQuery(this).next();
-                    corpo_janela_chat.toggle(100);
-                });
-            });
-
-
-            //fechando a janela
-            jQuery(function () {
-                jQuery("#principalChat .fechar").live('click', function () {
-
-                    var janelaSelecionada = jQuery(this).parent().parent();
-                    var idJanela = janelaSelecionada.attr("id");
-                    var janelaSplit = idJanela.split("_");
-                    var janelaFechada = Number(janelaSplit[1]);
-
-                    var janelasAbertas = Number(jQuery(".janela_chat").length) - 1;
-                    var indice = Number(jQuery(".fechar").index(this));
-                    var janelasAfrente = janelasAbertas - indice;
-
-                    for (var i = 1; i <= janelasAfrente; i++) {
-                        jQuery(".janela_chat:eq(" + (indice + i) + ")").animate({right: "-=285"}, 200);
-                    }
-
-                    janelaSelecionada.remove();
-                    jQuery("#usuarios_online li#" + janelaFechada + " a").addClass("comecar");
-
-                    var test;
-                    for (var i = 0; i < chatsAbertos.length; i++) {
-                        test = Number(chatsAbertos[i]);
-                        if (janelaFechada == test) {
-                            chatsAbertos.splice(i, 1);
-                            break;
-                        }
-                    }
-                });
-            });
-
-            //Enviando mensagens
-            jQuery(function () {
-                jQuery("#principalChat .mensagem_chat").live('keyup', function (tecla) {
-
-                    if (tecla.which == 13) {
-                        var texto = jQuery(this).val();
-                        var len = Number(texto.length);
-
-                        if (len > 0) {
-                            var id = jQuery(this).attr("id");
-                            var splitId = id.split(":");
-                            var operadorOrigem = Number(splitId[0]);
-                            var operadorDestino = Number(splitId[1]);
-                            jQuery.ajax({
-                                type: "GET",
-                                url: "<?= base_url(); ?>" + "batepapo/enviarmensagem",
-                                data: "mensagem=" + texto + "&origem=" + operadorOrigem + "&destino=" + operadorDestino,
-                                success: function () {
-                                    jQuery('.mensagem_chat').val('');
-                                    verifica(0, 0, <? echo $operador_id ?>);
+                    </li> 
+                    <li><span class="folder">Financeiro</span>
+                        <ul>
+                            <li><span class="folder">Rotinas</span>
+                                <? if ($perfil_id == 1) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa">Manter Entrada</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/pesquisar2">Manter Saida</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/contaspagar">Manter Contas a pagar</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/contasreceber">Manter Contas a Receber</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/pesquisar3">Manter Sangria</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/fornecedor">Manter Credor/Devedor</a></span></ul>
+                                <? }
+                                ?>
+                            </li> 
+                            <li><span class="folder">Relatorios</span>
+                                <?
+                                if ($perfil_id == 1) {
+                                    ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatoriosaida">Relatorio Saida</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatoriosaidagrupo">Relatorio Saida Tipo</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatorioentrada">Relatorio Entrada</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatorioentradagrupo">Relatorio Entrada Conta</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/contaspagar/relatoriocontaspagar">Relatorio Contas a pagar</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/contasreceber/relatoriocontasreceber">Relatorio Contas a Receber</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatoriomovitamentacao">Relatorio Moviten&ccedil;&atilde;o</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriovalormedio">Relatorio Valor Medio</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatorionotafiscal">Relatorio Nota</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatorioresumogeral">Relatorio Resumo</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/caixa/relatorioacompanhamentodecontas">Relatorio Acompanhamento de contas</a></span></ul>
+                                    <?
                                 }
+                                if ($perfil_id == 1 || $perfil_id == 5) {
+                                    ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixa">Relatorio Caixa</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixafaturado">Relatorio Caixa Faturamento</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixacartao">Relatorio Caixa Cartao</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriocaixacartaoconsolidado">Relatorio Consolidado Cartao</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatorioindicacao">Relatorio Indicacao</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriomedicoconveniofinanceiro">Relatorio Produ&ccedil;&atilde;o M&eacute;dica</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/guia/relatoriomedicoconvenioprevisaofinanceiro">Relatorio Previs&atilde;o M&eacute;dica</a></span></ul>
+                                    <?
+                                }
+                                ?>
+
+                            </li> 
+
+                        </ul>
+                    </li>
+
+                    <li><span class="folder">Configura&ccedil;&atilde;o</span>
+                        <ul>
+
+                            <li><span class="folder">Estoque</span>
+                                <? if ($perfil_id == 1 || $perfil_id == 8) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/menu">Manter Menu</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/tipo">Manter Tipo</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/classe">Manter Classe</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/subclasse">Manter Sub-Classe</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/unidade">Manter Medida</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/armazem">Manter Armazem</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/cliente">Manter Cliente</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>estoque/solicitacao/entregador">Manter Entregador</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador/operadorsetor">Listar Operadores</a></span></ul>
+                                <? } ?>
+                            </li> 
+                            <li><span class="folder">Financeiro</span>
+                                <? if ($perfil_id == 1) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/tipo">Manter Tipo</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/classe">Manter Classe</a></span></ul>
+        <!--                                <ul><span class="file"><a href="<?= base_url() ?>cadastros/subclasse">Manter Sub-Classe</a></span></ul>-->
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/forma">Manter Conta</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/pesquisardescricao">Manter Descricao do Pagamento</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento">Manter Forma de Pagamento</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>cadastros/formapagamento/grupospagamento">Forma de Pagamento Grupo</a></span></ul>
+                                <? } ?>
+                            </li> 
+    <!--                        <li><span class="folder">Tabelas</span>
+                            <? if ($perfil_id == 1) { ?>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarnaturezaoperacao">Manter Natureza de Operação</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcfop">Manter CFOP</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (ICMS)</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (IPI)</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcst">Manter CST (PIS/COFINS)</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarncm">Manter NCM</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcest">Manter CEST</a></span></ul>
+                                            <ul><span class="file"><a href="<?= base_url() ?>cadastros/tabelas/pesquisarcean">Manter cEAN / cEANTrib</a></span></ul>
+                            <? } ?>
+                            </li> -->
+                            <li><span class="folder">Administrativas</span>
+                                <? if ($perfil_id == 1 || $perfil_id == 3) { ?>
+                                    <ul><span class="file"><a href="<?= base_url() ?>seguranca/operador">Listar Profissionais</a></span></ul>    
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/empresa">Manter Empresa</a></span></ul>
+                                    <ul><span class="file"><a href="<?= base_url() ?>ambulatorio/versao">Vers&atilde;o</a></span></ul>
+                                <? } ?>
+                            </li> 
+                        </ul>
+                    </li>
+                    <li><span class="file"><a onclick="javascript: return confirm('Deseja realmente sair da aplicação?');"
+                                              href="<?= base_url() ?>login/sair">Sair</a></span>
+                    </li>
+                </ul>                       
+                <!-- Fim da Barra Lateral -->
+            </div>
+            <div class="mensagem"><?
+                if (isset($mensagem)): echo $mensagem;
+                endif;
+                ?></div>
+            <script type="text/javascript">
+                $("#menu").treeview({
+                    animated: "normal",
+                    persist: "cookie",
+                    collapsed: true,
+                    unique: true
+                });
+
+                jQuery(function () {
+
+                    jQuery("#contatos_chat_lista").click(function () {
+
+                        var classe = jQuery("#contatos_chat_lista").attr("class");
+
+                        //verificando se o usuario ja clicou no icone de batepapo
+                        if (classe == 'nao_clicado') {
+                            //mostrando a lista de contatos
+                            carregacontatos();
+                            jQuery("#contatos_chat_lista").attr("class", 'clicado');
+
+                            jQuery("#principalChat #usuarios_online").mouseleave(function () {
+                                jQuery("#principalChat #usuarios_online ul li").remove();
+                                jQuery("#contatos_chat_lista").attr("class", 'nao_clicado');
                             });
                         }
+                    });
 
-                    }
                 });
-            });
 
-            //Atualizando novas mensagens
-            function verifica(timestamp, ultimoId, operadorOrigem) {
-                var t;
-
-                //ESSA FUNCAO IRA VERIFICAR SE HA NOVAS MENSAGENS PARA OS CONTATOS ABERTOS OU NOVAS MENSAGENS NAO LIDAS
-                jQuery.ajax({
-                    url: "<?= base_url(); ?>" + "batepapo/atualizamensagens",
-                    type: "GET",
-                    data: 'timestamp=' + timestamp + '&ultimoid=' + ultimoId + '&usuario=' + operadorOrigem,
-                    dataType: 'json',
-                    success: function (retorno) {
-                        clearInterval(t);
-
-                        if (retorno.status == 'resultados' || retorno.status == 'vazio') {
-
-//                                //funcao chamando a si mesma a cada 1s
-//                                t = setTimeout(function () {
-//                                    verifica(retorno.timestamp, retorno.ultimoId, retorno.operadorOrigem);
-//                                }, 2000);
+                jQuery(".total_mensagens").css("opacity", "0.4");//define opacidade inicial
+                //faz o numero de mensagens nao lidas piscar
+                setInterval(function () {
+                    if ($(".total_mensagens").css("opacity") == 0) {
+                        $(".total_mensagens").css("opacity", "1");
+                    } else {
+                        $(".total_mensagens").css("opacity", "0");
+                    }
+                }, 600);
 
 
-                            //verifica se ha mensagens novas
-                            if (retorno.status == 'resultados') {
-                                jQuery.each(retorno.dados, function (i, msg) {
+                //abrindo a janelas de batepapo
+                jQuery(function () {
+                    jQuery("#principalChat #usuarios_online ul li a").live('click', function () {
+                        //                    console.log('teste');
+                        var id = jQuery(this).attr("id");
+                        jQuery(this).removeClass("comecarChat");
 
-                                    //testando se ela ja esta aberta
-                                    if (jQuery("#janela_" + msg.janela).length > 0) {
+                        var status = jQuery(this).next().attr("class");
+                        //                    console.log(status);
+                        var splitId = id.split(":");
+                        var idJanela = Number(splitId[1]);
 
-                                        //caso a janela ja esteja aberta adciona as novas mensagens em uma tag <li> e incrementa elas a <ul> da janela correspondente
-                                        if (jQuery("#janela_" + msg.janela + " .mensagens_chat ul li#" + msg.chat_id).length == 0 && msg.janela > 0) {
+                        if (jQuery("#janela_" + idJanela).length == 0) {
+                            var nome = jQuery(this).text();
+                            adicionarJanela(id, nome, status);
+                            retorna_historico(idJanela);
+                        } else {
+                            jQuery(this).removeClass("comecarChat");
+                        }
+                    });
+                });
 
-                                            if (operadorOrigem == msg.id_origem) {
-                                                jQuery("#janela_" + msg.janela + " .mensagens_chat ul").append("<li class='eu' id='" + msg.chat_id + "'><p>" + msg.mensagem + "</p></li>");
-                                            } else {
-                                                jQuery("#janela_" + msg.janela + " .mensagens_chat ul").append("<li id='" + msg.chat_id + "'><div class='imgPerfil'></div><p>" + msg.mensagem + "</p></li>");
-                                            }
-                                        }
+                //minimizando as janelas
+                jQuery(function () {
+                    jQuery("#principalChat .cabecalho_janela_chat").live('click', function () {
+                        var corpo_janela_chat = jQuery(this).next();
+                        corpo_janela_chat.toggle(100);
+                    });
+                });
 
-                                        //CASO O CONTATO ESTEJA ABBERTO ELE MARCA A MENSAGEM COMO LIDA
-                                        jQuery.ajax({
-                                            url: "<?= base_url(); ?>" + "batepapo/visualizacontatoaberto",
-                                            type: "GET",
-                                            data: 'operador_destino=' + msg.janela,
-                                            success: function () {
 
-                                            }
-                                        });
-                                    }
-                                });
+                //fechando a janela
+                jQuery(function () {
+                    jQuery("#principalChat .fechar").live('click', function () {
 
-                                var altura = jQuery(".corpo_janela_chat .mensagens_chat").height();
-                                jQuery(".corpo_janela_chat .mensagens_chat").animate({scrollTop: 1000000}, '500');
+                        var janelaSelecionada = jQuery(this).parent().parent();
+                        var idJanela = janelaSelecionada.attr("id");
+                        var janelaSplit = idJanela.split("_");
+                        var janelaFechada = Number(janelaSplit[1]);
+
+                        var janelasAbertas = Number(jQuery(".janela_chat").length) - 1;
+                        var indice = Number(jQuery(".fechar").index(this));
+                        var janelasAfrente = janelasAbertas - indice;
+
+                        for (var i = 1; i <= janelasAfrente; i++) {
+                            jQuery(".janela_chat:eq(" + (indice + i) + ")").animate({right: "-=285"}, 200);
+                        }
+
+                        janelaSelecionada.remove();
+                        jQuery("#usuarios_online li#" + janelaFechada + " a").addClass("comecar");
+
+                        var test;
+                        for (var i = 0; i < chatsAbertos.length; i++) {
+                            test = Number(chatsAbertos[i]);
+                            if (janelaFechada == test) {
+                                chatsAbertos.splice(i, 1);
+                                break;
                             }
                         }
-                    },
-                    error: function (retorno) {
-                        clearInterval(t);
-                        t = setTimeout(function () {
-                            verifica(retorno.timestamp, retorno.ultimoId, retorno.operadorOrigem);
-                        }, 10000);
-                    }
+                    });
                 });
-            }
 
-            function buscamensagens() {
-                setInterval(function () {
-                    verifica(0, 0,<? echo $operador_id ?>);
-                    mensagensnaolidas();
+                //Enviando mensagens
+                jQuery(function () {
+                    jQuery("#principalChat .mensagem_chat").live('keyup', function (tecla) {
 
-                }, 3000);
-            }
+                        if (tecla.which == 13) {
+                            var texto = jQuery(this).val();
+                            var len = Number(texto.length);
 
-            buscamensagens();
-//            mensagensnaolidas();
+                            if (len > 0) {
+                                var id = jQuery(this).attr("id");
+                                var splitId = id.split(":");
+                                var operadorOrigem = Number(splitId[0]);
+                                var operadorDestino = Number(splitId[1]);
+                                jQuery.ajax({
+                                    type: "GET",
+                                    url: "<?= base_url(); ?>" + "batepapo/enviarmensagem",
+                                    data: "mensagem=" + texto + "&origem=" + operadorOrigem + "&destino=" + operadorDestino,
+                                    success: function () {
+                                        jQuery('.mensagem_chat').val('');
+                                        verifica(0, 0, <? echo $operador_id ?>);
+                                    }
+                                });
+                            }
 
-        </script>
+                        }
+                    });
+                });
+
+                //Atualizando novas mensagens
+                function verifica(timestamp, ultimoId, operadorOrigem) {
+                    var t;
+
+                    //ESSA FUNCAO IRA VERIFICAR SE HA NOVAS MENSAGENS PARA OS CONTATOS ABERTOS OU NOVAS MENSAGENS NAO LIDAS
+                    jQuery.ajax({
+                        url: "<?= base_url(); ?>" + "batepapo/atualizamensagens",
+                        type: "GET",
+                        data: 'timestamp=' + timestamp + '&ultimoid=' + ultimoId + '&usuario=' + operadorOrigem,
+                        dataType: 'json',
+                        success: function (retorno) {
+                            clearInterval(t);
+
+                            if (retorno.status == 'resultados' || retorno.status == 'vazio') {
+
+                                //                                //funcao chamando a si mesma a cada 1s
+                                //                                t = setTimeout(function () {
+                                //                                    verifica(retorno.timestamp, retorno.ultimoId, retorno.operadorOrigem);
+                                //                                }, 2000);
+
+
+                                //verifica se ha mensagens novas
+                                if (retorno.status == 'resultados') {
+                                    jQuery.each(retorno.dados, function (i, msg) {
+
+                                        //testando se ela ja esta aberta
+                                        if (jQuery("#janela_" + msg.janela).length > 0) {
+
+                                            //caso a janela ja esteja aberta adciona as novas mensagens em uma tag <li> e incrementa elas a <ul> da janela correspondente
+                                            if (jQuery("#janela_" + msg.janela + " .mensagens_chat ul li#" + msg.chat_id).length == 0 && msg.janela > 0) {
+
+                                                if (operadorOrigem == msg.id_origem) {
+                                                    jQuery("#janela_" + msg.janela + " .mensagens_chat ul").append("<li class='eu' id='" + msg.chat_id + "'><p>" + msg.mensagem + "</p></li>");
+                                                } else {
+                                                    jQuery("#janela_" + msg.janela + " .mensagens_chat ul").append("<li id='" + msg.chat_id + "'><div class='imgPerfil'></div><p>" + msg.mensagem + "</p></li>");
+                                                }
+                                            }
+
+                                            //CASO O CONTATO ESTEJA ABBERTO ELE MARCA A MENSAGEM COMO LIDA
+                                            jQuery.ajax({
+                                                url: "<?= base_url(); ?>" + "batepapo/visualizacontatoaberto",
+                                                type: "GET",
+                                                data: 'operador_destino=' + msg.janela,
+                                                success: function () {
+
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                    var altura = jQuery(".corpo_janela_chat .mensagens_chat").height();
+                                    jQuery(".corpo_janela_chat .mensagens_chat").animate({scrollTop: 1000000}, '500');
+                                }
+                            }
+                        },
+                        error: function (retorno) {
+                            clearInterval(t);
+                            t = setTimeout(function () {
+                                verifica(retorno.timestamp, retorno.ultimoId, retorno.operadorOrigem);
+                            }, 10000);
+                        }
+                    });
+                }
+
+                function buscamensagens() {
+                    setInterval(function () {
+                        verifica(0, 0,<? echo $operador_id ?>);
+                        mensagensnaolidas();
+
+                    }, 3000);
+                }
+
+                buscamensagens();
+                //            mensagensnaolidas();
+
+            </script>
