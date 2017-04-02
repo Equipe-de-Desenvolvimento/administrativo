@@ -16,6 +16,7 @@ class Transportadora extends BaseController {
     function Transportadora() {
         parent::Controller();
         $this->load->model('estoque/transportadora_model', 'transportadora');
+        $this->load->model('estoque/fornecedor_model', 'fornecedor');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -36,6 +37,8 @@ class Transportadora extends BaseController {
     function carregartransportadora($estoque_transportadora_id) {
         $obj_transportadora = new transportadora_model($estoque_transportadora_id);
         $data['obj'] = $obj_transportadora;
+        
+        $data['tipo'] = $this->fornecedor->listartipo();
         $this->loadView('estoque/transportadora-form', $data);
     }
 

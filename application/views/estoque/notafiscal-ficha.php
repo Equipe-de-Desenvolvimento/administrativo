@@ -23,7 +23,7 @@
                 </a>
                 
                 <!-- Futuramente criar opçao de criar NFC-e -->
-                <a href="#">
+                <a href="<?= base_url() ?>estoque/notafiscal/carregarcancelarnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                     <button type="button" id="novaParcela">Cancelar NF-e</button>
                 </a>
                 <a href="<?= base_url() ?>estoque/notafiscal/impressaodanfe/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">

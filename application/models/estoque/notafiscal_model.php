@@ -270,9 +270,20 @@ class notafiscal_model extends Model {
         return $notafiscal_id;
     }
 
-    function gravarxmlfinalizado($nota_id, $xmlFinalizado, $numeroRecibo) {
+    function gravarxmlfinalizado($nota_id, $xmlFinalizado, $numeroRecibo, $numeroProtocolo) {
         $this->db->set('xml', $xmlFinalizado);
         $this->db->set('numero_recibo', $numeroRecibo);
+        $this->db->set('numero_protocolo', $numeroProtocolo);
+        
+        $this->db->where('notafiscal_id', $nota_id);
+        $this->db->update('tb_notafiscal');
+    }
+
+    function gravarmotivocancelamento($nota_id) {
+        $horario = date("Y-m-d H:i:s");
+        $this->db->set('data_cancelamento', $horario);
+        $this->db->set('cancelada', 't');
+        $this->db->set('motivo_cancelamento', $_POST['txtmotivo']);
         
         $this->db->where('notafiscal_id', $nota_id);
         $this->db->update('tb_notafiscal');

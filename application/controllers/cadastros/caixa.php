@@ -196,9 +196,43 @@ class Caixa extends BaseController {
         $this->loadView('ambulatorio/relatoriosaida', $data);
     }
 
+    function relatorioarquivoscnab() {
+        $this->loadView('ambulatorio/relatorioarquivoscnab');
+    }
+
     function relatorioacompanhamentodecontas() {
         $data['grupo'] = $this->guia->listargrupo();
         $this->loadView('ambulatorio/relatorioacompanhamentodecontas', $data);
+    }
+
+    function gerararquivoscnab() {
+        $empresa_id = $this->session->userdata('empresa_id');
+        $this->load->helper('directory');
+        $dataInicio = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $dataFim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
+        $nome = $_POST['nomeArquivo'];
+
+        $arquivos = directory_map("/home/sisprod/projetos/administrativo/upload/cnab");
+        $zip = new ZipArchive;
+        $zip->open("./upload/arquivosCNAB/{$nome}.zip", ZipArchive::CREATE);
+
+        if (!is_dir("./upload/arquivosCNAB")) {
+            mkdir("./upload/arquivosCNAB");
+            chmod("./upload/arquivosCNAB", 0777);
+        }
+
+        foreach ($arquivos as $pasta => $value) {
+            $dataPasta = date("Y-m-d", strtotime($pasta));
+            if (($dataPasta >= $dataInicio) && ($dataPasta <= $dataFim)) {
+
+                foreach ($value as $chave => $item) {
+                    $zip->addFile("./upload/cnab/{$pasta}/{$chave}/{$item[0]}", "$item[0]");
+                }
+            }
+        }
+        $zip->close();
+
+        redirect(base_url() . "cadastros/caixa/relatorioarquivoscnab");
     }
 
     function gerarelatorioacompanhamentodecontas() {
@@ -503,10 +537,9 @@ class Caixa extends BaseController {
         $this->loadView('ambulatorio/relatorioentrada', $data);
     }
 
-
-    function gerarelatorioentrada() {    
-        $data['txtdata_inicio'] = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $data['txtdata_fim'] = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+    function gerarelatorioentrada() {
+        $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $data['credordevedor'] = $this->caixa->buscarcredordevedor($_POST['credordevedor']);
         $data['tipo'] = $this->tipo->buscartipo($_POST['tipo']);
         $data['classe'] = $this->classe->buscarclasserelatorio($_POST['classe']);

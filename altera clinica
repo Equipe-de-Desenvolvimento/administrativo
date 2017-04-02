@@ -491,3 +491,36 @@ ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN vendedor_id integer;
 
 -- Dia 01/03/2017
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN notafiscal boolean DEFAULT false;
+
+-- Dia 02/03/2017
+ALTER TABLE ponto.tb_notafiscal ADD COLUMN motivo_cancelamento character varying(2000);
+DROP TABLE ponto.tb_estoque_transportadora;
+CREATE TABLE ponto.tb_estoque_transportadora
+(
+  estoque_transportadora_id serial NOT NULL,
+  descricao character varying(200),
+  cnpj character varying(20),
+  cep character varying(9),
+  logradouro character varying(200),
+  numero character varying(20),
+  complemento character varying(100),
+  bairro character varying(100),
+  municipio_id integer,
+  celular character varying(15),
+  telefone character varying(15),
+  ativo boolean DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  menu_id integer,
+  sala_id integer,
+  razao_social character varying(200),
+  saida boolean NOT NULL DEFAULT false,
+  tipo_logradouro_id integer,
+  inscricao_estadual character varying(20),
+  email character varying(60),
+  credor_devedor_id integer,
+  CONSTRAINT tb_estoque_transportadora_pkey PRIMARY KEY (estoque_transportadora_id)
+);
+

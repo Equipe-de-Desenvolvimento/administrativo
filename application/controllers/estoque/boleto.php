@@ -313,16 +313,20 @@ class Boleto extends BaseController {
         $nomeArquivo = $data['destinatario'][0]->nome . $nossoNumero;
         $pasta = $data['destinatario'][0]->nome;
 
-//        $pathRoot = "/home/sisprod/projetos/administrativo/";
-        if (!is_dir("./upload/cnab/$pasta")) {
-            mkdir("./upload/cnab/$pasta", 0777);
-            chmod("./upload/cnab", 0777);
+        $pathRoot = "./upload/cnab/" . date("Y-m-d") ;
+        if (!is_dir("./upload/cnab/" . date("Y-m-d") )) {
+            mkdir("./upload/cnab/" . date("Y-m-d"), 0777);
+            chmod("./upload/cnab/" . date("Y-m-d"), 0777);
+        }
+        if (!is_dir("{$pathRoot}/$pasta")) {
+            mkdir("{$pathRoot}/$pasta", 0777);
+            chmod("{$pathRoot}/$pasta", 0777);
         }
 
-        $txt = fopen("./upload/cnab/$pasta/$nomeArquivo.txt", "w+");
+        $txt = fopen("{$pathRoot}/$pasta/$nomeArquivo.txt", "w+");
         $inserindo = fwrite($txt, $txtCnab);
         fclose($txt);
-        chmod("./upload/cnab/$pasta/$nomeArquivo.txt", 0777);
+        chmod("{$pathRoot}/$pasta/$nomeArquivo.txt", 0777);
 
         $solicitacao_cliente_id = $data['boleto'][0]->solicitacao_cliente_id;
         $mensagem = 'Arquivo de Remessa salvo com sucesso.';

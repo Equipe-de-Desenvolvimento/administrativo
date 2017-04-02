@@ -53,7 +53,7 @@ class Menu extends BaseController {
             $_POST['valor'][$chave] = str_replace(',', '.', $_POST['valor'][$chave]);
             $valor = str_replace(',', '.', $_POST['valor'][$chave]);
             $menu_id = $_POST['txtestoque_menu_id'];
-            $produto_id = ($_POST['produto_id_item'] != '')?$_POST['produto_id_item']:$_POST['produto_id'][$chave];
+            $produto_id = (isset($_POST['produto_id_item']) && $_POST['produto_id_item'] != '')?$_POST['produto_id_item']:$_POST['produto_id'][$chave];
             $this->menu->gravaritens($valor, $menu_id, $produto_id);
         }
         redirect(base_url() . "estoque/menu/criarmenu/$estoque_menu_id");

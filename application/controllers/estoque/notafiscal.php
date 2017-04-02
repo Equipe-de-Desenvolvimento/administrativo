@@ -69,31 +69,6 @@ class Notafiscal extends BaseController {
         $this->loadView('estoque/notafiscal-form', $data);
     }
 
-    function impressaodanfe($solicitacao_cliente_id, $notafiscal_id = '') {
-        if ($notafiscal_id == '') {
-            $mensagem = 'A Nota Fiscal Eletronica ainda não foi gerada.';
-            $this->session->set_flashdata('message', $mensagem);
-            redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
-        } else {
-            $config = $this->geraconfignfephp($solicitacao_cliente_id);
-
-            $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
-            $chave = $notafiscal[0]->chave_nfe;
-            $data = date("Ym", strtotime($notafiscal[0]->data_envio));
-            $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
-
-            if ($chave == '') {
-                $mensagem = 'Não foi possivel encontrar a Chave da Nota fiscal, por favor gere novamente.';
-                $this->session->set_flashdata('message', $mensagem);
-                redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
-            }
-
-
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
-        }
-    }
-
     function gravarnotafiscaleletronica() {
         $solicitacao_id = $_POST['estoque_cliente_id'];
         $notafiscal_id = $this->notafiscal->gravarnotafiscaleletronica();
@@ -182,15 +157,21 @@ class Notafiscal extends BaseController {
     }
 
     function gerarnotafiscal($solicitacao_cliente_id, $notafiscal_id) {
-//        system("rm -R /home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/");
 
         $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
 
-        if ($notafiscal[0]->enviada == 't') {
+        if ($notafiscal[0]->enviada == 't' && $notafiscal[0]->cancelada == 'f') {
             $mensagem = 'Nota Fiscal ja foi Enviada para SEFAZ.';
             $this->session->set_flashdata('message', $mensagem);
             header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
             exit;
+        }
+
+        if ($notafiscal[0]->cancelada == 't') {
+            if (!is_dir("/home/sisprod/projetos/administrativo/upload/nfe/CANCELADAS/")) {
+                mkdir("/home/sisprod/projetos/administrativo/upload/nfe/CANCELADAS/");
+            }
+            system("mv /home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/ /home/sisprod/projetos/administrativo/upload/nfe/CANCELADAS/");
         }
 
         $data['empresa'] = $this->notafiscal->empresa();
@@ -423,8 +404,8 @@ class Notafiscal extends BaseController {
         $tipoAmbiente = ($notafiscal[0]->tipo_ambiente == '') ? '2' : $notafiscal[0]->tipo_ambiente; //1=Produção; 2=Homologação
         $chave = $notafiscal[0]->chave_nfe;
         $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
-
-        if ($notafiscal[0]->enviada == 'f') {
+        
+        if ($notafiscal[0]->enviada == 'f' OR ($notafiscal[0]->enviada == 't' && $notafiscal[0]->cancelada == 't')) {
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
             $this->notafiscal->gravardataenvio($notafiscal_id);
 
@@ -442,14 +423,77 @@ class Notafiscal extends BaseController {
         fclose($arq);
         chmod($filename, 0777);
 
-        $this->notafiscal->gravarxmlfinalizado($notafiscal_id, $xmlFinalizado, $numeroRecibo);
+        $this->notafiscal->gravarxmlfinalizado($notafiscal_id, $xmlFinalizado, $numeroRecibo, $numeroProtocolo);
 
         header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
         exit;
     }
 
+    function carregarcancelarnotafiscal($solicitacao_cliente_id, $notafiscal_id = '') {
+        if ($notafiscal_id == '') {
+            $mensagem = 'A Nota Fiscal Eletronica ainda não foi gerada.';
+            $this->session->set_flashdata('message', $mensagem);
+            redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+        }
+        $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
+        $data['notafiscal_id'] = $notafiscal_id;
+        $this->loadView('estoque/cancelarnotafiscal', $data);
+    }
+
+    function cancelarnotafiscal($solicitacao_cliente_id, $notafiscal_id = '') {
+        if ($notafiscal_id == '') {
+            $mensagem = 'A Nota Fiscal Eletronica ainda não foi gerada.';
+            $this->session->set_flashdata('message', $mensagem);
+            redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+        } else {
+            $this->notafiscal->gravarmotivocancelamento($notafiscal_id);
+
+            $config = $this->geraconfignfephp($solicitacao_cliente_id);
+
+            $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
+
+            $chave = $notafiscal[0]->chave_nfe;
+            $numProtocolo = $notafiscal[0]->numero_protocolo;
+            $modelo = $notafiscal[0]->modelo_nf;
+            $tpAmbiente = $notafiscal[0]->tipo_ambiente;
+            $motivo = $_POST['txtmotivo'];
+
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/cancelaNfe.php');
+
+            $data['mensagem'] = 'Cancelamento Efetuado com sucesso.';
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+        }
+    }
+
+    function impressaodanfe($solicitacao_cliente_id, $notafiscal_id = '') {
+        if ($notafiscal_id == '') {
+            $mensagem = 'A Nota Fiscal Eletronica ainda não foi gerada.';
+            $this->session->set_flashdata('message', $mensagem);
+            redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+        } else {
+            $config = $this->geraconfignfephp($solicitacao_cliente_id);
+
+            $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
+            $chave = $notafiscal[0]->chave_nfe;
+            $data = date("Ym", strtotime($notafiscal[0]->data_envio));
+            $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+
+            if ($chave == '') {
+                $mensagem = 'Não foi possivel encontrar a Chave da Nota fiscal, por favor gere novamente.';
+                $this->session->set_flashdata('message', $mensagem);
+                redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+            }
+
+
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
+        }
+    }
+
     function teste($solicitacao_cliente_id, $notafiscal_id) {
-        $chave = '23170308852545000138550380000000381000001018';
+        $chave = '23170308852545000138550560000000561000001090';
         $config = $this->geraconfignfephp($solicitacao_cliente_id);
         $tipoAmbiente = 2; //1=Produção; 2=Homologação
         require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');

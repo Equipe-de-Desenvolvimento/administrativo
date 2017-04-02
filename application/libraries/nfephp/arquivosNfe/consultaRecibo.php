@@ -56,9 +56,12 @@ if (count(@$aResposta['aProt'][0]) == 0 OR empty($aResposta['aProt'])) {
         exit;
     }
 }
-//echo '<hr><pre>', htmlspecialchars($nfe->soapDebug), <hr>;
+
+$numeroProtocolo = $aResposta['aProt'][0]['nProt'];
+//echo '<hr><pre>', htmlspecialchars($nfe->soapDebug), '<hr>';
 //print_r($aResposta);
 //echo "</pre><hr>";
+//die;
 
 $pathNFefile = "{$caminho}/{$solicitacao_cliente_id}/validada/{$chave}-nfe.xml";
 if (! $indSinc) {

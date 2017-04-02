@@ -21,6 +21,7 @@ class empresa_model extends Model {
     var $_inscricao_estadual_st = null;
     var $_inscricao_municipal = null;
     var $_cod_regime_tributario = null;
+    var $_ambienteProducao = null;
     var $_email = null;
 
     function Empresa_model($exame_empresa_id = null) {
@@ -120,6 +121,7 @@ class empresa_model extends Model {
             $this->db->set('inscricao_municipal', $_POST['inscricaomunicipal']);
             $this->db->set('inscricao_estadual_st', $_POST['inscricaoestadualst']);
             $this->db->set('cod_regime_tributario', $_POST['crt']);
+            $this->db->set('ambiente_producao', $_POST['ambienteProdcao']);
             if ($_POST['txtCNPJ'] != '') {
                 $this->db->set('cnpj', str_replace("-", "", str_replace("/", "", str_replace(".", "", $_POST['txtCNPJ']))));
             }
@@ -183,6 +185,7 @@ class empresa_model extends Model {
                                inscricao_estadual_st,
                                inscricao_municipal,
                                cod_regime_tributario,
+                               ambiente_producao,
                                email,
                                cnes,
                                cnae,
@@ -220,6 +223,9 @@ class empresa_model extends Model {
             $this->_inscricao_estadual_st = $return[0]->inscricao_estadual_st;
             $this->_inscricao_municipal = $return[0]->inscricao_municipal;
             $this->_cod_regime_tributario = $return[0]->cod_regime_tributario;
+            $this->_ambienteProducao = $return[0]->ambiente_producao;
+            
+//            echo $this->_ambienteProducao;die;
         } else {
             $this->_empresa_id = null;
         }
