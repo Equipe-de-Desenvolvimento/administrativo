@@ -41,7 +41,7 @@
                     </dt>
                     <dd>
                         <input type="hidden" name="cfop_id" id="cfop_id" class="texto01"/>
-                        <input type="text" name="cfop" id="cfop" alt="9.999" class="texto01"/>
+                        <input type="text" name="cfop" id="cfop" alt="9.999 " class="texto01"/>
                         <input type="text" name="descricao_cfop" id="descricao_cfop" class="texto08" readonly/>
                     </dd>
                     <dt>

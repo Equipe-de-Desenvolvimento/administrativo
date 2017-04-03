@@ -8,7 +8,7 @@
             <a href="<?= base_url() ?>estoque/boleto/imprimirboletobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
                 <button type="button" id="novaParcela">Imprimir Boleto</button>
             </a>
-            <a href="#">
+<!--            <a href="#">
                 <button type="button" id="novaParcela">Pedido de baixa</button>
             </a>
             <a href="#">
@@ -16,7 +16,7 @@
             </a>
             <a href="#">
                 <button type="button" id="novaParcela">Alteração de Outros Dados</button>
-            </a>
+            </a>-->
         </div>
 
         <br>

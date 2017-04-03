@@ -38,6 +38,7 @@ class Notafiscal extends BaseController {
         $data['notafiscal_id'] = $notafiscal_id;
         $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
         $data['produtos'] = $this->notafiscal->listarresumosolicitacao($solicitacao_cliente_id);
+        $data['notafiscal'] = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
 //        echo "<pre>";
 //        var_dump($data['produtos']);die;
         $this->loadView('estoque/notafiscal-ficha', $data);
@@ -407,11 +408,11 @@ class Notafiscal extends BaseController {
         
         if ($notafiscal[0]->enviada == 'f' OR ($notafiscal[0]->enviada == 't' && $notafiscal[0]->cancelada == 't')) {
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
-            $this->notafiscal->gravardataenvio($notafiscal_id);
-
             $data = date("Ym");
             /* Consultando a situacao do Recibo no sistema da SEFAZ  e adcionando Tag de Protocolo */
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+            
+            $this->notafiscal->gravardataenvio($notafiscal_id);
         } else {
             $data = date("Ym", strtotime($notafiscal[0]->data_envio));
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');

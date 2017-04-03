@@ -168,7 +168,7 @@ class solicitacao_model extends Model {
                     }
 
                     $classe = "VENDAS " . ' ' . $value->nome;
-                    
+
                     for ($x = 0; $x < count($formaPagamento); $x++) {
 
                         $parcelas = $this->jurosporparcelas($formaPagamento[$x]);
@@ -217,8 +217,8 @@ class solicitacao_model extends Model {
                         else {
                             $data_receber = date("Y-m-d");
                             foreach ($parcelas as $item) {
-                                $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
-                                
+                                $obs = "Parc. " . $item->parcela . '/' . count($parcelas) . ' ' . $observacao;
+
                                 $percParcela = (float) $item->valor;
                                 $valorParcela = $valor[$x] * ($percParcela / 100);
                                 $periodo = $item->dias;
@@ -804,7 +804,8 @@ class solicitacao_model extends Model {
 
     function listar($args = array()) {
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->select('es.estoque_solicitacao_setor_id,
+        $this->db->select(' DISTINCT(n.notafiscal_id),
+                            es.estoque_solicitacao_setor_id,
                             es.cliente_id,
                             ec.nome as cliente,
                             ec.saida,
@@ -813,8 +814,7 @@ class solicitacao_model extends Model {
                             es.faturado,
                             es.transportadora,
                             es.situacao, 
-                            es.notafiscal, 
-                            n.notafiscal_id');
+                            es.notafiscal');
         $this->db->from('tb_estoque_solicitacao_cliente es');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = es.cliente_id');
         $this->db->join('tb_estoque_operador_cliente oc', 'oc.cliente_id = es.cliente_id');
@@ -981,53 +981,8 @@ class solicitacao_model extends Model {
 
     function gravarfaturamento() {
         try {
-
-            if ($_POST['ajuste1'] != "0") {
-                $valor1 = $_POST['valorajuste1'];
-            } else {
-                $valor1 = $_POST['valor1'];
-            }
-            if ($_POST['ajuste2'] != "0") {
-                $valor2 = $_POST['valorajuste2'];
-            } else {
-                $valor2 = $_POST['valor2'];
-            }
-            if ($_POST['ajuste3'] != "0") {
-                $valor3 = $_POST['valorajuste3'];
-            } else {
-                $valor3 = $_POST['valor3'];
-            }
-            if ($_POST['ajuste4'] != "0") {
-                $valor4 = $_POST['valorajuste4'];
-            } else {
-                $valor4 = $_POST['valor4'];
-            }
-            if ($_POST['ajuste1'] != "0" || $_POST['ajuste2'] != "0" || $_POST['ajuste3'] != "0" || $_POST['ajuste4'] != "0") {
-                if ($_POST['valor1'] > $_POST['valorajuste1']) {
-                    $desconto1 = $_POST['valor1'] - $_POST['valorajuste1'];
-                } else {
-                    $desconto1 = $_POST['valorajuste1'] - $_POST['valor1'];
-                }
-                if ($_POST['valor2'] > $_POST['valorajuste2']) {
-                    $desconto2 = $_POST['valor1'] - $_POST['valorajuste1'];
-                } else {
-                    $desconto2 = $_POST['valorajuste2'] - $_POST['valor2'];
-                }
-                if ($_POST['valor3'] > $_POST['valorajuste3']) {
-                    $desconto3 = $_POST['valor3'] - $_POST['valorajuste3'];
-                } else {
-                    $desconto3 = $_POST['valorajuste3'] - $_POST['valor3'];
-                }
-                if ($_POST['valor4'] > $_POST['valorajuste4']) {
-                    $desconto4 = $_POST['valor4'] - $_POST['valorajuste4'];
-                } else {
-                    $desconto4 = $_POST['valorajuste4'] - $_POST['valor4'];
-                }
-
-                $desconto = $desconto1 + $desconto2 + $desconto3 + $desconto4;
-            } else {
-                $desconto = $_POST['desconto'];
-            }
+            $valor1 = $_POST['valor1'];
+            $desconto = $_POST['desconto'];
 
             /* inicia o mapeamento no banco */
             $horario = date("Y-m-d H:i:s");
@@ -1037,26 +992,26 @@ class solicitacao_model extends Model {
                 $this->db->set('descricao_pagamento', $_POST['formapamento1']);
                 $this->db->set('forma_pagamento', $_POST['forma_pagamento_1']);
                 $this->db->set('valor1', str_replace(",", ".", $valor1));
-                $this->db->set('parcelas1', $_POST['parcela1']);
+//                $this->db->set('parcelas1', $_POST['parcela1']);
             }
-            if ($_POST['formapamento2'] != '') {
-                $this->db->set('descricao_pagamento2', $_POST['formapamento2']);
-                $this->db->set('forma_pagamento2', $_POST['forma_pagamento_2']);
-                $this->db->set('valor2', str_replace(",", ".", $valor2));
-                $this->db->set('parcelas2', $_POST['parcela2']);
-            }
-            if ($_POST['formapamento3'] != '') {
-                $this->db->set('descricao_pagamento3', $_POST['formapamento3']);
-                $this->db->set('forma_pagamento3', $_POST['forma_pagamento_3']);
-                $this->db->set('valor3', str_replace(",", ".", $valor3));
-                $this->db->set('parcelas3', $_POST['parcela3']);
-            }
-            if ($_POST['formapamento4'] != '') {
-                $this->db->set('descricao_pagamento4', $_POST['formapamento4']);
-                $this->db->set('forma_pagamento4', $_POST['forma_pagamento_4']);
-                $this->db->set('valor4', str_replace(",", ".", $valor4));
-                $this->db->set('parcelas4', $_POST['parcela4']);
-            }
+//            if ($_POST['formapamento2'] != '') {
+//                $this->db->set('descricao_pagamento2', $_POST['formapamento2']);
+//                $this->db->set('forma_pagamento2', $_POST['forma_pagamento_2']);
+//                $this->db->set('valor2', str_replace(",", ".", $valor2));
+//                $this->db->set('parcelas2', $_POST['parcela2']);
+//            }
+//            if ($_POST['formapamento3'] != '') {
+//                $this->db->set('descricao_pagamento3', $_POST['formapamento3']);
+//                $this->db->set('forma_pagamento3', $_POST['forma_pagamento_3']);
+//                $this->db->set('valor3', str_replace(",", ".", $valor3));
+//                $this->db->set('parcelas3', $_POST['parcela3']);
+//            }
+//            if ($_POST['formapamento4'] != '') {
+//                $this->db->set('descricao_pagamento4', $_POST['formapamento4']);
+//                $this->db->set('forma_pagamento4', $_POST['forma_pagamento_4']);
+//                $this->db->set('valor4', str_replace(",", ".", $valor4));
+//                $this->db->set('parcelas4', $_POST['parcela4']);
+//            }
 
             $this->db->set('desconto', $desconto);
             if ((float) $desconto != 0) {
@@ -1364,7 +1319,7 @@ class solicitacao_model extends Model {
             $this->db->where("estoque_entrada_id", $_POST['produto_id']);
             $query = $this->db->get();
             $returno = $query->result();
-            
+
             $this->db->select('valor');
             $this->db->from('tb_estoque_solicitacao_itens');
             $this->db->where("estoque_solicitacao_itens_id", $_POST['txtestoque_solicitacao_itens_id']);
