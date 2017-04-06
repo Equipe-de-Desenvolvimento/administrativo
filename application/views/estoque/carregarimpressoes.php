@@ -16,7 +16,7 @@
                         <option value='espNota'>Espelho da Nota</option>
                     <? endif;?>
                     
-                    <option value='recibo'>Recibo</option>
+                    <!--<option value='recibo'>Recibo</option>-->
                 </select>
             </div>
             <div style="display: block; width: 100%; margin: 10pt;">
