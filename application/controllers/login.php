@@ -17,27 +17,13 @@ class Login extends Controller {
         $senha = $_POST['txtSenha'];
         $empresa = $_POST['txtempresa'];
 
-        //Pegando o nome e versao do navegador
-        preg_match('/Firefox.+/', $_SERVER['HTTP_USER_AGENT'], $browserPC);
-        preg_match('/FxiOS.+/', $_SERVER['HTTP_USER_AGENT'], $browserIOS);
-        $teste1 = count($browserPC);
-        $teste2 = count($browserIOS);
-
-        if ($teste1 > 0 || $teste2 > 0) {
-            //Pegando somente o numero da versao.
-            preg_match('/[0-9].+/', $browserPC[0], $verificanavegador['versao']);
-
-            if (($this->login->autenticar($usuario, $senha, $empresa)) &&
-                    ($this->session->userdata('autenticado') == true)) {
-                $valuecalculado = 0;
-                setcookie("TestCookie", $valuecalculado);
-                redirect(base_url() . "home", "refresh");
-            } else {
-                $data['mensagem'] = $this->mensagem->getMensagem('login002');
-                $this->carregarView($data);
-            }
+        if (($this->login->autenticar($usuario, $senha, $empresa)) &&
+                ($this->session->userdata('autenticado') == true)) {
+            $valuecalculado = 0;
+            setcookie("TestCookie", $valuecalculado);
+            redirect(base_url() . "home", "refresh");
         } else {
-            $data['mensagem'] = $this->mensagem->getMensagem('Navegador n&atilde;o suportado. Utilize o Firefox.');
+            $data['mensagem'] = $this->mensagem->getMensagem('login002');
             $this->carregarView($data);
         }
     }
