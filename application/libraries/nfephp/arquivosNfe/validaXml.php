@@ -1,5 +1,5 @@
 <?php
-require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
 use NFePHP\NFe\ToolsNFe;
 
@@ -7,7 +7,7 @@ $nfe = new ToolsNFe($config);
 $nfe->setModelo('55');
 
 $tpAmb = $tipoAmbiente;
-//$aXml = file_get_contents("/home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
+//$aXml = file_get_contents("/home/ubuntu/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/assinada/{$chave}-nfe.xml"); // Ambiente Linux
 
 if (! $nfe->validarXml($xml) || sizeof($nfeTools->errors)) {
     echo "<meta charset='utf-8'/>"

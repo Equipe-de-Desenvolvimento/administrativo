@@ -2,13 +2,13 @@
 
 namespace NFePHP\install;
 
-require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
 use NFePHP\Common\Configure\Configure;
 //var_dump(INPUT_GET);die;
 
 $cnpj = $obj_empresa->_cnpj;
-$pathCertsFiles = "/home/sisprod/projetos/administrativo/upload/certificado/". $obj_empresa->_empresa_id . "/";
+$pathCertsFiles = "/home/ubuntu/projetos/administrativo/upload/certificado/". $obj_empresa->_empresa_id . "/";
 $certPfxName = $_FILES["userfile"]['name'];
 $certPassword = $_POST['senha'];
 $certPhrase = '';

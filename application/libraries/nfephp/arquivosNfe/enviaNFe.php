@@ -1,6 +1,6 @@
 <?php
 
-require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
 use NFePHP\NFe\ToolsNFe;
 
@@ -17,8 +17,8 @@ $idLote = '';
 $flagZip = false;
 $retorno = $nfe->sefazEnviaLote($xml, $tpAmb, $idLote, $aResposta, $indSinc, $flagZip);
 
-if (is_dir('/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/')) {
-    chmod('/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/', 0777);
+if (is_dir('/home/ubuntu/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/')) {
+    chmod('/home/ubuntu/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/', 0777);
 }
 //echo '<pre>', htmlspecialchars($nfe->soapDebug), "<hr>";
 //print_r($aResposta);

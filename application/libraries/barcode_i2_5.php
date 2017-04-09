@@ -69,8 +69,8 @@ class BarcodeI25
         $this->ebf          = 1;
         $this->ebg          = 3;
         $this->altb         = 50;
-        $this->ipp          = "/home/sisprod/projetos/administrativo/img/boleto/ponto_preto.gif";
-        $this->ipb          = "/home/sisprod/projetos/administrativo/img/boleto/ponto_branco.gif";
+        $this->ipp          = "/home/ubuntu/projetos/administrativo/img/boleto/ponto_preto.gif";
+        $this->ipb          = "/home/ubuntu/projetos/administrativo/img/boleto/ponto_branco.gif";
         $this->mixed_code   = "";
         $this->bc_string    = "";
         $this->tamanhoTotal = 0;
@@ -233,7 +233,7 @@ class BarcodeI25
 				// -> dica, para definir outros tipos de imagens, como jpg, gif, etc... basta mudar o imagepng para o image relativo ao tipo. 
 				// -> mas sinceramente � besteira colocar outros tipos. png j� da e sobra! 
 				
-                                imagepng($barra_imagem, "/home/sisprod/projetos/administrativo/upload/codigoboleto/$this->codigo");
+                                imagepng($barra_imagem, "/home/ubuntu/projetos/administrativo/upload/codigoboleto/$this->codigo");
 				imagedestroy($barra_imagem);
 			}
 		}

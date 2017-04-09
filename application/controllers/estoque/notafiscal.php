@@ -85,12 +85,12 @@ class Notafiscal extends BaseController {
             'pathXmlUrlFileMDFe' => 'mdf2_ws1.xml',
             'pathXmlUrlFileCLe' => '',
             'pathXmlUrlFileNFSe' => '',
-            'pathNFeFiles' => '/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_id . '/',
+            'pathNFeFiles' => '/home/ubuntu/projetos/administrativo/upload/nfe/' . $solicitacao_id . '/',
             'pathCTeFiles' => '',
             'pathMDFeFiles' => '',
             'pathCLeFiles' => '',
             'pathNFSeFiles' => '',
-            'pathCertsFiles' => '/home/sisprod/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
+            'pathCertsFiles' => '/home/ubuntu/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
             'siteUrl' => base_url() . '/ambulatorio/empresa',
             'schemesNFe' => 'PL_008i2',
             'schemesCTe' => 'PL_CTe_200',
@@ -116,9 +116,9 @@ class Notafiscal extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoFile' => '/home/ubuntu/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoNFe' => '/home/ubuntu/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoNFCe' => '/home/ubuntu/projetos/administrativo/img/stg - logo.jpg',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''
@@ -168,10 +168,10 @@ class Notafiscal extends BaseController {
         }
 
         if ($notafiscal[0]->cancelada == 't') {
-            if (!is_dir("/home/sisprod/projetos/administrativo/upload/nfe/CANCELADAS/")) {
-                mkdir("/home/sisprod/projetos/administrativo/upload/nfe/CANCELADAS/");
+            if (!is_dir("/home/ubuntu/projetos/administrativo/upload/nfe/CANCELADAS/")) {
+                mkdir("/home/ubuntu/projetos/administrativo/upload/nfe/CANCELADAS/");
             }
-            system("mv /home/sisprod/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/ /home/sisprod/projetos/administrativo/upload/nfe/CANCELADAS/");
+            system("mv /home/ubuntu/projetos/administrativo/upload/nfe/{$solicitacao_cliente_id}/ /home/ubuntu/projetos/administrativo/upload/nfe/CANCELADAS/");
         }
 
         $data['empresa'] = $this->notafiscal->empresa();
@@ -354,19 +354,19 @@ class Notafiscal extends BaseController {
          */
 
 
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+        require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
         // GERA O XML PRINCIPAL
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
+        require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraXml.php');
 
         // GERA AS TAGS DA ASSINATURA DIGITAL
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
+        require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/assinaNFe.php');
 
         // VALIDA O XML POR MEIO DE UM SCHEMA XSD
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
+        require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
 
         //Salvando o XML em um arquivo
-        $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+        $caminho = "/home/ubuntu/projetos/administrativo/upload/nfe";
         chmod($caminho, 0777);
 
         if (!is_dir("{$caminho}/{$solicitacao_cliente_id}")) {
@@ -403,18 +403,18 @@ class Notafiscal extends BaseController {
         $indSinc = '0'; //0=asíncrono, 1=síncrono
         $tipoAmbiente = ($notafiscal[0]->tipo_ambiente == '') ? '2' : $notafiscal[0]->tipo_ambiente; //1=Produção; 2=Homologação
         $chave = $notafiscal[0]->chave_nfe;
-        $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+        $caminho = "/home/ubuntu/projetos/administrativo/upload/nfe";
         
         if ($notafiscal[0]->enviada == 'f' OR ($notafiscal[0]->enviada == 't' && $notafiscal[0]->cancelada == 't')) {
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
             $this->notafiscal->gravardataenvio($notafiscal_id);
 
             $data = date("Ym");
             /* Consultando a situacao do Recibo no sistema da SEFAZ  e adcionando Tag de Protocolo */
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
         } else {
             $data = date("Ym", strtotime($notafiscal[0]->data_envio));
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
         }
 
         $filename = "{$caminho}/{$solicitacao_cliente_id}/validada/{$chave}-protNFe.xml"; // Ambiente Linux
@@ -458,8 +458,8 @@ class Notafiscal extends BaseController {
             $tpAmbiente = $notafiscal[0]->tipo_ambiente;
             $motivo = $_POST['txtmotivo'];
 
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/cancelaNfe.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/cancelaNfe.php');
 
             $data['mensagem'] = 'Cancelamento Efetuado com sucesso.';
             $this->session->set_flashdata('message', $data['mensagem']);
@@ -478,7 +478,7 @@ class Notafiscal extends BaseController {
             $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
             $chave = $notafiscal[0]->chave_nfe;
             $data = date("Ym", strtotime($notafiscal[0]->data_envio));
-            $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+            $caminho = "/home/ubuntu/projetos/administrativo/upload/nfe";
 
             if ($chave == '') {
                 $mensagem = 'Não foi possivel encontrar a Chave da Nota fiscal, por favor gere novamente.';
@@ -487,8 +487,8 @@ class Notafiscal extends BaseController {
             }
 
 
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
         }
     }
 
@@ -496,7 +496,7 @@ class Notafiscal extends BaseController {
         $chave = '23170308852545000138550560000000561000001090';
         $config = $this->geraconfignfephp($solicitacao_cliente_id);
         $tipoAmbiente = 2; //1=Produção; 2=Homologação
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
+        require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
     }
 
 }
