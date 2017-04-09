@@ -53,7 +53,7 @@ class caixa_model extends Model {
             $this->db->where('e.observacao ilike', "%" . $args['obs'] . "%");
         }
         if (isset($args['datafim']) && strlen($args['datafim']) > 0) {
-            $this->db->where('e.data >=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datafim']))));
+            $this->db->where('e.data <=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datafim']))));
         }
         return $this->db;
     }
@@ -88,7 +88,7 @@ class caixa_model extends Model {
             $this->db->where('s.data >=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datainicio']))));
         }
         if (isset($args['datafim']) && strlen($args['datafim']) > 0) {
-            $this->db->where('s.data >=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datafim']))));
+            $this->db->where('s.data <=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datafim']))));
         }
         if (isset($args['obs']) && strlen($args['obs']) != '') {
             $this->db->where('s.observacao ilike', "%" . $args['obs'] . "%");
@@ -114,7 +114,7 @@ class caixa_model extends Model {
             $this->db->where('s.data >=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datainicio']))));
         }
         if (isset($args['datafim']) && strlen($args['datafim']) > 0) {
-            $this->db->where('s.data >=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datafim']))));
+            $this->db->where('s.data <=', date("Y-m-d", strtotime(str_replace("/", "-", $args['datafim']))));
         }
         if (isset($args['obs']) && strlen($args['obs']) != '') {
             $this->db->where('s.observacao ilike', "%" . $args['obs'] . "%");
