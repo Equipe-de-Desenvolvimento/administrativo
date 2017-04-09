@@ -214,7 +214,7 @@ class Contaspagar extends BaseController {
 
     function gravar() {
         $repetir = $_POST['repitir'];
-        $dia = str_replace("/", "-", $_POST['inicio']);
+        $dia = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['inicio'])));
         $parcela = 1;
         if ($_POST['financeiro_contaspagar_id'] == '') {
             if ($repetir == '' || $repetir == 1) {
