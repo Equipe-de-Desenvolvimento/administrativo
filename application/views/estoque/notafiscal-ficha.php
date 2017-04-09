@@ -18,17 +18,22 @@
         <? if ($impostos): ?>
             <div>     
                 <!-- NF-e -->
+                
+                <?if(!isset($notafiscal[0]->enviada) || @$notafiscal[0]->enviada == 'f'):?>
                 <a href="<?= base_url() ?>estoque/notafiscal/informacoesnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                     <button type="button" id="novaParcela">Gerar NF-e</button>
                 </a>
+                <? endif;?>
                 
                 <!-- Futuramente criar opçao de criar NFC-e -->
                 <a href="<?= base_url() ?>estoque/notafiscal/carregarcancelarnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                     <button type="button" id="novaParcela">Cancelar NF-e</button>
                 </a>
+                <?if(isset($notafiscal[0]->enviada) && @$notafiscal[0]->enviada == 't'):?>
                 <a href="<?= base_url() ?>estoque/notafiscal/impressaodanfe/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                     <button type="button" id="novaParcela">Imprimir DANFe</button>
                 </a>
+                <? endif;?>
             </div>
             <br>
         <? else: 

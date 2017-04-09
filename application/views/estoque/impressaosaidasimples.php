@@ -46,7 +46,7 @@
                     <!-- PRIMEIRO CABECALHO -->
                     <tr>
                         <td>
-                            <img src="" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                            <img src="" alt="" width="70" height="100" border="1" style="margin-bottom: -10pt;">
                         </td>
                         <td>
                             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -83,9 +83,12 @@
                                 <tr>
                                     
                                     <td colspan="4"><span class="negrito">Cliente: </span><span class="dados_cabecalho"><?= @$destinatario[0]->nome; ?></span></td>
-                                    <td colspan="2">&nbsp;&nbsp;</td>
+<!--                                    <td colspan="2">&nbsp;&nbsp;</td>-->
 
+                                </tr>
+                                <tr>
                                     <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></td>
+                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
                                     
                                 </tr>
                                 <tr>
@@ -95,26 +98,25 @@
                                         <?= @$destinatario[0]->logradouro; ?> <?= @$destinatario[0]->numero; ?>
                                         </span>
                                     </td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                     <td><span class="negrito">Fone: </span><span class="dados_cabecalho"><?= @$destinatario[0]->telefone; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
-                                    <td>&nbsp;&nbsp;</td>
+<!--                                    <td>&nbsp;&nbsp;</td>
+                                    <td>&nbsp;&nbsp;</td>-->
 
-                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                 </tr>
                                 <tr>
 
                                     <td><span class="negrito">Bairro: </span><span class="dados_cabecalho"><?= @$destinatario[0]->bairro; ?></span></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
 
                                     <td><span class="negrito">Cid: </span><span class="dados_cabecalho"><?= @$destinatario[0]->municipio; ?></span></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
 
                                     <td><span class="negrito">UF: </span><span class="dados_cabecalho"><?= @$destinatario[0]->estado; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                 </tr>
                                 <tr>
@@ -128,6 +130,11 @@
                                     <td colspan="4"><span class="negrito">Entregador: </span>
                                         <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                     </td>
+<!--                                    <td colspan="5"><span class="negrito">Rota: </span>
+                                        <span class="dados_cabecalho"></span>
+                                    </td>-->
+                                </tr>
+                                <tr>
                                     <td colspan="5"><span class="negrito">Rota: </span>
                                         <span class="dados_cabecalho"></span>
                                     </td>
@@ -303,10 +310,10 @@
                                             <tr>
                                                 <td colspan="3">
                                                     F.Pagamento: <?= @$nome[0]->forma_pagamento; ?> <br>
-                                                    <div style="margin-bottom: 15pt; width: 250pt;"></div>  
+                                                    <div style="margin-bottom: 15pt; width: 70pt;"></div>  
                                                 </td>
                                                 <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
-                                                <!--<td style="width: 250pt;"></td>-->
+                                                <!--<td style="width: 70pt;"></td>-->
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
@@ -329,7 +336,7 @@
                                                 <td style="width: 75pt;"></td>
                                                 <!--<td style="width: 75pt;"></td>-->
                                                 <!--<td style="width: 75pt;"></td>-->
-                                                <td style="width: 150pt;" colspan="2">
+                                                <td style="width: 75pt;" colspan="2">
                                                 <center>
                                                         <span class="negrito">Assinatura</span>
                                                 </center>
@@ -375,7 +382,7 @@
                     <!-- PRIMEIRO CABECALHO -->
                     <tr>
                         <td>
-                            <img src="" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                            <img src="" alt="" width="70" height="100" border="1" style="margin-bottom: -10pt;">
                         </td>
                         <td>
                             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -412,9 +419,12 @@
                                 <tr>
                                     
                                     <td colspan="4"><span class="negrito">Cliente: </span><span class="dados_cabecalho"><?= @$destinatario[0]->nome; ?></span></td>
-                                    <td colspan="2">&nbsp;&nbsp;</td>
+<!--                                    <td colspan="2">&nbsp;&nbsp;</td>-->
 
+                                </tr>
+                                <tr>
                                     <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></td>
+                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
                                     
                                 </tr>
                                 <tr>
@@ -424,26 +434,25 @@
                                         <?= @$destinatario[0]->logradouro; ?> <?= @$destinatario[0]->numero; ?>
                                         </span>
                                     </td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                     <td><span class="negrito">Fone: </span><span class="dados_cabecalho"><?= @$destinatario[0]->telefone; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
-                                    <td>&nbsp;&nbsp;</td>
+<!--                                    <td>&nbsp;&nbsp;</td>
+                                    <td>&nbsp;&nbsp;</td>-->
 
-                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                 </tr>
                                 <tr>
 
                                     <td><span class="negrito">Bairro: </span><span class="dados_cabecalho"><?= @$destinatario[0]->bairro; ?></span></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
 
                                     <td><span class="negrito">Cid: </span><span class="dados_cabecalho"><?= @$destinatario[0]->municipio; ?></span></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
 
                                     <td><span class="negrito">UF: </span><span class="dados_cabecalho"><?= @$destinatario[0]->estado; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                 </tr>
                                 <tr>
@@ -457,6 +466,11 @@
                                     <td colspan="4"><span class="negrito">Entregador: </span>
                                         <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                     </td>
+<!--                                    <td colspan="5"><span class="negrito">Rota: </span>
+                                        <span class="dados_cabecalho"></span>
+                                    </td>-->
+                                </tr>
+                                <tr>
                                     <td colspan="5"><span class="negrito">Rota: </span>
                                         <span class="dados_cabecalho"></span>
                                     </td>
@@ -632,10 +646,10 @@
                                             <tr>
                                                 <td colspan="3">
                                                     F.Pagamento: <?= @$nome[0]->forma_pagamento; ?> <br>
-                                                    <div style="margin-bottom: 15pt; width: 250pt;"></div>  
+                                                    <div style="margin-bottom: 15pt; width: 70pt;"></div>  
                                                 </td>
                                                 <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
-                                                <!--<td style="width: 250pt;"></td>-->
+                                                <!--<td style="width: 70pt;"></td>-->
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;&nbsp;&nbsp;</td>
@@ -658,7 +672,7 @@
                                                 <td style="width: 75pt;"></td>
                                                 <!--<td style="width: 75pt;"></td>-->
                                                 <!--<td style="width: 75pt;"></td>-->
-                                                <td style="width: 150pt;" colspan="2">
+                                                <td style="width: 75pt;" colspan="2">
                                                 <center>
                                                         <span class="negrito">Assinatura</span>
                                                 </center>

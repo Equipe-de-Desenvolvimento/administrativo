@@ -1,3 +1,3 @@
 <?php
 
-include __DIR__ . '/vendor/autoload.php';
+include '/home/ubuntu/projetos/administrativo/application/libraries/nfephp/vendor/autoload.php';

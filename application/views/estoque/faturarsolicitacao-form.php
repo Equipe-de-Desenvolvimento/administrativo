@@ -42,20 +42,20 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Valor1</td>
-                            <td>Descricao de pagamento1</td>
-                            <td>Forma de pagamento1</td>
-                            <td>Ajuste1(%)</td>
-                            <td>Valor Ajustado1</td>
+                            <td>Valor</td>
+                            <td>Descricao de pagamento</td>
+                            <td>Forma de pagamento</td>
+<!--                            <td>Ajuste(%)</td>
+                            <td>Valor Ajustado</td>-->
                             <!--<td>Parcelas1</td>-->
                         </tr>
                         <tr>
                             <td>
-                                <input style="width:100pt" type="text" name="valor1" id="valor1" class="texto01" value="<?= $solicitacao[0]->valor1; ?>" onblur="history.go(0)" />
+                                <input style="width:100pt" type="text" name="valor1" id="valor1" class="texto01" value="<?= @$solicitacao[0]->valor_total; ?>" onblur="history.go(0)" />
                             </td>
                             <td>
                                 <input type="hidden" name="formapamento1_boleto" id="formapamento1_boleto" class="texto01"/>
-                                <select  name="formapamento1" id="formapamento1" class="size1" >
+                                <select  name="formapamento1" id="formapamento1" class="size4" style="min-width: 200pt">
                                     <option value="">Selecione</option>
                                     <? foreach ($descricao_pagamento as $item) : ?>
                                         <option value="<?= $item->descricao_forma_pagamento_id; ?>" ><?= $item->nome; ?></option>
@@ -70,12 +70,12 @@
                                     <? endforeach; ?>
                                 </select>
                             </td>
-                            <td>
+<!--                            <td>
                                 <input type="text" name="ajuste1" id="ajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/>                                                                           
                             </td> 
                             <td> 
                                 <input type="text" name="valorajuste1" id="valorajuste1" size="1" value="<?= $valor; ?>" onblur="history.go(0)"/> 
-                            </td>
+                            </td>-->
 <!--                            <td>
                                 <input style="width: 60px;" type="number" name="parcela1" id="parcela1"  value="1" min="1" /> 
                             </td>-->

@@ -1,6 +1,6 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
     <div class="clear"></div>
-    <form name="form_solicitacaoitens" id="form_solicitacaoitens" action="<?= base_url() ?>estoque/solicitacao/impressoes" method="post">
+    <form name="form_solicitacaoitens" id="form_solicitacaoitens" target="_blank" action="<?= base_url() ?>estoque/solicitacao/impressoes" method="post">
         <fieldset>
             <legend>Impressoes</legend>
             <input type="hidden" value="<?= @$estoque_solicitacao_id;?>" name="estoque_solicitacao_id" id="estoque_solicitacao_id"/>
@@ -16,7 +16,7 @@
                         <option value='espNota'>Espelho da Nota</option>
                     <? endif;?>
                     
-                    <option value='recibo'>Recibo</option>
+                    <!--<option value='recibo'>Recibo</option>-->
                 </select>
             </div>
             <div style="display: block; width: 100%; margin: 10pt;">
