@@ -275,6 +275,10 @@ class Contasreceber extends BaseController {
 
     function anexarimagemcontasareceber($financeiro_contasreceber_id) {
 
+        if (!is_dir("./upload/contasareceber")) {
+            mkdir("./upload/contasareceber");
+            chmod("./upload/contasareceber", 0777);
+        }
         $this->load->helper('directory');
         $data['arquivo_pasta'] = directory_map("./upload/contasareceber/$financeiro_contasreceber_id/");
 //        $data['arquivo_pasta'] = directory_map("/home/vivi/projetos/clinica/upload/consulta/$paciente_id/");
@@ -290,6 +294,11 @@ class Contasreceber extends BaseController {
 //        $data = $_FILES['userfile'];
 //        var_dump($data);
 //        die;
+        if (!is_dir("./upload/contasareceber")) {
+            mkdir("./upload/contasareceber");
+            chmod("./upload/contasareceber", 0777);
+        }
+        
         if (!is_dir("./upload/contasareceber/$financeiro_contasreceber_id")) {
             mkdir("./upload/contasareceber/$financeiro_contasreceber_id");
             $destino = "./upload/contasareceber/$financeiro_contasreceber_id";

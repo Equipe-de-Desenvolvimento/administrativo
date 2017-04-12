@@ -526,7 +526,6 @@ class caixa_model extends Model {
 
     function gravarentrada() {
         try {
-            die();
             //busca tipo
             $this->db->select('t.descricao');
             $this->db->from('tb_tipo_entradas_saida t');

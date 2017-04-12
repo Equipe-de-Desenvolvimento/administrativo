@@ -274,7 +274,10 @@ class Contaspagar extends BaseController {
     }
 
     function anexarimagemcontasapagar($financeiro_contaspagar_id) {
-
+        if (!is_dir("./upload/contasapagar")) {
+            mkdir("./upload/contasapagar");
+            chmod("./upload/contasapagar", 0777);
+        }
         $this->load->helper('directory');
         $data['arquivo_pasta'] = directory_map("./upload/contasapagar/$financeiro_contaspagar_id/");
 //        $data['arquivo_pasta'] = directory_map("/home/vivi/projetos/clinica/upload/consulta/$paciente_id/");
@@ -290,6 +293,11 @@ class Contaspagar extends BaseController {
 //        $data = $_FILES['userfile'];
 //        var_dump($data);
 //        die;
+        if (!is_dir("./upload/contasapagar")) {
+            mkdir("./upload/contasapagar");
+            chmod("./upload/contasapagar", 0777);
+        }
+        
         if (!is_dir("./upload/contasapagar/$financeiro_contaspagar_id")) {
             mkdir("./upload/contasapagar/$financeiro_contaspagar_id");
             $destino = "./upload/contasapagar/$financeiro_contaspagar_id";
