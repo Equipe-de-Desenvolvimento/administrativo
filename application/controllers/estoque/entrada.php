@@ -62,7 +62,7 @@ class Entrada extends BaseController {
             $error = null;
             $data = array('upload_data' => $this->upload->data());
         }
-//        var_dump($_FILES['userfile']['name']);die;
+        
         $arqNome = $_FILES['userfile']['name'];
         $xml = simplexml_load_file("/home/sisprod/projetos/administrativo/upload/entradaxml/" . $arqNome);
 
@@ -71,19 +71,15 @@ class Entrada extends BaseController {
         $dados['iefornecedor'] = (string) $xml->NFe->infNFe->emit->IE;
         $dados['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
         $dados['produtos'] = array();
-
+        
         foreach ($xml->NFe->infNFe->det as $key => $value) {
-            $dados['produtos'][]['lote'] = array();
-            $dados['produtos'][]['qtde'] = array();
-            $dados['produtos'][]['valorcompra'] = array();
+            $dados['produtos'][] = array(
+                "codproduto" => (string) $value->prod->cProd,
+                "qtde" => (string) $value->prod->qCom,
+                "valorcompra" => (string) $value->prod->vProd
+            );
         }
-
-        echo "<pre>";
-        var_dump($xml->NFe->infNFe->det);
-        echo "<hr>";
-        var_dump($dados);
-        die;
-        echo
+        
         redirect(base_url() . "estoque/entrada");
     }
 
