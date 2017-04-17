@@ -467,7 +467,7 @@ class Utilitario {
 
         return $filepath;
 
-        // necessita instalar gd-library no ubuntu -> sudo apt-get install php5-gd
+        // necessita instalar gd-library no sisprod -> sudo apt-get install php5-gd
     }
 
 }

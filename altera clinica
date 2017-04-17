@@ -524,3 +524,6 @@ CREATE TABLE ponto.tb_estoque_transportadora
   CONSTRAINT tb_estoque_transportadora_pkey PRIMARY KEY (estoque_transportadora_id)
 );
 
+
+-- Dia 17/04/2017
+ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN indicadorIE character varying(10);

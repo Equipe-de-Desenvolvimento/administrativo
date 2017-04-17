@@ -98,8 +98,16 @@
     $CPF = $dadosNFe['destCPF'];
     $idEstrangeiro = '';
     $xNome = $dadosNFe['destNOME'];
+    
+    
     $indIEDest = $dadosNFe['destIND_IE'];
-    $IE = $dadosNFe['destIE'];
+    if($indIEDest != '9'){
+        $IE = $dadosNFe['destIE'];
+    }
+    else{
+        $IE = '';
+    }
+    
     $ISUF = '';
     $IM = $dadosNFe['destIM'];
     $email = $dadosNFe['destEMAIL'];

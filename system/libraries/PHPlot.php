@@ -1512,8 +1512,8 @@ class PHPlot
             // No default font yet. Try some common sans-serif fonts.
             $fonts = array('LiberationSans-Regular.ttf',  // For Linux with a correct GD font search path
                            'Verdana.ttf', 'Arial.ttf', 'Helvetica.ttf', // For Windows, maybe others
-                           'liberation/LiberationSans-Regular.ttf',     // For newer Ubuntu etc
-                           'ttf-liberation/LiberationSans-Regular.ttf', // For older Debian, Ubuntu, etc
+                           'liberation/LiberationSans-Regular.ttf',     // For newer sisprod etc
+                           'ttf-liberation/LiberationSans-Regular.ttf', // For older Debian, sisprod, etc
                            'benjamingothic.ttf',  // Original PHPlot default
                           );
             foreach ($fonts as $font) {

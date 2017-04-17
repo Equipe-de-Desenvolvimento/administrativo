@@ -44,6 +44,53 @@ class Entrada extends BaseController {
         $this->loadView('estoque/entrada-form', $data);
     }
 
+    function carregarentradaxml() {
+        if (!is_dir("./upload/entradaxml")) {
+            mkdir("./upload/entradaxml");
+            chmod("./upload/entradaxml/", 0777);
+        }
+
+        $config['upload_path'] = "/home/sisprod/projetos/administrativo/upload/entradaxml/";
+        $config['allowed_types'] = 'xml';
+        $config['overwrite'] = TRUE;
+        $config['encrypt_name'] = TRUE;
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload()) {
+            $error = array('error' => $this->upload->display_errors());
+        } else {
+            $error = null;
+            $data = array('upload_data' => $this->upload->data());
+        }
+//        var_dump($_FILES['userfile']['name']);die;
+        $arqNome = $_FILES['userfile']['name'];
+        $xml = simplexml_load_file("/home/sisprod/projetos/administrativo/upload/entradaxml/" . $arqNome);
+
+
+        $dados['cnpjfornecedor'] = (string) $xml->NFe->infNFe->emit->CNPJ;
+        $dados['iefornecedor'] = (string) $xml->NFe->infNFe->emit->IE;
+        $dados['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
+        $dados['produtos'] = array();
+
+        foreach ($xml->NFe->infNFe->det as $key => $value) {
+            $dados['produtos'][]['lote'] = array();
+            $dados['produtos'][]['qtde'] = array();
+            $dados['produtos'][]['valorcompra'] = array();
+        }
+
+        echo "<pre>";
+        var_dump($xml->NFe->infNFe->det);
+        echo "<hr>";
+        var_dump($dados);
+        die;
+        echo
+        redirect(base_url() . "estoque/entrada");
+    }
+
+    function novaentradaxml() {
+        $this->loadView('estoque/entradaxml-form');
+    }
+
     function relatoriosaldoarmazem() {
         $data['armazem'] = $this->entrada->listararmazem();
         $data['empresa'] = $this->guia->listarempresas();
@@ -161,8 +208,8 @@ class Entrada extends BaseController {
         $armazem = $_POST['armazem'];
         $estoque_fornecedor_id = $_POST['txtfornecedor'];
         $estoque_produto_id = $_POST['txtproduto'];
-        $data['txtdata_inicio'] = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $data['txtdata_fim'] = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+        $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         if ($armazem == 0) {
             $data['armazem'] = 0;
         } else {
@@ -194,8 +241,8 @@ class Entrada extends BaseController {
 
     function gerarelatoriosaidaarmazem() {
         $armazem = $_POST['armazem'];
-        $data['txtdata_inicio'] = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_inicio']) ) );
-        $data['txtdata_fim'] = date("Y-m-d", strtotime ( str_replace('/','-', $_POST['txtdata_fim']) ) );
+        $data['txtdata_inicio'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_inicio'])));
+        $data['txtdata_fim'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $estoque_fornecedor_id = $_POST['txtfornecedor'];
         $estoque_produto_id = $_POST['txtproduto'];
         if ($armazem == 0) {
@@ -261,7 +308,7 @@ class Entrada extends BaseController {
         }
         $this->load->view('footer');
     }
- 
+
     function anexarimagementrada($estoque_entrada_id) {
 
         $this->load->helper('directory');
@@ -302,8 +349,7 @@ class Entrada extends BaseController {
         $data['estoque_entrada_id'] = $estoque_entrada_id;
         $this->anexarimagementrada($estoque_entrada_id);
     }
-    
-    
+
 }
 
 /* End of file welcome.php */

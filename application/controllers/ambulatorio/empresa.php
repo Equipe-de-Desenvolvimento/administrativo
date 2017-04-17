@@ -55,7 +55,7 @@ class Empresa extends BaseController {
             chmod($destino, 0777);
         }
 
-        $verifica = $data['arquivo_pasta'] = directory_map("/home/ubuntu/projetos/administrativo/upload/certificado/$empresa_id");
+        $verifica = $data['arquivo_pasta'] = directory_map("/home/sisprod/projetos/administrativo/upload/certificado/$empresa_id");
         $teste = false;
         foreach ($verifica as $chave => $valor) {
             if ($chave == "excluidos") {
@@ -92,7 +92,7 @@ class Empresa extends BaseController {
 
             $extensao = explode('.', $_FILES["userfile"]['name']);
             if ($extensao[1] == 'pfx') {
-                $config['upload_path'] = "/home/ubuntu/projetos/administrativo/upload/certificado/" . $empresa_id . "/";
+                $config['upload_path'] = "/home/sisprod/projetos/administrativo/upload/certificado/" . $empresa_id . "/";
                 $config['allowed_types'] = 'pfx';
                 $config['overwrite'] = TRUE;
                 $config['encrypt_name'] = TRUE;
@@ -110,7 +110,7 @@ class Empresa extends BaseController {
         }
         //gerando arquivos 
         $obj_empresa = new empresa_model($empresa_id);
-        require_once ('/home/ubuntu/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraCertsNFe.php');
+        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraCertsNFe.php');
         $this->session->set_flashdata('message', $mensagem);
         redirect(base_url() . "ambulatorio/empresa/carregarempresacertificado/$empresa_id");
     }
@@ -136,11 +136,11 @@ class Empresa extends BaseController {
         $data['empresa_id'] = $empresa_id;
         $this->load->helper('directory');
 
-        $data['arquivo_pasta'] = directory_map("/home/ubuntu/projetos/administrativo/upload/certificado/$empresa_id");
+        $data['arquivo_pasta'] = directory_map("/home/sisprod/projetos/administrativo/upload/certificado/$empresa_id");
         if ($data['arquivo_pasta'] != false) {
             sort($data['arquivo_pasta']);
         }
-        $data['arquivos_deletados'] = directory_map("/home/ubuntu/projetos/administrativo/upload/certificado/$empresa_id/excluidos");
+        $data['arquivos_deletados'] = directory_map("/home/sisprod/projetos/administrativo/upload/certificado/$empresa_id/excluidos");
         $this->loadView('ambulatorio/empresacertificado', $data);
     }
 

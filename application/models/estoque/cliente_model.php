@@ -200,9 +200,10 @@ class cliente_model extends Model {
             } elseif ($_POST['credor_devedor'] != "") {
                 $this->db->set('credor_devedor_id', $_POST['credor_devedor']);
             }
-            
+
             /* inicia o mapeamento no banco */
             $estoque_cliente_id = $_POST['txtestoqueclienteid'];
+            $this->db->set('indicadorie', $_POST['indIEdest']);
             $this->db->set('nome', $_POST['txtfantasia']);
             $this->db->set('menu_id', $_POST['menu']);
             $this->db->set('telefone', $_POST['telefone']);
@@ -233,9 +234,7 @@ class cliente_model extends Model {
             if ($_POST['txttipo_id'] != '') {
                 $this->db->set('tipo_logradouro_id', $_POST['txttipo_id']);
             }
-            if ($_POST['inscricaoestadual'] != '') {
-                $this->db->set('inscricao_estadual', $_POST['inscricaoestadual']);
-            }
+            $this->db->set('inscricao_estadual', $_POST['inscricaoestadual']);
 
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
