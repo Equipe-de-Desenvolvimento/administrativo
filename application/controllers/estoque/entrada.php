@@ -50,7 +50,7 @@ class Entrada extends BaseController {
             chmod("./upload/entradaxml/", 0777);
         }
 
-        $config['upload_path'] = "/home/sisprod/projetos/administrativo/upload/entradaxml/";
+        $config['upload_path'] = "./upload/entradaxml/";
         $config['allowed_types'] = 'xml';
         $config['overwrite'] = TRUE;
         $config['encrypt_name'] = TRUE;
@@ -64,7 +64,7 @@ class Entrada extends BaseController {
         }
         
         $arqNome = $_FILES['userfile']['name'];
-        $xml = simplexml_load_file("/home/sisprod/projetos/administrativo/upload/entradaxml/" . $arqNome);
+        $xml = simplexml_load_file("./upload/entradaxml/" . $arqNome);
         
         foreach ($xml->NFe->infNFe->det as $key => $value) {
             $resultado = $this->entrada->listarprodutoentradaxml($value->prod->cProd);

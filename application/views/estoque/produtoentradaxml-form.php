@@ -28,7 +28,7 @@
                         <tr style="border-bottom: 1px solid gray;">
                             <td>
                                 <label>Produto</label>
-                                <input type="text" name="produto_id[<?= $i ?>]" id="produto_id<?= $i ?>" value="<?= $value['produto_id']; ?>"/>
+                                <input type="hidden" name="produto_id[<?= $i ?>]" id="produto_id<?= $i ?>" value="<?= $value['produto_id']; ?>"/>
                                 <input type="text" class="texto07" name="produto[<?= $i ?>]" id="produto<?= $i ?>" value="<?= $value['descricao']; ?>" required/>
                             </td>
                             <td>
