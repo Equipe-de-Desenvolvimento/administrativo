@@ -65,22 +65,27 @@ class Entrada extends BaseController {
         
         $arqNome = $_FILES['userfile']['name'];
         $xml = simplexml_load_file("/home/sisprod/projetos/administrativo/upload/entradaxml/" . $arqNome);
-
-
-        $dados['cnpjfornecedor'] = (string) $xml->NFe->infNFe->emit->CNPJ;
-        $dados['iefornecedor'] = (string) $xml->NFe->infNFe->emit->IE;
-        $dados['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
-        $dados['produtos'] = array();
         
         foreach ($xml->NFe->infNFe->det as $key => $value) {
-            $dados['produtos'][] = array(
-                "codproduto" => (string) $value->prod->cProd,
-                "qtde" => (string) $value->prod->qCom,
+            $resultado = $this->entrada->listarprodutoentradaxml($value->prod->cProd);
+            
+            $view['produtos'][] = array(
+                "produto_id" => $resultado[0]->estoque_produto_id,
+                "descricao" => $resultado[0]->descricao,
+                "qtde" => (int) $value->prod->qCom,
                 "valorcompra" => (string) $value->prod->vProd
             );
         }
         
-        redirect(base_url() . "estoque/entrada");
+        $dados['cnpjfornecedor'] = (string) $xml->NFe->infNFe->emit->CNPJ;
+        $cnpj = substr($dados['cnpjfornecedor'], 0, -2) . '-' . substr($dados['cnpjfornecedor'], -2, 2);
+        
+        $view['fornecedor'] = $this->entrada->listarfornecedorentradaxml($cnpj);
+        $view['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
+        
+        $view['sub'] = $this->entrada->listararmazem();
+//        var_dump($cnpj)
+        $this->loadView('estoque/produtoentradaxml-form', $view);
     }
 
     function novaentradaxml() {
@@ -276,6 +281,34 @@ class Entrada extends BaseController {
 
     function gravar() {
         $exame_entrada_id = $this->entrada->gravar();
+        if ($exame_entrada_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar a Entrada. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar a Entrada.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/entrada");
+    }
+
+    function gravarentradaxml() {
+        foreach ($_POST['produto'] as $chave => $item) {
+            
+            $_POST['valor'][$chave] = str_replace(',', '.', str_replace('.', '', $_POST['valor'][$chave]) );
+            $_POST['qtde'][$chave] = (int) str_replace('.', '', $_POST['qtde'][$chave]);
+            $dados = array(
+                "txtfornecedor" => $_POST['fornecedor_id'],
+                "nota" => $_POST['numnf'],
+                "cfop" => $_POST['cfop'],
+                "txtproduto" => $_POST['produto_id'][$chave],
+                "txtarmazem" => $_POST['txtarmazem'][$chave],
+                "compra" => $_POST['valor'][$chave],
+                "validade" => $_POST['validade'][$chave],
+                "quantidade" => $_POST['qtde'][$chave],
+                "lote" => $_POST['lote'][$chave]
+            );
+            $this->entrada->gravarentradaxml($dados);
+        }
+//        $exame_entrada_id = 
         if ($exame_entrada_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Entrada. Opera&ccedil;&atilde;o cancelada.';
         } else {

@@ -109,6 +109,26 @@ class entrada_model extends Model {
         return $return->result();
     }
 
+    function listarprodutoentradaxml($codProduto) {
+        $this->db->select('estoque_produto_id,
+                            descricao');
+        $this->db->from('tb_estoque_produto');
+        $this->db->where('codigo', "$codProduto");
+        $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listarfornecedorentradaxml($cnpj) {
+        $this->db->select('estoque_fornecedor_id,
+                            razao_social');
+        $this->db->from('tb_estoque_fornecedor');
+        $this->db->where('cnpj', $cnpj);
+        $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarunidade() {
         $this->db->select('estoque_unidade_id,
                             descricao');
@@ -531,16 +551,70 @@ class entrada_model extends Model {
             return 0;
     }
 
+    function gravarentradaxml($dados) {
+        try {
+            /* inicia o mapeamento no banco */
+            //atualiza com o ultimo valor de compra
+            $qtde = str_replace(",", ".", str_replace(".", "", $dados['quantidade']));
+            $vlr = str_replace(",", ".", str_replace(".", "", $dados['compra']));
+            $this->db->set('valor_compra', $vlr / $qtde);
+            $this->db->where('estoque_produto_id', $dados['txtproduto']);
+            $this->db->update('tb_estoque_produto');
+            
+            $this->db->set('produto_id', $dados['txtproduto']);
+            $this->db->set('fornecedor_id', $dados['txtfornecedor']);
+            $this->db->set('armazem_id', $dados['txtarmazem']);
+            $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $dados['compra'])));
+            $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $dados['quantidade'])));
+            $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $dados['nota'])));
+            $this->db->set('lote', $dados['lote']);
+            $this->db->set('codigo_cfop', str_replace('.', '', $dados['cfop']));
+
+            if ($dados['validade'] != "//") {
+                $this->db->set('validade', $dados['validade']);
+            }
+
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_estoque_entrada');
+            $erro = $this->db->_error_message();
+            if (trim($erro) != "") // erro de banco
+                return -1;
+            else
+                $estoque_entrada_id = $this->db->insert_id();
+
+            $this->db->set('estoque_entrada_id', $estoque_entrada_id);
+            $this->db->set('produto_id', $dados['txtproduto']);
+            $this->db->set('fornecedor_id', $dados['txtfornecedor']);
+            $this->db->set('armazem_id', $dados['txtarmazem']);
+            $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $dados['compra'])));
+            $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $dados['quantidade'])));
+            $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $dados['nota'])));
+            if ($dados['validade'] != "//") {
+                $this->db->set('validade', $dados['validade']);
+            }
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_estoque_saldo');
+
+            return $estoque_entrada_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
     function gravar() {
         try {
             /* inicia o mapeamento no banco */
             //atualiza com o ultimo valor de compra
             $qtde = str_replace(",", ".", str_replace(".", "", $_POST['quantidade']));
             $vlr = str_replace(",", ".", str_replace(".", "", $_POST['compra']));
-            $this->db->set('valor_compra', $vlr/$qtde);
+            $this->db->set('valor_compra', $vlr / $qtde);
             $this->db->where('estoque_produto_id', $_POST['txtproduto']);
             $this->db->update('tb_estoque_produto');
-            
+
             $estoque_entrada_id = $_POST['txtestoque_entrada_id'];
             $this->db->set('produto_id', $_POST['txtproduto']);
             $this->db->set('fornecedor_id', $_POST['txtfornecedor']);
