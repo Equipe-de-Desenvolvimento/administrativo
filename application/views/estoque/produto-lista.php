@@ -11,15 +11,26 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="5" class="tabela_title">
+                        <th colspan="3" class="tabela_title">
                             <form method="get" action="<?= base_url() ?>estoque/produto/pesquisar">
-                                <input type="text" name="nome" class="texto10 bestupper" value="<?php echo @$_GET['nome']; ?>" />
-                                <button type="submit" id="enviar">Pesquisar</button>
+                                <tr>
+                                        <th class="tabela_title">Produto</th>
+                                        <th class="tabela_title">Código</th>
+                                        <th class="tabela_title"></th>
+                                        <!--<th class="tabela_title">Nota</th>-->                              
+                                </tr>
+                                <tr>
+                                    <td> <input type="text" name="nome" class="texto07 bestupper" value="<?php echo @$_GET['nome']; ?>" /></td>
+                                    <td> <input type="text" name="codigo" class="texto03" value="<?php echo @$_GET['codigo']; ?>" /></td>
+                                    <td> <button type="submit" id="enviar">Pesquisar</button></td>
+<!--                                        <th class="tabela_title">Armazem</th>
+                                        <th class="tabela_title">Nota</th>                               -->
+                                </tr>
                             </form>
                         </th>
                     </tr>
                     <tr>
-                        <th class="tabela_header">Nome</th>
+                        <th class="tabela_header">Codigo &nbsp;&nbsp;&nbsp;&nbsp;Nome</th>
                         <th class="tabela_header">Unidade</th>
                         <th class="tabela_header">Sub-classe</th>
                         <th class="tabela_header">Valor</th>
@@ -43,7 +54,7 @@
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
                      ?>
                             <tr>
-                                <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->codigo .' - '. $item->descricao; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->unidade; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->sub_classe; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor_compra ,2 ,',', '.'); ?></td>

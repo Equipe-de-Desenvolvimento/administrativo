@@ -203,7 +203,7 @@ class solicitacao_model extends Model {
 
                                 $this->db->set('valor', $valor[$x]);
                                 $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
-                                $this->db->set('data', $parcelas[0]->prazo);
+                                $this->db->set('data', $data_receber);
                                 $this->db->set('parcela', $parcelas[0]->parcela);
                                 $this->db->set('classe', $classe);
                                 $this->db->set('conta', $value->conta_id);
@@ -994,24 +994,6 @@ class solicitacao_model extends Model {
                 $this->db->set('valor1', str_replace(",", ".", $valor1));
 //                $this->db->set('parcelas1', $_POST['parcela1']);
             }
-//            if ($_POST['formapamento2'] != '') {
-//                $this->db->set('descricao_pagamento2', $_POST['formapamento2']);
-//                $this->db->set('forma_pagamento2', $_POST['forma_pagamento_2']);
-//                $this->db->set('valor2', str_replace(",", ".", $valor2));
-//                $this->db->set('parcelas2', $_POST['parcela2']);
-//            }
-//            if ($_POST['formapamento3'] != '') {
-//                $this->db->set('descricao_pagamento3', $_POST['formapamento3']);
-//                $this->db->set('forma_pagamento3', $_POST['forma_pagamento_3']);
-//                $this->db->set('valor3', str_replace(",", ".", $valor3));
-//                $this->db->set('parcelas3', $_POST['parcela3']);
-//            }
-//            if ($_POST['formapamento4'] != '') {
-//                $this->db->set('descricao_pagamento4', $_POST['formapamento4']);
-//                $this->db->set('forma_pagamento4', $_POST['forma_pagamento_4']);
-//                $this->db->set('valor4', str_replace(",", ".", $valor4));
-//                $this->db->set('parcelas4', $_POST['parcela4']);
-//            }
 
             $this->db->set('desconto', $desconto);
             if ((float) $desconto != 0) {
@@ -1023,8 +1005,7 @@ class solicitacao_model extends Model {
             $this->db->set('faturado', 't');
             $this->db->where('estoque_solicitacao_id', $_POST['estoque_solicitacao_id']);
             $this->db->update('tb_estoque_solicitacao_faturamento');
-
-            if ($_POST['formapamento1_boleto'] == 't' || $_POST['formapamento2_boleto'] == 't' || $_POST['formapamento3_boleto'] == 't' || $_POST['formapamento4_boleto'] == 't') {
+            if ($_POST['formapamento1_boleto'] == 't') {
                 $this->db->set('boleto', 't');
             } else {
                 $this->db->set('boleto', 'f');

@@ -18,31 +18,35 @@
         <? if ($impostos): ?>
             <div>     
                 <!-- NF-e -->
-                
-                <?if(!isset($notafiscal[0]->enviada) || @$notafiscal[0]->enviada == 'f'):?>
-                <a href="<?= base_url() ?>estoque/notafiscal/informacoesnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
-                    <button type="button" id="novaParcela">Gerar NF-e</button>
-                </a>
-                <? endif;?>
-                
+
+                <? if (!isset($notafiscal[0]->enviada) || @$notafiscal[0]->enviada == 'f'): ?>
+                    <a href="<?= base_url() ?>estoque/notafiscal/informacoesnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
+                        <button type="button" id="novaParcela">Gerar NF-e</button>
+                    </a>
+                <? endif; ?>
+
                 <!-- Futuramente criar opçao de criar NFC-e -->
                 <a href="<?= base_url() ?>estoque/notafiscal/carregarcancelarnotafiscal/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                     <button type="button" id="novaParcela">Cancelar NF-e</button>
                 </a>
-                <?if(isset($notafiscal[0]->enviada) && @$notafiscal[0]->enviada == 't'):?>
-                <a href="<?= base_url() ?>estoque/notafiscal/impressaodanfe/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
-                    <button type="button" id="novaParcela">Imprimir DANFe</button>
-                </a>
-                <? endif;?>
+                <? if (isset($notafiscal[0]->enviada) && @$notafiscal[0]->enviada == 't'): ?>
+                    <a href="<?= base_url() ?>estoque/notafiscal/impressaodanfe/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
+                        <button type="button" id="novaParcela">Imprimir DANFe</button>
+                    </a>
+                <? endif; ?>
             </div>
             <br>
-        <? else: 
-            if (count($produtos) == 0) { ?>
+            <?
+        else:
+            if (count($produtos) == 0) {
+                ?>
                 <h3 style="font-weight: bold">Impossibilitado de gerar NF-e, não há produtos nessa solicitação.</h3> 
-            <? } else {?>
+            <? } else { ?>
                 <h3 style="font-weight: bold">Só é possivel gerar NF-e após informar os detalhes para todos os produtos.</h3>
-            <?}
-        endif; ?>
+                <?
+            }
+        endif;
+        ?>
 
         <fieldset>
             <legend>Dados do Cliente</legend>
@@ -107,6 +111,41 @@
                 <? endforeach; ?>
             </table>
         </fieldset>
+
+        <? if (isset($notafiscal[0]->enviada) && @$notafiscal[0]->enviada == 't'): ?>
+            <fieldset>
+                <table>
+                    <tr>
+
+                        <td width="15px"> 
+                            <img width="50px" src="<?= base_url() ?>img/pdf-icon.png" height="50px" onclick="javascript:window.open('<?= base_url() . "estoque/notafiscal/downloaddanfe/" . @$solicitacao_cliente_id . "/" . @$notafiscal_id; ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">
+                            <br>
+                            <? echo "danfe.pdf"; ?>
+                        </td>
+                        <?
+                        $this->load->helper('directory');
+
+                        $arquivo_pasta = directory_map("./upload/nfe/$solicitacao_cliente_id/validada/");
+                        if ($arquivo_pasta != false) {
+                            foreach ($arquivo_pasta as $value) {
+                                $explode = explode('-', $value);
+                                if($explode[1] != "protNFe.xml"){
+                                    continue;
+                                }
+                                ?>
+                                <td width="15px"> 
+                                    <img width="50px" src="<?= base_url() ?>img/xml-icon.png" height="50px" onclick="javascript:window.open('<?= base_url() . "/upload/nfe/$solicitacao_cliente_id/validada/$value" ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">
+                                    <br>
+                                    <? echo "Arquivo XML"; ?>
+                                </td>       
+                                <?
+                            }
+                        }
+                        ?>
+                    </tr>
+                </table>
+            </fieldset>
+        <? endif; ?>
 
     </form>
 

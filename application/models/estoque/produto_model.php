@@ -38,6 +38,7 @@ class produto_model extends Model {
     function listar($args = array()) {
         $this->db->select('p.estoque_produto_id,
                             p.descricao,
+                            p.codigo,
                             p.unidade_id,
                             u.descricao as unidade,
                             p.sub_classe_id,
@@ -49,6 +50,9 @@ class produto_model extends Model {
         $this->db->where('p.ativo', 'true');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('p.descricao ilike', "%" . $args['nome'] . "%");
+        }
+        if (isset($args['codigo']) && strlen($args['codigo']) > 0) {
+            $this->db->where('p.codigo ilike', "%".$args['codigo']."%");
         }
         return $this->db;
     }

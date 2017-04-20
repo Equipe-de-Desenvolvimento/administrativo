@@ -32,4 +32,9 @@ chmod($pdfDanfe, 0777);
  *      D = Faz o download do arquivo
  *      S = Manipular o arquivo manualmente (caso queira usar tem que ir no codigo e colocar o que desejar)  
  */
-$abre = $danfe->printDANFE("{$pdfDanfe}", 'I'); //Abre o PDF no Navegador
+if(isset($download) && @$download){
+    $abre = $danfe->printDANFE("{$pdfDanfe}", 'D');
+}
+else{
+    $abre = $danfe->printDANFE("{$pdfDanfe}", 'I'); //Abre o PDF no Navegador
+}

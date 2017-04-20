@@ -215,29 +215,29 @@ class contrato_model extends Model {
                     return true;
                 }
 
-                if (strtotime($item->data) <= strtotime($data)) {
-
-                    //CASO ALGUMA PARCELA SEJA ANTERIOR AO MÊS ATUAL
-                    $this->db->set('data', $item->data);
-                    $this->db->set('valor', $item->valor);
-                    $this->db->set('classe', $classe);
-                    $this->db->set('nome', $item->credor_devedor_id);
-                    $this->db->set('conta', $item->conta_id);
-                    $this->db->set('observacao', $observacao);
-                    $this->db->set('data_cadastro', $horario);
-                    $this->db->set('operador_cadastro', $operador_id);
-                    $this->db->insert('tb_entradas');
-                    $entradas_id = $this->db->insert_id();
-
-                    $this->db->set('data', $item->data);
-                    $this->db->set('valor', $item->valor);
-                    $this->db->set('entrada_id', $entradas_id);
-                    $this->db->set('conta', $item->conta_id);
-                    $this->db->set('nome', $item->credor_devedor_id);
-                    $this->db->set('data_cadastro', $horario);
-                    $this->db->set('operador_cadastro', $operador_id);
-                    $this->db->insert('tb_saldo');
-                } else {
+//                if (strtotime($item->data) <= strtotime($data)) {
+//
+//                    //CASO ALGUMA PARCELA SEJA ANTERIOR AO MÊS ATUAL
+//                    $this->db->set('data', $item->data);
+//                    $this->db->set('valor', $item->valor);
+//                    $this->db->set('classe', $classe);
+//                    $this->db->set('nome', $item->credor_devedor_id);
+//                    $this->db->set('conta', $item->conta_id);
+//                    $this->db->set('observacao', $observacao);
+//                    $this->db->set('data_cadastro', $horario);
+//                    $this->db->set('operador_cadastro', $operador_id);
+//                    $this->db->insert('tb_entradas');
+//                    $entradas_id = $this->db->insert_id();
+//
+//                    $this->db->set('data', $item->data);
+//                    $this->db->set('valor', $item->valor);
+//                    $this->db->set('entrada_id', $entradas_id);
+//                    $this->db->set('conta', $item->conta_id);
+//                    $this->db->set('nome', $item->credor_devedor_id);
+//                    $this->db->set('data_cadastro', $horario);
+//                    $this->db->set('operador_cadastro', $operador_id);
+//                    $this->db->insert('tb_saldo');
+//                } else {
 
                     //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contasreceber
                     $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
@@ -252,7 +252,7 @@ class contrato_model extends Model {
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
                     $this->db->insert('tb_financeiro_contasreceber');
-                }
+//                }
             }
         } else {
             foreach ($parcelas as $item) {
@@ -260,29 +260,29 @@ class contrato_model extends Model {
                     return true;
                 }
 
-                if (strtotime($item->data) <= strtotime($data)) {
-
-                    //CASO ALGUMA PARCELA SEJA ANTERIOR AO MÊS ATUAL
-                    $this->db->set('data', $item->data);
-                    $this->db->set('valor', $item->valor);
-                    $this->db->set('classe', $classe);
-                    $this->db->set('nome', $item->credor_devedor_id);
-                    $this->db->set('conta', $item->conta_id);
-                    $this->db->set('observacao', $observacao);
-                    $this->db->set('data_cadastro', $horario);
-                    $this->db->set('operador_cadastro', $operador_id);
-                    $this->db->insert('tb_saidas');
-                    $saida_id = $this->db->insert_id();
-
-                    $this->db->set('data', $item->data);
-                    $this->db->set('valor', -((int)$item->valor));
-                    $this->db->set('entrada_id', $saida_id);
-                    $this->db->set('conta', $item->conta_id);
-                    $this->db->set('nome', $item->credor_devedor_id);
-                    $this->db->set('data_cadastro', $horario);
-                    $this->db->set('operador_cadastro', $operador_id);
-                    $this->db->insert('tb_saldo');
-                } else {
+//                if (strtotime($item->data) <= strtotime($data)) {
+//
+//                    //CASO ALGUMA PARCELA SEJA ANTERIOR AO MÊS ATUAL
+//                    $this->db->set('data', $item->data);
+//                    $this->db->set('valor', $item->valor);
+//                    $this->db->set('classe', $classe);
+//                    $this->db->set('nome', $item->credor_devedor_id);
+//                    $this->db->set('conta', $item->conta_id);
+//                    $this->db->set('observacao', $observacao);
+//                    $this->db->set('data_cadastro', $horario);
+//                    $this->db->set('operador_cadastro', $operador_id);
+//                    $this->db->insert('tb_saidas');
+//                    $saida_id = $this->db->insert_id();
+//
+//                    $this->db->set('data', $item->data);
+//                    $this->db->set('valor', -((int)$item->valor));
+//                    $this->db->set('entrada_id', $saida_id);
+//                    $this->db->set('conta', $item->conta_id);
+//                    $this->db->set('nome', $item->credor_devedor_id);
+//                    $this->db->set('data_cadastro', $horario);
+//                    $this->db->set('operador_cadastro', $operador_id);
+//                    $this->db->insert('tb_saldo');
+//                } else {
 
                     //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contaspagar
                     $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
@@ -298,7 +298,7 @@ class contrato_model extends Model {
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
                     $this->db->insert('tb_financeiro_contaspagar');
-                }
+//                }
             }
        
         }

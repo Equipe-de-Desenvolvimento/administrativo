@@ -81,6 +81,11 @@
                 <input type="text" name="juros" id="juros" alt="decimal" class="texto01"/>
             </div>-->
 
+<!--            <div style="display: block; width: 100%">
+                <br>
+                <input type="checkbox" name="enviar" id="enviar"/>
+                <label for="enviar" style="display: inline-block;font-weight: bold;color: black; font-size: 10pt">Enviar p/ email.</label>
+            </div>-->
             <div style="display: block; width: 100%">
                 <br>
                 <hr>

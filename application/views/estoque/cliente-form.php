@@ -157,17 +157,17 @@
                         </select>
                     </dd>
 
-                    <dt>
+<!--                    <dt>
                         <label>Sala</label>
-                    </dt>
-                    <dd>
+                    </dt>-->
+<!--                    <dd>
                         <select name="sala" id="sala" class="size4">
                             <option value="">SELECIONE</option>
-<? foreach ($sala as $item) { ?>
+<? // foreach ($sala as $item) { ?>
                                 <option value="<?= $item->exame_sala_id; ?>"><?= $item->nome; ?></option>
-<? } ?>
+<? // } ?>
                         </select>
-                    </dd>
+                    </dd>-->
 
 
                     <dt>

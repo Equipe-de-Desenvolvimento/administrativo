@@ -580,47 +580,11 @@ class Solicitacao extends BaseController {
             $solicitacao_id = $_POST['estoque_solicitacao_id'];
 
             if ($_POST['formapamento1_boleto'] == 't') {
-                if ($_POST['ajuste1'] != "0") {
-                    $valor = $_POST['valorajuste1'];
-                } else {
-                    $valor = $_POST['valor1'];
-                }
+                $valor = $_POST['valor1'];
                 $descricao_id = $_POST['formapamento1'];
                 $forma_id = $_POST['forma_pagamento_1'];
                 $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
             }
-
-            if ($_POST['formapamento2_boleto'] == 't') {
-                if ($_POST['ajuste1'] != "0") {
-                    $valor = $_POST['valorajuste2'];
-                } else {
-                    $valor = $_POST['valor2'];
-                }
-                $descricao_id = $_POST['formapamento2'];
-                $forma_id = $_POST['forma_pagamento_2'];
-                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
-            }
-            if ($_POST['formapamento3_boleto'] == 't') {
-                if ($_POST['ajuste1'] != "0") {
-                    $valor = $_POST['valorajuste3'];
-                } else {
-                    $valor = $_POST['valor3'];
-                }
-                $descricao_id = $_POST['formapamento3'];
-                $forma_id = $_POST['forma_pagamento_3'];
-                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
-            }
-            if ($_POST['formapamento4_boleto'] == 't') {
-                if ($_POST['ajuste1'] != "0") {
-                    $valor = $_POST['valorajuste4'];
-                } else {
-                    $valor = $_POST['valor4'];
-                }
-                $descricao_id = $_POST['formapamento4'];
-                $forma_id = $_POST['forma_pagamento_4'];
-                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
-            }
-
             $this->solicitacao->gravarfinanceirofaturamento();
 
             if ($verifica) {

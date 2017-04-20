@@ -426,8 +426,30 @@ class Notafiscal extends BaseController {
         fclose($arq);
         chmod($filename, 0777);
 
-        $this->notafiscal->gravarxmlfinalizado($notafiscal_id, $xmlFinalizado, $numeroRecibo, $numeroProtocolo);
-
+//        $data['empresa'] = $this->notafiscal->empresa();
+//        $this->notafiscal->gravarxmlfinalizado($notafiscal_id, $xmlFinalizado, $numeroRecibo, $numeroProtocolo);
+//
+//        
+//        $this->load->library('My_phpmailer');
+//        $mail = new PHPMailer;
+//        $mail->setLanguage('br');                             // Habilita as saídas de erro em Português
+//        $mail->CharSet = 'UTF-8';                             // Habilita o envio do email como 'UTF-8'
+//        //$mail->SMTPDebug = 3;                               // Habilita a saída do tipo "verbose"
+//        $mail->isSMTP();                                      // Configura o disparo como SMTP
+//        $mail->Host = 'smtp.gmail.com';                       // Especifica o enderço do servidor SMTP da Locaweb
+//        $mail->SMTPAuth = true;                               // Habilita a autenticação SMTP
+//        $mail->Username = 'equipe2016gcjh@gmail.com';         // Usuário do SMTP
+//        $mail->Password = 'DUCOCOFRUTOPCE';                   // Senha do SMTP
+//        $mail->SMTPSecure = 'ssl';                            // Habilita criptografia TLS | 'ssl' também é possível
+//        $mail->Port = 465;                                    // Porta TCP para a conexão
+//        $mail->From = 'equipe2016gcjh@gmail.com';             // Endereço previamente verificado no painel do SMTP
+//        $mail->FromName = 'STG Saúde';                        // Nome no remetente
+//        $mail->addAddress($email);                            // Acrescente um destinatário
+//        $mail->isHTML(true);                                  // Configura o formato do email como HTML
+//        $mail->Subject = 'Laudo Médico';
+//        $mail->Body = $texto;
+//        $mail->send();
+        
         header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
         exit;
     }
@@ -490,6 +512,26 @@ class Notafiscal extends BaseController {
             }
 
 
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
+        }
+    }
+
+    function downloaddanfe($solicitacao_cliente_id, $notafiscal_id = '') {
+        if ($notafiscal_id == '') {
+            echo "<script>window.close();</script>";
+        } else {
+            $config = $this->geraconfignfephp($solicitacao_cliente_id);
+
+            $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
+            $chave = $notafiscal[0]->chave_nfe;
+            $data = date("Ym", strtotime($notafiscal[0]->data_envio));
+            $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
+            if ($chave == '') {
+                echo "<script>window.close();</script>";
+            }
+            $download = true;
+            
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
         }
