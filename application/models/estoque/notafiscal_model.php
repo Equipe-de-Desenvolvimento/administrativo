@@ -80,6 +80,15 @@ class notafiscal_model extends Model {
         return $return->result();
     }
 
+    function listanotasolicitacao($estoque_solicitacao_id) {
+        $this->db->select('notafiscal_id');
+        $this->db->from('tb_notafiscal');
+        $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
+        $this->db->where('ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listaclientenotafiscal($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('ec.*, m.estado, 

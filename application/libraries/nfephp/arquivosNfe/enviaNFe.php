@@ -17,9 +17,9 @@ $idLote = '';
 $flagZip = false;
 $retorno = $nfe->sefazEnviaLote($xml, $tpAmb, $idLote, $aResposta, $indSinc, $flagZip);
 
-if (is_dir('/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/')) {
-    chmod('/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/', 0777);
-}
+//if (is_dir('/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/')) {
+//    chmod('/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_cliente_id . '/', 777);
+//}
 //echo '<pre>', htmlspecialchars($nfe->soapDebug), "<hr>";
 //print_r($aResposta);
 //print_r($retorno);

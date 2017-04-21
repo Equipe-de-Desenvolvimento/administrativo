@@ -301,11 +301,18 @@ class entrada_model extends Model {
             ep.descricao as produto');
         $this->db->from('tb_estoque_produto ep');
         $this->db->join('tb_estoque_sub_classe sc', 'sc.estoque_sub_classe_id = ep.sub_classe_id', 'left');
+        $this->db->join('tb_estoque_classe ec', 'ec.estoque_classe_id = sc.classe_id', 'left');
         $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id = ep.unidade_id', 'left');
         $this->db->where('ep.ativo', 'true');
-//        if ($_POST['empresa'] != "0") {
-//            $this->db->where('ae.empresa_id', $_POST['empresa']);
-//        }
+        if ($_POST['tipo_id'] != "") {
+            $this->db->where('ec.tipo_id', $_POST['tipo_id']);
+        }
+        if ($_POST['classe_id'] != "") {
+            $this->db->where('sc.classe_id', $_POST['classe_id']);
+        }
+        if ($_POST['subclasse_id'] != "") {
+            $this->db->where('sc.estoque_sub_classe_id', $_POST['subclasse_id']);
+        }
         $return = $this->db->get();
         return $return->result();
     }

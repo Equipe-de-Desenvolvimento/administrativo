@@ -69,6 +69,20 @@ class menu_model extends Model {
         return $return->result();
     }
 
+    function listarautocompleteprodutoportipo($tipo_id) {
+        $this->db->select('sc.estoque_sub_classe_id,
+                            sc.descricao');
+        $this->db->from('tb_estoque_tipo t');
+        $this->db->join('tb_estoque_classe c', 'c.tipo_id = t.estoque_tipo_id', 'left');
+        $this->db->join('tb_estoque_sub_classe sc', 'sc.classe_id = c.estoque_classe_id', 'left');
+        $this->db->where('t.estoque_tipo_id', $tipo_id);
+        $this->db->where('t.ativo', 'true');
+        $this->db->where('c.ativo', 'true');
+        $this->db->where('sc.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarautocompleteclasseportipo($tipo_id) {
         $this->db->select('c.estoque_classe_id,
                             c.descricao');

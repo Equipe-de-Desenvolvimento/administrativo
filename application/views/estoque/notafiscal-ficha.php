@@ -33,6 +33,9 @@
                     <a href="<?= base_url() ?>estoque/notafiscal/impressaodanfe/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
                         <button type="button" id="novaParcela">Imprimir DANFe</button>
                     </a>
+                    <a href="<?= base_url() ?>estoque/notafiscal/enviarporemail/<?= @$solicitacao_cliente_id; ?>/<?= @$notafiscal_id; ?>">
+                        <button type="button" id="novaParcela">Enviar p/ Email</button>
+                    </a>
                 <? endif; ?>
             </div>
             <br>
@@ -121,20 +124,20 @@
                             <img width="50px" src="<?= base_url() ?>img/pdf-icon.png" height="50px" onclick="javascript:window.open('<?= base_url() . "estoque/notafiscal/downloaddanfe/" . @$solicitacao_cliente_id . "/" . @$notafiscal_id; ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">
                             <br>
                             <? echo "danfe.pdf"; ?>
-                        </td>
+                        </td><pre>
                         <?
                         $this->load->helper('directory');
 
                         $arquivo_pasta = directory_map("./upload/nfe/$solicitacao_cliente_id/validada/");
                         if ($arquivo_pasta != false) {
                             foreach ($arquivo_pasta as $value) {
-                                $explode = explode('-', $value);
-                                if($explode[1] != "protNFe.xml"){
+                                $explode = explode('.', $value);
+                                if($explode[1] != "zip"){
                                     continue;
                                 }
                                 ?>
                                 <td width="15px"> 
-                                    <img width="50px" src="<?= base_url() ?>img/xml-icon.png" height="50px" onclick="javascript:window.open('<?= base_url() . "/upload/nfe/$solicitacao_cliente_id/validada/$value" ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">
+                                    <img width="50px" src="<?= base_url() ?>img/xml-icon.png" height="50px" onclick="javascript:window.open('<?= base_url() . "upload/nfe/$solicitacao_cliente_id/validada/$value" ?>', '_blank', 'toolbar=no,Location=no,menubar=no,width=1200,height=600');">
                                     <br>
                                     <? echo "Arquivo XML"; ?>
                                 </td>       

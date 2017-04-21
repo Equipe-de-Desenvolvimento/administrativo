@@ -43,10 +43,14 @@ class produto_model extends Model {
                             u.descricao as unidade,
                             p.sub_classe_id,
                             sc.descricao as sub_classe,
+                            ec.descricao as classe,
+                            em.descricao as marca,
                             p.valor_compra');
         $this->db->from('tb_estoque_produto p');
         $this->db->join('tb_estoque_sub_classe sc', 'sc.estoque_sub_classe_id = p.sub_classe_id', 'left');
+        $this->db->join('tb_estoque_classe ec', 'ec.estoque_classe_id = sc.classe_id', 'left');
         $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id = p.unidade_id', 'left');
+        $this->db->join('tb_estoque_marca em', 'em.estoque_marca_id = p.marca_id', 'left');
         $this->db->where('p.ativo', 'true');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('p.descricao ilike', "%" . $args['nome'] . "%");
@@ -54,14 +58,57 @@ class produto_model extends Model {
         if (isset($args['codigo']) && strlen($args['codigo']) > 0) {
             $this->db->where('p.codigo ilike', "%".$args['codigo']."%");
         }
+        if (isset($args['subclasse_id']) && strlen($args['subclasse_id']) > 0) {
+            $this->db->where('sc.estoque_sub_classe_id', $args['subclasse_id']);
+        }
+        if (isset($args['classe_id']) && strlen($args['classe_id']) > 0) {
+            $this->db->where('sc.classe_id', $args['classe_id']);
+        }
+        if (isset($args['tipo_id']) && strlen($args['tipo_id']) > 0) {
+            $this->db->where('ec.tipo_id', $args['tipo_id']);
+        }
+        if (isset($args['marca_id']) && strlen($args['marca_id']) > 0) {
+            $this->db->where('p.marca_id', $args['marca_id']);
+        }
         return $this->db;
+    }
+
+    function listarmarca() {
+        $this->db->select('em.estoque_marca_id,
+                           em.descricao');
+        $this->db->from('tb_estoque_marca em');
+        $this->db->where('em.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
     }
 
     function listarsub() {
         $this->db->select('sc.estoque_sub_classe_id,
-                            sc.descricao');
+                            sc.descricao,
+                            sc.classe_id');
         $this->db->from('tb_estoque_sub_classe sc');
         $this->db->where('sc.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listarclasse() {
+        $this->db->select('ec.estoque_classe_id,
+                            ec.descricao,
+                            ec.tipo_id');
+        $this->db->from('tb_estoque_classe ec');
+//        $this->db->join('tb_estoque_classe ec', 'ec.estoque_classe_id = sc.classe_id', 'left');
+        $this->db->where('ec.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listartipo() {
+        $this->db->select('et.estoque_tipo_id,
+                            et.descricao');
+        $this->db->from('tb_estoque_tipo et');
+//        $this->db->join('tb_estoque_classe ec', 'ec.estoque_classe_id = sc.classe_id', 'left');
+        $this->db->where('et.ativo', 'true');
         $return = $this->db->get();
         return $return->result();
     }
@@ -123,6 +170,9 @@ class produto_model extends Model {
             $this->db->set('estoque_minimo', $_POST['minimo']);
             $this->db->set('unidade_id', $_POST['unidade']);
             $this->db->set('sub_classe_id', $_POST['sub']);
+            if($_POST['marca'] != ''){
+                $this->db->set('marca_id', $_POST['marca']);
+            }
             if($_POST['codigo'] != ''){
                 $this->db->set('codigo', $_POST['codigo']);
             }

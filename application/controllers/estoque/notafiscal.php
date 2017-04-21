@@ -72,7 +72,13 @@ class Notafiscal extends BaseController {
 
     function gravarnotafiscaleletronica() {
         $solicitacao_id = $_POST['estoque_cliente_id'];
-        $notafiscal_id = $this->notafiscal->gravarnotafiscaleletronica();
+        $resultado = $this->notafiscal->listanotasolicitacao($solicitacao_id);
+//        var_dump($resultado);die;
+        if (count($resultado) == 0) {
+            $notafiscal_id = $this->notafiscal->gravarnotafiscaleletronica();
+        } else {
+            $notafiscal_id = $resultado[0]->notafiscal_id;
+        }
         redirect(base_url() . "estoque/notafiscal/gerarnotafiscal/$solicitacao_id/$notafiscal_id");
     }
 
@@ -221,10 +227,8 @@ class Notafiscal extends BaseController {
             "destCNPJ" => $this->utilitario->remover_caracter($data['destinatario'][0]->cnpj),
             "destCPF" => '',
             "destNOME" => $data['destinatario'][0]->nome,
-            
             "destIND_IE" => $data['destinatario'][0]->indicadorie, //criar um novo campo na tb_estoque_cliente (VERIFICAR SE O CLIENTE É ISENTO DE IE)
             "destIE" => $this->utilitario->remover_caracter($data['destinatario'][0]->inscricao_estadual),
-            
             "destIM" => '', //criar um novo campo na tb_estoque_cliente
             "destEMAIL" => $data['destinatario'][0]->email,
             "destLOG" => $data['destinatario'][0]->logradouro,
@@ -407,13 +411,16 @@ class Notafiscal extends BaseController {
         $tipoAmbiente = ($notafiscal[0]->tipo_ambiente == '') ? '2' : $notafiscal[0]->tipo_ambiente; //1=Produção; 2=Homologação
         $chave = $notafiscal[0]->chave_nfe;
         $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
-        
-        if ($notafiscal[0]->enviada == 'f' OR ($notafiscal[0]->enviada == 't' && $notafiscal[0]->cancelada == 't')) {
+
+        if ($notafiscal[0]->enviada == 'f' OR ( $notafiscal[0]->enviada == 't' && $notafiscal[0]->cancelada == 't')) {
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/enviaNFe.php');
             $data = date("Ym");
+//            die('morreu');
+
             /* Consultando a situacao do Recibo no sistema da SEFAZ  e adcionando Tag de Protocolo */
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/consultaRecibo.php');
-            
+//            die(',prr');
+
             $this->notafiscal->gravardataenvio($notafiscal_id);
         } else {
             $data = date("Ym", strtotime($notafiscal[0]->data_envio));
@@ -426,32 +433,70 @@ class Notafiscal extends BaseController {
         fclose($arq);
         chmod($filename, 0777);
 
+
 //        $data['empresa'] = $this->notafiscal->empresa();
 //        $this->notafiscal->gravarxmlfinalizado($notafiscal_id, $xmlFinalizado, $numeroRecibo, $numeroProtocolo);
 //
-//        
-//        $this->load->library('My_phpmailer');
-//        $mail = new PHPMailer;
-//        $mail->setLanguage('br');                             // Habilita as saídas de erro em Português
-//        $mail->CharSet = 'UTF-8';                             // Habilita o envio do email como 'UTF-8'
-//        //$mail->SMTPDebug = 3;                               // Habilita a saída do tipo "verbose"
-//        $mail->isSMTP();                                      // Configura o disparo como SMTP
-//        $mail->Host = 'smtp.gmail.com';                       // Especifica o enderço do servidor SMTP da Locaweb
-//        $mail->SMTPAuth = true;                               // Habilita a autenticação SMTP
-//        $mail->Username = 'equipe2016gcjh@gmail.com';         // Usuário do SMTP
-//        $mail->Password = 'DUCOCOFRUTOPCE';                   // Senha do SMTP
-//        $mail->SMTPSecure = 'ssl';                            // Habilita criptografia TLS | 'ssl' também é possível
-//        $mail->Port = 465;                                    // Porta TCP para a conexão
-//        $mail->From = 'equipe2016gcjh@gmail.com';             // Endereço previamente verificado no painel do SMTP
-//        $mail->FromName = 'STG Saúde';                        // Nome no remetente
-//        $mail->addAddress($email);                            // Acrescente um destinatário
-//        $mail->isHTML(true);                                  // Configura o formato do email como HTML
-//        $mail->Subject = 'Laudo Médico';
-//        $mail->Body = $texto;
-//        $mail->send();
-        
+// 
+
+        $zip = new ZipArchive;
+        $zip->open("{$caminho}/{$solicitacao_cliente_id}/validada/xml.zip", ZipArchive::CREATE);
+        $zip->addFile("$filename", "{$chave}-xml.xml");
+        $zip->close();
+
         header("Location: " . base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
         exit;
+    }
+
+    function enviaremail() {
+        
+        $notafiscal_id = $_POST['notafiscal_id'];
+        $solicitacao_cliente_id = $_POST['solicitacao_id'];
+        
+        $notafiscal = $this->notafiscal->instanciarnotafiscal($_POST['notafiscal_id']);
+        $this->load->library('My_phpmailer');
+        $mail = new PHPMailer(true);
+
+        $mail->setLanguage('br');                             // Habilita as saídas de erro em Português
+        $mail->CharSet = 'UTF-8';                             // Habilita o envio do email como 'UTF-8'
+        $mail->SMTPDebug = 3;                               // Habilita a saída do tipo "verbose"
+        $mail->isSMTP();                                      // Configura o disparo como SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Especifica o enderço do servidor SMTP da Locaweb
+        $mail->SMTPAuth = true;                               // Habilita a autenticação SMTP
+        $mail->Username = $_POST['email'];                    // Usuário do SMTP
+        $mail->Password = $_POST['senha'];                   // Senha do SMTP
+        $mail->SMTPSecure = 'ssl';                            // Habilita criptografia TLS | 'ssl' também é possível
+        $mail->Port = 465;                                    // Porta TCP para a conexão
+        $mail->From = $_POST['email'];             // Endereço previamente verificado no painel do SMTP
+        $mail->FromName = $_POST['email'];                        // Nome no remetente
+        $mail->addAddress($_POST['remetente']);                            // Acrescente um destinatário
+        $mail->isHTML(true);                                  // Configura o formato do email como HTML
+        $mail->Subject = 'NFe ' . $notafiscal[0]->chave_nfe;
+        $mail->Body = $_POST['texto'];
+        
+        if (isset($_POST['danfe'])) {
+            $mail->AddAttachment("./upload/nfe/$solicitacao_cliente_id/validada/" . $notafiscal[0]->chave_nfe . '-danfe.pdf', $notafiscal[0]->chave_nfe . '-danfe.pdf');
+        }
+        if (isset($_POST['xml'])) {
+            $mail->AddAttachment("./upload/nfe/$solicitacao_cliente_id/validada/" . $notafiscal[0]->chave_nfe . '-protNFe.xml', $notafiscal[0]->chave_nfe . '-protNFe.xml');
+        }
+
+        if(!$mail->Send()) {           
+            $mensagem = "Erro: " . $mail->ErrorInfo;
+        } else {
+            $mensagem = "Email enviado com sucesso!";
+        }
+        
+        
+        $this->session->set_flashdata('message', $mensagem);
+        redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
+    }
+
+    function enviarporemail($solicitacao_cliente_id, $notafiscal_id) {
+        $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
+        $data['notafiscal_id'] = $notafiscal_id;
+        $data['empresa'] = $this->notafiscal->empresa();
+        $this->loadView('estoque/enviaremail-form', $data);
     }
 
     function carregarcancelarnotafiscal($solicitacao_cliente_id, $notafiscal_id = '') {
@@ -531,7 +576,7 @@ class Notafiscal extends BaseController {
                 echo "<script>window.close();</script>";
             }
             $download = true;
-            
+
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
             require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraDanfe.php');
         }

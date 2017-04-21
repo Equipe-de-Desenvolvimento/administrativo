@@ -527,3 +527,17 @@ CREATE TABLE ponto.tb_estoque_transportadora
 
 -- Dia 17/04/2017
 ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN indicadorIE character varying(10);
+
+-- Dia 24/04/2017
+CREATE TABLE ponto.tb_estoque_marca
+(
+  estoque_marca_id serial NOT NULL,
+  descricao character varying(400),
+  ativo boolean DEFAULT true,
+  data_cadastro timestamp without time zone,
+  operador_cadastro integer,
+  data_atualizacao timestamp without time zone,
+  operador_atualizacao integer,
+  CONSTRAINT tb_estoque_marca_pkey PRIMARY KEY (estoque_marca_id)
+);
+ALTER TABLE ponto.tb_estoque_produto ADD COLUMN marca_id integer;

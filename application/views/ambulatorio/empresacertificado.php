@@ -7,7 +7,7 @@
             <input type="file" name="userfile" required=""/><br>
             <label>Informe a senha do arquivo</label><br>
             <div>
-                <input type="password" name="senha" id="senha"/><img src="<?= base_url() ?>/img/eye-icon.png" style="display: inline-block; margin-bottom:-5pt; " width="23pt" height="23pt" id="visualizar"/>
+                <input type="password" name="senha" id="senha" required=""/><img src="<?= base_url() ?>/img/eye-icon.png" style="display: inline-block; margin-bottom:-5pt; " width="23pt" height="23pt" id="visualizar"/>
             </div>
             <button type="submit" name="btnEnviar">Enviar</button>
             <input type="hidden" name="empresa_id" value="<?= $empresa_id; ?>" />

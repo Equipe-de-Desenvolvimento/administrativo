@@ -1,3 +1,14 @@
+<style>
+    .optTipo{
+        color: #3A539B; font-style:italic; background-color: #DADFE1; padding: 5pt 0pt 5pt 0pt;
+    }
+    .optClasse{
+        color: #F2784B; font-style:italic; background-color: #DADFE1; text-indent: 10pt;
+    }
+    .option{
+        text-indent: 30pt; color: black; font-weight: bold;
+    }
+</style>
 <div class="content"> <!-- Inicio da DIV content -->
     <div id="accordion">
         <h3 class="singular"><a href="#">Cadastro de Produto</a></h3>
@@ -18,12 +29,36 @@
                     </dt>
                     <dd>
                         <select name="sub" id="sub" class="size4">
-                            <? foreach ($sub as $value) : ?>
-                                <option value="<?= $value->estoque_sub_classe_id; ?>"<?
-                                if (@$obj->_sub_classe_id == $value->estoque_sub_classe_id):echo'selected';
-                                endif;
-                                ?>><?php echo $value->descricao; ?></option>
-<? endforeach; ?>
+
+                            <? foreach ($tipo as $value) : ?>
+                                <optgroup label="<?= $value->descricao ?>" class="optTipo">
+                                    <?
+                                    foreach ($classe as $value2) :
+                                        if ($value->estoque_tipo_id == $value2->tipo_id) {
+                                            ?>
+                                        <optgroup label="<?= $value2->descricao ?>" class="optClasse">
+                                            <?
+                                            foreach ($sub as $item) :
+                                                if ($item->classe_id == $value2->estoque_classe_id) {
+                                                    ?>
+                                                    <option 
+                                                        class="option"
+                                                        value="<?= $item->estoque_sub_classe_id; ?>"
+                                                        <? if (@$obj->_sub_classe_id == $item->estoque_sub_classe_id):echo'selected';endif; ?>>
+                                                    <?= $item->descricao; ?>
+                                                    </option>
+                                                    <?
+                                                }
+                                            endforeach;
+                                        }
+                                        ?>
+                                    </optgroup>
+                                    <? endforeach; ?>
+
+                                </optgroup>
+                                <?
+                            endforeach;
+                            ?>
                         </select>
                     </dd>
 
@@ -34,10 +69,24 @@
                         <select name="unidade" id="unidade" class="size4">
                             <? foreach ($unidade as $value) : ?>
                                 <option value="<?= $value->estoque_unidade_id; ?>"<?
-                                        if (@$obj->_unidade_id == $value->estoque_unidade_id):echo'selected';
-                                        endif;
-                                        ?>><?php echo $value->descricao; ?></option>
-<? endforeach; ?>
+                            if (@$obj->_unidade_id == $value->estoque_unidade_id):echo'selected';
+                            endif;
+                                ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
+                        </select>
+                    </dd>
+
+                    <dt>
+                        <label>Marca</label>
+                    </dt>
+                    <dd>
+                        <select name="marca" id="marca" class="size4">
+                            <? foreach ($marca as $value) : ?>
+                                <option value="<?= $value->estoque_marca_id; ?>"<?
+                            if (@$obj->_unidade_id == $value->estoque_marca_id):echo'selected';
+                            endif;
+                                ?>><?php echo $value->descricao; ?></option>
+                                    <? endforeach; ?>
                         </select>
                     </dd>
 
@@ -116,7 +165,7 @@
             select: function (event, ui) {
                 $("#codigo_ncm").val(ui.item.codigo);
                 $("#descricao_ncm").val(ui.item.descricao);
-                if(ui.item.aliquota != "NT"){
+                if (ui.item.aliquota != "NT") {
                     $("#ipi").val(ui.item.aliquota);
                 }
                 $.getJSON('<?= base_url() ?>autocomplete/autocompletencmcest', {ncm: ui.item.codigo}, function (j) {

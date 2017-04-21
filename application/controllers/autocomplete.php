@@ -488,6 +488,16 @@ class Autocomplete extends Controller {
         echo json_encode($result);
     }
 
+    function estoqueprodutoportipo() {
+
+        if (isset($_GET['tipo_id'])) {
+            $result = $this->menu->listarautocompleteprodutoportipo($_GET['tipo_id']);
+        } else {
+            $result = $this->menu->listarautocompleteprodutoportipo();
+        }
+        echo json_encode($result);
+    }
+    
     function estoqueclasseportipo() {
 
         if (isset($_GET['tipo_id'])) {

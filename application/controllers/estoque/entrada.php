@@ -17,7 +17,9 @@ class Entrada extends BaseController {
         parent::Controller();
         $this->load->model('estoque/entrada_model', 'entrada');
         $this->load->model('estoque/cliente_model', 'cliente');
+        $this->load->model('estoque/produto_model', 'produto');
         $this->load->model('ambulatorio/guia_model', 'guia');
+        $this->load->model('estoque/menu_model', 'menu');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -62,13 +64,13 @@ class Entrada extends BaseController {
             $error = null;
             $data = array('upload_data' => $this->upload->data());
         }
-        
+
         $arqNome = $_FILES['userfile']['name'];
         $xml = simplexml_load_file("./upload/entradaxml/" . $arqNome);
-        
+
         foreach ($xml->NFe->infNFe->det as $key => $value) {
             $resultado = $this->entrada->listarprodutoentradaxml($value->prod->cProd);
-            
+
             $view['produtos'][] = array(
                 "produto_id" => $resultado[0]->estoque_produto_id,
                 "descricao" => $resultado[0]->descricao,
@@ -76,13 +78,13 @@ class Entrada extends BaseController {
                 "valorcompra" => (string) $value->prod->vProd
             );
         }
-        
+
         $dados['cnpjfornecedor'] = (string) $xml->NFe->infNFe->emit->CNPJ;
         $cnpj = substr($dados['cnpjfornecedor'], 0, -2) . '-' . substr($dados['cnpjfornecedor'], -2, 2);
-        
+
         $view['fornecedor'] = $this->entrada->listarfornecedorentradaxml($cnpj);
         $view['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
-        
+
         $view['sub'] = $this->entrada->listararmazem();
 //        var_dump($cnpj)
         $this->loadView('estoque/produtoentradaxml-form', $view);
@@ -177,6 +179,10 @@ class Entrada extends BaseController {
 
     function relatorioprodutos() {
         $data['empresa'] = $this->guia->listarempresas();
+        $data['tipo'] = $this->menu->listartipos();
+        $data['classe'] = $this->produto->listarclasse();
+        $data['sub'] = $this->produto->listarsub();
+        
         $this->loadView('estoque/relatorioprodutos', $data);
     }
 
@@ -292,8 +298,8 @@ class Entrada extends BaseController {
 
     function gravarentradaxml() {
         foreach ($_POST['produto'] as $chave => $item) {
-            
-            $_POST['valor'][$chave] = str_replace(',', '.', str_replace('.', '', $_POST['valor'][$chave]) );
+
+            $_POST['valor'][$chave] = str_replace(',', '.', str_replace('.', '', $_POST['valor'][$chave]));
             $_POST['qtde'][$chave] = (int) str_replace('.', '', $_POST['qtde'][$chave]);
             $dados = array(
                 "txtfornecedor" => $_POST['fornecedor_id'],

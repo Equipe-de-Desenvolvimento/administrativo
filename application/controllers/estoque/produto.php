@@ -16,6 +16,7 @@ class Produto extends BaseController {
     function Produto() {
         parent::Controller();
         $this->load->model('estoque/produto_model', 'produto');
+        $this->load->model('estoque/menu_model', 'menu');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -37,6 +38,12 @@ class Produto extends BaseController {
         $obj_produto = new produto_model($estoque_produto_id);
         $data['obj'] = $obj_produto;
         $data['sub'] = $this->produto->listarsub();
+        $data['classe'] = $this->produto->listarclasse();
+        $data['tipo'] = $this->produto->listartipo();
+        $data['marca'] = $this->produto->listarmarca();
+//        echo "<pre>";
+//        var_dump($data['sub']);die;
+        
         $data['unidade'] = $this->produto->listarunidade();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('estoque/produto-form', $data);
