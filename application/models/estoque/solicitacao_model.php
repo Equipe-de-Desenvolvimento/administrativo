@@ -167,7 +167,7 @@ class solicitacao_model extends Model {
                         }
                     }
 
-                    $classe = "VENDAS " . ' ' . $value->nome;
+                    $classe = "PEDIDO FATURAMENTO";
 
                     for ($x = 0; $x < count($formaPagamento); $x++) {
 

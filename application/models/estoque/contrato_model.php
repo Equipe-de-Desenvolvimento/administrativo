@@ -204,7 +204,7 @@ class contrato_model extends Model {
         $parcelas = $this->db->get()->result();
 
         $observacao = "Contrato de Num: " . $parcelas[0]->numero_contrato . ',  Credor/Devedor: ' . $parcelas[0]->razao_social;
-        $classe = "CONTRATO " . $parcelas[0]->numero_contrato;
+        $classe = "CONTRATO";
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
 
