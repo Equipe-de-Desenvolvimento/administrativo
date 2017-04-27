@@ -7,24 +7,24 @@
         width: 100%;
     }
     .cabecalho_principal{
-        font-size: 12pt;
+        font-size:14pt;
     }
     .cabecalho_secundario{
-        font-size:12pt;
+        font-size:14pt;
         margin-bottom: -10pt;
     }
     .negrito{
         font-weight: bolder;
     }
     .dados_cabecalho{
-        font-size: 12pt;
+        font-size:14pt;
     }
     .corpo{
         margin-top: 5pt;
         min-height: 150pt;
     }
     .tabela_fim{
-        font-size: 10pt;
+        font-size: 12pt;
     }
     table{
         width: 100%;

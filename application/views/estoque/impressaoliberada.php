@@ -1,42 +1,42 @@
 <head>
 <style>
-        .linha_abaixo{
-            border-bottom: 1px solid black;
-        }
-        .tabela_principal{
-            width: 100%;
-        }
-        .cabecalho_principal{
-            font-size: 12pt;
-        }
-        .cabecalho_secundario{
-            font-size:12pt;
-            margin-bottom: -10pt;
-        }
-        .negrito{
-            font-weight: bolder;
-        }
-        .dados_cabecalho{
-            font-size: 12pt;
-        }
-        .corpo{
-            margin-top: 5pt;
-            min-height: 150pt;
-        }
-        .tabela_fim{
-            font-size: 10pt;
-        }
-        table{
-            width: 100%;
-        }
-    </style>
+    .linha_abaixo{
+        border-bottom: 1px solid black;
+    }
+    .tabela_principal{
+        width: 100%;
+    }
+    .cabecalho_principal{
+        font-size:15pt;
+    }
+    .cabecalho_secundario{
+        font-size:14.5pt;
+        margin-bottom: -10pt;
+    }
+    .negrito{
+        font-weight: bolder;
+    }
+    .dados_cabecalho{
+        font-size:14pt;
+    }
+    .corpo{
+        margin-top: 5pt;
+        min-height: 150pt;
+    }
+    .tabela_fim{
+        font-size: 12pt;
+    }
+    table{
+        width: 100%;
+    }
+</style>
 
     <meta charset="utf-8">
     <title>Pedido</title>
     </head>
 <body>
     <div style="width: 100%">
-        <table class="tabela_principal" cellpadding="2" cellspacing="2">
+        <table class="tabela_principal" cellpadding="5" cellspacing="4">
 
             <!-- PRIMEIRO CABECALHO -->
             <tr>
@@ -44,7 +44,7 @@
                     <img src="" alt="" width="350" height="150" border="1">
                 </td>
                 <td >
-                    <table class="cabecalho_principal" cellspacing="5" cellpadding="1">
+                    <table class="cabecalho_principal" cellspacing="5" cellpadding="4">
                         <tr>
                             <td colspan="4"><span class="negrito"><?= @$empresa[0]->empresa; ?></span></td>
                         </tr>
@@ -80,42 +80,38 @@
             <!-- SEGUNDO CABECALHO -->
             <tr>
                 <td colspan="2">
-                    <table class="cabecalho_secundario" cellspacing="5" cellpadding="5">
+                    <table class="cabecalho_secundario" cellspacing="5" cellpadding="4">
                                 <tr>
                                     
-                                    <td colspan="4"><span class="negrito">Cliente: </span><span class="dados_cabecalho"><?= @$destinatario[0]->nome; ?></span></td>
-                                    <td colspan="2">&nbsp;&nbsp;</td>
+                                    <td colspan="7"><span class="negrito">Cliente: </span><span style="white-space: nowrap;" class="dados_cabecalho"><?= @$destinatario[0]->nome; ?></span></td>
+                                    <!--<td colspan="2">&nbsp;&nbsp;</td>-->
 
-                                    <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></td>
+                                    <td colspan="3" align="right"><div style="width: 100pt;"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></div></td>
                                     
                                 </tr>
                                 <tr>
 
-                                    <td colspan="3"><span class="negrito">End: </span>
+                                    <td colspan="4"><span class="negrito">End: </span>
                                         <span class="dados_cabecalho">
                                         <?= @$destinatario[0]->logradouro; ?> <?= @$destinatario[0]->numero; ?>
                                         </span>
                                     </td>
-                                    <td>&nbsp;&nbsp;</td>
 
-                                    <td><span class="negrito">Fone: </span><span class="dados_cabecalho"><?= @$destinatario[0]->telefone; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <td colspan="3" align="center"><span class="negrito">Fone: </span><span class="dados_cabecalho"><?= @$destinatario[0]->telefone; ?></span></td>
 
-                                    <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <td colspan="3"><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
 
                                 </tr>
                                 <tr>
 
-                                    <td><span class="negrito">Bairro: </span><span class="dados_cabecalho"><?= @$destinatario[0]->bairro; ?></span></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td colspan="4"><span class="negrito">Bairro: </span><span class="dados_cabecalho"><?= @$destinatario[0]->bairro; ?></span></td>
+                                    <!--<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
 
-                                    <td><span class="negrito">Cid: </span><span class="dados_cabecalho"><?= @$destinatario[0]->municipio; ?></span></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td colspan="1"><span class="negrito">Cid: </span><span class="dados_cabecalho"><?= @$destinatario[0]->municipio; ?></span></td>
+                                    <!--<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
 
-                                    <td><span class="negrito">UF: </span><span class="dados_cabecalho"><?= @$destinatario[0]->estado; ?></span></td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <td colspan="1"><span class="negrito">UF: </span><span class="dados_cabecalho"><?= @$destinatario[0]->estado; ?></span></td>
+                                    <!--<td>&nbsp;&nbsp;</td>-->
 
                                 </tr>
                     </table>
