@@ -144,6 +144,89 @@ class notafiscal_model extends Model {
         return $return->result();
     }
 
+    function listarsolicitacaoespelhonota($estoque_solicitacao_id) {
+        $this->db->select('situacao');
+        $this->db->from('tb_estoque_solicitacao_cliente esc');
+        $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('esc.ativo', 'true');
+        $returno = $this->db->get()->result();
+
+        if ($returno[0]->situacao != "FECHADA") {
+
+
+            $this->db->select(' sum(esi.quantidade) as quantidade,
+                            ee.validade,
+                            ee.lote,
+                            ee.validade,
+                            ep.descricao,
+                            ep.estoque_produto_id,
+                            ep.codigo, 
+                            ep.ncm,
+                            ep.cest,
+                            sum(esi.valor) as valor_venda,           
+                            c.codigo_cfop, 
+                            c.descricao_cfop,
+                            eu.descricao as unidade,
+                            ee.validade,
+                            ee.lote
+                            ');
+            $this->db->from('tb_estoque_solicitacao_itens esi');
+            $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = esi.produto_id');
+            $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id= ep.unidade_id');
+            $this->db->join('tb_estoque_entrada ee', 'ee.estoque_entrada_id = esi.entrada_id', 'left');
+            $this->db->join('tb_cfop c', 'c.codigo_cfop = esi.codigo_cfop', 'left');
+            $this->db->where('esi.solicitacao_cliente_id', $estoque_solicitacao_id);
+            $this->db->where('esi.ativo', 'true');
+            $this->db->groupby('ee.validade,ee.lote,ee.validade,ep.descricao,ep.estoque_produto_id,ep.codigo, ep.ncm,
+                            ep.cest,c.codigo_cfop, c.descricao_cfop,eu.descricao,
+                            ee.validade, ee.lote');
+            $this->db->orderby('ep.descricao');
+            $return = $this->db->get();
+        } 
+        else {
+            
+            $this->db->select(' es.estoque_saida_id,
+                            ep.descricao,
+                            ep.estoque_produto_id,
+                            ep.codigo, 
+                            esi.estoque_solicitacao_itens_id, 
+                            es.validade,
+                            es.quantidade,
+                            ep.ncm,
+                            ep.cest,
+                            esi.cst_icms,
+                            esi.cst_ipi,
+                            esi.cst_pis,
+                            esi.cst_cofins,
+                            esi.icms, 
+                            esi.ipi, 
+                            esi.pis, 
+                            esi.cofins, 
+                            esi.icmsst, 
+                            esi.mva,    
+                            esi.valor as valor_venda,            
+                            esi.quantidade as quantidade_solicitada,
+                            c.codigo_cfop, 
+                            c.descricao_cfop,
+                            eu.descricao as unidade,
+                            ee.validade,
+                            ee.lote
+                            ');
+            $this->db->from('tb_estoque_saida es');
+            $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = es.produto_id');
+            $this->db->join('tb_estoque_unidade eu', 'eu.estoque_unidade_id= ep.unidade_id');
+            $this->db->join('tb_estoque_solicitacao_itens esi', 'esi.estoque_solicitacao_itens_id = es.estoque_solicitacao_itens_id', 'left');
+            $this->db->join('tb_estoque_entrada ee', 'ee.estoque_entrada_id = es.estoque_entrada_id', 'left');
+            $this->db->join('tb_cfop c', 'c.codigo_cfop = esi.codigo_cfop', 'left');
+            $this->db->where('es.solicitacao_cliente_id', $estoque_solicitacao_id);
+            $this->db->where('es.ativo', 'true');
+            $this->db->orderby('es.estoque_saida_id');
+            $return = $this->db->get();
+        }
+        
+        return $return->result();
+    }
+
     function listarsolicitacaosnota($estoque_solicitacao_id) {
         $this->db->select(' es.estoque_saida_id,
                             ep.descricao,
@@ -257,24 +340,23 @@ class notafiscal_model extends Model {
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
 
-            if ($_POST['nota_fiscal_id'] == "") {// insert
-
-                $this->db->set('data_cadastro', $horario);
-                $this->db->set('operador_cadastro', $operador_id);
-                $this->db->insert('tb_notafiscal');
-                $erro = $this->db->_error_message();
-                if (trim($erro) != "") // erro de banco
-                    return -1;
-                else
-                    $notafiscal_id = $this->db->insert_id();
-            }
-            else { // update
-                $notafiscal_id = $_POST['nota_fiscal_id'];
-                $this->db->set('data_atualizacao', $horario);
-                $this->db->set('operador_atualizacao', $operador_id);
-                $this->db->where('notafiscal_id', $notafiscal_id);
-                $this->db->update('tb_notafiscal');
-            }
+        if ($_POST['nota_fiscal_id'] == "") {// insert
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_notafiscal');
+            $erro = $this->db->_error_message();
+            if (trim($erro) != "") // erro de banco
+                return -1;
+            else
+                $notafiscal_id = $this->db->insert_id();
+        }
+        else { // update
+            $notafiscal_id = $_POST['nota_fiscal_id'];
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->where('notafiscal_id', $notafiscal_id);
+            $this->db->update('tb_notafiscal');
+        }
 
         return $notafiscal_id;
     }
@@ -283,7 +365,7 @@ class notafiscal_model extends Model {
         $this->db->set('xml', $xmlFinalizado);
         $this->db->set('numero_recibo', $numeroRecibo);
         $this->db->set('numero_protocolo', $numeroProtocolo);
-        
+
         $this->db->where('notafiscal_id', $nota_id);
         $this->db->update('tb_notafiscal');
     }
@@ -293,7 +375,7 @@ class notafiscal_model extends Model {
         $this->db->set('data_cancelamento', $horario);
         $this->db->set('cancelada', 't');
         $this->db->set('motivo_cancelamento', $_POST['txtmotivo']);
-        
+
         $this->db->where('notafiscal_id', $nota_id);
         $this->db->update('tb_notafiscal');
     }
@@ -302,7 +384,7 @@ class notafiscal_model extends Model {
         $horario = date("Y-m-d H:i:s");
         $this->db->set('data_envio', $horario);
         $this->db->set('enviada', 't');
-        
+
         $this->db->where('notafiscal_id', $nota_id);
         $this->db->update('tb_notafiscal');
     }
@@ -312,12 +394,12 @@ class notafiscal_model extends Model {
         $this->db->set('chave_nfe', $chave);
         $this->db->set('tipo_ambiente', $tipoAmbiente);
         $this->db->set('xml', $xml);
-        
+
         $this->db->set('gerada', 't');
         $this->db->set('data_geracao', $horario);
         $this->db->set('assinada', 't');
         $this->db->set('data_assinatura', $horario);
-        
+
         $this->db->where('notafiscal_id', $nota_id);
         $this->db->update('tb_notafiscal');
     }

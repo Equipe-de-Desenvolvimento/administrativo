@@ -163,9 +163,9 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <td>PRODUTOS</td>
-                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                    <td>QUANTIDADE</td>
+                                                    <th align="left">PRODUTOS</th>
+                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>QUANTIDADE</th>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
@@ -467,9 +467,9 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <td>PRODUTOS</td>
-                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                    <td>QUANTIDADE</td>
+                                                    <th align="left">PRODUTOS</th>
+                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>QUANTIDADE</th>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 

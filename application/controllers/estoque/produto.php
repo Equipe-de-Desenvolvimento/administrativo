@@ -27,9 +27,9 @@ class Produto extends BaseController {
         $this->pesquisar();
     }
 
-    function pesquisar($args = array()) {
-
-        $this->loadView('estoque/produto-lista', $args);
+    function pesquisar($limite = 25) {
+        $data["limite_paginacao"] = $limite;
+        $this->loadView('estoque/produto-lista', $data);
 
 //            $this->carregarView($data);
     }

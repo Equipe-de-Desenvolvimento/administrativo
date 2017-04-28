@@ -9,12 +9,9 @@
                     <option value=''>SELECIONE</option>
                     <option value='pedido_simples'>Pedido simples</option>
                     <option value='pedido'>Pedido</option>
-                    
-                    <?if($solicitacao[0]->situacao == "FECHADA"):?>
-                        <option value='saida_simples'>Saida simples</option>  
-                        <option value='saida'>Saida</option>
-                        <option value='espNota'>Espelho da Nota</option>
-                    <? endif;?>
+                    <option value='saida_simples'>Saida simples</option>  
+                    <option value='saida'>Saida</option>
+                    <option value='espNota'>Espelho da Nota</option>
                     
                     <!--<option value='recibo'>Recibo</option>-->
                 </select>

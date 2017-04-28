@@ -18,7 +18,7 @@ $marca = $this->produto->listarmarca();
                 <thead>
                     <tr>
                         <th colspan="3" class="tabela_title">
-                            <form method="get" action="<?= base_url() ?>estoque/produto/pesquisar">
+                            <form method="get" action="<?= base_url() ?>estoque/produto/pesquisar/<?=$limite_paginacao?>">
                                 <tr>
                                     <th class="tabela_title">Produto</th>
                                     <th class="tabela_title">Código</th>
@@ -99,14 +99,19 @@ $marca = $this->produto->listarmarca();
                 $url = $this->utilitario->build_query_params(current_url(), $_GET);
                 $consulta = $this->produto->listar($_GET);
                 $total = $consulta->count_all_results();
-                $limit = 10;
+                $limit = $limite_paginacao;
                 isset($_GET['per_page']) ? $pagina = $_GET['per_page'] : $pagina = 0;
 
                 if ($total > 0) {
                     ?>
                     <tbody>
                         <?php
-                        $lista = $this->produto->listar($_GET)->limit($limit, $pagina)->get()->result();
+                        if ($limit != "todos") {
+                            $lista = $this->produto->listar($_GET)->limit($limit, $pagina)->get()->result();
+                        } else {
+                            $lista = $this->produto->listar($_GET)->get()->result();
+                        }
+                        
                         $estilo_linha = "tabela_content01";
                         foreach ($lista as $item) {
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
@@ -137,6 +142,23 @@ $marca = $this->produto->listarmarca();
                         <th class="tabela_footer" colspan="16">
                             <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
+                            <div style="display: inline">
+                                <span style="margin-left: 15px; color: white; font-weight: bolder;"> Limite: </span>
+                                <select style="width: 50px">
+                                    <option onclick="javascript:window.location.href = ('<?= base_url() ?>estoque/produto/pesquisar/25');" <? if ($limit == 25) {
+                                echo "selected";
+                            } ?>> 25 </option>
+                                    <option onclick="javascript:window.location.href = ('<?= base_url() ?>estoque/produto/pesquisar/50');" <? if ($limit == 50) {
+                                echo "selected";
+                            } ?>> 50 </option>
+                                    <option onclick="javascript:window.location.href = ('<?= base_url() ?>estoque/produto/pesquisar/100');" <? if ($limit == 100) {
+                                echo "selected";
+                            } ?>> 100 </option>
+                                    <option onclick="javascript:window.location.href = ('<?= base_url() ?>estoque/produto/pesquisar/todos');" <? if ($limit == "todos") {
+                                echo "selected";
+                            } ?>> Todos </option>
+                                </select>
+                            </div>
                         </th>
                     </tr>
                 </tfoot>
@@ -196,27 +218,5 @@ $marca = $this->produto->listarmarca();
             }
         });
     });
-//    $(function () {
-//        $('#subclasse_id').change(function () {
-//            if ($(this).val()) {
-//                $('.carregando').show();
-//                var options = '';
-//                $.getJSON('<?= base_url() ?>autocomplete/estoqueprodutosporsubclasse', {subclasse_id: $(this).val(), ajax: true}, function (j) {
-////                                                              options = '<option value="">SELECIONE -></option>';
-//                    for (var c = 0; c < j.length; c++) {
-////                                                                    console.log(j[c].valor_venda,j[c].valor_compra);
-//                        options += '<option value="' + j[c].estoque_produto_id + '" onclick="carregaValor(\'' + j[c].valor_venda + ":" + j[c].valor_compra + '\')">' + j[c].descricao + '</option>';
-//                    }
-//                    $('#produto_id').html(options).show();
-//                    if ($('#configTodos').attr('checked')) {
-//                        configuraTodos();
-//                    }
-//                    $('.carregando').hide();
-//                });
-//            } else {
-//                $('#produto_id').html('<option value="">SELECIONE</option>');
-//            }
-//        });
-//    });
 
 </script>

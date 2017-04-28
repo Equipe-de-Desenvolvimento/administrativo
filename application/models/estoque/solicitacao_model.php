@@ -560,60 +560,47 @@ class solicitacao_model extends Model {
     }
 
     function listarsaidaitem($estoque_solicitacao_id) {
-//        $this->db->select('ep.estoque_saida_id, p.descricao, ep.quantidade');
-//        $this->db->from('tb_estoque_saida ep');
-//        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = ep.produto_id');
-//        $this->db->where('ep.solicitacao_cliente_id', $estoque_solicitacao_id);
-//        $this->db->where('ep.ativo', 'true');
-//        $return = $this->db->get();
-//        return $return->result();
-//
-//
-//        $this->db->select('sc.data_fechamento , sc.data_cadastro , si.estoque_solicitacao_itens_id');
-//        $this->db->from('tb_estoque_solicitacao_cliente sc');
-//        $this->db->join('tb_estoque_solicitacao_itens si', 'si.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id', 'left');
-//        $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
-//        $this->db->orderby('si.estoque_solicitacao_itens_id DESC');
-//        $retorno = $this->db->get()->result();
-////        echo "<pre>";
-////        var_dump($retorno);die;
-//
-//        $this->db->select('data_cadastro');
-//        $this->db->from('tb_estoque_saida ');
-////        $this->db->join('tb_estoque_saida es' , 'es.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id' , 'left');
-//        $this->db->where('estoque_solicitacao_itens_id', $retorno[0]->estoque_solicitacao_itens_id);
-//        $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
-//        $retorno3 = $this->db->get()->result();
-//
-////        var_dump($retorno3);die;
-////        
-////        $datateste = $retorno3[0]->data_cadastro;
-//
-//        if (isset($retorno3[0]->data_cadastro)) {
-//            $data = $retorno3[0]->data_cadastro;
-//        } else {
-//            $data = $retorno[0]->data_cadastro;
-//        }
+        $this->db->select('situacao');
+        $this->db->from('tb_estoque_solicitacao_cliente esc');
+        $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('esc.ativo', 'true');
+        $returno = $this->db->get()->result();
 
-        $this->db->select(' ep.estoque_saida_id,
+        if ($returno[0]->situacao == "FECHADA") {
+
+            $this->db->select(' ep.estoque_saida_id,
                             p.descricao,
                             ep.validade,
                             ep.quantidade,
                             u.descricao as unidade,
                             sum(s.quantidade) as saldo,                           
                             si.quantidade as quantidade_solicitada');
-        $this->db->from('tb_estoque_saida ep');
-        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = ep.produto_id');
-        $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id');
-        $this->db->join('tb_estoque_saldo s', 's.produto_id = ep.produto_id', 'left');
-        $this->db->join('tb_estoque_solicitacao_itens si', 'si.estoque_solicitacao_itens_id = ep.estoque_solicitacao_itens_id', 'left');
-        $this->db->where('ep.solicitacao_cliente_id', $estoque_solicitacao_id);
-        $this->db->where('ep.ativo', 'true');
-//        $this->db->where('s.data_cadastro <=', $retorno[0]->data_cadastro);
-//        $this->db->where('s.data_cadastro <=', $data);
-        $this->db->groupby('ep.estoque_saida_id, p.descricao, ep.validade , u.descricao , si.quantidade');
-        $this->db->orderby('ep.estoque_saida_id');
-        $return = $this->db->get();
+            $this->db->from('tb_estoque_saida ep');
+            $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = ep.produto_id');
+            $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id');
+            $this->db->join('tb_estoque_saldo s', 's.produto_id = ep.produto_id', 'left');
+            $this->db->join('tb_estoque_solicitacao_itens si', 'si.estoque_solicitacao_itens_id = ep.estoque_solicitacao_itens_id', 'left');
+            $this->db->where('ep.solicitacao_cliente_id', $estoque_solicitacao_id);
+            $this->db->where('ep.ativo', 'true');
+            $this->db->groupby('ep.estoque_saida_id, p.descricao, ep.validade , u.descricao , si.quantidade');
+            $this->db->orderby('ep.estoque_saida_id');
+            $return = $this->db->get();
+        } else {
+            $this->db->select('p.descricao,
+                               si.solicitacao_cliente_id,
+                               u.descricao as unidade,
+                               sum(si.quantidade) as quantidade');
+            $this->db->from('tb_estoque_solicitacao_itens si');
+            $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id', 'left');
+            $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id', 'left');
+
+            $this->db->where('si.solicitacao_cliente_id', $estoque_solicitacao_id);
+            $this->db->where('si.ativo', 'true');
+            $this->db->groupby('p.descricao, si.solicitacao_cliente_id, u.descricao');
+            $this->db->orderby('si.solicitacao_cliente_id');
+            $return = $this->db->get();
+        }
+
         return $return->result();
     }
 
@@ -627,12 +614,12 @@ class solicitacao_model extends Model {
                           si.valor');
         $this->db->from('tb_estoque_solicitacao_cliente sc');
         $this->db->join('tb_estoque_solicitacao_itens si', 'si.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id', 'left');
-        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id');
-        $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id');
+        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id', 'left');
+        $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id', 'left');
 
         $this->db->where('sc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('sc.ativo', 'true');
-        $this->db->where('sc.situacao', 'LIBERADA');
+        $this->db->where("(sc.situacao = 'LIBERADA' OR sc.situacao = 'FECHADA')");
         $this->db->orderby('sc.estoque_solicitacao_setor_id');
         $return = $this->db->get();
         return $return->result();

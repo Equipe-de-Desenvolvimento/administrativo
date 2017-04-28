@@ -202,7 +202,7 @@ class Solicitacao extends BaseController {
         $tipoAmbiente = (int) $data["empresa"][0]->ambiente_producao; //1=Produção; 2=Homologação
 
         $data['destinatario'] = $this->notafiscal->listaclientenotafiscal($solicitacao_cliente_id);
-        $data['produtos'] = $this->notafiscal->listarsolicitacaosnota($solicitacao_cliente_id);
+        $data['produtos'] = $this->notafiscal->listarsolicitacaoespelhonota($solicitacao_cliente_id);
 
         if ($this->utilitario->codigo_uf($data['empresa'][0]->codigo_ibge) == $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge)) {
             $data['identificaDestOp'] = '1';
