@@ -46,12 +46,6 @@
                     <td><label>Valor do Frete:</label></td>
                     <td><input type="text" name="valor_frete" id="valor_frete" autocomplete="off" class="texto10" value="<?= @$solicitacao_transportadora->valor_frete; ?>"  onkeyup="validar(this, 'num');" required="true"/></td>
                 </tr>
-                <tr>
-                    <td><label>Entregador:</label></td>
-                    <td>
-                        <input type="hidden" name="entregador_id" id="entregador_id" class="texto10" value="<?= @$solicitacao_transportadora->entregador_id; ?>"/>
-                        <input type="text" name="entregador" id="entregador" class="texto10" value="<?= @$solicitacao_transportadora->entregador; ?>" required="true"/></td>
-                </tr>
             </table>    
             <hr/>
             <button type="submit" name="btnEnviar">Enviar</button>

@@ -27,6 +27,17 @@
                     </dd>
                     <? $medicos = $this->operador_m->listarvendedor(); ?>
                     <dt>
+                        <label>Forma de Pagamento</label>
+                    </dt>
+                    <dd>
+                        <select name="formapagamento" id="formapagamento" class="size3">
+                            <option value="">Selecione</option>
+                            <? foreach ($forma_pagamento as $value) : ?>
+                                <option value="<?= $value->forma_pagamento_id ?>"><?= $value->nome ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
                         <label>Vendedor</label>
                     </dt>
                     <dd>
@@ -38,10 +49,24 @@
                         </select>
                     </dd>
                     <dt>
+                        <label>Entregador</label>
+                    </dt>
+                    <dd>
+                        <select name="entregador" id="setor" class="size4" >
+                            <option value="">Selecione</option>
+                            <? foreach ($entregadores as $value) : ?>
+                                <option value="<?= $value->entregador_id; ?>"><?php echo $value->nome; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
                         <label>&nbsp;</label>
                     </dt>
                     <dd>
                         <input type="checkbox" name="usanota" id="usanota"/><label for="usanota"> Usa NFe</label>
+
+                        <input type="checkbox" name="financeiro" id="financeiro"/><label for="financeiro">Financeiro</label>
+                        <input type="checkbox" name="boleto" id="boleto"/><label for="boleto">Boleto</label>
                     </dd>
                 </dl>    
                 <hr/>

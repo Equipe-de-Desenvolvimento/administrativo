@@ -579,12 +579,12 @@ class Solicitacao extends BaseController {
             $credor_devedor_id = $_POST['credor_devedor_id'];
             $solicitacao_id = $_POST['estoque_solicitacao_id'];
 
-            if ($_POST['formapamento1_boleto'] == 't') {
-                $valor = $_POST['valor1'];
-                $descricao_id = $_POST['formapamento1'];
-                $forma_id = $_POST['forma_pagamento_1'];
-                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
-            }
+//            if ($_POST['formapamento1_boleto'] == 't') {
+//                $valor = $_POST['valor1'];
+//                $descricao_id = $_POST['formapamento1'];
+//                $forma_id = $_POST['forma_pagamento_1'];
+//                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
+//            }
             $this->solicitacao->gravarfinanceirofaturamento();
 
             if ($verifica) {
@@ -761,6 +761,8 @@ class Solicitacao extends BaseController {
         $obj_solicitacao = new solicitacao_model($estoque_solicitacao_id);
         $data['obj'] = $obj_solicitacao;
         $data['setor'] = $this->solicitacao->listarclientes();
+        $data['entregadores'] = $this->solicitacao->listarentregadores();
+        $data['forma_pagamento'] = $this->solicitacao->formadepagamento();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('estoque/solicitacao-form', $data);
     }

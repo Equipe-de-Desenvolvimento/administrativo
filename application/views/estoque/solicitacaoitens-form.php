@@ -23,7 +23,7 @@
                             $parametro = $value->valor_venda . '|' . $value->ipi
                             ?>
                             <option value="<?= $value->estoque_produto_id; ?>"  onclick="carregaValor('<?= $parametro; ?>')">
-                                <?php echo $value->descricao; ?></option>
+                                <?php echo $value->codigo . " - " . $value->descricao; ?></option>
                         <? endforeach; ?>
                     </select>
                 </div>

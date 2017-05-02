@@ -452,7 +452,8 @@ class solicitacao_model extends Model {
     }
 
     function listarprodutos($estoque_solicitacao_id) {
-        $this->db->select('ep.estoque_produto_id,
+        $this->db->select('ep.codigo,
+            ep.estoque_produto_id,
                             ep.descricao,
                             ep.ipi,
                             emp.valor as valor_venda');
@@ -464,6 +465,9 @@ class solicitacao_model extends Model {
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('ep.ativo', 'true');
         $this->db->where('emp.ativo', 'true');
+        $this->db->orderby('ep.descricao');
+        $this->db->orderby('ep.codigo');
+        
         $return = $this->db->get();
         return $return->result();
     }
@@ -815,6 +819,16 @@ class solicitacao_model extends Model {
         return $this->db;
     }
 
+    function listarentregadores() {
+
+        $this->db->select(' es.entregador_id,
+                            es.nome');
+        $this->db->from('tb_entregador es');
+        $this->db->where('es.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarentregador($args = array()) {
         $operador_id = $this->session->userdata('operador_id');
 
@@ -1021,9 +1035,18 @@ class solicitacao_model extends Model {
             if (isset($_POST['usanota'])) {
                 $this->db->set('notafiscal', 't');
             }
+            if (isset($_POST['financeiro'])) {
+                $this->db->set('financeiro', 't');
+            }
+            if (isset($_POST['boleto'])) {
+                $this->db->set('boleto', 't');
+            }
             if (isset($_POST['contrato']) && $_POST['contrato'] != '') {
                 $this->db->set('contrato', 't');
                 $this->db->set('contrato_id', $_POST['contrato']);
+            }
+            if (isset($_POST['formapagamento']) && $_POST['formapagamento'] != '') {
+                $this->db->set('formadepagamento', $_POST['formapagamento']);
             }
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
@@ -1196,7 +1219,6 @@ class solicitacao_model extends Model {
             $_POST['valor_frete'] = str_replace(",", ".", $_POST['valor_frete']);
 
             $this->db->set('transportadora_id', $_POST['transportadora_id']);
-            $this->db->set('entregador_id', $_POST['entregador_id']);
             $this->db->set('solicitacao_cliente_id', $_POST['solicitacao_cliente_id']);
             $this->db->set('volume', $_POST['txtvolume']);
             $this->db->set('peso', $_POST['peso']);

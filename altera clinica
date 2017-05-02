@@ -541,3 +541,7 @@ CREATE TABLE ponto.tb_estoque_marca
   CONSTRAINT tb_estoque_marca_pkey PRIMARY KEY (estoque_marca_id)
 );
 ALTER TABLE ponto.tb_estoque_produto ADD COLUMN marca_id integer;
+
+
+-- Dia 01/05/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente add column entregador integer;
