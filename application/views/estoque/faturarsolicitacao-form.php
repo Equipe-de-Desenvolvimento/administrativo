@@ -26,6 +26,7 @@
                         <tr>
                             <td colspan="10">
                                 <input type="text" style="width:100pt" name="valorafaturar" id="valorafaturar" class="texto01" value="<?= @$solicitacao[0]->valor_total; ?>" readonly />
+                                <!--<input type="hidden" name="financeiro" id="financeiro" class="texto01" value="<?= @$solicitacao_cliente[0]->financeiro; ?>"/>-->
                                 <input type="hidden" name="estoque_solicitacao_id" id="estoque_solicitacao_id" class="texto01" value="<?= @$estoque_solicitacao_id; ?>"/>
                                 <input type="hidden" name="contrato_id" id="contrato_id" class="texto01" value="<?= @$solicitacao_cliente[0]->contrato_id; ?>"/>
                                 <input type="hidden" name="credor_devedor_id" id="credor_devedor_id" class="texto01" value="<?= @$solicitacao_cliente[0]->credor_devedor_id; ?>"/>

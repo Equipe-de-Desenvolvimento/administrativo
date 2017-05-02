@@ -585,7 +585,11 @@ class Solicitacao extends BaseController {
 //                $forma_id = $_POST['forma_pagamento_1'];
 //                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
 //            }
-            $this->solicitacao->gravarfinanceirofaturamento();
+            $solicitacao_cliente = $this->solicitacao->listarsolicitacaofaturamentocliente($_POST['estoque_solicitacao_id']);
+            
+            if($solicitacao_cliente[0]->financeiro == 't'){
+                $this->solicitacao->gravarfinanceirofaturamento();
+            }
 
             if ($verifica) {
                 $data['mensagem'] = 'Faturado com sucesso.';
@@ -593,7 +597,7 @@ class Solicitacao extends BaseController {
                 $data['mensagem'] = 'Erro ao Faturar.';
             }
         } else {
-            $data['mensagem'] = 'Erro ao Faturar.';
+            $data['mensagem'] = 'Erro ao Faturar. Valor total diferente de 0!';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         echo "<script type='text/javascript'> 

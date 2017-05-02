@@ -141,7 +141,7 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         $formasPagamento = $return->result();
 
-
+//echo "<pre>";
         $valorPedido = $faturamento[0]->valor_total;
         if ($valorPedido != '0.00') {
             foreach ($descricaoPagamento as $value) {
@@ -152,19 +152,7 @@ class solicitacao_model extends Model {
                             $valor[] = $faturamento[0]->valor1;
                             $parcelas = $faturamento[0]->parcelas1;
                             $formaPagamento[] = $faturamento[0]->forma_pagamento;
-                        } elseif ($faturamento[0]->forma_pagamento2 == $fP->forma_pagamento_id) {
-                            $valor[] = $faturamento[0]->valor2;
-                            $parcelas = $faturamento[0]->parcelas2;
-                            $formaPagamento[] = $faturamento[0]->forma_pagamento2;
-                        } elseif ($faturamento[0]->forma_pagamento3 == $fP->forma_pagamento_id) {
-                            $valor[] = $faturamento[0]->valor3;
-                            $parcelas = $faturamento[0]->parcelas3;
-                            $formaPagamento[] = $faturamento[0]->forma_pagamento3;
-                        } elseif ($faturamento[0]->forma_pagamento4 == $fP->forma_pagamento_id) {
-                            $valor[] = $faturamento[0]->valor4;
-                            $parcelas = $faturamento[0]->parcelas4;
-                            $formaPagamento[] = $faturamento[0]->forma_pagamento4;
-                        }
+                        } 
                     }
 
                     $classe = "PEDIDO FATURAMENTO";
@@ -174,6 +162,7 @@ class solicitacao_model extends Model {
                         $parcelas = $this->jurosporparcelas($formaPagamento[$x]);
 
                         //FORMA DE PAGAMENTO 'AVISTA'
+                        // O valor 100 se refere a porcentagem de juros cadastrada na parcela.
                         if (count($parcelas) == 1 && $parcelas[0]->valor == '100.00') {
                             $prazo = (int) $parcelas[0]->prazo;
 
@@ -200,7 +189,6 @@ class solicitacao_model extends Model {
                             } else { //CASO HAJA UM PRAZO
                                 $data_receber = date("Y-m-d");
                                 $data_receber = date("Y-m-d", strtotime("+$prazo days", strtotime($data_receber)));
-
                                 $this->db->set('valor', $valor[$x]);
                                 $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
                                 $this->db->set('data', $data_receber);
@@ -223,7 +211,7 @@ class solicitacao_model extends Model {
                                 $valorParcela = $valor[$x] * ($percParcela / 100);
                                 $periodo = $item->dias;
                                 $data_receber = date("Y-m-d", strtotime("+$periodo days", strtotime($data_receber)));
-
+                                
                                 $this->db->set('valor', $valorParcela);
                                 $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
                                 $this->db->set('data', $data_receber);
@@ -420,7 +408,8 @@ class solicitacao_model extends Model {
     function listarsolicitacaofaturamentocliente($estoque_solicitacao_id) {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('esc.contrato_id, 
-                           ec.credor_devedor_id');
+                           ec.credor_devedor_id, 
+                           esc.financeiro');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
