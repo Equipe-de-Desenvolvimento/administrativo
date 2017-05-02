@@ -545,3 +545,7 @@ ALTER TABLE ponto.tb_estoque_produto ADD COLUMN marca_id integer;
 
 -- Dia 01/05/2017
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente add column entregador integer;
+
+-- Dia 02/05/2017
+ALTER TABLE ponto.tb_empresa ADD COLUMN almoxarifado boolean DEFAULT false;
+

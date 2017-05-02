@@ -7,6 +7,7 @@ class empresa_model extends Model {
     var $_razao_social = null;
     var $_cnpj = null;
     var $_celular = null;
+    var $_almoxarifado = null;
     var $_telefone = null;
     var $_tipo_logradouro_id = null;
     var $_logradouro = null;
@@ -131,6 +132,11 @@ class empresa_model extends Model {
             if ($_POST['email'] != '') {
                 $this->db->set('email',$_POST['email']);
             }
+            if (isset($_POST['almoxarifado'])) {
+                $this->db->set('almoxarifado','t');
+            } else{
+                $this->db->set('almoxarifado','f');
+            }
             $this->db->set('telefone', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['telefone']))));
             $this->db->set('celular', str_replace("(", "", str_replace(")", "", str_replace("-", "", $_POST['celular']))));
             if ($_POST['municipio_id'] != '') {
@@ -177,6 +183,7 @@ class empresa_model extends Model {
                                cnpj,
                                celular,
                                telefone,
+                               almoxarifado,
                                cep,
                                logradouro,
                                numero,
@@ -204,6 +211,7 @@ class empresa_model extends Model {
             $this->_empresa_id = $empresa_id;
             $this->_nome = $return[0]->nome;
             $this->_cnpj = $return[0]->cnpj;
+            $this->_almoxarifado = $return[0]->almoxarifado;
             $this->_razao_social = $return[0]->razao_social;
             $this->_celular = $return[0]->celular;
             $this->_telefone = $return[0]->telefone;

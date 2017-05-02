@@ -131,6 +131,12 @@
                             <option value="1" <?= (@$obj->_ambienteProducao == '1') ? 'selected' : '' ?>>Ambiente de Produção</option>
                         </select>
                     </dd>
+                    <dt>
+                        <label>Possui Almoxarifado?</label>
+                    </dt>
+                    <dd>
+                        <input type="checkbox" name="almoxarifado" <?if(@$obj->_almoxarifado == 't'){echo 'checked';} ?>/>
+                    </dd>
                 </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>

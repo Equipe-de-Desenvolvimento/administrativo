@@ -152,7 +152,7 @@ class solicitacao_model extends Model {
                             $valor[] = $faturamento[0]->valor1;
                             $parcelas = $faturamento[0]->parcelas1;
                             $formaPagamento[] = $faturamento[0]->forma_pagamento;
-                        } 
+                        }
                     }
 
                     $classe = "PEDIDO FATURAMENTO";
@@ -211,7 +211,7 @@ class solicitacao_model extends Model {
                                 $valorParcela = $valor[$x] * ($percParcela / 100);
                                 $periodo = $item->dias;
                                 $data_receber = date("Y-m-d", strtotime("+$periodo days", strtotime($data_receber)));
-                                
+
                                 $this->db->set('valor', $valorParcela);
                                 $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
                                 $this->db->set('data', $data_receber);
@@ -409,11 +409,21 @@ class solicitacao_model extends Model {
         $operador_id = $this->session->userdata('operador_id');
         $this->db->select('esc.contrato_id, 
                            ec.credor_devedor_id, 
-                           esc.financeiro');
+                           esc.financeiro,
+                           esc.boleto');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('esc.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function almoxarifadosaida() {
+        $empresa = $this->session->userdata('empresa_id');
+        $this->db->select('almoxarifado');
+        $this->db->from('tb_empresa e');
+        $this->db->where('empresa_id', $empresa);
         $return = $this->db->get();
         return $return->result();
     }
@@ -456,7 +466,7 @@ class solicitacao_model extends Model {
         $this->db->where('emp.ativo', 'true');
         $this->db->orderby('ep.descricao');
         $this->db->orderby('ep.codigo');
-        
+
         $return = $this->db->get();
         return $return->result();
     }
@@ -559,26 +569,26 @@ class solicitacao_model extends Model {
         $this->db->where('esc.ativo', 'true');
         $returno = $this->db->get()->result();
 
-        if ($returno[0]->situacao == "FECHADA") {
-
-            $this->db->select(' ep.estoque_saida_id,
-                            p.descricao,
-                            ep.validade,
-                            ep.quantidade,
-                            u.descricao as unidade,
-                            sum(s.quantidade) as saldo,                           
-                            si.quantidade as quantidade_solicitada');
-            $this->db->from('tb_estoque_saida ep');
-            $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = ep.produto_id');
-            $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id');
-            $this->db->join('tb_estoque_saldo s', 's.produto_id = ep.produto_id', 'left');
-            $this->db->join('tb_estoque_solicitacao_itens si', 'si.estoque_solicitacao_itens_id = ep.estoque_solicitacao_itens_id', 'left');
-            $this->db->where('ep.solicitacao_cliente_id', $estoque_solicitacao_id);
-            $this->db->where('ep.ativo', 'true');
-            $this->db->groupby('ep.estoque_saida_id, p.descricao, ep.validade , u.descricao , si.quantidade');
-            $this->db->orderby('ep.estoque_saida_id');
-            $return = $this->db->get();
-        } else {
+//        if ($returno[0]->situacao == "FECHADA") {
+//
+//            $this->db->select(' ep.estoque_saida_id,
+//                            p.descricao,
+//                            ep.validade,
+//                            ep.quantidade,
+//                            u.descricao as unidade,
+//                            sum(s.quantidade) as saldo,                           
+//                            si.quantidade as quantidade_solicitada');
+//            $this->db->from('tb_estoque_saida ep');
+//            $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = ep.produto_id');
+//            $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id');
+//            $this->db->join('tb_estoque_saldo s', 's.produto_id = ep.produto_id', 'left');
+//            $this->db->join('tb_estoque_solicitacao_itens si', 'si.estoque_solicitacao_itens_id = ep.estoque_solicitacao_itens_id', 'left');
+//            $this->db->where('ep.solicitacao_cliente_id', $estoque_solicitacao_id);
+//            $this->db->where('ep.ativo', 'true');
+//            $this->db->groupby('ep.estoque_saida_id, p.descricao, ep.validade , u.descricao , si.quantidade');
+//            $this->db->orderby('ep.estoque_saida_id');
+//            $return = $this->db->get();
+//        } else {
             $this->db->select('p.descricao,
                                si.solicitacao_cliente_id,
                                u.descricao as unidade,
@@ -592,7 +602,7 @@ class solicitacao_model extends Model {
             $this->db->groupby('p.descricao, si.solicitacao_cliente_id, u.descricao');
             $this->db->orderby('si.solicitacao_cliente_id');
             $return = $this->db->get();
-        }
+//        }
 
         return $return->result();
     }
@@ -682,89 +692,18 @@ class solicitacao_model extends Model {
 
     function listarformapagamentoboleto($solicitacao_cliente_id) {
 
-        $this->db->select('descricao_pagamento,
-                           descricao_pagamento2,
-                           descricao_pagamento3,
-                           descricao_pagamento4,
-                           fs.nome as forma1,
-                           fs2.nome as forma2,
-                           fs3.nome as forma3,
-                           fs4.nome as forma4');
+        $this->db->select('fs.conta,
+                               fs.agencia,
+                               fp.nome as descricao_pagamento,
+                               fp.descricao_forma_pagamento_id,
+                               fs.descricao');
         $this->db->from('tb_estoque_solicitacao_faturamento sf');
-        $this->db->join('tb_forma_pagamento fs', 'fs.forma_pagamento_id = sf.forma_pagamento', 'left');
-        $this->db->join('tb_forma_pagamento fs2', 'fs2.forma_pagamento_id = sf.forma_pagamento2', 'left');
-        $this->db->join('tb_forma_pagamento fs3', 'fs3.forma_pagamento_id = sf.forma_pagamento3', 'left');
-        $this->db->join('tb_forma_pagamento fs4', 'fs4.forma_pagamento_id = sf.forma_pagamento4', 'left');
+        $this->db->join('tb_descricao_forma_pagamento fp', 'fp.descricao_forma_pagamento_id = sf.descricao_pagamento', 'left');
+        $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
         $this->db->where('sf.ativo', 'true');
         $this->db->where('sf.estoque_solicitacao_id', $solicitacao_cliente_id);
         $retorno = $this->db->get()->result();
-
-        $formasPagamento = array();
-        if ($retorno[0]->descricao_pagamento != NULL) {
-            $this->db->select('fs.conta,
-                               fs.agencia,
-                               fp.nome as descricao_pagamento,
-                               fp.descricao_forma_pagamento_id,
-                               fs.descricao');
-            $this->db->from('tb_descricao_forma_pagamento fp');
-            $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento);
-            $this->db->where('fp.boleto', 't');
-            $f = $this->db->get()->result();
-            $f[0]->forma = $retorno[0]->forma1;
-            if (count($f) > 0) {
-                $formasPagamento[] = $f[0];
-            }
-        }
-        if ($retorno[0]->descricao_pagamento2 != NULL) {
-            $this->db->select('fs.conta,
-                               fs.agencia,
-                               fp.nome as descricao_pagamento,
-                               fp.descricao_forma_pagamento_id,
-                               fs.descricao');
-            $this->db->from('tb_descricao_forma_pagamento fp');
-            $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento2);
-            $this->db->where('fp.boleto', 't');
-            $f = $this->db->get()->result();
-            $f[0]->forma = $retorno[0]->forma2;
-            if (count($f) > 0) {
-                $formasPagamento[] = $f[0];
-            }
-        }
-        if ($retorno[0]->descricao_pagamento3 != NULL) {
-            $this->db->select('fs.conta,
-                               fs.agencia,
-                               fp.nome as descricao_pagamento,
-                               fp.descricao_forma_pagamento_id,
-                               fs.descricao');
-            $this->db->from('tb_descricao_forma_pagamento fp');
-            $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento3);
-            $this->db->where('fp.boleto', 't');
-            $f = $this->db->get()->result();
-            $f[0]->forma = $retorno[0]->forma3;
-            if (count($f) > 0) {
-                $formasPagamento[] = $f[0];
-            }
-        }
-        if ($retorno[0]->descricao_pagamento4 != NULL) {
-            $this->db->select('fs.conta,
-                               fs.agencia,
-                               fp.nome as descricao_pagamento,
-                               fp.descricao_forma_pagamento_id,
-                               fs.descricao');
-            $this->db->from('tb_descricao_forma_pagamento fp');
-            $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = fp.conta_id', 'left');
-            $this->db->where('fp.descricao_forma_pagamento_id', $retorno[0]->descricao_pagamento4);
-            $this->db->where('fp.boleto', 't');
-            $f = $this->db->get()->result();
-            $f[0]->forma = $retorno[0]->forma4;
-            if (count($f) > 0) {
-                $formasPagamento[] = $f[0];
-            }
-        }
-        return $formasPagamento;
+        return $retorno;
     }
 
     function listarcontaboleto($forma_pagamento_id) {

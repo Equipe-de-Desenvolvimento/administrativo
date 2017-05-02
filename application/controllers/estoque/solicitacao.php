@@ -147,10 +147,7 @@ class Solicitacao extends BaseController {
 
         $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
         $data['formaspagamento'] = $this->solicitacao->listarformapagamentoboleto($solicitacao_cliente_id);
-//                    die;
-
         if (count($data['formaspagamento']) > 1) {
-//            die;
             $this->loadView('estoque/solicitacaoboleto', $data);
         } else {
             $pagamento_id = $data['formaspagamento'][0]->forma_pagamento_id;
@@ -472,8 +469,6 @@ class Solicitacao extends BaseController {
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
-
-//        echo '<pre>';        var_dump($data);die;
         $html = $this->load->View('estoque/impressaoliberada', $data, true);
         pdf($html);
     }
@@ -578,14 +573,17 @@ class Solicitacao extends BaseController {
             $contrato_id = $_POST['contrato_id'];
             $credor_devedor_id = $_POST['credor_devedor_id'];
             $solicitacao_id = $_POST['estoque_solicitacao_id'];
-
-//            if ($_POST['formapamento1_boleto'] == 't') {
-//                $valor = $_POST['valor1'];
-//                $descricao_id = $_POST['formapamento1'];
-//                $forma_id = $_POST['forma_pagamento_1'];
-//                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
-//            }
+            
             $solicitacao_cliente = $this->solicitacao->listarsolicitacaofaturamentocliente($_POST['estoque_solicitacao_id']);
+            
+            
+
+            if ($solicitacao_cliente[0]->boleto == 't') {
+                $valor = $_POST['valor1'];
+                $descricao_id = $_POST['formapamento1'];
+                $forma_id = $_POST['forma_pagamento_1'];
+                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
+            }
             
             if($solicitacao_cliente[0]->financeiro == 't'){
                 $this->solicitacao->gravarfinanceirofaturamento();

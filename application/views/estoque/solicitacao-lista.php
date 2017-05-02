@@ -7,6 +7,7 @@
     </div>
     <?
     $perfil_id = $this->session->userdata('perfil_id');
+    $almoxarifado = $this->solicitacao->almoxarifadosaida();
     ?>
     <div id="accordion">
         <h3 class="singular"><a href="#">Manter Pedido</a></h3>
@@ -62,7 +63,7 @@
                                     <td class="<?php echo $estilo_linha; ?>"><font color="blue"><b><?= $item->situacao; ?></b></td>
                                 <? }if ($verifica == 3) { ?>
                                     <td class="<?php echo $estilo_linha; ?>"><font color="green"><b><?= $item->situacao; ?></b></td>
-                                <?
+                                    <?
                                 }
                                 if ($item->situacao == 'ABERTA') {
                                     ?>
@@ -70,73 +71,79 @@
                                             <a href="<?= base_url() ?>estoque/solicitacao/carregarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>">Cadastrar</a>
                                         </div>
                                     </td>
-                                <?
+                                    <?
                                 }
                                 if ($item->situacao == 'LIBERADA' && ($perfil_id == 1 || $perfil_id == 8)) {
-                                    if($item->faturado == 'f'){ ?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
-                                            <a onclick="javascript:window.open('<?= base_url() ?>estoque/solicitacao/faturarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=900,height=450');">Finalizar</a>
-                                            
-                                        </div>
-                                    </td>
-                                    <? 
-                                    if ($item->transportadora == 'f'){ ?>
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;">
-                                        <div class="bt_link">                                  
-                                            <a onclick="javascript: window.open('<?= base_url() ?>estoque/solicitacao/gravartransportadora/<?= $item->estoque_solicitacao_setor_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=750,height=400');">Transportadora</a>
-                                        </div> 
-                                    </td>
-                                    
-                                    <? }
-                                    
-                                    } 
-                                    
-                                    if($item->faturado == 't'){?>
-                                    
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
-                                            <a href="<?= base_url() ?>estoque/solicitacao/carregarsaida/<?= $item->estoque_solicitacao_setor_id ?>">Saida</a>
-                                        </div>
-                                    </td>
-                                    <?}?>
-                                    
-                                    <?if($item->faturado == 't' && $item->boleto == 't'){?>
-                                    
-                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
-                                            <a href="<?= base_url() ?>estoque/boleto/carregarboletos/<?= $item->estoque_solicitacao_setor_id ?>">Boleto</a>
-                                        </div>
-                                    </td>
-                                    <?}?>
-                            <?  }
-                            
+                                    if ($item->faturado == 'f') {
+                                        ?>
+                                        <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
+                                                <a onclick="javascript:window.open('<?= base_url() ?>estoque/solicitacao/faturarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=900,height=450');">Finalizar</a>
+
+                                            </div>
+                                        </td>
+                                        <? if ($item->transportadora == 'f') { ?>
+                                            <td class="<?php echo $estilo_linha; ?>" width="60px;">
+                                                <div class="bt_link">                                  
+                                                    <a onclick="javascript: window.open('<?= base_url() ?>estoque/solicitacao/gravartransportadora/<?= $item->estoque_solicitacao_setor_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=750,height=400');">Transportadora</a>
+                                                </div> 
+                                            </td>
+
+                                            <?
+                                        }
+                                    }
+//                                    var_dump($almoxarifado);die;
+                                    if ($almoxarifado[0]->almoxarifado == 't') {
+                                        if ($item->faturado == 't') {
+                                            ?>
+
+                                            <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
+                                                    <a href="<?= base_url() ?>estoque/solicitacao/carregarsaida/<?= $item->estoque_solicitacao_setor_id ?>">Saida</a>
+                                                </div>
+                                            </td>
+                                            <?
+                                        }
+                                    }
+                                    if ($item->faturado == 't' && $item->boleto == 't') {
+                                        ?>
+
+                                        <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
+                                                <a href="<?= base_url() ?>estoque/boleto/carregarboletos/<?= $item->estoque_solicitacao_setor_id ?>">Boleto</a>
+                                            </div>
+                                        </td>
+                                    <?
+                                    }
+                                }
+
                                 if ($item->situacao != 'ABERTA') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;" colspan="">  <div class="bt_link">                                
                                             <a href="<?= base_url() ?>estoque/solicitacao/carregarimpressoes/<?= $item->estoque_solicitacao_setor_id ?>">Impressoes</a>
                                         </div>
                                     </td>
-                                <?
+                                    <?
                                 }
-                                if ($item->situacao == 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8) && $item->notafiscal == 't') {
+                                if (($perfil_id == 1 || $perfil_id == 8) && $item->notafiscal == 't' && $item->faturado == 't') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
                                             <a href="<?= base_url() ?>estoque/notafiscal/carregarnotafiscalopcoes/<?= $item->estoque_solicitacao_setor_id ?>/<?= $item->notafiscal_id ?>">N. Fiscal</a>
                                         </div>
                                     </td>
-                                <? }
+                                    <?
+                                }
                                 if ($item->situacao != 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8) && ($item->faturado != 't')) {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
                                             <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Solicitacao?');" href="<?= base_url() ?>estoque/solicitacao/excluir/<?= $item->estoque_solicitacao_setor_id ?>">Excluir</a>
                                         </div>
                                     </td>
-                                <? } ?>
+        <? } ?>
                             </tr>
 
                         </tbody>
-        <?php
-    }
-}
-?>
+                        <?php
+                    }
+                }
+                ?>
                 <tfoot>
                     <tr>
                         <th class="tabela_footer" colspan="7">
