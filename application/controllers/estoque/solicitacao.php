@@ -568,7 +568,7 @@ class Solicitacao extends BaseController {
 
     function gravarfaturamento($solicitacao_id) {
     
-//            $verifica = $this->solicitacao->gravarfaturamento($solicitacao_id);
+            $verifica = $this->solicitacao->gravarfaturamento($solicitacao_id);
 
 //            $contrato_id = $_POST['contrato_id'];
 //            $credor_devedor_id = $_POST['credor_devedor_id'];

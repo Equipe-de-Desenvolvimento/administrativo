@@ -177,6 +177,7 @@ class solicitacao_model extends Model {
                                 $this->db->set('nome', $value->credor_devedor);
                                 $this->db->set('conta', $value->conta_id);
                                 $this->db->set('observacao', $observacao);
+                                $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
                                 $this->db->insert('tb_entradas');
@@ -185,6 +186,7 @@ class solicitacao_model extends Model {
                                 $this->db->set('data', $data);
                                 $this->db->set('valor', $valor[$x]);
                                 $this->db->set('entrada_id', $entradas_id);
+                                $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('conta', $value->conta_id);
                                 $this->db->set('nome', $value->credor_devedor);
                                 $this->db->set('data_cadastro', $horario);
@@ -196,6 +198,7 @@ class solicitacao_model extends Model {
                                 $this->db->set('valor', $valor[$x]);
                                 $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
                                 $this->db->set('data', $data_receber);
+                                $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('parcela', $parcelas[0]->parcela);
                                 $this->db->set('classe', $classe);
                                 $this->db->set('conta', $value->conta_id);
@@ -220,6 +223,7 @@ class solicitacao_model extends Model {
                                 $this->db->set('valor', $valorParcela);
                                 $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
                                 $this->db->set('data', $data_receber);
+                                $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('parcela', $item->parcela);
                                 $this->db->set('classe', $classe);
                                 $this->db->set('conta', $value->conta_id);

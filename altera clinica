@@ -552,3 +552,7 @@ ALTER TABLE ponto.tb_estoque_solicitacao_cliente add column financeiro boolean D
 -- Dia 02/05/2017
 ALTER TABLE ponto.tb_empresa ADD COLUMN almoxarifado boolean DEFAULT false;
 
+-- Dia 03/05/2017
+ALTER TABLE ponto.tb_financeiro_contasreceber add column pedido_id integer;
+ALTER TABLE ponto.tb_entradas add column pedido_id integer;
+ALTER TABLE ponto.tb_saldo add column pedido_id integer;
