@@ -285,12 +285,22 @@ class boleto_model extends Model {
         }
     }
 
-    function gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id) {
+    function gravarsolicitacaoboleto($solicitacao_id) {
+
+        $this->db->select('descricao_forma_pagamento_id,
+                            nome, 
+                            conta_id, 
+                            credor_devedor, 
+                            cartao,
+                            boleto');
+        $this->db->from('tb_estoque_solicitacao_cliente');
+        $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
+        $return = $this->db->get();
+        $descricaoPagamento = $return->result();
 
         $this->db->set('valor', $valor);
         $this->db->set('solicitacao_cliente_id', $solicitacao_id);
         $this->db->set('descricaopagamento_id', $descricao_id);
-        $this->db->set('formapagamento_id', $forma_id);
         if ($credor_devedor_id != '') {
             $this->db->set('credor_devedor_id', $credor_devedor_id);
         }

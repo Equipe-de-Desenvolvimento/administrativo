@@ -110,18 +110,18 @@ class solicitacao_model extends Model {
         return $query->result();
     }
 
-    function gravarfinanceirofaturamento() {
+    function gravarfinanceirofaturamento($solicitacao_id) {
         /* inicia o mapeamento no banco */
-        $this->db->select('ec.nome, ec.telefone, ec.credor_devedor_id, esf.*');
+        $this->db->select('ec.nome, ec.telefone, ec.credor_devedor_id, esc.formadepagamento, esf.*');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id');
         $this->db->join('tb_estoque_solicitacao_faturamento esf', 'esf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id');
-        $this->db->where("estoque_solicitacao_setor_id", $_POST['estoque_solicitacao_id']);
+        $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
         $faturamento = $this->db->get()->result();
 
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        $observacao = "Pedido: " . $_POST['estoque_solicitacao_id'] . ',  Cliente: ' . $faturamento[0]->nome;
+        $observacao = "Pedido: " . $solicitacao_id . ',  Cliente: ' . $faturamento[0]->nome;
         $data = date("Y-m-d");
 
         $this->db->select('descricao_forma_pagamento_id,
@@ -135,35 +135,39 @@ class solicitacao_model extends Model {
         $return = $this->db->get();
         $descricaoPagamento = $return->result();
 
-        $this->db->select('forma_pagamento_id');
+        $this->db->select('forma_pagamento_id, tipo');
         $this->db->from('tb_forma_pagamento');
         $this->db->where("ativo", 't');
         $return = $this->db->get();
         $formasPagamento = $return->result();
 
+
+        
+        
 //echo "<pre>";
         $valorPedido = $faturamento[0]->valor_total;
         if ($valorPedido != '0.00') {
-            foreach ($descricaoPagamento as $value) {
-                if ($faturamento[0]->descricao_pagamento == $value->descricao_forma_pagamento_id || $faturamento[0]->descricao_pagamento2 == $value->descricao_forma_pagamento_id || $faturamento[0]->descricao_pagamento3 == $value->descricao_forma_pagamento_id || $faturamento[0]->descricao_pagamento4 == $value->descricao_forma_pagamento_id) {
+
                     foreach ($formasPagamento as $fP) {
 
-                        if ($faturamento[0]->forma_pagamento == $fP->forma_pagamento_id) {
-                            $valor[] = $faturamento[0]->valor1;
+                        if ($faturamento[0]->formadepagamento == $fP->forma_pagamento_id) {
+                            $valor[] = $faturamento[0]->valor_total;
+                            $tipo = $fP->tipo;
                             $parcelas = $faturamento[0]->parcelas1;
-                            $formaPagamento[] = $faturamento[0]->forma_pagamento;
-                        }
-                    }
-
+                            $formaPagamento[] = $faturamento[0]->formadepagamento;
+ 
                     $classe = "PEDIDO FATURAMENTO";
 
                     for ($x = 0; $x < count($formaPagamento); $x++) {
+                            
 
                         $parcelas = $this->jurosporparcelas($formaPagamento[$x]);
-
+                        $prazo = (int) $parcelas[0]->prazo;
+//                    var_dump($prazo);
+//                    die;
                         //FORMA DE PAGAMENTO 'AVISTA'
                         // O valor 100 se refere a porcentagem de juros cadastrada na parcela.
-                        if (count($parcelas) == 1 && $parcelas[0]->valor == '100.00') {
+                        if ($tipo == 1) {
                             $prazo = (int) $parcelas[0]->prazo;
 
                             if ($prazo == 0 || $prazo == '') { //CASO SEJA AVISTA E NAO HAJA PRAZO (vai receber o dinheiro no caixa)
@@ -203,6 +207,7 @@ class solicitacao_model extends Model {
                         }
                         //FORMA DE PAGAMENTO 'PARCELADO' ou 'CADASTRO MANUAL'
                         else {
+
                             $data_receber = date("Y-m-d");
                             foreach ($parcelas as $item) {
                                 $obs = "Parc. " . $item->parcela . '/' . count($parcelas) . ' ' . $observacao;
@@ -589,19 +594,19 @@ class solicitacao_model extends Model {
 //            $this->db->orderby('ep.estoque_saida_id');
 //            $return = $this->db->get();
 //        } else {
-            $this->db->select('p.descricao,
+        $this->db->select('p.descricao,
                                si.solicitacao_cliente_id,
                                u.descricao as unidade,
                                sum(si.quantidade) as quantidade');
-            $this->db->from('tb_estoque_solicitacao_itens si');
-            $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id', 'left');
-            $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id', 'left');
+        $this->db->from('tb_estoque_solicitacao_itens si');
+        $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id', 'left');
+        $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id', 'left');
 
-            $this->db->where('si.solicitacao_cliente_id', $estoque_solicitacao_id);
-            $this->db->where('si.ativo', 'true');
-            $this->db->groupby('p.descricao, si.solicitacao_cliente_id, u.descricao');
-            $this->db->orderby('si.solicitacao_cliente_id');
-            $return = $this->db->get();
+        $this->db->where('si.solicitacao_cliente_id', $estoque_solicitacao_id);
+        $this->db->where('si.ativo', 'true');
+        $this->db->groupby('p.descricao, si.solicitacao_cliente_id, u.descricao');
+        $this->db->orderby('si.solicitacao_cliente_id');
+        $return = $this->db->get();
 //        }
 
         return $return->result();
@@ -908,39 +913,33 @@ class solicitacao_model extends Model {
             return 0;
     }
 
-    function gravarfaturamento() {
+    function gravarfaturamento($solicitacao_id) {
         try {
-            $valor1 = $_POST['valor1'];
-            $desconto = $_POST['desconto'];
 
+            $this->db->select('formadepagamento');
+            $this->db->from('tb_estoque_solicitacao_cliente');
+            $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
+            $return = $this->db->get();
+            $descricaoPagamento = $return->result();
+            $formadepagamento = $descricaoPagamento[0]->formadepagamento;
             /* inicia o mapeamento no banco */
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 
-            if ($_POST['formapamento1'] != '') {
-                $this->db->set('descricao_pagamento', $_POST['formapamento1']);
-                $this->db->set('forma_pagamento', $_POST['forma_pagamento_1']);
-                $this->db->set('valor1', str_replace(",", ".", $valor1));
-//                $this->db->set('parcelas1', $_POST['parcela1']);
+            if ($formadepagamento != '') {
+                $this->db->set('forma_pagamento', $formadepagamento);
             }
 
-            $this->db->set('desconto', $desconto);
-            if ((float) $desconto != 0) {
-                $this->db->set('data_desconto', date("Y-m-d"));
-            }
-            $this->db->set('valor_total', $_POST['novovalortotal']);
+
             $this->db->set('data_faturamento', $horario);
             $this->db->set('operador_faturamento', $operador_id);
             $this->db->set('faturado', 't');
-            $this->db->where('estoque_solicitacao_id', $_POST['estoque_solicitacao_id']);
+            $this->db->where('estoque_solicitacao_id', $solicitacao_id);
             $this->db->update('tb_estoque_solicitacao_faturamento');
-            if ($_POST['formapamento1_boleto'] == 't') {
-                $this->db->set('boleto', 't');
-            } else {
-                $this->db->set('boleto', 'f');
-            }
+
+
             $this->db->set('faturado', 't');
-            $this->db->where('estoque_solicitacao_setor_id', $_POST['estoque_solicitacao_id']);
+            $this->db->where('estoque_solicitacao_setor_id', $solicitacao_id);
             $this->db->update('tb_estoque_solicitacao_cliente');
 
             $erro = $this->db->_error_message();

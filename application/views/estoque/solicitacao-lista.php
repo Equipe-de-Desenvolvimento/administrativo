@@ -77,7 +77,7 @@
                                     if ($item->faturado == 'f') {
                                         ?>
                                         <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
-                                                <a onclick="javascript:window.open('<?= base_url() ?>estoque/solicitacao/faturarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=900,height=450');">Finalizar</a>
+                                                <a href="<?= base_url() ?>estoque/solicitacao/gravarfaturamento/<?= $item->estoque_solicitacao_setor_id ?>">Finalizar</a>
 
                                             </div>
                                         </td>
