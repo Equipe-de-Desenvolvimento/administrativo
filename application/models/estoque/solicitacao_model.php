@@ -119,6 +119,8 @@ class solicitacao_model extends Model {
         $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
         $faturamento = $this->db->get()->result();
 
+        $cliente = $faturamento[0]->credor_devedor_id;
+
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
         $observacao = "Pedido: " . $solicitacao_id . ',  Cliente: ' . $faturamento[0]->nome;
@@ -142,24 +144,24 @@ class solicitacao_model extends Model {
         $formasPagamento = $return->result();
 
 
-        
-        
+
+
 //echo "<pre>";
         $valorPedido = $faturamento[0]->valor_total;
         if ($valorPedido != '0.00') {
 
-                    foreach ($formasPagamento as $fP) {
+            foreach ($formasPagamento as $fP) {
 
-                        if ($faturamento[0]->formadepagamento == $fP->forma_pagamento_id) {
-                            $valor[] = $faturamento[0]->valor_total;
-                            $tipo = $fP->tipo;
-                            $parcelas = $faturamento[0]->parcelas1;
-                            $formaPagamento[] = $faturamento[0]->formadepagamento;
- 
+                if ($faturamento[0]->formadepagamento == $fP->forma_pagamento_id) {
+                    $valor[] = $faturamento[0]->valor_total;
+                    $tipo = $fP->tipo;
+                    $parcelas = $faturamento[0]->parcelas1;
+                    $formaPagamento[] = $faturamento[0]->formadepagamento;
+
                     $classe = "PEDIDO FATURAMENTO";
 
                     for ($x = 0; $x < count($formaPagamento); $x++) {
-                            
+
 
                         $parcelas = $this->jurosporparcelas($formaPagamento[$x]);
                         $prazo = (int) $parcelas[0]->prazo;
@@ -174,8 +176,8 @@ class solicitacao_model extends Model {
                                 $this->db->set('data', $data);
                                 $this->db->set('valor', $valor[$x]);
                                 $this->db->set('classe', $classe);
-                                $this->db->set('nome', $value->credor_devedor);
-                                $this->db->set('conta', $value->conta_id);
+                                $this->db->set('tipo', 'PEDIDO');
+                                $this->db->set('nome', $cliente);
                                 $this->db->set('observacao', $observacao);
                                 $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('data_cadastro', $horario);
@@ -187,8 +189,7 @@ class solicitacao_model extends Model {
                                 $this->db->set('valor', $valor[$x]);
                                 $this->db->set('entrada_id', $entradas_id);
                                 $this->db->set('pedido_id', $solicitacao_id);
-                                $this->db->set('conta', $value->conta_id);
-                                $this->db->set('nome', $value->credor_devedor);
+                                $this->db->set('nome', $cliente);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
                                 $this->db->insert('tb_saldo');
@@ -196,12 +197,12 @@ class solicitacao_model extends Model {
                                 $data_receber = date("Y-m-d");
                                 $data_receber = date("Y-m-d", strtotime("+$prazo days", strtotime($data_receber)));
                                 $this->db->set('valor', $valor[$x]);
-                                $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
+                                $this->db->set('devedor', $cliente);
+                                $this->db->set('tipo', 'PEDIDO');
                                 $this->db->set('data', $data_receber);
                                 $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('parcela', $parcelas[0]->parcela);
                                 $this->db->set('classe', $classe);
-                                $this->db->set('conta', $value->conta_id);
                                 $this->db->set('observacao', $observacao);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
@@ -221,12 +222,12 @@ class solicitacao_model extends Model {
                                 $data_receber = date("Y-m-d", strtotime("+$periodo days", strtotime($data_receber)));
 
                                 $this->db->set('valor', $valorParcela);
-                                $this->db->set('devedor', $faturamento[0]->credor_devedor_id);
+                                $this->db->set('devedor', $cliente);
+                                $this->db->set('tipo', 'PEDIDO');
                                 $this->db->set('data', $data_receber);
                                 $this->db->set('pedido_id', $solicitacao_id);
                                 $this->db->set('parcela', $item->parcela);
                                 $this->db->set('classe', $classe);
-                                $this->db->set('conta', $value->conta_id);
                                 $this->db->set('observacao', $obs);
                                 $this->db->set('data_cadastro', $horario);
                                 $this->db->set('operador_cadastro', $operador_id);
