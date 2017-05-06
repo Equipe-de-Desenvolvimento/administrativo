@@ -73,6 +73,17 @@
                         </select>
                     </dd>
                     <dt>
+                        <label>Descrição de Pagamento</label>
+                    </dt>
+                    <dd>
+                        <select name="descricaopagamento" id="descricaopagamento" class="size3" required="">
+                            <option value="">Selecione</option>
+                            <? foreach ($descricao_pagamento as $value) : ?>
+                                <option value="<?= $value->descricao_forma_pagamento_id ?>"><?= $value->nome ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
                         <label>Observa&ccedil;&atilde;o</label>
                     </dt>
                     <dd class="dd_texto">

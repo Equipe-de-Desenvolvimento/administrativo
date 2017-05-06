@@ -194,7 +194,15 @@ class contrato_model extends Model {
     }
 
     function faturarcontrato($estoque_contrato_id) {
-        $this->db->select('valor, parcela, ecp.data, credor_devedor_id, ec.numero_contrato, ec.conta_id, fcd.razao_social, tc.tipo_movimentacao');
+        $this->db->select('valor, 
+                           parcela, 
+                           ecp.data, 
+                           credor_devedor_id, 
+                           ec.numero_contrato, 
+                           ec.conta_id, 
+                           fcd.razao_social, 
+                           tc.tipo_movimentacao,
+                           ec.descricaopagamento_id');
         $this->db->from('tb_estoque_contrato_pagamento ecp');
         $this->db->join('tb_estoque_contrato ec', 'ec.estoque_contrato_id = ecp.contrato_id');
         $this->db->join('tb_estoque_tipo_contrato tc', 'tc.estoque_tipo_contrato_id = ec.tipo_contrato_id');
@@ -202,6 +210,8 @@ class contrato_model extends Model {
         $this->db->where('ecp.ativo', 'true');
         $this->db->where('contrato_id', $estoque_contrato_id);
         $parcelas = $this->db->get()->result();
+//        echo "<pre>";
+//        var_dump($parcelas);die;
 
         $observacao = "Contrato de Num: " . $parcelas[0]->numero_contrato . ',  Credor/Devedor: ' . $parcelas[0]->razao_social;
         $classe = "CONTRATO";
@@ -215,43 +225,20 @@ class contrato_model extends Model {
                     return true;
                 }
 
-//                if (strtotime($item->data) <= strtotime($data)) {
-//
-//                    //CASO ALGUMA PARCELA SEJA ANTERIOR AO MÊS ATUAL
-//                    $this->db->set('data', $item->data);
-//                    $this->db->set('valor', $item->valor);
-//                    $this->db->set('classe', $classe);
-//                    $this->db->set('nome', $item->credor_devedor_id);
-//                    $this->db->set('conta', $item->conta_id);
-//                    $this->db->set('observacao', $observacao);
-//                    $this->db->set('data_cadastro', $horario);
-//                    $this->db->set('operador_cadastro', $operador_id);
-//                    $this->db->insert('tb_entradas');
-//                    $entradas_id = $this->db->insert_id();
-//
-//                    $this->db->set('data', $item->data);
-//                    $this->db->set('valor', $item->valor);
-//                    $this->db->set('entrada_id', $entradas_id);
-//                    $this->db->set('conta', $item->conta_id);
-//                    $this->db->set('nome', $item->credor_devedor_id);
-//                    $this->db->set('data_cadastro', $horario);
-//                    $this->db->set('operador_cadastro', $operador_id);
-//                    $this->db->insert('tb_saldo');
-//                } else {
+                //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contasreceber
+                $obs = "Parc. " . $item->parcela . '/' . count($parcelas) . ' ' . $observacao;
 
-                    //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contasreceber
-                    $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
-                    
-                    $this->db->set('valor', $item->valor);
-                    $this->db->set('devedor', $item->credor_devedor_id);
-                    $this->db->set('data', $item->data);
-                    $this->db->set('parcela', $item->parcela);
-                    $this->db->set('classe', $classe);
-                    $this->db->set('conta', $item->conta_id);
-                    $this->db->set('observacao', $obs);
-                    $this->db->set('data_cadastro', $horario);
-                    $this->db->set('operador_cadastro', $operador_id);
-                    $this->db->insert('tb_financeiro_contasreceber');
+                $this->db->set('valor', $item->valor);
+                $this->db->set('devedor', $item->credor_devedor_id);
+                $this->db->set('data', $item->data);
+                $this->db->set('parcela', $item->parcela);
+                $this->db->set('classe', $classe);
+//                $this->db->set('descricaopagamento', $item->descricaopagamento);
+                $this->db->set('conta', $item->conta_id);
+                $this->db->set('observacao', $obs);
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_financeiro_contasreceber');
 //                }
             }
         } else {
@@ -260,47 +247,24 @@ class contrato_model extends Model {
                     return true;
                 }
 
-//                if (strtotime($item->data) <= strtotime($data)) {
-//
-//                    //CASO ALGUMA PARCELA SEJA ANTERIOR AO MÊS ATUAL
-//                    $this->db->set('data', $item->data);
-//                    $this->db->set('valor', $item->valor);
-//                    $this->db->set('classe', $classe);
-//                    $this->db->set('nome', $item->credor_devedor_id);
-//                    $this->db->set('conta', $item->conta_id);
-//                    $this->db->set('observacao', $observacao);
-//                    $this->db->set('data_cadastro', $horario);
-//                    $this->db->set('operador_cadastro', $operador_id);
-//                    $this->db->insert('tb_saidas');
-//                    $saida_id = $this->db->insert_id();
-//
-//                    $this->db->set('data', $item->data);
-//                    $this->db->set('valor', -((int)$item->valor));
-//                    $this->db->set('entrada_id', $saida_id);
-//                    $this->db->set('conta', $item->conta_id);
-//                    $this->db->set('nome', $item->credor_devedor_id);
-//                    $this->db->set('data_cadastro', $horario);
-//                    $this->db->set('operador_cadastro', $operador_id);
-//                    $this->db->insert('tb_saldo');
-//                } else {
 
-                    //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contaspagar
-                    $obs = "Parc. ".$item->parcela.'/'.count($parcelas) . ' '. $observacao ;
-                    
-                    $this->db->set('valor', $item->valor);
-                    $this->db->set('credor', $item->credor_devedor_id);
-                    $this->db->set('data', $item->data);
-                    $this->db->set('parcela', $item->parcela);
-                    $this->db->set('numero_parcela', count($parcelas) );
-                    $this->db->set('classe', $classe);
-                    $this->db->set('conta', $item->conta_id);
-                    $this->db->set('observacao', $obs);
-                    $this->db->set('data_cadastro', $horario);
-                    $this->db->set('operador_cadastro', $operador_id);
-                    $this->db->insert('tb_financeiro_contaspagar');
+                //PARCELAS QUE SÃO POSTERIORES A DATA ATUAL IRÃO PARA A tb_financeiro_contaspagar
+                $obs = "Parc. " . $item->parcela . '/' . count($parcelas) . ' ' . $observacao;
+
+                $this->db->set('valor', $item->valor);
+                $this->db->set('credor', $item->credor_devedor_id);
+                $this->db->set('data', $item->data);
+                $this->db->set('parcela', $item->parcela);
+                $this->db->set('numero_parcela', count($parcelas));
+                $this->db->set('classe', $classe);
+//                $this->db->set('descricaopagamento', $item->descricaopagamento);
+                $this->db->set('conta', $item->conta_id);
+                $this->db->set('observacao', $obs);
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_financeiro_contaspagar');
 //                }
             }
-       
         }
         $this->db->set('faturado', 't');
         $this->db->set('data_faturamento', $horario);

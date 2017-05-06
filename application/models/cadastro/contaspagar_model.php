@@ -232,6 +232,7 @@ class contaspagar_model extends Model {
             $this->db->set('tipo', $tipo);
             $this->db->set('classe', $_POST['classe']);
             $this->db->set('conta', $_POST['conta']);
+            $this->db->set('descricaopagamento', $_POST['descricaopagamento']);
             $this->db->set('tipo_numero', $_POST['tiponumero']);
             $this->db->set('numero_parcela', $_POST['repitir']);
             $this->db->set('observacao', $_POST['Observacao']);

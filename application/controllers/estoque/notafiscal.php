@@ -371,7 +371,12 @@ class Notafiscal extends BaseController {
 
         // VALIDA O XML POR MEIO DE UM SCHEMA XSD
         require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/validaXml.php');
-
+        if ($validacaoXSD) {
+//            echo $mensagem;die;
+            $this->session->set_flashdata('message', $mensagem); // Variavel criada dentro de validaXml.php
+            redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/{$solicitacao_cliente_id}/{$notafiscal_id}");
+        }
+//        die;
         //Salvando o XML em um arquivo
         $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
         chmod($caminho, 0777);
@@ -449,10 +454,10 @@ class Notafiscal extends BaseController {
     }
 
     function enviaremail() {
-        
+
         $notafiscal_id = $_POST['notafiscal_id'];
         $solicitacao_cliente_id = $_POST['solicitacao_id'];
-        
+
         $notafiscal = $this->notafiscal->instanciarnotafiscal($_POST['notafiscal_id']);
         $this->load->library('My_phpmailer');
         $mail = new PHPMailer(true);
@@ -473,7 +478,7 @@ class Notafiscal extends BaseController {
         $mail->isHTML(true);                                  // Configura o formato do email como HTML
         $mail->Subject = 'NFe ' . $notafiscal[0]->chave_nfe;
         $mail->Body = $_POST['texto'];
-        
+
         if (isset($_POST['danfe'])) {
             $mail->AddAttachment("./upload/nfe/$solicitacao_cliente_id/validada/" . $notafiscal[0]->chave_nfe . '-danfe.pdf', $notafiscal[0]->chave_nfe . '-danfe.pdf');
         }
@@ -481,13 +486,13 @@ class Notafiscal extends BaseController {
             $mail->AddAttachment("./upload/nfe/$solicitacao_cliente_id/validada/" . $notafiscal[0]->chave_nfe . '-protNFe.xml', $notafiscal[0]->chave_nfe . '-protNFe.xml');
         }
 
-        if(!$mail->Send()) {           
+        if (!$mail->Send()) {
             $mensagem = "Erro: " . $mail->ErrorInfo;
         } else {
             $mensagem = "Email enviado com sucesso!";
         }
-        
-        
+
+
         $this->session->set_flashdata('message', $mensagem);
         redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
     }
@@ -522,16 +527,20 @@ class Notafiscal extends BaseController {
 
             $notafiscal = $this->notafiscal->instanciarnotafiscal($notafiscal_id);
 
-            $chave = $notafiscal[0]->chave_nfe;
-            $numProtocolo = $notafiscal[0]->numero_protocolo;
-            $modelo = $notafiscal[0]->modelo_nf;
-            $tpAmbiente = $notafiscal[0]->tipo_ambiente;
-            $motivo = $_POST['txtmotivo'];
+            if ($notafiscal[0]->enviada == 't') {
+                $chave = $notafiscal[0]->chave_nfe;
+                $numProtocolo = $notafiscal[0]->numero_protocolo;
+                $modelo = $notafiscal[0]->modelo_nf;
+                $tpAmbiente = $notafiscal[0]->tipo_ambiente;
+                $motivo = $_POST['txtmotivo'];
 
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
-            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/cancelaNfe.php');
-
-            $data['mensagem'] = 'Cancelamento Efetuado com sucesso.';
+                require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+                require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/cancelaNfe.php');
+                $data['mensagem'] = 'Cancelamento Efetuado com sucesso.';
+            }
+            else{
+                $data['mensagem'] = 'Operação cancelada. Nota Fiscal ainda não foi enviada para a SEFAZ.';
+            }
             $this->session->set_flashdata('message', $data['mensagem']);
             redirect(base_url() . "estoque/notafiscal/carregarnotafiscalopcoes/$solicitacao_cliente_id/$notafiscal_id");
         }

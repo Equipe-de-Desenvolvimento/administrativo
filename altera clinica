@@ -556,3 +556,15 @@ ALTER TABLE ponto.tb_empresa ADD COLUMN almoxarifado boolean DEFAULT false;
 ALTER TABLE ponto.tb_financeiro_contasreceber add column pedido_id integer;
 ALTER TABLE ponto.tb_entradas add column pedido_id integer;
 ALTER TABLE ponto.tb_saldo add column pedido_id integer;
+
+-- Dia 04/05/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente add column descricaopagamento integer;
+
+-- Dia 06/05/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN cancelada boolean DEFAULT false;
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN motivo_cancelamento character varying;
+
+ALTER TABLE ponto.tb_entradas add column descricaopagamento integer;
+ALTER TABLE ponto.tb_financeiro_contasreceber add column descricaopagamento integer;
+ALTER TABLE ponto.tb_financeiro_contaspagar add column descricaopagamento integer;
+ALTER TABLE ponto.tb_saidas add column descricaopagamento integer;

@@ -428,8 +428,8 @@ class Solicitacao extends BaseController {
         $data['usuario'] = $this->solicitacao->usuarioemitente();
 //        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
         $html = $this->load->View('estoque/impressaosaida', $data, true);
-        
-        pdf($html, null, null,null,'',true);
+
+        pdf($html, null, null, null, '', true);
     }
 
     function imprimirsimples($estoque_solicitacao_id) {
@@ -444,7 +444,7 @@ class Solicitacao extends BaseController {
         $data['usuario'] = $this->solicitacao->usuarioemitente();
 //        $this->load->View('estoque/impressaosaidasimples', $data);
         $html = $this->load->View('estoque/impressaosaidasimples', $data, true);
-        pdf($html, null, null,null,'',true);
+        pdf($html, null, null, null, '', true);
     }
 
     function imprimirliberadasimples($estoque_solicitacao_id) {
@@ -457,7 +457,6 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
         $html = $this->load->View('estoque/impressaoliberadasimples', $data, true);
         pdf($html);
-        
     }
 
     function imprimirliberada($estoque_solicitacao_id) {
@@ -567,33 +566,31 @@ class Solicitacao extends BaseController {
     }
 
     function gravarfaturamento($solicitacao_id) {
-    
-            $verifica = $this->solicitacao->gravarfaturamento($solicitacao_id);
+
+        $verifica = $this->solicitacao->gravarfaturamento($solicitacao_id);
 
 //            $contrato_id = $_POST['contrato_id'];
 //            $credor_devedor_id = $_POST['credor_devedor_id'];
 //            $solicitacao_id = $_POST['estoque_solicitacao_id'];
 //            
-            $solicitacao_cliente = $this->solicitacao->listarsolicitacaofaturamentocliente($solicitacao_id);
+        $solicitacao_cliente = $this->solicitacao->listarsolicitacaofaturamentocliente($solicitacao_id);
 
-            
+        //dar saida estoque
+        $this->solicitacao->finalizarsaidapedido($solicitacao_id);
 
-//            if ($solicitacao_cliente[0]->boleto == 't') {
-//                $valor = $_POST['valor1'];
-//                $descricao_id = $_POST['formapamento1'];
-//                $forma_id = $_POST['forma_pagamento_1'];
-//                $verifica = $this->boleto->gravarsolicitacaoboleto($valor, $solicitacao_id, $descricao_id, $forma_id, $credor_devedor_id, $contrato_id);
-//            }
-            
-            if($solicitacao_cliente[0]->financeiro == 't'){
-                $this->solicitacao->gravarfinanceirofaturamento($solicitacao_id);
-            }
+        if ($solicitacao_cliente[0]->boleto == 't') {
+            $verifica = $this->boleto->gravarsolicitacaoboleto($solicitacao_id);
+        }
 
-            if ($verifica) {
-                $data['mensagem'] = 'Faturado com sucesso.';
-            } else {
-                $data['mensagem'] = 'Erro ao Faturar.';
-            }
+        if ($solicitacao_cliente[0]->financeiro == 't') {
+            $this->solicitacao->gravarfinanceirofaturamento($solicitacao_id);
+        }
+
+        if ($verifica) {
+            $data['mensagem'] = 'Finalizado com sucesso.';
+        } else {
+            $data['mensagem'] = 'Erro ao Finalizar.';
+        }
 //        } else {
 //            $data['mensagem'] = 'Erro ao Faturar. Valor total diferente de 0!';
 //        }
@@ -601,6 +598,29 @@ class Solicitacao extends BaseController {
         echo "<script type='text/javascript'> 
                     window.close();
                 </script>";
+        redirect(base_url() . "estoque/solicitacao");
+    }
+
+    function carregarcancelarsolicitacao($estoque_solicitacao_id) {
+        $data['solicitacao_id'] = $estoque_solicitacao_id;
+        $data['solicitacao'] = $this->solicitacao->usanotafiscal($estoque_solicitacao_id);
+        $this->loadview('estoque/cancelarpedido-form', $data);
+    }
+
+    function cancelarsolicitacao() {
+        if ($_POST['notafiscal'] == 't') {
+            $config = $this->geraconfignfephp($_POST['txtsolicitacao_id']);
+            $this->solicitacao->cancelarnotafiscal($_POST['txtsolicitacao_id'], $config);
+        }
+//        var_dump($_POST['txtsolicitacao_id']);die;
+        if ($_POST['financeiro'] == 't') {
+            $this->solicitacao->cancelarsolicitacaofinanceiro($_POST['txtsolicitacao_id']);
+        }
+
+        $this->solicitacao->cancelarpedido($_POST['txtsolicitacao_id']);
+
+        $data['mensagem'] = 'Pedido cancelado com sucesso.';
+        $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/solicitacao");
     }
 
@@ -766,6 +786,7 @@ class Solicitacao extends BaseController {
         $data['setor'] = $this->solicitacao->listarclientes();
         $data['entregadores'] = $this->solicitacao->listarentregadores();
         $data['forma_pagamento'] = $this->solicitacao->formadepagamento();
+        $data['descricao_pagamento'] = $this->solicitacao->descricaodepagamento();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('estoque/solicitacao-form', $data);
     }

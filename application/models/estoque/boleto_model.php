@@ -287,31 +287,45 @@ class boleto_model extends Model {
 
     function gravarsolicitacaoboleto($solicitacao_id) {
 
-        $this->db->select('descricao_forma_pagamento_id,
-                            nome, 
-                            conta_id, 
-                            credor_devedor, 
-                            cartao,
-                            boleto');
+        $this->db->select("descricaopagamento,
+                            contrato_id,
+                            boleto");
         $this->db->from('tb_estoque_solicitacao_cliente');
         $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
         $return = $this->db->get();
-        $descricaoPagamento = $return->result();
-
-        $this->db->set('valor', $valor);
-        $this->db->set('solicitacao_cliente_id', $solicitacao_id);
-        $this->db->set('descricaopagamento_id', $descricao_id);
-        if ($credor_devedor_id != '') {
-            $this->db->set('credor_devedor_id', $credor_devedor_id);
+        $retorno = $return->result();
+        
+        $this->db->select("esi.quantidade, esi.valor as valor_venda");
+        $this->db->from('tb_estoque_solicitacao_itens esi');
+        $this->db->where("solicitacao_cliente_id", $solicitacao_id);
+        $this->db->where("ativo", 't');
+        $return = $this->db->get();
+        $retorno2 = $return->result();
+        
+        $valortotal = 0;
+        foreach ($retorno2 as $item) {
+            //calcula valor total
+            $v = (float) $item->valor_venda;
+            $a = (int) str_replace('.', '', $item->quantidade);
+            $preco = (float) $a * $v;
+            $valortotal += $preco;
         }
-        if ($contrato_id != '') {
-            $this->db->set('contrato_id', $contrato_id);
+
+        $this->db->set('valor', $valortotal);
+        $this->db->set('solicitacao_cliente_id', $solicitacao_id);
+        $this->db->set('descricaopagamento_id', $retorno[0]->descricaopagamento);
+//        if ($retorno[0]->credor_devedor != '') {
+//            $this->db->set('credor_devedor_id', $retorno[0]->credor_devedor);
+//        }
+        if ($retorno[0]->contrato_id != '') {
+            $this->db->set('contrato_id', $retorno[0]->contrato_id);
         }
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
         $this->db->set('data_cadastro', $horario);
         $this->db->set('operador_cadastro', $operador_id);
         $this->db->insert('tb_estoque_boleto');
+        return true;
     }
 
     function excluircontratos($operado_contrato) {

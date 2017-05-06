@@ -112,129 +112,102 @@ class solicitacao_model extends Model {
 
     function gravarfinanceirofaturamento($solicitacao_id) {
         /* inicia o mapeamento no banco */
-        $this->db->select('ec.nome, ec.telefone, ec.credor_devedor_id, esc.formadepagamento, esf.*');
+        $this->db->select('ec.nome, ec.telefone, 
+                           ec.credor_devedor_id, 
+                           esc.descricaopagamento, 
+                           esc.formadepagamento, 
+                           fp.tipo,
+                           esf.*');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id');
+        $this->db->join('tb_descricao_forma_pagamento dfp', 'dfp.descricao_forma_pagamento_id = esc.descricaopagamento');
+        $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = esc.formadepagamento', 'left');
         $this->db->join('tb_estoque_solicitacao_faturamento esf', 'esf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id');
         $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
         $faturamento = $this->db->get()->result();
 
         $cliente = $faturamento[0]->credor_devedor_id;
-
-        $horario = date("Y-m-d H:i:s");
-        $operador_id = $this->session->userdata('operador_id');
-        $observacao = "Pedido: " . $solicitacao_id . ',  Cliente: ' . $faturamento[0]->nome;
-        $data = date("Y-m-d");
-
-        $this->db->select('descricao_forma_pagamento_id,
-                            nome, 
-                            conta_id, 
-                            credor_devedor, 
-                            cartao,
-                            boleto');
-        $this->db->from('tb_descricao_forma_pagamento');
-        $this->db->where("ativo", 't');
-        $return = $this->db->get();
-        $descricaoPagamento = $return->result();
-
-        $this->db->select('forma_pagamento_id, tipo');
-        $this->db->from('tb_forma_pagamento');
-        $this->db->where("ativo", 't');
-        $return = $this->db->get();
-        $formasPagamento = $return->result();
-
-
-
-
-//echo "<pre>";
         $valorPedido = $faturamento[0]->valor_total;
+
         if ($valorPedido != '0.00') {
+            $valor = $faturamento[0]->valor_total;
+            $tipo = $faturamento[0]->tipo;
+            $parcelas = $faturamento[0]->parcelas1;
 
-            foreach ($formasPagamento as $fP) {
-
-                if ($faturamento[0]->formadepagamento == $fP->forma_pagamento_id) {
-                    $valor[] = $faturamento[0]->valor_total;
-                    $tipo = $fP->tipo;
-                    $parcelas = $faturamento[0]->parcelas1;
-                    $formaPagamento[] = $faturamento[0]->formadepagamento;
-
-                    $classe = "PEDIDO FATURAMENTO";
-
-                    for ($x = 0; $x < count($formaPagamento); $x++) {
+            $classe = "PEDIDO FATURAMENTO";
 
 
-                        $parcelas = $this->jurosporparcelas($formaPagamento[$x]);
-                        $prazo = (int) $parcelas[0]->prazo;
-//                    var_dump($prazo);
-//                    die;
-                        //FORMA DE PAGAMENTO 'AVISTA'
-                        // O valor 100 se refere a porcentagem de juros cadastrada na parcela.
-                        if ($tipo == 1) {
-                            $prazo = (int) $parcelas[0]->prazo;
+            $parcelas = $this->jurosporparcelas($faturamento[0]->formadepagamento);
+            $prazo = (int) $parcelas[0]->prazo;
 
-                            if ($prazo == 0 || $prazo == '') { //CASO SEJA AVISTA E NAO HAJA PRAZO (vai receber o dinheiro no caixa)
-                                $this->db->set('data', $data);
-                                $this->db->set('valor', $valor[$x]);
-                                $this->db->set('classe', $classe);
-                                $this->db->set('tipo', 'PEDIDO');
-                                $this->db->set('nome', $cliente);
-                                $this->db->set('observacao', $observacao);
-                                $this->db->set('pedido_id', $solicitacao_id);
-                                $this->db->set('data_cadastro', $horario);
-                                $this->db->set('operador_cadastro', $operador_id);
-                                $this->db->insert('tb_entradas');
-                                $entradas_id = $this->db->insert_id();
+            //FORMA DE PAGAMENTO 'AVISTA'
+            // O valor 100 se refere a porcentagem de juros cadastrada na parcela.
+            if ($tipo == 1) {
+                $prazo = (int) $parcelas[0]->prazo;
 
-                                $this->db->set('data', $data);
-                                $this->db->set('valor', $valor[$x]);
-                                $this->db->set('entrada_id', $entradas_id);
-                                $this->db->set('pedido_id', $solicitacao_id);
-                                $this->db->set('nome', $cliente);
-                                $this->db->set('data_cadastro', $horario);
-                                $this->db->set('operador_cadastro', $operador_id);
-                                $this->db->insert('tb_saldo');
-                            } else { //CASO HAJA UM PRAZO
-                                $data_receber = date("Y-m-d");
-                                $data_receber = date("Y-m-d", strtotime("+$prazo days", strtotime($data_receber)));
-                                $this->db->set('valor', $valor[$x]);
-                                $this->db->set('devedor', $cliente);
-                                $this->db->set('tipo', 'PEDIDO');
-                                $this->db->set('data', $data_receber);
-                                $this->db->set('pedido_id', $solicitacao_id);
-                                $this->db->set('parcela', $parcelas[0]->parcela);
-                                $this->db->set('classe', $classe);
-                                $this->db->set('observacao', $observacao);
-                                $this->db->set('data_cadastro', $horario);
-                                $this->db->set('operador_cadastro', $operador_id);
-                                $this->db->insert('tb_financeiro_contasreceber');
-                            }
-                        }
-                        //FORMA DE PAGAMENTO 'PARCELADO' ou 'CADASTRO MANUAL'
-                        else {
+                if ($prazo == 0 || $prazo == '') { //CASO SEJA AVISTA E NAO HAJA PRAZO (vai receber o dinheiro no caixa)
+                    $this->db->set('data', $data);
+                    $this->db->set('valor', $valor);
+                    $this->db->set('classe', $classe);
+                    $this->db->set('descricaopagamento', $faturamento[0]->descricaopagamento);
+                    $this->db->set('tipo', 'PEDIDO');
+                    $this->db->set('nome', $cliente);
+                    $this->db->set('observacao', $observacao);
+                    $this->db->set('pedido_id', $solicitacao_id);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_entradas');
+                    $entradas_id = $this->db->insert_id();
 
-                            $data_receber = date("Y-m-d");
-                            foreach ($parcelas as $item) {
-                                $obs = "Parc. " . $item->parcela . '/' . count($parcelas) . ' ' . $observacao;
+                    $this->db->set('data', $data);
+                    $this->db->set('valor', $valor);
+                    $this->db->set('entrada_id', $entradas_id);
+                    $this->db->set('pedido_id', $solicitacao_id);
+                    $this->db->set('nome', $cliente);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_saldo');
+                } else { //CASO HAJA UM PRAZO
+                    $data_receber = date("Y-m-d");
+                    $data_receber = date("Y-m-d", strtotime("+$prazo days", strtotime($data_receber)));
+                    $this->db->set('valor', $valor);
+                    $this->db->set('devedor', $cliente);
+                    $this->db->set('tipo', 'PEDIDO');
+                    $this->db->set('data', $data_receber);
+                    $this->db->set('descricaopagamento', $faturamento[0]->descricaopagamento);
+                    $this->db->set('pedido_id', $solicitacao_id);
+                    $this->db->set('parcela', $parcelas[0]->parcela);
+                    $this->db->set('classe', $classe);
+                    $this->db->set('observacao', $observacao);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_financeiro_contasreceber');
+                }
+            }
+            //FORMA DE PAGAMENTO 'PARCELADO' ou 'CADASTRO MANUAL'
+            else {
 
-                                $percParcela = (float) $item->valor;
-                                $valorParcela = $valor[$x] * ($percParcela / 100);
-                                $periodo = $item->dias;
-                                $data_receber = date("Y-m-d", strtotime("+$periodo days", strtotime($data_receber)));
+                $data_receber = date("Y-m-d");
+                foreach ($parcelas as $item) {
+                    $obs = "Parc. " . $item->parcela . '/' . count($parcelas) . ' ' . $observacao;
 
-                                $this->db->set('valor', $valorParcela);
-                                $this->db->set('devedor', $cliente);
-                                $this->db->set('tipo', 'PEDIDO');
-                                $this->db->set('data', $data_receber);
-                                $this->db->set('pedido_id', $solicitacao_id);
-                                $this->db->set('parcela', $item->parcela);
-                                $this->db->set('classe', $classe);
-                                $this->db->set('observacao', $obs);
-                                $this->db->set('data_cadastro', $horario);
-                                $this->db->set('operador_cadastro', $operador_id);
-                                $this->db->insert('tb_financeiro_contasreceber');
-                            }
-                        }
-                    }
+                    $percParcela = (float) $item->valor;
+                    $valorParcela = $valor * ($percParcela / 100);
+                    $periodo = $item->dias;
+                    $data_receber = date("Y-m-d", strtotime("+$periodo days", strtotime($data_receber)));
+
+                    $this->db->set('valor', $valorParcela);
+                    $this->db->set('devedor', $cliente);
+                    $this->db->set('tipo', 'PEDIDO');
+                    $this->db->set('data', $data_receber);
+                    $this->db->set('pedido_id', $solicitacao_id);
+                    $this->db->set('descricaopagamento', $faturamento[0]->descricaopagamento);
+                    $this->db->set('parcela', $item->parcela);
+                    $this->db->set('classe', $classe);
+                    $this->db->set('observacao', $obs);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_financeiro_contasreceber');
                 }
             }
         }
@@ -420,9 +393,78 @@ class solicitacao_model extends Model {
         $this->db->select('esc.contrato_id, 
                            ec.credor_devedor_id, 
                            esc.financeiro,
-                           esc.boleto');
+                           esc.boleto,
+                           esc.formadepagamento,
+                           esc.descricaopagamento');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id', 'left');
+        $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('esc.ativo', 'true');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function cancelarsolicitacaofinanceiro($estoque_solicitacao_id) {
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('ativo', 'f');
+        $this->db->set('excluido', 't');
+        $this->db->where('pedido_id', $estoque_solicitacao_id);
+        $this->db->update('tb_financeiro_contasreceber');
+
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('ativo', 'f');
+        $this->db->where('pedido_id', $estoque_solicitacao_id);
+        $this->db->update('tb_entradas');
+    }
+
+    function cancelarnotafiscal($estoque_solicitacao_id, $config) {
+        $this->db->select(' chave_nfe,
+                            numero_protocolo,
+                            modelo_nf,
+                            tipo_ambiente,
+                            enviada');
+        $this->db->from('tb_notafiscal');
+        $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
+        $this->db->where('ativo', 't');
+        $retorno = $this->db->get()->result();
+
+        if (count($retorno)>0 && @$retorno[0]->enviada != 'f') {
+            $chave = $retorno[0]->chave_nfe;
+            $numProtocolo = $retorno[0]->numero_protocolo;
+            $modelo = $retorno[0]->modelo_nf;
+            $tpAmbiente = $retorno[0]->tipo_ambiente;
+            $motivo = $_POST['txtmotivo'];
+
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+            require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/cancelaNfe.php');
+
+            $horario = date("Y-m-d H:i:s");
+            $this->db->set('data_cancelamento', $horario);
+            $this->db->set('cancelada', 't');
+            $this->db->set('motivo_cancelamento', $_POST['txtmotivo']);
+
+            $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
+            $this->db->update('tb_notafiscal');
+        }
+    }
+
+    function cancelarpedido($estoque_solicitacao_id) {
+        $this->db->set('situacao', 'CANCELADO');
+        $this->db->set('cancelada', 't');
+        $this->db->set('motivo_cancelamento', $_POST['txtmotivo']);
+        $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->update('tb_estoque_solicitacao_cliente');
+    }
+
+    function usanotafiscal($estoque_solicitacao_id) {
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->select('esc.notafiscal, financeiro');
+        $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('esc.ativo', 'true');
         $return = $this->db->get();
@@ -743,6 +785,7 @@ class solicitacao_model extends Model {
                             es.faturado,
                             es.transportadora,
                             es.situacao, 
+                            es.cancelada, 
                             es.notafiscal');
         $this->db->from('tb_estoque_solicitacao_cliente es');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = es.cliente_id');
@@ -921,18 +964,22 @@ class solicitacao_model extends Model {
     function gravarfaturamento($solicitacao_id) {
         try {
 
-            $this->db->select('formadepagamento');
+            $this->db->select('formadepagamento,descricaopagamento');
             $this->db->from('tb_estoque_solicitacao_cliente');
             $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
             $return = $this->db->get();
             $descricaoPagamento = $return->result();
             $formadepagamento = $descricaoPagamento[0]->formadepagamento;
+            $descpag = $descricaoPagamento[0]->descricaopagamento;
             /* inicia o mapeamento no banco */
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 
             if ($formadepagamento != '') {
                 $this->db->set('forma_pagamento', $formadepagamento);
+            }
+            if ($formadepagamento != '') {
+                $this->db->set('descricao_pagamento', $descpag);
             }
 
 
@@ -979,6 +1026,9 @@ class solicitacao_model extends Model {
             }
             if (isset($_POST['formapagamento']) && $_POST['formapagamento'] != '') {
                 $this->db->set('formadepagamento', $_POST['formapagamento']);
+            }
+            if (isset($_POST['descricaopagamento']) && $_POST['descricaopagamento'] != '') {
+                $this->db->set('descricaopagamento', $_POST['descricaopagamento']);
             }
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
@@ -1221,6 +1271,89 @@ class solicitacao_model extends Model {
                 $estoque_solicitacao_produtos_id = $this->db->insert_id();
 
             return $estoque_solicitacao_produtos_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
+    function finalizarsaidapedido($solicitacao_id) {
+        try {
+            /* inicia o mapeamento no banco */
+            $this->db->select('sum(esi.quantidade) as qtde,
+                               esi.produto_id,
+                               esi.entrada_id,
+                               esi.estoque_solicitacao_itens_id,
+                               ee.fornecedor_id,
+                               ee.armazem_id,
+                               ee.nota_fiscal,
+                               ee.validade,
+                               (sum(esi.quantidade) * esi.valor)  as valor');
+            $this->db->from('tb_estoque_solicitacao_itens esi');
+            $this->db->where("esi.ativo", 't');
+            $this->db->where("solicitacao_cliente_id", $solicitacao_id);
+            $this->db->join('tb_estoque_entrada ee', 'ee.estoque_entrada_id = esi.entrada_id', 'left');
+            $this->db->groupby('esi.produto_id,
+                                esi.entrada_id,
+                                esi.estoque_solicitacao_itens_id,
+                                ee.fornecedor_id,
+                                ee.armazem_id,
+                                ee.nota_fiscal,
+                                ee.validade,');
+            $query = $this->db->get();
+            $returno = $query->result();
+
+            for ($i = 0; $i < count($returno); $i++) {
+                $estoque_entrada_id = $returno[$i]->entrada_id;
+                $this->db->set('estoque_entrada_id', $estoque_entrada_id);
+                $this->db->set('estoque_solicitacao_itens_id', $returno[$i]->estoque_solicitacao_itens_id);
+                $this->db->set('solicitacao_cliente_id', $solicitacao_id);
+
+                $this->db->set('produto_id', $returno[$i]->produto_id);
+                $this->db->set('fornecedor_id', $returno[$i]->fornecedor_id);
+                $this->db->set('armazem_id', $returno[$i]->armazem_id);
+                $this->db->set('valor_venda', $returno[$i]->valor);
+                $this->db->set('quantidade', $returno[$i]->qtde);
+                $this->db->set('nota_fiscal', $returno[$i]->nota_fiscal);
+                if ($returno[$i]->validade != "") {
+                    $this->db->set('validade', $returno[$i]->validade);
+                }
+                $horario = date("Y-m-d H:i:s");
+                $operador_id = $this->session->userdata('operador_id');
+
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_estoque_saida');
+                $erro = $this->db->_error_message();
+                if (trim($erro) != "") // erro de banco
+                    return -1;
+                else
+                    $estoque_saida_id = $this->db->insert_id();
+
+                $this->db->set('estoque_entrada_id', $estoque_entrada_id);
+                $this->db->set('estoque_saida_id', $estoque_saida_id);
+                $this->db->set('produto_id', $returno[$i]->produto_id);
+                $this->db->set('fornecedor_id', $returno[$i]->fornecedor_id);
+                $this->db->set('armazem_id', $returno[$i]->armazem_id);
+                $this->db->set('valor_compra', $returno[$i]->valor);
+                $quantidade = -1 * $returno[$i]->qtde;
+                $this->db->set('quantidade', $quantidade);
+                $this->db->set('nota_fiscal', $returno[$i]->nota_fiscal);
+                if ($returno[$i]->validade != "") {
+                    $this->db->set('validade', $returno[$i]->validade);
+                }
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_estoque_saldo');
+
+                $horario = date("Y-m-d H:i:s");
+                $operador_id = $this->session->userdata('operador_id');
+            }
+            $this->db->set('situacao', 'FECHADA');
+            $this->db->set('data_fechamento', $horario);
+            $this->db->set('operador_fechamento', $operador_id);
+            $this->db->where('estoque_solicitacao_setor_id', $solicitacao_id);
+            $this->db->update('tb_estoque_solicitacao_cliente');
+            return true;
         } catch (Exception $exc) {
             return -1;
         }

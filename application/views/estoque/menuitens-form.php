@@ -83,6 +83,12 @@
                                 <td>
                                     <div>
                                         <label>Valor Venda</label>
+                                        <input type="text" name="valorvenda[0]" id="valorvenda[0]" alt="decimal" class="texto02" required/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <label>Valor Venda Menu</label>
                                         <input type="text" name="valor[0]" id="valor[0]" alt="decimal" class="texto02" required/>
                                     </div>
                                 </td>
@@ -170,16 +176,25 @@
                                             formPadrao += '</select></div></td><td><div><label>Valor Compra</label><input type="text" name="valorCompra[0]" id="valorCompra[0]" alt="decimal" class="texto02" required/>';
                                             formPadrao += '</div></td><td><div><label>Percentual</label><input type="text" name="percentual[0]" id="percentual[0]" alt="decimal" class="texto02" onblur="calculaValorVenda(\'0\')" required/></div>';
                                             formPadrao += '</td><td><div><input type="checkbox" name="desconto[0]" id="valor[0]" onchange="calculaValorVenda(\'0\')"/><span style="font-weight: bold; margin-left:3pt;">Desconto</span>';
-                                            formPadrao += '</div></td><td><div><label>Valor Venda</label><input type="text" name="valor[0]" id="valor[0]" alt="decimal" class="texto02" required/></div></td></tr></table></div>';
+                                            formPadrao += '</div></td><td><div><label>Valor Venda</label><input type="text" name="valorvenda[0]" id="valorvenda[0]" alt="decimal" class="texto02" required/></div></td>';
+                                            formPadrao += '<td><div><label>Valor Venda Menu</label><input type="text" name="valor[0]" id="valor[0]" alt="decimal" class="texto02" required/></div></td></tr></table></div>';
 
                                             var totResultados = 0;
                                             function calculaValorVenda(indice) {
-                                                var vCompra = parseFloat($("input:text[name='valorCompra[" + indice + "]']").val());
                                                 var vPer = parseFloat($("input:text[name='percentual[" + indice + "]']").val());
                                                 if ($("input:checkbox[name='desconto[" + indice + "]']").attr('checked')) {
+                                                    var vCompra = parseFloat($("input:text[name='valorvenda[" + indice + "]']").val());
                                                     vPer = vPer * (-1);
+                                                    var vVenda = (new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2}).format(
+                                                            (vCompra + (vCompra * (vPer / 100)))));
                                                 }
-                                                var vVenda = (new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format((vCompra + (vCompra * (vPer / 100)))));
+                                                else{
+                                                    var vCompra = parseFloat($("input:text[name='valorCompra[" + indice + "]']").val());
+                                                    var vVenda = (new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2}).format(
+                                                            (vCompra + (vCompra * (vPer / 100)))));
+                                                }
                                                 var res = vVenda.replace(".", '');
                                                 $("input:text[name='valor[" + indice + "]']").val(res);
                                             }
@@ -199,6 +214,7 @@
                                             function carregaValor(valor) {
                                                 var splitValores = valor.split(':');
 //                                                    console.log(splitValores);
+                                                $("input:text[name='valorvenda[0]']").val(splitValores[0]);
                                                 $("input:text[name='valor[0]']").val(splitValores[0]);
                                                 $("input:text[name='valorCompra[0]']").val(splitValores[1]);
 //                                                    $("#valorCompra[0]").val(splitValores[1]);
@@ -214,8 +230,8 @@
 //                                                            opcoesCabecalho += '<td></td>';
                                                 opcoesCabecalho += '<td colspan="2" ><button type="button" id="aplicarTodos">Aplicar a Todos</button></td>';
                                                 opcoesCabecalho += '<td colspan="2" ><input type="checkbox" name="selTodos" id="selTodos"/><span style="font-weight: bold; margin-left:3pt;">Salvar Todos</span></tr>';
-                                                opcoesCabecalho += '<tr><td colspan="7"  style="border-bottom: 1px solid black;"></td></tr>';
-                                                opcoesCabecalho += '<tr> <td>&nbsp;</td> <td><span class="tbTitulo">Produto</span></td> <td><span class="tbTitulo">Vlr Compra</span></td> <td><span class="tbTitulo">Percentual</span></td> <td><span class="tbTitulo">Desconto</span></td> <td><span class="tbTitulo">Vlr Venda</span></td> <td><span class="tbTitulo">Salvar?</span></td> </tr>';
+                                                opcoesCabecalho += '<tr><td colspan="8"  style="border-bottom: 1px solid black;"></td></tr>';
+                                                opcoesCabecalho += '<tr> <td>&nbsp;</td> <td><span class="tbTitulo">Produto</span></td> <td><span class="tbTitulo">Vlr Compra</span></td> <td><span class="tbTitulo">Percentual</span></td> <td><span class="tbTitulo">Desconto</span></td> <td><span class="tbTitulo">Vlr Venda</span></td> <td><span class="tbTitulo">Vlr Venda Menu</span></td> <td><span class="tbTitulo">Salvar?</span></td> </tr>';
                                                 var options = '';
                                                 $.getJSON('<?= base_url() ?>autocomplete/estoqueprodutosporsubclasse', {subclasse_id: $("#subclasse_id").val(), ajax: true}, function (j) {
 //                                                                console.log(j);
@@ -223,11 +239,12 @@
                                                         var prodID = '<td><input type="hidden" name="produto_id[' + [c] + ']" id="produto_id[' + [c] + ']" value="' + j[c].estoque_produto_id + '" class="texto02" /></td>';
                                                         var nome = '<td><input type="text" name="nome[' + [c] + ']" id="nome[' + [c] + ']" alt="decimal" class="texto06" value="' + j[c].descricao + '" readonly/></td>';
                                                         var vlrCompra = '<td><input type="text" name="valorCompra[' + [c] + ']" id="valorCompra[' + [c] + ']"  onkeyup="validar(this, \'num\');" class="texto02" value="' + j[c].valor_compra + '"/></td>';
-                                                        var vlrVenda = '<td><input type="text" name="valor[' + [c] + ']" id="valor[' + [c] + ']"  onkeyup="validar(this, \'num\');" class="texto02" value="' + j[c].valor_venda + '"/></td>';
+                                                        var vlrVendaMenu = '<td><input type="text" name="valor[' + [c] + ']" id="valor[' + [c] + ']"  onkeyup="validar(this, \'num\');" class="texto02" value="' + j[c].valor_venda + '"/></td>';
+                                                        var vlrVenda = '<td><input type="text" name="valorvenda[' + [c] + ']" id="valorvenda[' + [c] + ']"  onkeyup="validar(this, \'num\');" class="texto02" value="' + j[c].valor_venda + '"/></td>';
                                                         var percentual = '<td><input type="text" name="percentual[' + [c] + ']" onblur="calculaValorVenda(\'' + c + '\')" onchange="calculaValorVenda(\'' + c + '\')" id="percentual[' + [c] + ']"  onkeyup="validar(this, \'num\');" class="texto01" /></td>';
                                                         var desconto = '<td><input type="checkbox" name="desconto[' + [c] + ']" id="desconto[' + [c] + ']" onchange="calculaValorVenda(\'' + c + '\')"/></td>';
                                                         var ativo = '<td><input type="checkbox" name="ativo[' + [c] + ']" id="ativo[' + [c] + ']"/></td>';
-                                                        options += "<tr>" + prodID + nome + vlrCompra + percentual + desconto + vlrVenda + ativo + "</tr>";
+                                                        options += "<tr>" + prodID + nome + vlrCompra + percentual + desconto + vlrVenda + vlrVendaMenu + ativo + "</tr>";
 
                                                     }
 
@@ -284,7 +301,7 @@
                                                     } else {
                                                         $('.produtosSubClasse table').remove();
                                                         $('.produtosSubClasse').html(formPadrao).show();
-                                                        
+
                                                         if ($("#subclasse_id").val() != '') {
                                                             var options = '';
                                                             $.getJSON('<?= base_url() ?>autocomplete/estoqueprodutosporsubclasse', {subclasse_id: $("#subclasse_id").val(), ajax: true}, function (j) {

@@ -32,14 +32,14 @@ class Caixa extends BaseController {
         $this->pesquisar();
     }
 
-    function pesquisar($args = array()) {
-
-        $this->loadView('cadastros/entrada-lista', $args);
+    function pesquisar($limite = 25) {
+        $data["limite_paginacao"] = $limite;
+        $this->loadView('cadastros/entrada-lista', $data);
     }
 
-    function pesquisar2($args = array()) {
-
-        $this->loadView('cadastros/saida-lista', $args);
+    function pesquisar2($limite = 25) {
+        $data["limite_paginacao"] = $limite;
+        $this->loadView('cadastros/saida-lista', $data);
     }
 
     function pesquisar3($args = array()) {
@@ -60,6 +60,7 @@ class Caixa extends BaseController {
         $data['tipo'] = $this->tipo->listartipo();
         $data['classe'] = $this->classe->listarclasse();
         $data['conta'] = $this->forma->listarforma();
+        $data['descricao_pagamento'] = $this->caixa->descricaodepagamento();
         $this->loadView('cadastros/entrada-form', $data);
     }
 
@@ -67,6 +68,7 @@ class Caixa extends BaseController {
         $data['tipo'] = $this->tipo->listartipo();
         $data['classe'] = $this->classe->listarclasse();
         $data['conta'] = $this->forma->listarforma();
+        $data['descricao_pagamento'] = $this->caixa->descricaodepagamento();
 //        $r = $this->classe->listarautocompleteclassessaida('CUSTO FIXO IMPRESSÃO'); 
 //        var_dump($r); die;
         $this->loadView('cadastros/saida-form', $data);

@@ -51,7 +51,8 @@
                             <option value="">Selecione</option>
                             <? foreach ($classe as $value) : ?>
                                 <option value="<?= $value->descricao; ?>"
-                                      <?  if($value->descricao == @$obj->_classe):echo'selected'; endif; ?>><?php echo $value->descricao; ?></option>
+                                        <? if ($value->descricao == @$obj->_classe):echo'selected';
+                                        endif; ?>><?php echo $value->descricao; ?></option>
 <? endforeach; ?>
                         </select>
                     </dd>
@@ -63,9 +64,20 @@
                             <option value="">Selecione</option>
                             <? foreach ($conta as $value) : ?>
                                 <option value="<?= $value->forma_entradas_saida_id; ?>"<?
-                                        if (@$obj->_forma == $value->forma_entradas_saida_id):echo'selected';
-                                        endif;
-                                        ?>><?php echo $value->descricao; ?></option>
+                                if (@$obj->_forma == $value->forma_entradas_saida_id):echo'selected';
+                                endif;
+                                ?>><?php echo $value->descricao; ?></option>
+<? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Descrição de Pagamento</label>
+                    </dt>
+                    <dd>
+                        <select name="descricaopagamento" id="descricaopagamento" class="size3" required="">
+                            <option value="">Selecione</option>
+                            <? foreach ($descricao_pagamento as $value) : ?>
+                                <option value="<?= $value->descricao_forma_pagamento_id ?>"><?= $value->nome ?></option>
 <? endforeach; ?>
                         </select>
                     </dd>
@@ -90,7 +102,7 @@
 <script type="text/javascript" src="<?= base_url() ?>js/jquery-ui-1.10.4.js" ></script>
 <script type="text/javascript">
 
-        $(function () {
+    $(function () {
         $('#tipo').change(function () {
             if ($(this).val()) {
                 $('.carregando').show();

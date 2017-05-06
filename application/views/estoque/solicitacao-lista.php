@@ -65,7 +65,7 @@
                                     <td class="<?php echo $estilo_linha; ?>"><font color="green"><b><?= $item->situacao; ?></b></td>
                                     <?
                                 }
-                                if ($item->situacao == 'ABERTA') {
+                                if ($item->situacao == 'ABERTA' && $item->cancelada == 'f') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;">  <div class="bt_link">                                
                                             <a href="<?= base_url() ?>estoque/solicitacao/carregarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>">Cadastrar</a>
@@ -73,7 +73,7 @@
                                     </td>
                                     <?
                                 }
-                                if ($item->situacao == 'LIBERADA' && ($perfil_id == 1 || $perfil_id == 8)) {
+                                if ($item->situacao == 'LIBERADA' && ($perfil_id == 1 || $perfil_id == 8)  && $item->cancelada == 'f') {
                                     if ($item->faturado == 'f') {
                                         ?>
                                         <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
@@ -92,7 +92,7 @@
                                         }
                                     }
 //                                    var_dump($almoxarifado);die;
-                                    if ($almoxarifado[0]->almoxarifado == 't') {
+                                    if ($almoxarifado[0]->almoxarifado == 't' && $item->cancelada == 'f') {
                                         if ($item->faturado == 't') {
                                             ?>
 
@@ -103,15 +103,15 @@
                                             <?
                                         }
                                     }
-                                    if ($item->faturado == 't' && $item->boleto == 't') {
-                                        ?>
+                                }
+                                if ($item->faturado == 't' && $item->boleto == 't'  && $item->cancelada == 'f') {
+                                    ?>
 
-                                        <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
-                                                <a href="<?= base_url() ?>estoque/boleto/carregarboletos/<?= $item->estoque_solicitacao_setor_id ?>">Boleto</a>
-                                            </div>
-                                        </td>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                
+                                            <a href="<?= base_url() ?>estoque/boleto/carregarboletos/<?= $item->estoque_solicitacao_setor_id ?>">Boleto</a>
+                                        </div>
+                                    </td>
                                     <?
-                                    }
                                 }
 
                                 if ($item->situacao != 'ABERTA') {
@@ -122,7 +122,7 @@
                                     </td>
                                     <?
                                 }
-                                if (($perfil_id == 1 || $perfil_id == 8) && $item->notafiscal == 't' && $item->faturado == 't') {
+                                if (($perfil_id == 1 || $perfil_id == 8) && $item->notafiscal == 't' && $item->faturado == 't' && $item->cancelada == 'f') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
                                             <a href="<?= base_url() ?>estoque/notafiscal/carregarnotafiscalopcoes/<?= $item->estoque_solicitacao_setor_id ?>/<?= $item->notafiscal_id ?>">N. Fiscal</a>
@@ -130,10 +130,18 @@
                                     </td>
                                     <?
                                 }
-                                if ($item->situacao != 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8) && ($item->faturado != 't')) {
+//                                if ($item->situacao != 'FECHADA' && ($perfil_id == 1 || $perfil_id == 8) && ($item->faturado != 't')) {
+                                ?>
+        <!--                                    <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
+                                        <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Solicitacao?');" href="<?= base_url() ?>estoque/solicitacao/excluir/<?= $item->estoque_solicitacao_setor_id ?>">Excluir</a>
+                                    </div>
+                                </td>-->
+                                <?
+                                // } 
+                                if ($item->cancelada == 'f') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;"><div class="bt_link">                                  
-                                            <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Solicitacao?');" href="<?= base_url() ?>estoque/solicitacao/excluir/<?= $item->estoque_solicitacao_setor_id ?>">Excluir</a>
+                                            <a href="<?= base_url() ?>estoque/solicitacao/carregarcancelarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>">Cancelar</a>
                                         </div>
                                     </td>
         <? } ?>

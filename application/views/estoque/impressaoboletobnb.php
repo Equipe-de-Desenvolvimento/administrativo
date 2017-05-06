@@ -1,5 +1,4 @@
 <?
-
 //NUMERAÇÃO DA CARTEIRA
 if ($boleto[0]->carteira == '1') {
     $carteira = "21";
@@ -36,7 +35,7 @@ error_reporting(E_ALL);
 
 /* CONTRUINDO CODIGO DE BARRAS */
 $fatorVencimento = $this->utilitario->fatorVencimentoBNB($boleto[0]->data_vencimento);
-$codParcial = '0049' /*DV COD BARRAS*/ .$fatorVencimento . $this->utilitario->tamanho_string(str_replace('.', '', $boleto[0]->valor), 10, 'numero')
+$codParcial = '0049' /* DV COD BARRAS */ . $fatorVencimento . $this->utilitario->tamanho_string(str_replace('.', '', $boleto[0]->valor), 10, 'numero')
         . $boleto[0]->conta_agencia . $boleto[0]->empresa_conta . $boleto[0]->conta_digito
         . $boleto[0]->nosso_numero . $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero)
         . $carteira . '000';
@@ -44,30 +43,30 @@ $dvCodBarra = $this->utilitario->dvCodigoBNB($codParcial);
 $codigo = substr($codParcial, 0, 4) . $dvCodBarra . substr($codParcial, 4);
 
 
-/* CONTRUINDO A LINHA DIGITÁVEL*/
-$parametroDV1 = '0049'. $boleto[0]->conta_agencia . substr($boleto[0]->empresa_conta, 0, 1);
+/* CONTRUINDO A LINHA DIGITÁVEL */
+$parametroDV1 = '0049' . $boleto[0]->conta_agencia . substr($boleto[0]->empresa_conta, 0, 1);
 $priCampoDv = $this->utilitario->dvLinhaBNB($parametroDV1);
-$priCampo = '0049' . substr($boleto[0]->conta_agencia, 0 ,1). '.' 
-            . substr($boleto[0]->conta_agencia, 1) 
-            . substr($boleto[0]->empresa_conta, 0, 1)
-            . $priCampoDv;
+$priCampo = '0049' . substr($boleto[0]->conta_agencia, 0, 1) . '.'
+        . substr($boleto[0]->conta_agencia, 1)
+        . substr($boleto[0]->empresa_conta, 0, 1)
+        . $priCampoDv;
 
-$parametroDV2 = substr($boleto[0]->empresa_conta, 1) . $boleto[0]->conta_digito . substr($boleto[0]->nosso_numero, 0, 3); 
+$parametroDV2 = substr($boleto[0]->empresa_conta, 1) . $boleto[0]->conta_digito . substr($boleto[0]->nosso_numero, 0, 3);
 $segCampoDv = $this->utilitario->dvLinhaBNB($parametroDV2);
-$segCampo = substr($parametroDV2, 0, 5) . '.' .substr($parametroDV2, 5) . $segCampoDv;
+$segCampo = substr($parametroDV2, 0, 5) . '.' . substr($parametroDV2, 5) . $segCampoDv;
 
 
-$parametroDV3 = substr($boleto[0]->nosso_numero, 3).$this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero).$carteira.'000'; 
+$parametroDV3 = substr($boleto[0]->nosso_numero, 3) . $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero) . $carteira . '000';
 $terCampoDv = $this->utilitario->dvLinhaBNB($parametroDV3);
-$terCampo = substr($parametroDV3, 0, 5) . '.' .substr($parametroDV3, 5) . $terCampoDv;
+$terCampo = substr($parametroDV3, 0, 5) . '.' . substr($parametroDV3, 5) . $terCampoDv;
 
 $quaCampo = $dvCodBarra; //definido na hora de criar o cod de barras
 
 $quiCampo = $fatorVencimento //definido na hora de criar o cod de barras  
-            . $this->utilitario->tamanho_string(str_replace('.', '', $boleto[0]->valor), 10, 'numero'); 
+        . $this->utilitario->tamanho_string(str_replace('.', '', $boleto[0]->valor), 10, 'numero');
 
 
-$linha = "{$priCampo} {$segCampo} {$terCampo} {$quaCampo} {$quiCampo}"; 
+$linha = "{$priCampo} {$segCampo} {$terCampo} {$quaCampo} {$quiCampo}";
 
 //DEMONSTRATIVOS
 $demonstrativo1 = "Pagamento de Compra na empresa " . $empresa[0]->empresa;
@@ -97,7 +96,7 @@ function direita($entra, $comp) {
 }
 
 //Fim da função
-    ?>
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
@@ -151,7 +150,7 @@ function direita($entra, $comp) {
                     <!-- Nosso Número -->
                     <div class="nosso_numero item">
                         <label>Nosso Número</label>
-                        <?= $boleto[0]->nosso_numero; ?> - <?= $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero);?>
+                        <?= $boleto[0]->nosso_numero; ?> - <?= $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero); ?>
                     </div>
                 </div>
 
@@ -219,185 +218,190 @@ function direita($entra, $comp) {
                         <label>Demonstrativo</label>
                         <?= $demonstrativo1; ?><br>
                         <?= $demonstrativo2; ?><br>
-                    </div>
-                    <!-- Autenticação Mecânica -->
-                    <div class="autenticacao_mecanica">
-                        <label>Autenticação Mecânica</label>
-                    </div>
-                </div>
+                                </div>
+                                <!-- Autenticação Mecânica -->
+                                <div class="autenticacao_mecanica">
+                                    <label>Autenticação Mecânica</label>
+                                </div>
+                                </div>
 
-                <!--Linha pontilhada para corte-->
-                <div class="linha_corte"><label>Corte na linha pontilhada</label></div>
-            </div>            
-            <!--DIV FICHA DE COMPENSACAO-->
+                                <!--Linha pontilhada para corte-->
+                                <div class="linha_corte"><label>Corte na linha pontilhada</label></div>
+                                </div>            
+                                <!--DIV FICHA DE COMPENSACAO-->
 
-            <div id="ficha_compensacao">
-                <!--  cabecalho  -->
-                <div class="cabecalho">
-                    <div class="banco_logo "><img src="<?= base_url() ?>img/boleto/bnb.png" /></div>
-                    <div class="banco_codigo ">004-3</div>
-                    <div class="linha_digitavel  last"><?= $linha; ?></div>
-                </div>
+                                <div id="ficha_compensacao">
+                                    <!--  cabecalho  -->
+                                    <div class="cabecalho">
+                                        <div class="banco_logo "><img src="<?= base_url() ?>img/boleto/bnb.png" /></div>
+                                        <div class="banco_codigo ">004-3</div>
+                                        <div class="linha_digitavel  last"><?= $linha; ?></div>
+                                    </div>
 
-                <div id="colunaprincipal" class="">
-                    <!--  linha1  -->
-                    <!--local de pagamento-->
-                    <div class="local_pagamento item">
-                        <label>Local de Pagamento</label>
-<!--                        ATE O VENCIMENTO PAGUE PREFERENCIALMENTE NO BANCO DO NORDESTE<br>
-                        APOS O VENCIMENTO PAGUE SOMENTE NO BANCO DO NORDESTE<br>-->
-                        Pagável em qualquer banco até o vencimento                        
-                    </div>
+                                    <div id="colunaprincipal" class="">
+                                        <!--  linha1  -->
+                                        <!--local de pagamento-->
+                                        <div class="local_pagamento item">
+                                            <label>Local de Pagamento</label>
+                                            <!--                        ATE O VENCIMENTO PAGUE PREFERENCIALMENTE NO BANCO DO NORDESTE<br>
+                                                                    APOS O VENCIMENTO PAGUE SOMENTE NO BANCO DO NORDESTE<br>-->
+                                            Pagável em qualquer banco até o vencimento                        
+                                        </div>
 
-                    <!--  linha2  -->
-                    <!--Cedente-->
-                    <div class="cedente item">
-                        <label>Cedente </label>
-                        <?= $empresa[0]->razao_social; ?>
-                    </div>
+                                        <!--  linha2  -->
+                                        <!--Cedente-->
+                                        <div class="cedente item">
+                                            <label>Cedente </label>
+                                            <?= $empresa[0]->razao_social; ?>
+                                        </div>
 
-                    <!--  linha3  -->
-                    <div class="linha">
-                        <!--data emissao-->
-                        <div class="data_doc item">
-                            <label>Data do documento</label>
-                            <?= date("d/m/Y"); ?>
-                        </div>
-                        <!--numdocumento-->
-                        <div class="num_doc item">
-                            <label>Número do documento</label>
-                            <?= $boleto[0]->numero_documento; ?>                        
-                        </div>
-                        <!--especiedocumento-->
-                        <div class="espec_doc item">
-                            <label>Espécie Doc.</label>
-                            <?= $especie; ?>
-                        </div>
-                        <!--aceite-->
-                        <div class="aceite item">
-                            <label>Aceite</label>
-                            <?= $boleto[0]->aceite; ?>
-                        </div>
-                        <!--data processamento-->
-                        <div class="dt_proc item">
-                            <label>Data proc</label>
-                            <?= date("d/m/Y"); ?>                       
-                        </div>
-                    </div>
+                                        <!--  linha3  -->
+                                        <div class="linha">
+                                            <!--data emissao-->
+                                            <div class="data_doc item">
+                                                <label>Data do documento</label>
+                                                <?= date("d/m/Y"); ?>
+                                            </div>
+                                            <!--numdocumento-->
+                                            <div class="num_doc item">
+                                                <label>Número do documento</label>
+                                                <?= $boleto[0]->numero_documento; ?>                        
+                                            </div>
+                                            <!--especiedocumento-->
+                                            <div class="espec_doc item">
+                                                <label>Espécie Doc.</label>
+                                                <?= $especie; ?>
+                                            </div>
+                                            <!--aceite-->
+                                            <div class="aceite item">
+                                                <label>Aceite</label>
+                                                <?= $boleto[0]->aceite; ?>
+                                            </div>
+                                            <!--data processamento-->
+                                            <div class="dt_proc item">
+                                                <label>Data proc</label>
+                                                <?= date("d/m/Y"); ?>                       
+                                            </div>
+                                        </div>
 
-                    <!--  linha4  -->
-                    <div class="linha">
-                        <!--uso do banco-->
-                        <div class="uso_banco item">
-                            <label>Uso do Banco</label>
+                                        <!--  linha4  -->
+                                        <div class="linha">
+                                            <!--uso do banco-->
+                                            <div class="uso_banco item">
+                                                <label>Uso do Banco</label>
 
-                        </div>
-                        <!--carteira-->
-                        <div class="carteira item">
-                            <label>Carteira</label>
-                            <?= $carteira; ?>                        
-                        </div>
-                        <!--especie moeda-->
-                        <div class="moeda item">
-                            <label>Moeda</label>
-                            R$
-                        </div>
-                        <!--quantidade-->
-                        <div class="qtd item">
-                            <label>Quantidade</label>
-                            1                        
-                        </div>
-                        <!--valor-->
-                        <div class="valor item">
-                            <label>(x) Valor</label>
-                            <span>R$ </span> <span style="text-align: right;"><?= str_replace('.', ',', $boleto[0]->valor); ?></span>                        
-                        </div>
-                    </div>
+                                            </div>
+                                            <!--carteira-->
+                                            <div class="carteira item">
+                                                <label>Carteira</label>
+                                                <?= $carteira; ?>                        
+                                            </div>
+                                            <!--especie moeda-->
+                                            <div class="moeda item">
+                                                <label>Moeda</label>
+                                                R$
+                                            </div>
+                                            <!--quantidade-->
+                                            <div class="qtd item">
+                                                <label>Quantidade</label>
+                                                1                        
+                                            </div>
+                                            <!--valor-->
+                                            <div class="valor item">
+                                                <label>(x) Valor</label>
+                                                <span>R$ </span> <span style="text-align: right;"><?= str_replace('.', ',', $boleto[0]->valor); ?></span>                        
+                                            </div>
+                                        </div>
 
-                    <!--  instrucoes/mensagens  -->
-                    <div class="mensagens ">
-                        <label>Instruções </label>
-                        <?= $demonstrativo1; ?><br>
-                        <?= $demonstrativo2; ?><br>
-                        - <?= $instrucao; ?>
-                    </div>
+                                        <!--  instrucoes/mensagens  -->
+                                        <div class="mensagens ">
+                                            <label>Instruções </label>
+                                            <?= $demonstrativo1; ?><br>
+                                            <?= $demonstrativo2; ?><br>
+                                                    - <?= $instrucao; ?>
+                                                    </div>
 
-                </div>
-                <!--Coluna direita-->
-                <div id="colunadireita" class="">
-                    <div class="">
-                        <label>Vencimento</label>
-                        <?= date("d/m/Y", strtotime($boleto[0]->data_vencimento)); ?>                   
-                    </div>
-                    <div class="">
-                        <label>Agência / Código cedente </label>
-                        <?= $boleto[0]->conta_agencia; ?> / <?= $boleto[0]->empresa_conta; ?> - <?= $boleto[0]->conta_digito; ?>              
-                    </div>
-                    <div class="">
-                        <label>Nosso número</label>
-                        <?= $boleto[0]->nosso_numero; ?> - <?= $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero);?>              
-                    </div>
-                    <div class="">
-                        <label>(=) Valor do documento</label>
-                        <span>R$ </span> <span style="text-align: right;"><?= str_replace('.', ',', $boleto[0]->valor); ?></span>                    
-                    </div>
-                    <div class="">
-                        <label>(-) Desconto/Abatimento</label>
-                    </div>
-                    <div class="">
-                        <label>(-) Outras deduções</label>
-                    </div>
-                    <div class="">
-                        <label>(+) Mora/Multa</label>
-                    </div>
-                    <div class="">
-                        <label>(+) Outros Acréscimos</label>
-                    </div>
-                    <div class="">
-                        <label>(=) Valor cobrado</label>
-                    </div>
-                </div>
+                                                    </div>
+                                                    <!--Coluna direita-->
+                                                    <div id="colunadireita" class="">
+                                                        <div class="">
+                                                            <label>Vencimento</label>
+                                                            <?= date("d/m/Y", strtotime($boleto[0]->data_vencimento)); ?>                   
+                                                        </div>
+                                                        <div class="">
+                                                            <label>Agência / Código cedente </label>
+                                                            <?= $boleto[0]->conta_agencia; ?> / <?= $boleto[0]->empresa_conta; ?> - <?= $boleto[0]->conta_digito; ?>              
+                                                        </div>
+                                                        <div class="">
+                                                            <label>Nosso número</label>
+                                                            <?= $boleto[0]->nosso_numero; ?> - <?= $this->utilitario->digito_nosso_numeroBNB($boleto[0]->nosso_numero); ?>              
+                                                        </div>
+                                                        <div class="">
+                                                            <label>(=) Valor do documento</label>
+                                                            <span>R$ </span> <span style="text-align: right;"><?= str_replace('.', ',', $boleto[0]->valor); ?></span>                    
+                                                        </div>
+                                                        <div class="">
+                                                            <label>(-) Desconto/Abatimento</label>
+                                                        </div>
+                                                        <div class="">
+                                                            <label>(-) Outras deduções</label>
+                                                        </div>
+                                                        <div class="">
+                                                            <label>(+) Mora/Multa</label>
+                                                        </div>
+                                                        <div class="">
+                                                            <label>(+) Outros Acréscimos</label>
+                                                        </div>
+                                                        <div class="">
+                                                            <label>(=) Valor cobrado</label>
+                                                        </div>
+                                                    </div>
 
-                <!--  sacado  -->
-                <div id="sacado" class="">
-                    <div class="">
-                        <label>Sacado</label>
-                        <?= $boleto[0]->cliente; ?><br>
-                        CNPJ: <?= $boleto[0]->cliente_cnpj; ?><br>                    
-                    </div>
+                                                    <!--  sacado  -->
+                                                    <div id="sacado" class="">
+                                                        <div class="">
+                                                            <label>Sacado</label>
+                                                            <?= $boleto[0]->cliente; ?><br>
+                                                                CNPJ: <?= $boleto[0]->cliente_cnpj; ?><br>                    
+                                                                    </div>
 
-                    <div style="display: block; width: 100%; margin-top: 15pt;">
-                        <label>Sacador/Avalista</label>
-                    </div>
-                </div>
+                                                                    <div style="display: block; width: 100%; margin-top: 15pt;">
+                                                                        <label>Sacador/Avalista</label>
+                                                                    </div>
+                                                                    </div>
 
 
-                <!--  codigo_barras  -->
-                <div id="codigo_barras" class="">
-                    <div style="margin: 4pt;">
-                        <?php 
-                            include ('/home/sisprod/projetos/administrativo/application/libraries/barcode_i2_5.php');
-                            $bc = new BarcodeI25();
-                            $bc->tipoRetorno = 1;
-                            $bc->ebf = 1.5; //espessura da barra fina
-                            $bc->ebg = 2 * $bc->ebf; //espessura da barra grossa
-                            $bc->SetCode($codigo);
-                            $bc->Generate();
-                        ?>
-                        <img src="<?= base_url() ?>upload/codigoboleto/<?=$codigo?>"/>
-                    </div>
-                    <div class="">
-                        <!--<span>Autenticação Mecânica</span> / <span>Ficha de Compensação</span>-->
-                        <span>Ficha de Compensação</span>
-                        <label>Autenticação Mecânica</label>
-                    </div>
-                </div>
+                                                                    <!--  codigo_barras  -->
+                                                                    <div id="codigo_barras" class="">
+                                                                        <div style="margin: 4pt;">
+                                                                            <?php
+                                                                            if (!is_dir("./upload/codigoboleto")) {
+                                                                                mkdir("./upload/codigoboleto");
+                                                                                $destino = "./upload/codigoboleto";
+                                                                                chmod($destino, 0777);
+                                                                            }
+                                                                            include ('/home/sisprod/projetos/administrativo/application/libraries/barcode_i2_5.php');
+                                                                            $bc = new BarcodeI25();
+                                                                            $bc->tipoRetorno = 1;
+                                                                            $bc->ebf = 1.5; //espessura da barra fina
+                                                                            $bc->ebg = 2 * $bc->ebf; //espessura da barra grossa
+                                                                            $bc->SetCode($codigo);
+                                                                            $bc->Generate();
+                                                                            ?>
+                                                                            <img src="<?= base_url() ?>upload/codigoboleto/<?= $codigo ?>"/>
+                                                                        </div>
+                                                                        <div class="">
+                                                                            <!--<span>Autenticação Mecânica</span> / <span>Ficha de Compensação</span>-->
+                                                                            <span>Ficha de Compensação</span>
+                                                                            <label>Autenticação Mecânica</label>
+                                                                        </div>
+                                                                    </div>
 
-                <!--Linha pontilhada para corte-->
-                <div class="linha_corte"><label>Corte na linha pontilhada</label></div>
+                                                                    <!--Linha pontilhada para corte-->
+                                                                    <div class="linha_corte"><label>Corte na linha pontilhada</label></div>
 
-                <!--Encerra ficha de compensação-->    
-            </div>
-        </div>
-    </body>
-</html>
+                                                                    <!--Encerra ficha de compensação-->    
+                                                                    </div>
+                                                                    </div>
+                                                                    </body>
+                                                                    </html>

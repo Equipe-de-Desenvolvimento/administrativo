@@ -30,9 +30,9 @@ class Contasreceber extends BaseController {
         $this->pesquisar();
     }
 
-    function pesquisar($args = array()) {
-
-        $this->loadView('cadastros/contasreceber-lista', $args);
+    function pesquisar($limite = 25) {
+        $data["limite_paginacao"] = $limite;
+        $this->loadView('cadastros/contasreceber-lista', $data);
 
 //            $this->carregarView($data);
     }
@@ -42,6 +42,7 @@ class Contasreceber extends BaseController {
         $data['obj'] = $obj_contasreceber;
         $data['conta'] = $this->forma->listarforma();
         $data['tipo'] = $this->tipo->listartipo();
+        $data['descricao_pagamento'] = $this->caixa->descricaodepagamento();
         $data['classe'] = $this->classe->listarclasse();
         $this->loadView('cadastros/contasreceber-form', $data);
     }
