@@ -123,9 +123,9 @@ class Notafiscal extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''

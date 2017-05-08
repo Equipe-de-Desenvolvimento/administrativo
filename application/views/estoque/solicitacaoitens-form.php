@@ -162,9 +162,7 @@
                 <a onclick="javascript: window.open('<?= base_url() ?>estoque/solicitacao/gravartransportadora/<?= $estoque_solicitacao_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=750,height=400');">Transportadora</a>
             </div>                                        
             <div class="bt_link">                                  
-                <a  href="<?= base_url() ?>estoque/solicitacao/pesquisar" onclick="javascript: var a = confirm('Deseja realmente Liberar e Finalizar a solicitacao?');
-                        if (a == true) {
-                            window.open('<?= base_url() ?>estoque/solicitacao/liberarsolicitacaofaturar/<?= $estoque_solicitacao_id ?>', '_blank', 'toolbar=no,Location=no,menubar=no,scrollbars=yes,width=900,height=450')};">Liberar/Finalizar</a>
+                <a  href="<?= base_url() ?>estoque/solicitacao/gravarfaturamento/<?= $estoque_solicitacao_id ?>">Liberar/Finalizar</a>
             </div>                                        
             <div class="bt_link">                                  
                 <a onclick="javascript: return confirm('Deseja realmente Liberar a solicitacao?');" href="<?= base_url() ?>estoque/solicitacao/liberarsolicitacao/<?= $estoque_solicitacao_id ?>">Liberar</a>
@@ -263,7 +261,7 @@
                                         if (j[c].lote === ' ' && data === '') {
                                             continue;
                                         } else {
-                                            options += '<option value="' + j[c].estoque_entrada_id + '">LOTE: ' + j[c].lote + ' - ' + data + '</option>';
+                                            options += '<option value="' + j[c].estoque_entrada_id + '">LOTE: ' + j[c].lote + '  | QTDE: ' + j[c].total + " | VAL: " + data + '</option>';
                                         }
                                     }
                                     $('#lote').html(options).show();

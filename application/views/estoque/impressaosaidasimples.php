@@ -7,12 +7,12 @@
             margin: 0 0 -30pt 0;
         }
         .cabecalho_principal{
-            font-size: 10pt;
+            font-size: 9pt;
             margin-bottom: -20pt;
             margin-top: -15pt;
         }
         .cabecalho_secundario{
-            font-size:10pt;
+            font-size:9pt;
             margin-bottom: -10pt;
         }
         .negrito{
@@ -46,7 +46,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr>
                                 <td>
-                                    <img src="" alt="" width="50" height="70" border="1">
+                                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="100" height="70" border="1">
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -335,10 +335,10 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr>
                                 <td>
-                                    <img src="" alt="" width="50" height="70" border="1">
+                                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="100" height="70" border="1">
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
                                 </td>
                                 <td>
                                     <table class="cabecalho_principal" cellspacing="8" cellpadding="4">
@@ -609,6 +609,7 @@
                                     </div>
                                 </td>
                             </tr> 
+
 
                         </table>
                     </div>

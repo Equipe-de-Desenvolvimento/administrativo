@@ -41,7 +41,7 @@
             <!-- PRIMEIRO CABECALHO -->
             <tr>
                 <td width="400">
-                    <img src="" alt="" width="350" height="150" border="1">
+                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="350" height="150" border="1">
                 </td>
                 <td >
                     <table class="cabecalho_principal" cellspacing="5" cellpadding="1">

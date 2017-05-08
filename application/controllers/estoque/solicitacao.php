@@ -73,9 +73,9 @@ class Solicitacao extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''
@@ -804,6 +804,9 @@ class Solicitacao extends BaseController {
 
     function gravar() {
         $estoque_solicitacao_setor_id = $this->solicitacao->gravar();
+//        if(@$_POST['atualizafinanceiro'] ==  'true' && isset($_POST['financeiro'])){
+//            $this->solicitacao->removerfinanceiro($_POST['solicitacao_id']);
+//        }
         if ($estoque_solicitacao_setor_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Solicitacao. Opera&ccedil;&atilde;o cancelada.';
         } else {
