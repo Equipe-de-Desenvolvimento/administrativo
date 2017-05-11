@@ -8,11 +8,11 @@
                 <?
                 $i = 1;
                 foreach ($boletos as $value) :
-                    if ($value->registrado == 't'):
-                        $registro = "<span style='color:green;'>REGISTRADO</span>";
-                    else:
-                        $registro = "<span style='color:red;'>NÃO REGISTRADO</span>";
-                    endif;
+//                    if ($value->registrado == 't'):
+//                        $registro = "<span style='color:green;'>REGISTRADO</span>";
+//                    else:
+//                        $registro = "<span style='color:red;'>NÃO REGISTRADO</span>";
+//                    endif;
 
                     if ($value->pagado == 't'):
                         $pagado = "<span style='color:green;'>PAGAMENTO EFETUADO</span>";
@@ -25,7 +25,9 @@
                             <legend>BOLETO <? echo $i; $i++;?></legend>
                             <span class="label" title="Descrição do Pagamento">DESC(...): </span> <span class="text"><?= $value->descricaopagamento; ?></span><br>
                             <span class="label" title="Forma de Pagamento">FORM(...): </span> <span class="text"><?= $value->formapagamento; ?></span><br>
-                            <?= $registro; ?><br>
+                            <!--//<? // echo $registro; ?><br>-->
+                            VENC: <?= date("d/m/Y", strtotime($value->data_vencimento)); ?><br>
+                            VALOR: R$ <?= number_format($value->valor, 2, ',',''); ?><br>
                             <?= $pagado; ?><br>
                             <center>
                                 <a href="<?= base_url() ?>estoque/boleto/solicitacaoboleto/<?= $value->estoque_boleto_id; ?>">

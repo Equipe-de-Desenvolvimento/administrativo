@@ -67,6 +67,7 @@ class Boleto extends BaseController {
 
     function gerarboletobnb($estoque_boleto_id) {
         $data['estoque_boleto_id'] = $estoque_boleto_id;
+        $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
         $this->loadView('estoque/boletobnb-form', $data);
     }
 
@@ -78,7 +79,7 @@ class Boleto extends BaseController {
         $_POST['juros'] = str_replace(',', '.', str_replace('.', '', $_POST['juros']));
         $_POST['seu_numero'] = $this->tamanho_string(date('dmyH:i'), 10, 'numero');
         $_POST['nosso_numero'] = $this->tamanho_string($_POST['estoque_boleto_id'], 7, 'numero');
-        $_POST['numDoc'] = $this->tamanho_string($_POST['numDoc'], 25, 'numero');
+        $_POST['numDoc'] = $this->tamanho_string($_POST['estoque_boleto_id'], 25, 'numero');
         $_POST['vencimento'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['vencimento'])));
 
         $this->boleto->gravardadoscnab();

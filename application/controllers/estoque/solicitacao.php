@@ -581,6 +581,8 @@ class Solicitacao extends BaseController {
         if ($solicitacao_cliente[0]->boleto == 't') {
             $verifica = $this->boleto->gravarsolicitacaoboleto($solicitacao_id);
         }
+        
+//        echo  "<pre>"; var_dump($solicitacao_cliente);die;
 
         if ($solicitacao_cliente[0]->financeiro == 't') {
             $this->solicitacao->gravarfinanceirofaturamento($solicitacao_id);
