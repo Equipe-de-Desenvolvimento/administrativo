@@ -568,3 +568,6 @@ ALTER TABLE ponto.tb_entradas add column descricaopagamento integer;
 ALTER TABLE ponto.tb_financeiro_contasreceber add column descricaopagamento integer;
 ALTER TABLE ponto.tb_financeiro_contaspagar add column descricaopagamento integer;
 ALTER TABLE ponto.tb_saidas add column descricaopagamento integer;
+
+-- Dia 13/05/2017
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN gerado boolean DEFAULT false;

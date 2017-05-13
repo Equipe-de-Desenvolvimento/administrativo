@@ -67,7 +67,7 @@ $quiCampo = $fatorVencimento //definido na hora de criar o cod de barras
 
 
 $linha = "{$priCampo} {$segCampo} {$terCampo} {$quaCampo} {$quiCampo}";
-
+//var_dump($linha);die;
 //DEMONSTRATIVOS
 $demonstrativo1 = "Pagamento de Compra na empresa " . $empresa[0]->empresa;
 $demonstrativo2 = "Mensalidade referente a " . $empresa[0]->empresa;

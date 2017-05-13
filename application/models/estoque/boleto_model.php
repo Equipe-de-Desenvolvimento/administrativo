@@ -29,6 +29,17 @@ class boleto_model extends Model {
         }
     }
 
+    function listarsolicitacaoboletoscnab($solicitacao_cliente_id) {
+
+        $this->db->select('eb.estoque_boleto_id, eb.data_vencimento');
+        $this->db->from('tb_estoque_boleto eb');
+        $this->db->where('eb.ativo', 'true');
+        $this->db->where('eb.solicitacao_cliente_id', $solicitacao_cliente_id);
+        $return = $this->db->get();
+        $return = $return->result();
+        return $return;
+    }
+
     function listarsolicitacaoboleto($solicitacao_cliente_id) {
 
         $this->db->select('eb.estoque_boleto_id,
@@ -170,6 +181,7 @@ class boleto_model extends Model {
                             eb.carteira,
                             eb.servico,
                             eb.aceite,
+                            eb.gerado,
                             eb.instrucao_boleto,
                             eb.baixa,
                             eb.descricaopagamento_id,
@@ -246,6 +258,26 @@ class boleto_model extends Model {
         return $return->result();
     }
 
+    function gravardadoscnabtodos($estoque_boleto_id) {
+        $this->db->set('data_vencimento', $_POST['vencimento']);
+        $this->db->set('numero_documento', $_POST['numDoc']);
+        $this->db->set('nosso_numero', $_POST['nosso_numero']);
+        $this->db->set('juros', $_POST['juros']);
+        $this->db->set('mensagem_cedente', $_POST['mensagem']);
+        $this->db->set('instrucao_boleto', $_POST['instrucao']);
+        $this->db->set('aceite', $_POST['aceite']);
+        $this->db->set('especie_documento', $_POST['especie']);
+        $this->db->set('carteira', $_POST['carteira']);
+        $this->db->set('servico', $_POST['servico']);
+        $this->db->set('gerado', 't');
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('estoque_boleto_id', $estoque_boleto_id);
+        $this->db->update('tb_estoque_boleto');
+    }
+
     function gravardadoscnab() {
         $this->db->set('data_vencimento', $_POST['vencimento']);
         $this->db->set('numero_documento', $_POST['numDoc']);
@@ -257,6 +289,7 @@ class boleto_model extends Model {
         $this->db->set('especie_documento', $_POST['especie']);
         $this->db->set('carteira', $_POST['carteira']);
         $this->db->set('servico', $_POST['servico']);
+        $this->db->set('gerado', 't');
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
         $this->db->set('data_atualizacao', $horario);

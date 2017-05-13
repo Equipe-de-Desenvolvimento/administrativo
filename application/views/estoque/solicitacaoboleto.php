@@ -1,7 +1,28 @@
+
+<style>
+    #novaParcela{
+        width: 150pt;
+        height: 22pt;
+        background-color: #2c3e50;
+        font-size: 10pt;
+        color: black;
+        border-radius: 20pt;
+    }
+    #novaParcela:hover{
+        cursor: pointer;
+        border: 1pt solid #999;
+        font-weight: bold;
+        color: #b30707;
+    }
+</style>
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
-    <div class="clear"></div>
+    <!--<div class="clear"></div>-->
     <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/solicitacaoboleto" method="post">
-        
+        <!--<div>-->
+        <a href="<?= base_url() ?>estoque/boleto/gerarboletosbnb/<?= @$solicitacao_cliente_id; ?>">
+                <button type="button" id="novaParcela">Gerar Boletos</button>
+            </a>
+        <!--</div>-->
         <fieldset>
             <legend>Boletos</legend>
             <div class="boletos">

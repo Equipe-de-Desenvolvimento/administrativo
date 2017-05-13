@@ -12,14 +12,13 @@
         <h3 class="singular"><a href="#">Informações Necessarias para Gerar o Boleto</a></h3>
         <div>
             <dl class="dl_desconto_lista">
-                <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/criarboletobanconordeste" method="post">
+                <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/criarboletosbanconordestetodos" method="post">
                     <dl>
                         <dt>
                             <label>Carteira *</label>
                         </dt>
                         <dd>
-                            <!--<input type="hidden" name="servico" id="servico" value="01">-->
-                            <input type="hidden" name="estoque_boleto_id" id="estoque_boleto_id" value="<?= $estoque_boleto_id ?>">  
+                            <input type="hidden" name="solicitacao_cliente_id" id="solicitacao_cliente_id" value="<?= $solicitacao_cliente_id ?>">  
                             <select name="carteira" required="" class="size2">
                                 <option value="">Selecione</option>
                                 <option value="1">21 - Cobrança Simples Escritural - Boleto Emitido Pelo Banco</option>
@@ -45,8 +44,8 @@
                                 <option value="09">Protestar</option>
                                 <option value="10">Não Protestar</option>
                                 <option value="12">Inclusão de Ocorrência</option>
-                                <!--<option value="13">Exclusão de ocorrência</option>-->
-                                <!--<option value="31">Alteração de Outros Dados</option>-->
+<!--                                <option value="13">Exclusão de ocorrência</option>
+                                <option value="31">Alteração de Outros Dados</option>-->
                                 <option value="32">Pedido de Devolução</option>
                                 <option value="33">Pedido de Devolução (entregue ao Sacado).</option>
                                 <option value="99">Pedido dos Títulos em Aberto</option>
@@ -95,12 +94,12 @@
                             </select>
                         </dd>
 
-                        <dt>
+<!--                        <dt>
                             <label>Vencimento *</label>
                         </dt>
                         <dd>  
                             <input type="text" name="vencimento" id="vencimento" alt="date" value="<?= date("d/m/Y", strtotime($boleto[0]->data_vencimento)) ?>" class="texto02" required=""/>
-                        </dd>
+                        </dd>-->
 
                         <dt>
                             <label>Juros (R$)</label>
