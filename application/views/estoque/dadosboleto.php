@@ -5,18 +5,20 @@
             <a href="<?= base_url() ?>estoque/boleto/gerarboletobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
                 <button type="button" id="novaParcela">Gerar Boleto</button>
             </a>
-            <a href="<?= base_url() ?>estoque/boleto/imprimirboletobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
-                <button type="button" id="novaParcela">Imprimir Boleto</button>
-            </a>
-<!--            <a href="#">
-                <button type="button" id="novaParcela">Pedido de baixa</button>
-            </a>
-            <a href="#">
-                <button type="button" id="novaParcela">Alteração de Vencimento</button>
-            </a>
-            <a href="#">
-                <button type="button" id="novaParcela">Alteração de Outros Dados</button>
-            </a>-->
+            <? if ($boleto[0]->gerado == 't') { ?>
+                <a href="<?= base_url() ?>estoque/boleto/imprimirboletobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
+                    <button type="button" id="novaParcela">Imprimir Boleto</button>
+                </a>
+            <? } ?>
+            <!--            <a href="#">
+                            <button type="button" id="novaParcela">Pedido de baixa</button>
+                        </a>
+                        <a href="#">
+                            <button type="button" id="novaParcela">Alteração de Vencimento</button>
+                        </a>
+                        <a href="#">
+                            <button type="button" id="novaParcela">Alteração de Outros Dados</button>
+                        </a>-->
         </div>
 
         <br>
