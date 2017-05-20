@@ -82,7 +82,7 @@ if ($boleto[0]->instrucao_boleto == '05') {
 } elseif ($boleto[0]->instrucao_boleto == '15') {
     $instrucao = "Após vencimento, cobrar comissão de permanência do BANCO DO NORDESTE.";
 } elseif ($boleto[0]->instrucao_boleto == '00') {
-    $instrucao = "Sem Instruções – Acata as instruções da Carteira do Cedente.";
+    $instrucao = $boleto[0]->mensagem_cedente;
 }
 
 $boleto[0]->numero_documento = substr($boleto[0]->numero_documento, 10);
