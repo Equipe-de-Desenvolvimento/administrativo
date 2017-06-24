@@ -825,7 +825,8 @@ class solicitacao_model extends Model {
         $this->db->where('oc.operador_id', $operador_id);
         $this->db->where('oc.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
-            $this->db->where('ec.nome ilike', "%" . $args['nome'] . "%");
+            $this->db->where("(ec.nome ilike '%" . $args['nome'] . "%' 
+                               OR es.estoque_solicitacao_setor_id = " . $args['nome'] .")");
         }
         return $this->db;
     }

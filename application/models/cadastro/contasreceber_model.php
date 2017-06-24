@@ -33,6 +33,7 @@ class contasreceber_model extends Model {
                             fc.tipo,
                             fc.classe,
                             fc.data,
+                            fc.pedido_id,
                             cd.razao_social,
                             fc.tipo_numero');
         $this->db->from('tb_financeiro_contasreceber fc');
