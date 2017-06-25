@@ -46,7 +46,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr>
                                 <td>
-                                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="100" height="70" border="1">
+                                    <img src="img/logo peq.jpg" alt="" width="100" height="70" border="1">
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -335,7 +335,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr>
                                 <td>
-                                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="100" height="70" border="1">
+                                    <img src="img/logo peq.jpg" alt="" width="100" height="70" border="1">
                                 </td>
                                 <td>
                                     <!--&nbsp;&nbsp;&nbsp;&nbsp;-->

@@ -462,12 +462,17 @@ class Solicitacao extends BaseController {
     function imprimirliberada($estoque_solicitacao_id) {
 
         $this->load->plugin('mpdf');
+        
+//        $mpdf = new Mpdf();
+//        $mpdf->showImageErrors = true;
+        
         $data['solicitacao_id'] = $estoque_solicitacao_id;
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+//        $this->load->View('estoque/impressaoliberada', $data, true);
         $html = $this->load->View('estoque/impressaoliberada', $data, true);
         pdf($html);
     }

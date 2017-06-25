@@ -28,6 +28,7 @@ function pdf($html, $filename = null, $cabecalho = null, $rodape = null, $grupo 
     //$mpdf->SetDisplayMode('fullpage');
     //Cabeçalho: Seta a data/hora completa de quando o PDF foi gerado + um texto no lado direito
 //    $mpdf->SetHTMLHeader('Introduction','O'); 
+//    $mpdf->showImageErrors = true;
     $mpdf->SetHTMLHeader($cabecalho);
     $mpdf->SetHTMLFooter($rodape);
 //    $mpdf->DefHTMLHeaderByName("teste", $cabecalho);

@@ -45,7 +45,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr colspan="2">
                                 <td>
-                                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                                    <img src="img/logo peq.jpg" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
                                 </td>
                                 <td>
                                     <table class="cabecalho_principal">
@@ -344,7 +344,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr colspan="2">
                                 <td>
-                                    <img src="<?= base_url(); ?>img/logo peq.jpg" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                                    <img src="img/logo peq.jpg" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
                                 </td>
                                 <td>
                                     <table class="cabecalho_principal">
