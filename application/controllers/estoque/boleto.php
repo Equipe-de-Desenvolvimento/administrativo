@@ -34,6 +34,18 @@ class Boleto extends BaseController {
         $this->loadView('estoque/boleto-lista', $args);
     }
 
+    function carregarboletoscontrato($contrato_id) {
+        $data['contrato_id'] = $contrato_id;
+        $data['boletos'] = $this->boleto->listarsolicitacaoboletocontrato($contrato_id);
+//        var_dump(count($data['boletos']));die;
+        if (count($data['boletos']) > 1) {
+            $this->loadView('estoque/solicitacaoboletocontrato', $data);
+        } else {
+            $estoque_boleto_id = $data['boletos'][0]->estoque_boleto_id;
+            redirect(base_url() . "estoque/boleto/solicitacaoboletocontrato/$estoque_boleto_id");
+        }
+    }
+    
     function carregarboletos($solicitacao_cliente_id) {
 
         $data['solicitacao_cliente_id'] = $solicitacao_cliente_id;
@@ -45,6 +57,17 @@ class Boleto extends BaseController {
             $estoque_boleto_id = $data['boletos'][0]->estoque_boleto_id;
             redirect(base_url() . "estoque/boleto/solicitacaoboleto/$estoque_boleto_id");
         }
+    }
+
+    function solicitacaoboletocontrato($estoque_boleto_id) {
+//        $estoque_boleto_id;
+        $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
+        $contrato_id = $data['boleto'][0]->contrato_id;
+        $data['conta'] = $this->boleto->listarcontaboletocontrato($contrato_id);
+        $data['devedor'] = $this->boleto->listarcredordevedorcontrato($contrato_id);
+//        echo "<pre>";
+//        var_dump($data['conta']);die;
+        $this->loadView('estoque/dadosboletocontrato', $data);
     }
 
     function solicitacaoboleto($estoque_boleto_id) {
@@ -77,6 +100,12 @@ class Boleto extends BaseController {
         $this->loadView('estoque/boletobnb-form', $data);
     }
 
+    function gerarboletocontratobnb($estoque_boleto_id) {
+        $data['estoque_boleto_id'] = $estoque_boleto_id;
+        $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
+        $this->loadView('estoque/boletocontratobnb-form', $data);
+    }
+
     function criarboletosbanconordestetodos() {
         $solicitacao_id = $_POST['solicitacao_cliente_id'];
         $boletos = $this->boleto->listarsolicitacaoboletoscnab($solicitacao_id);
@@ -95,6 +124,24 @@ class Boleto extends BaseController {
         $mensagem = 'Boletos gerado com sucesso.';
         $this->session->set_flashdata('message', $mensagem);
         redirect(base_url() . "estoque/boleto/carregarboletos/$solicitacao_id");
+    }
+
+    function criarboletocontratobanconordeste() {
+//        $data['boleto'] = $this->boleto->instanciarboleto($_POST['estoque_boleto_id']);
+        $nosso_numero = $_POST['estoque_boleto_id'];
+
+        $_POST['mensagem'] = mb_strtoupper($this->remover_caracter(utf8_decode($_POST['mensagem'])));
+        $_POST['juros'] = str_replace(',', '.', str_replace('.', '', $_POST['juros']));
+        $_POST['multa'] = str_replace(',', '.', str_replace('.', '', $_POST['multa']));
+        $_POST['seu_numero'] = $this->tamanho_string(date('dmyH:i'), 10, 'numero');
+        $_POST['nosso_numero'] = $this->tamanho_string($_POST['estoque_boleto_id'], 7, 'numero');
+        $_POST['numDoc'] = $this->tamanho_string($_POST['estoque_boleto_id'], 25, 'numero');
+        $_POST['vencimento'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['vencimento'])));
+
+        $this->boleto->gravardadoscnab();
+        $estoque_boleto_id = $_POST['estoque_boleto_id'];
+        $this->geracnabBNB($estoque_boleto_id);
+        redirect(base_url() . "estoque/boleto/solicitacaoboleto/$estoque_boleto_id");
     }
 
     function criarboletobanconordeste() {

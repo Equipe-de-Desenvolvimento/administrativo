@@ -60,6 +60,14 @@ class Menu extends BaseController {
         
     }
 
+    function excluirmultiplositensmenu() {
+        
+        foreach($_GET['itensExcluir'] as $item){
+            $this->menu->excluirmultiplositensmenu($item);
+        }
+        
+    }
+
     function excluirmenu($estoque_menu_produtos_id, $estoque_menu_id) {
         $this->menu->excluirmenuproduto($estoque_menu_produtos_id);
         $data['mensagem'] = 'Sucesso ao excluir a Menu';

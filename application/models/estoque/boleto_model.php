@@ -40,6 +40,24 @@ class boleto_model extends Model {
         return $return;
     }
 
+    function listarsolicitacaoboletocontrato($contrato_id) {
+
+        $this->db->select('eb.estoque_boleto_id,
+                           eb.valor,
+                           eb.registrado,
+                           eb.data_vencimento,
+                           eb.pagado,
+                           ec.razao_social as credor_devedor');
+        $this->db->from('tb_estoque_boleto eb');        
+        $this->db->join('tb_financeiro_credor_devedor ec', 'ec.financeiro_credor_devedor_id = eb.credor_devedor_id', 'left');
+        $this->db->where('eb.ativo', 'true');
+        $this->db->where('eb.contrato_id', $contrato_id);
+        $this->db->orderby('data_vencimento');
+        $return = $this->db->get();
+        $return = $return->result();
+        return $return;
+    }
+
     function listarsolicitacaoboleto($solicitacao_cliente_id) {
 
         $this->db->select('eb.estoque_boleto_id,
@@ -58,6 +76,19 @@ class boleto_model extends Model {
         $return = $this->db->get();
         $return = $return->result();
         return $return;
+    }
+
+    function listarcontaboletocontrato($contrato_id) {
+
+        $this->db->select('fs.conta,
+                            fs.agencia,
+                            fs.digito,
+                            fs.descricao as descricao_conta');
+        $this->db->from('tb_estoque_contrato ec');
+        $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = ec.conta_id', 'left');
+        $this->db->where('ec.estoque_contrato_id', $contrato_id);
+        $return = $this->db->get();
+        return $return->result();
     }
 
     function listarcontaboleto($descricaopagamento_id) {
@@ -104,6 +135,28 @@ class boleto_model extends Model {
         $this->db->where('esf.estoque_solicitacao_id', $estoque_solicitacao_id);
         $return = $this->db->get();
         return $return->result();
+    }
+
+    function listarcredordevedorcontrato($contrato_id) {
+        $this->db->select('cli.razao_social as cliente,
+                           cli.telefone as cliente_telefone,
+                           cli.celular as cliente_celular,
+                           cli.cnpj as cliente_cnpj,
+                           cli.logradouro as cliente_logradouro,
+                           cli.numero as cliente_numero,
+                           cli.bairro as cliente_bairro,
+                           m.nome as cliente_municipio,
+                           m.estado as cliente_estado');
+        $this->db->from('tb_estoque_boleto eb');        
+        $this->db->join('tb_estoque_contrato ec', 'ec.estoque_contrato_id = eb.contrato_id', 'left');
+        $this->db->join('tb_financeiro_credor_devedor cli', 'cli.financeiro_credor_devedor_id = ec.credor_devedor_id', 'left');
+        $this->db->join('tb_municipio m', 'm.municipio_id = cli.municipio_id', 'left');
+        $this->db->where('eb.ativo', 'true');
+        $this->db->where('eb.contrato_id', $contrato_id);
+        $this->db->orderby('data_vencimento');
+        $return = $this->db->get();
+        $return = $return->result();
+        return $return;
     }
 
     function listar($args = array()) {

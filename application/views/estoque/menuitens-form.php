@@ -106,7 +106,14 @@
         </fieldset>
 
         <fieldset>
+            <input type="hidden" name="menu_id" value="<?= $menu[0]->estoque_menu_id; ?>"/>
             <legend>Produtos Adicionados</legend>
+            <button type="button" id="excluirSelecionados"
+                    style="display:block; position: relative; float: right; 
+                            width: 200pt; height: 20pt; font-size: 15pt; 
+                            margin: 0 50pt 10pt; border-radius: 5pt">
+                Excluir Selecionados
+            </button>
             <?
             if ($contador > 0) {
                 ?>
@@ -116,7 +123,7 @@
                         <tr>
                             <th class="tabela_header">Produtos</th>
                             <th class="tabela_header">Valor</th>
-                            <th class="tabela_header">&nbsp;</th>
+                            <th class="tabela_header" colspan="2">&nbsp;</th>
                         </tr>
                     </thead>
                     <?
@@ -128,10 +135,12 @@
                             <tr>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->descricao; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= number_format($item->valor, 2, ',', '.'); ?></td>
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <input type="checkbox" name="excluir" id="itemExcluirFlag" class="<?= $item->estoque_menu_produtos_id; ?>"/> Excluir
+                                </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="100px;">
                                     <a href="<?= base_url() ?>estoque/menu/excluirmenu/<?= $item->estoque_menu_produtos_id; ?>/<?= $menu[0]->estoque_menu_id; ?>" class="delete">
                                     </a>
-
                                 </td>
                             </tr>
 
@@ -147,7 +156,6 @@
                     </tr>
                 </tfoot>
             </table> 
-
         </fieldset>
         </form>
     </div> 
@@ -180,6 +188,33 @@
                                             formPadrao += '<td><div><label>Valor Venda Menu</label><input type="text" name="valor[0]" id="valor[0]" alt="decimal" class="texto02" required/></div></td></tr></table></div>';
 
                                             var totResultados = 0;
+                                            
+                                         
+                                            $('input:checkbox[name="excluir"]').removeAttr('checked');   
+                                             
+                                            jQuery(function () {
+                                                $("#excluirSelecionados").live('click', function () {
+                                                    var selecionados = new Array();
+                                                    
+                                                    $('input:checkbox[name="excluir"]').each(function(){
+                                                        if( $(this).attr("checked") ) selecionados.push($(this).attr("class"));
+                                                    });
+                                                    
+                                                    jQuery.ajax({
+                                                    type: "GET",
+                                                    url: "<?= base_url() ?>estoque/menu/excluirmultiplositensmenu",
+                                                    data: {
+                                                        itensExcluir: selecionados
+                                                    },
+                                                    success: function (retorno) {
+                                                        window.location.reload();
+                                                    }
+                                                });
+                                                    
+                                                });
+                                            });
+                                            
+                                            
                                             function calculaValorVenda(indice) {
                                                 var vPer = parseFloat($("input:text[name='percentual[" + indice + "]']").val());
                                                 if ($("input:checkbox[name='desconto[" + indice + "]']").attr('checked')) {
@@ -188,8 +223,7 @@
                                                     var vVenda = (new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2,
                                                         maximumFractionDigits: 2}).format(
                                                             (vCompra + (vCompra * (vPer / 100)))));
-                                                }
-                                                else{
+                                                } else {
                                                     var vCompra = parseFloat($("input:text[name='valorCompra[" + indice + "]']").val());
                                                     var vVenda = (new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2,
                                                         maximumFractionDigits: 2}).format(
@@ -355,6 +389,7 @@
                                                     }
                                                 });
                                             });
+                                            
                                             jQuery(function () {
                                                 $("#aplicarTodos").live('click', function () {
                                                     var percentual = $('#percentualTodos').val();
@@ -376,6 +411,7 @@
                                                     }
                                                 });
                                             });
+                                            
                                             $(function () {
                                                 $("#accordion").accordion();
                                             });

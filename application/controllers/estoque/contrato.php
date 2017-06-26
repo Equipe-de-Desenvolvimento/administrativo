@@ -55,6 +55,7 @@ class Contrato extends BaseController {
 
     function carregarcontratotipo($contratotipo_id) {
         $data['tipo'] = $this->contrato->carregarcontratotipo($contratotipo_id);
+//        var_dump($data['tipo']);die;
         $this->loadView('estoque/contratotipo-form', $data);
     }
 
@@ -87,6 +88,8 @@ class Contrato extends BaseController {
         } else {
             $data['mensagem'] = 'Sucesso ao faturar contrato.';
         }
+        
+//        die;
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/contrato");
     }
