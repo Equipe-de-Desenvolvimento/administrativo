@@ -571,3 +571,6 @@ ALTER TABLE ponto.tb_saidas add column descricaopagamento integer;
 
 -- Dia 13/05/2017
 ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN gerado boolean DEFAULT false;
+
+-- Dia 25/06/2017
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN multa numeric(10,2);

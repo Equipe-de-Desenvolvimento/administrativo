@@ -573,26 +573,26 @@ class Solicitacao extends BaseController {
     function gravarfaturamento($solicitacao_id) {
 
         $verifica = $this->solicitacao->gravarfaturamento($solicitacao_id);
-
+//        die;
 //            $contrato_id = $_POST['contrato_id'];
 //            $credor_devedor_id = $_POST['credor_devedor_id'];
 //            $solicitacao_id = $_POST['estoque_solicitacao_id'];
 //            
         $solicitacao_cliente = $this->solicitacao->listarsolicitacaofaturamentocliente($solicitacao_id);
-
+//        die;
         //dar saida estoque
         $this->solicitacao->finalizarsaidapedido($solicitacao_id);
-
+//        die;
         if ($solicitacao_cliente[0]->boleto == 't') {
             $verifica = $this->boleto->gravarsolicitacaoboleto($solicitacao_id);
         }
-        
+//        die;
 //        echo  "<pre>"; var_dump($solicitacao_cliente);die;
 
         if ($solicitacao_cliente[0]->financeiro == 't') {
             $this->solicitacao->gravarfinanceirofaturamento($solicitacao_id);
         }
-
+//        die;
         if ($verifica) {
             $data['mensagem'] = 'Finalizado com sucesso.';
         } else {

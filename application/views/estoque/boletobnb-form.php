@@ -142,11 +142,18 @@
                         </dd>
 
                         <dt>
-                            <label>Juros (R$)</label>
+                            <label>Juros (R$ ao dia)</label>
                         </dt>
                         <dd>  
                             <? //$value = "value='".str_replace()"'"?>
                             <input type="text" name="juros" id="juros" alt="decimal" class="texto01"/>
+                        </dd>
+                        <dt>
+                            <label>Multa (R$)</label>
+                        </dt>
+                        <dd>  
+                            <? //$value = "value='".str_replace()"'"?>
+                            <input type="text" name="multa" id="multa" alt="decimal" class="texto01"/>
                         </dd>
                         <dt>
                             <label>Mensagem do Cedente</label>

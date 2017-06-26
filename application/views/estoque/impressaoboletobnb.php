@@ -71,6 +71,9 @@ $linha = "{$priCampo} {$segCampo} {$terCampo} {$quaCampo} {$quiCampo}";
 //DEMONSTRATIVOS
 $demonstrativo1 = "Pagamento de Compra na empresa " . $empresa[0]->empresa;
 $demonstrativo2 = "Mensalidade referente a " . $empresa[0]->empresa;
+$cobranca = "Após " . date("d/m/Y", strtotime($boleto[0]->data_vencimento)) . " cobrar:<br>"
+        . "<span style='margin-left: 10pt'>- Multa de R$ ". ((@$boleto[0]->multa != '')?str_replace('.', ',', @$boleto[0]->multa):'0,00') . "</span><br>"
+        . "<span style='margin-left: 10pt'>- Juros de R$ ". ((@$boleto[0]->juros != '')?str_replace('.', ',', @$boleto[0]->juros):'0,00') . " ao dia</span><br>";
 
 //INSTRUÇÕES DO DOCUMENTO
 if ($boleto[0]->instrucao_boleto == '05') {
@@ -318,7 +321,8 @@ function direita($entra, $comp) {
                                             <label>Instruções </label>
                                             <?= $demonstrativo1; ?><br>
                                             <?= $demonstrativo2; ?><br>
-                                                    - <?= $instrucao; ?>
+                                            <?= $cobranca; ?>
+                                            <?= $instrucao; ?>
                                                     </div>
 
                                                     </div>

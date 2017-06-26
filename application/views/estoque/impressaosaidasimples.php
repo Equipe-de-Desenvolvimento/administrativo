@@ -152,20 +152,22 @@
                             <tr>
                                 <td colspan="3">
                                     <div class="corpo">
-                                        <table>
+                                        <table cellpadding="2">
                                             <tbody>
                                                 <tr>
-                                                    <th align="left">PRODUTOS</th>
-                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th align="left">COD</th>
+                                                    <th align="left">PRODUTO</th>
+                                                    <th>UNIDADE</th>
                                                     <th>QUANTIDADE</th>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
                                                 <? foreach ($produtossaida as $value) : ?>
                                                     <tr> 
+                                                        <td><?= @$value->codigo; ?></td>
                                                         <td><?= @$value->descricao; ?></td>
-                                                        <td></td>
-                                                        <td><?= @$value->quantidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->unidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->quantidade; ?></td>
                                                     </tr>
                                                 <? endforeach; ?>
                                             </tbody>
@@ -444,17 +446,19 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <th align="left">PRODUTOS</th>
-                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th align="left">COD</th>
+                                                    <th align="left">PRODUTO</th>
+                                                    <th>UNIDADE</th>
                                                     <th>QUANTIDADE</th>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
                                                 <? foreach ($produtossaida as $value) : ?>
                                                     <tr> 
+                                                        <td><?= @$value->codigo; ?></td>
                                                         <td><?= @$value->descricao; ?></td>
-                                                        <td></td>
-                                                        <td><?= @$value->quantidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->unidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->quantidade; ?></td>
                                                     </tr>
                                                 <? endforeach; ?>
                                             </tbody>

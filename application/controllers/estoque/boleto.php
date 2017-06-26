@@ -103,6 +103,7 @@ class Boleto extends BaseController {
 
         $_POST['mensagem'] = mb_strtoupper($this->remover_caracter(utf8_decode($_POST['mensagem'])));
         $_POST['juros'] = str_replace(',', '.', str_replace('.', '', $_POST['juros']));
+        $_POST['multa'] = str_replace(',', '.', str_replace('.', '', $_POST['multa']));
         $_POST['seu_numero'] = $this->tamanho_string(date('dmyH:i'), 10, 'numero');
         $_POST['nosso_numero'] = $this->tamanho_string($_POST['estoque_boleto_id'], 7, 'numero');
         $_POST['numDoc'] = $this->tamanho_string($_POST['estoque_boleto_id'], 25, 'numero');

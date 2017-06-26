@@ -670,7 +670,9 @@ class solicitacao_model extends Model {
 //            $this->db->orderby('ep.estoque_saida_id');
 //            $return = $this->db->get();
 //        } else {
-        $this->db->select('p.descricao,
+        $this->db->select('
+                               p.descricao,
+                               p.codigo,
                                si.solicitacao_cliente_id,
                                u.descricao as unidade,
                                sum(si.quantidade) as quantidade');
@@ -680,7 +682,7 @@ class solicitacao_model extends Model {
 
         $this->db->where('si.solicitacao_cliente_id', $estoque_solicitacao_id);
         $this->db->where('si.ativo', 'true');
-        $this->db->groupby('p.descricao, si.solicitacao_cliente_id, u.descricao');
+        $this->db->groupby('p.descricao, p.codigo, si.solicitacao_cliente_id, u.descricao');
         $this->db->orderby('si.solicitacao_cliente_id');
         $return = $this->db->get();
 //        }

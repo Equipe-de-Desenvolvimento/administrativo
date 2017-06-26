@@ -80,15 +80,14 @@ class BarcodeI25 {
         global $MIOLO;
 
         $code = trim($code);
-
         if (strlen($code) == 0) {
             echo "C�digo de Barras n�o informado. (Barcode Undefined)";
             $this->errors = $this->errors + 1;
         }
-        if ((strlen($code) % 2) != 0) {
-            echo "Tamanho inv�lido de c�digo. Deve ser m�ltiplo de 2. (Invalid barcode lenght)";
-            $this->errors = $this->errors + 1;
-        }
+//        if ((strlen($code) % 2) != 0) {
+//            echo "Tamanho inv�lido de c�digo. Deve ser m�ltiplo de 2. (Invalid barcode lenght)";
+//            $this->errors = $this->errors + 1;
+//        }
 
         if ($this->errors == 0) {
             $this->codigo = $code;

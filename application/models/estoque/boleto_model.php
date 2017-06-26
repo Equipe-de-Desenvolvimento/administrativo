@@ -176,6 +176,7 @@ class boleto_model extends Model {
                             eb.nosso_numero,
                             eb.seu_numero,
                             eb.juros,
+                            eb.multa,
                             eb.mensagem_cedente,
                             eb.especie_documento,
                             eb.carteira,
@@ -283,6 +284,7 @@ class boleto_model extends Model {
         $this->db->set('numero_documento', $_POST['numDoc']);
         $this->db->set('nosso_numero', $_POST['nosso_numero']);
         $this->db->set('juros', $_POST['juros']);
+        $this->db->set('multa', $_POST['multa']);
         $this->db->set('mensagem_cedente', $_POST['mensagem']);
         $this->db->set('instrucao_boleto', $_POST['instrucao']);
         $this->db->set('aceite', $_POST['aceite']);
@@ -290,8 +292,10 @@ class boleto_model extends Model {
         $this->db->set('carteira', $_POST['carteira']);
         $this->db->set('servico', $_POST['servico']);
         $this->db->set('gerado', 't');
+        
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
+        
         $this->db->set('data_atualizacao', $horario);
         $this->db->set('operador_atualizacao', $operador_id);
         $this->db->where('estoque_boleto_id', $_POST['estoque_boleto_id']);
@@ -332,7 +336,9 @@ class boleto_model extends Model {
     }
 
     function gravarsolicitacaoboleto($solicitacao_id) {
-
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        
         $this->db->select('ec.nome, ec.telefone, 
                            ec.credor_devedor_id, 
                            esc.descricaopagamento, 
@@ -366,7 +372,8 @@ class boleto_model extends Model {
                 if ($prazo == 0 || $prazo == '') { //CASO SEJA AVISTA E NAO HAJA PRAZO (vai receber o dinheiro no caixa)
                     $this->db->set('descricaopagamento_id', $faturamento[0]->descricaopagamento);
                     $this->db->set('formapagamento_id', $faturamento[0]->formadepagamento);
-                    $this->db->set('data_vencimento', $valor);
+                    $this->db->set('data_vencimento', $horario);
+                    $this->db->set('valor', $valor);
                     $this->db->set('solicitacao_cliente_id', $solicitacao_id);
                     $this->db->set('data_cadastro', $horario);
                     $this->db->set('operador_cadastro', $operador_id);
