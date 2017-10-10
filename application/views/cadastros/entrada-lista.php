@@ -110,6 +110,7 @@
                         <th class="tabela_header">Tipo</th>
                         <th class="tabela_header">Classe</th>
                         <th class="tabela_header" width="90px;">Dt entrada</th>
+                        <th class="tabela_header">Pedido</th>
                         <th class="tabela_header" width="90px;">Valor</th>
                         <th class="tabela_header">Conta</th>
                         <th class="tabela_header">Observacao</th>
@@ -143,6 +144,7 @@
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->tipo; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->classe; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= substr($item->data, 8, 2) . "/" . substr($item->data, 5, 2) . "/" . substr($item->data, 0, 4); ?></td>
+                                <td class="<?php echo $estilo_linha; ?>"><?= $item->pedido_id; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><b><?= number_format($item->valor, 2, ",", "."); ?></b></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->conta; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->observacao; ?></td>

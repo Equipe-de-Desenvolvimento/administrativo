@@ -26,7 +26,7 @@
                         <th class="tabela_header">Pedido</th>
                         <th class="tabela_header">Data</th>
                         <th class="tabela_header">Status</th>
-                        <th class="tabela_header" width="70px;" colspan="4"><center>Detalhes</center></th>
+                        <th class="tabela_header" width="70px;" colspan="8"><center>Detalhes</center></th>
                 </tr>
                 </thead>
                 <?php
@@ -114,6 +114,14 @@
                                     <?
                                 }
 
+                                if ($item->enviada != 't') {
+                                    ?>
+                                    <td class="<?php echo $estilo_linha; ?>" width="60px;" colspan="">  <div class="bt_link">                                
+                                            <a href="<?= base_url() ?>estoque/solicitacao/criarsolicitacao/<?= $item->estoque_solicitacao_setor_id ?>">Reabrir</a>
+                                        </div>
+                                    </td>
+                                    <?
+                                }
                                 if ($item->situacao != 'ABERTA') {
                                     ?>
                                     <td class="<?php echo $estilo_linha; ?>" width="60px;" colspan="">  <div class="bt_link">                                
@@ -154,7 +162,7 @@
                 ?>
                 <tfoot>
                     <tr>
-                        <th class="tabela_footer" colspan="7">
+                        <th class="tabela_footer" colspan="12">
 <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
                         </th>

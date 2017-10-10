@@ -27,6 +27,7 @@ class caixa_model extends Model {
                             data,
                             fcd.razao_social,
                             tipo,
+                            pedido_id,
                             classe');
         $this->db->from('tb_entradas e');
         $this->db->join('tb_forma_entradas_saida fe', 'fe.forma_entradas_saida_id = e.conta', 'left');

@@ -58,6 +58,8 @@ class contrato_model extends Model {
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where('ect.nome ilike', "%" . $args['nome'] . "%");
         }
+        
+//        $this->db->orderby('fp.nome');
         return $this->db;
     }
 
@@ -140,8 +142,10 @@ class contrato_model extends Model {
     }
 
     function carregarcontratotipo($contratotipo_id) {
-        $this->db->select('estoque_tipo_contrato_id as tipo_id,
-                                descricao');
+        $this->db->select('     estoque_tipo_contrato_id as tipo_id,
+                                descricao,
+                                tipo_movimentacao,
+                                boleto');
         $this->db->from('tb_estoque_tipo_contrato');
         $this->db->where('estoque_tipo_contrato_id', $contratotipo_id);
         $this->db->where('ativo', 'true');
@@ -202,24 +206,26 @@ class contrato_model extends Model {
                            ec.conta_id, 
                            fcd.razao_social, 
                            tc.tipo_movimentacao,
+                           tc.boleto,
+                           ecp.contrato_id,
                            ec.descricaopagamento_id');
         $this->db->from('tb_estoque_contrato_pagamento ecp');
-        $this->db->join('tb_estoque_contrato ec', 'ec.estoque_contrato_id = ecp.contrato_id');
-        $this->db->join('tb_estoque_tipo_contrato tc', 'tc.estoque_tipo_contrato_id = ec.tipo_contrato_id');
-        $this->db->join('tb_financeiro_credor_devedor fcd', 'fcd.financeiro_credor_devedor_id = ec.credor_devedor_id');
+        $this->db->join('tb_estoque_contrato ec', 'ec.estoque_contrato_id = ecp.contrato_id', 'left');
+        $this->db->join('tb_estoque_tipo_contrato tc', 'tc.estoque_tipo_contrato_id = ec.tipo_contrato_id', 'left');
+        $this->db->join('tb_financeiro_credor_devedor fcd', 'fcd.financeiro_credor_devedor_id = ec.credor_devedor_id', 'left');
         $this->db->where('ecp.ativo', 'true');
         $this->db->where('contrato_id', $estoque_contrato_id);
         $parcelas = $this->db->get()->result();
-//        echo "<pre>";
+        
 //        var_dump($parcelas);die;
-
-        $observacao = "Contrato de Num: " . $parcelas[0]->numero_contrato . ',  Credor/Devedor: ' . $parcelas[0]->razao_social;
+        
+        $observacao = "Contrato de Num: " . @$parcelas[0]->numero_contrato . ',  Credor/Devedor: ' . @$parcelas[0]->razao_social;
         $classe = "CONTRATO";
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
 
         $data = date("Y-m-d");
-        if ($parcelas[0]->tipo_movimentacao == 'ENTRADA') {
+        if (@$parcelas[0]->tipo_movimentacao == 'ENTRADA') {
             foreach ($parcelas as $item) {
                 if ($item->credor_devedor_id == '' || $item->conta_id == '') {
                     return true;
@@ -233,7 +239,6 @@ class contrato_model extends Model {
                 $this->db->set('data', $item->data);
                 $this->db->set('parcela', $item->parcela);
                 $this->db->set('classe', $classe);
-//                $this->db->set('descricaopagamento', $item->descricaopagamento);
                 $this->db->set('conta', $item->conta_id);
                 $this->db->set('observacao', $obs);
                 $this->db->set('data_cadastro', $horario);
@@ -266,6 +271,19 @@ class contrato_model extends Model {
 //                }
             }
         }
+        
+        if ($parcelas[0]->boleto == 't') {
+            foreach ($parcelas as $item) {
+                $this->db->set('valor', $item->valor);
+                $this->db->set('credor_devedor_id', $item->credor_devedor_id);
+                $this->db->set('data_vencimento', $item->data);
+                $this->db->set('contrato_id', $item->contrato_id);
+                $this->db->set('data_cadastro', $horario);
+                $this->db->set('operador_cadastro', $operador_id);
+                $this->db->insert('tb_estoque_boleto');
+            }
+        }
+
         $this->db->set('faturado', 't');
         $this->db->set('data_faturamento', $horario);
         $this->db->where('estoque_contrato_id', $estoque_contrato_id);
@@ -332,6 +350,12 @@ class contrato_model extends Model {
             /* inicia o mapeamento no banco */
             $this->db->set('descricao', $_POST['txtNome']);
             $this->db->set('tipo_movimentacao', $_POST['tipoFinanceiro']);
+            if( isset($_POST['boleto']) ){
+                $this->db->set('boleto', 'true');
+            }
+            else{
+                $this->db->set('boleto', 'false');
+            }
 
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');

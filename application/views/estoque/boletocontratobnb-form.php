@@ -12,7 +12,7 @@
         <h3 class="singular"><a href="#">Informações Necessarias para Gerar o Boleto</a></h3>
         <div>
             <dl class="dl_desconto_lista">
-                <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/criarboletobanconordeste" method="post">
+                <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/criarboletocontratobanconordeste" method="post">
                     <dl>
                         <dt>
                             <label>Carteira *</label>

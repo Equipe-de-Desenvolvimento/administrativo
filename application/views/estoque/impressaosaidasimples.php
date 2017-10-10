@@ -7,12 +7,12 @@
             margin: 0 0 -30pt 0;
         }
         .cabecalho_principal{
-            font-size: 10pt;
+            font-size: 9pt;
             margin-bottom: -20pt;
             margin-top: -15pt;
         }
         .cabecalho_secundario{
-            font-size:10pt;
+            font-size:9pt;
             margin-bottom: -10pt;
         }
         .negrito{
@@ -46,7 +46,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr>
                                 <td>
-                                    <img src="" alt="" width="50" height="70" border="1">
+                                    <img src="img/logo peq.jpg" alt="" width="100" height="70" border="1">
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -152,20 +152,22 @@
                             <tr>
                                 <td colspan="3">
                                     <div class="corpo">
-                                        <table>
+                                        <table cellpadding="2">
                                             <tbody>
                                                 <tr>
-                                                    <th align="left">PRODUTOS</th>
-                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th align="left">COD</th>
+                                                    <th align="left">PRODUTO</th>
+                                                    <th>UNIDADE</th>
                                                     <th>QUANTIDADE</th>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
                                                 <? foreach ($produtossaida as $value) : ?>
                                                     <tr> 
+                                                        <td><?= @$value->codigo; ?></td>
                                                         <td><?= @$value->descricao; ?></td>
-                                                        <td></td>
-                                                        <td><?= @$value->quantidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->unidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->quantidade; ?></td>
                                                     </tr>
                                                 <? endforeach; ?>
                                             </tbody>
@@ -335,10 +337,10 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr>
                                 <td>
-                                    <img src="" alt="" width="50" height="70" border="1">
+                                    <img src="img/logo peq.jpg" alt="" width="100" height="70" border="1">
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
                                 </td>
                                 <td>
                                     <table class="cabecalho_principal" cellspacing="8" cellpadding="4">
@@ -444,17 +446,19 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <th align="left">PRODUTOS</th>
-                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th align="left">COD</th>
+                                                    <th align="left">PRODUTO</th>
+                                                    <th>UNIDADE</th>
                                                     <th>QUANTIDADE</th>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
                                                 <? foreach ($produtossaida as $value) : ?>
                                                     <tr> 
+                                                        <td><?= @$value->codigo; ?></td>
                                                         <td><?= @$value->descricao; ?></td>
-                                                        <td></td>
-                                                        <td><?= @$value->quantidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->unidade; ?></td>
+                                                        <td style="text-align: right"><?= @$value->quantidade; ?></td>
                                                     </tr>
                                                 <? endforeach; ?>
                                             </tbody>
@@ -609,6 +613,7 @@
                                     </div>
                                 </td>
                             </tr> 
+
 
                         </table>
                     </div>

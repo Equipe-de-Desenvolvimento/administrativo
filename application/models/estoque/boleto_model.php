@@ -29,6 +29,35 @@ class boleto_model extends Model {
         }
     }
 
+    function listarsolicitacaoboletoscnab($solicitacao_cliente_id) {
+
+        $this->db->select('eb.estoque_boleto_id, eb.data_vencimento');
+        $this->db->from('tb_estoque_boleto eb');
+        $this->db->where('eb.ativo', 'true');
+        $this->db->where('eb.solicitacao_cliente_id', $solicitacao_cliente_id);
+        $return = $this->db->get();
+        $return = $return->result();
+        return $return;
+    }
+
+    function listarsolicitacaoboletocontrato($contrato_id) {
+
+        $this->db->select('eb.estoque_boleto_id,
+                           eb.valor,
+                           eb.registrado,
+                           eb.data_vencimento,
+                           eb.pagado,
+                           ec.razao_social as credor_devedor');
+        $this->db->from('tb_estoque_boleto eb');        
+        $this->db->join('tb_financeiro_credor_devedor ec', 'ec.financeiro_credor_devedor_id = eb.credor_devedor_id', 'left');
+        $this->db->where('eb.ativo', 'true');
+        $this->db->where('eb.contrato_id', $contrato_id);
+        $this->db->orderby('data_vencimento');
+        $return = $this->db->get();
+        $return = $return->result();
+        return $return;
+    }
+
     function listarsolicitacaoboleto($solicitacao_cliente_id) {
 
         $this->db->select('eb.estoque_boleto_id,
@@ -36,15 +65,30 @@ class boleto_model extends Model {
                            dfp.nome as descricaopagamento,
                            eb.valor,
                            eb.registrado,
+                           eb.data_vencimento,
                            eb.pagado');
         $this->db->from('tb_estoque_boleto eb');
         $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = eb.formapagamento_id', 'left');
         $this->db->join('tb_descricao_forma_pagamento dfp', 'dfp.descricao_forma_pagamento_id = eb.descricaopagamento_id', 'left');
         $this->db->where('eb.ativo', 'true');
         $this->db->where('eb.solicitacao_cliente_id', $solicitacao_cliente_id);
+        $this->db->orderby('data_vencimento');
         $return = $this->db->get();
         $return = $return->result();
         return $return;
+    }
+
+    function listarcontaboletocontrato($contrato_id) {
+
+        $this->db->select('fs.conta,
+                            fs.agencia,
+                            fs.digito,
+                            fs.descricao as descricao_conta');
+        $this->db->from('tb_estoque_contrato ec');
+        $this->db->join('tb_forma_entradas_saida fs', 'fs.forma_entradas_saida_id = ec.conta_id', 'left');
+        $this->db->where('ec.estoque_contrato_id', $contrato_id);
+        $return = $this->db->get();
+        return $return->result();
     }
 
     function listarcontaboleto($descricaopagamento_id) {
@@ -91,6 +135,28 @@ class boleto_model extends Model {
         $this->db->where('esf.estoque_solicitacao_id', $estoque_solicitacao_id);
         $return = $this->db->get();
         return $return->result();
+    }
+
+    function listarcredordevedorcontrato($contrato_id) {
+        $this->db->select('cli.razao_social as cliente,
+                           cli.telefone as cliente_telefone,
+                           cli.celular as cliente_celular,
+                           cli.cnpj as cliente_cnpj,
+                           cli.logradouro as cliente_logradouro,
+                           cli.numero as cliente_numero,
+                           cli.bairro as cliente_bairro,
+                           m.nome as cliente_municipio,
+                           m.estado as cliente_estado');
+        $this->db->from('tb_estoque_boleto eb');        
+        $this->db->join('tb_estoque_contrato ec', 'ec.estoque_contrato_id = eb.contrato_id', 'left');
+        $this->db->join('tb_financeiro_credor_devedor cli', 'cli.financeiro_credor_devedor_id = ec.credor_devedor_id', 'left');
+        $this->db->join('tb_municipio m', 'm.municipio_id = cli.municipio_id', 'left');
+        $this->db->where('eb.ativo', 'true');
+        $this->db->where('eb.contrato_id', $contrato_id);
+        $this->db->orderby('data_vencimento');
+        $return = $this->db->get();
+        $return = $return->result();
+        return $return;
     }
 
     function listar($args = array()) {
@@ -163,11 +229,13 @@ class boleto_model extends Model {
                             eb.nosso_numero,
                             eb.seu_numero,
                             eb.juros,
+                            eb.multa,
                             eb.mensagem_cedente,
                             eb.especie_documento,
                             eb.carteira,
                             eb.servico,
                             eb.aceite,
+                            eb.gerado,
                             eb.instrucao_boleto,
                             eb.baixa,
                             eb.descricaopagamento_id,
@@ -244,7 +312,7 @@ class boleto_model extends Model {
         return $return->result();
     }
 
-    function gravardadoscnab() {
+    function gravardadoscnabtodos($estoque_boleto_id) {
         $this->db->set('data_vencimento', $_POST['vencimento']);
         $this->db->set('numero_documento', $_POST['numDoc']);
         $this->db->set('nosso_numero', $_POST['nosso_numero']);
@@ -255,8 +323,32 @@ class boleto_model extends Model {
         $this->db->set('especie_documento', $_POST['especie']);
         $this->db->set('carteira', $_POST['carteira']);
         $this->db->set('servico', $_POST['servico']);
+        $this->db->set('gerado', 't');
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('estoque_boleto_id', $estoque_boleto_id);
+        $this->db->update('tb_estoque_boleto');
+    }
+
+    function gravardadoscnab() {
+        $this->db->set('data_vencimento', $_POST['vencimento']);
+        $this->db->set('numero_documento', $_POST['numDoc']);
+        $this->db->set('nosso_numero', $_POST['nosso_numero']);
+        $this->db->set('juros', $_POST['juros']);
+        $this->db->set('multa', $_POST['multa']);
+        $this->db->set('mensagem_cedente', $_POST['mensagem']);
+        $this->db->set('instrucao_boleto', $_POST['instrucao']);
+        $this->db->set('aceite', $_POST['aceite']);
+        $this->db->set('especie_documento', $_POST['especie']);
+        $this->db->set('carteira', $_POST['carteira']);
+        $this->db->set('servico', $_POST['servico']);
+        $this->db->set('gerado', 't');
+        
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        
         $this->db->set('data_atualizacao', $horario);
         $this->db->set('operador_atualizacao', $operador_id);
         $this->db->where('estoque_boleto_id', $_POST['estoque_boleto_id']);
@@ -284,47 +376,96 @@ class boleto_model extends Model {
             return -1;
         }
     }
+    
+    
+    function jurosporparcelas($formapagamento_id) {
+        $this->db->select('valor, prazo, parcela, dias');
+        $this->db->from('tb_formapagamento_pacela_juros');
+        $this->db->where('forma_pagamento_id', $formapagamento_id);
+        $this->db->where('ativo', 't');
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 
     function gravarsolicitacaoboleto($solicitacao_id) {
-
-        $this->db->select("descricaopagamento,
-                            contrato_id,
-                            boleto");
-        $this->db->from('tb_estoque_solicitacao_cliente');
-        $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
-        $return = $this->db->get();
-        $retorno = $return->result();
-        
-        $this->db->select("esi.quantidade, esi.valor as valor_venda");
-        $this->db->from('tb_estoque_solicitacao_itens esi');
-        $this->db->where("solicitacao_cliente_id", $solicitacao_id);
-        $this->db->where("ativo", 't');
-        $return = $this->db->get();
-        $retorno2 = $return->result();
-        
-        $valortotal = 0;
-        foreach ($retorno2 as $item) {
-            //calcula valor total
-            $v = (float) $item->valor_venda;
-            $a = (int) str_replace('.', '', $item->quantidade);
-            $preco = (float) $a * $v;
-            $valortotal += $preco;
-        }
-
-        $this->db->set('valor', $valortotal);
-        $this->db->set('solicitacao_cliente_id', $solicitacao_id);
-        $this->db->set('descricaopagamento_id', $retorno[0]->descricaopagamento);
-//        if ($retorno[0]->credor_devedor != '') {
-//            $this->db->set('credor_devedor_id', $retorno[0]->credor_devedor);
-//        }
-        if ($retorno[0]->contrato_id != '') {
-            $this->db->set('contrato_id', $retorno[0]->contrato_id);
-        }
         $horario = date("Y-m-d H:i:s");
         $operador_id = $this->session->userdata('operador_id');
-        $this->db->set('data_cadastro', $horario);
-        $this->db->set('operador_cadastro', $operador_id);
-        $this->db->insert('tb_estoque_boleto');
+        
+        $this->db->select('ec.nome, ec.telefone, 
+                           ec.credor_devedor_id, 
+                           esc.descricaopagamento, 
+                           esc.formadepagamento, 
+                           fp.tipo,
+                           esf.*');
+        $this->db->from('tb_estoque_solicitacao_cliente esc');
+        $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id');
+        $this->db->join('tb_descricao_forma_pagamento dfp', 'dfp.descricao_forma_pagamento_id = esc.descricaopagamento');
+        $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = esc.formadepagamento');
+        $this->db->join('tb_estoque_solicitacao_faturamento esf', 'esf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id');
+        $this->db->where("estoque_solicitacao_setor_id", $solicitacao_id);
+        $this->db->where("esf.ativo", 't');
+        $faturamento = $this->db->get()->result();
+
+        $cliente = $faturamento[0]->credor_devedor_id;
+        $valorPedido = $faturamento[0]->valor_total;
+
+        if ($valorPedido != '0.00') {
+            $valor = $faturamento[0]->valor_total;
+            $tipo = $faturamento[0]->tipo;
+
+            $parcelas = $this->jurosporparcelas($faturamento[0]->formadepagamento);
+            $prazo = (int) $parcelas[0]->prazo;
+
+//FORMA DE PAGAMENTO 'AVISTA'
+// O valor 100 se refere a porcentagem de juros cadastrada na parcela.
+            if ($tipo == 1) {
+                $prazo = (int) $parcelas[0]->prazo;
+
+                if ($prazo == 0 || $prazo == '') { //CASO SEJA AVISTA E NAO HAJA PRAZO (vai receber o dinheiro no caixa)
+                    $this->db->set('descricaopagamento_id', $faturamento[0]->descricaopagamento);
+                    $this->db->set('formapagamento_id', $faturamento[0]->formadepagamento);
+                    $this->db->set('data_vencimento', $horario);
+                    $this->db->set('valor', $valor);
+                    $this->db->set('solicitacao_cliente_id', $solicitacao_id);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_estoque_boleto');
+                } else { //CASO HAJA UM PRAZO
+                    $data_receber = date("Y-m-d");
+                    $data_receber = date("Y-m-d", strtotime("+$prazo days", strtotime($data_receber)));
+                    $this->db->set('valor', $valor);
+                    $this->db->set('data_vencimento', $data_receber);
+                    $this->db->set('descricaopagamento_id', $faturamento[0]->descricaopagamento);
+                    $this->db->set('formapagamento_id', $faturamento[0]->formadepagamento);
+                    $this->db->set('solicitacao_cliente_id', $solicitacao_id);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_estoque_boleto');
+                }
+            }
+//FORMA DE PAGAMENTO 'PARCELADO' ou 'CADASTRO MANUAL'
+            else {
+
+                $data_receber = date("Y-m-d");
+                foreach ($parcelas as $item) {
+
+                    $percParcela = (float) $item->valor;
+                    $valorParcela = $valor * ($percParcela / 100);
+                    $periodo = $item->dias;
+                    $data_receber = date("Y-m-d", strtotime("+$periodo days", strtotime($data_receber)));
+
+                    $this->db->set('valor', $valorParcela);
+                    $this->db->set('descricaopagamento_id', $faturamento[0]->descricaopagamento);
+                    $this->db->set('formapagamento_id', $faturamento[0]->formadepagamento);
+                    $this->db->set('data_vencimento', $data_receber);
+                    $this->db->set('solicitacao_cliente_id', $solicitacao_id);
+                    $this->db->set('data_cadastro', $horario);
+                    $this->db->set('operador_cadastro', $operador_id);
+                    $this->db->insert('tb_estoque_boleto');
+                }
+            }
+        }
         return true;
     }
 

@@ -16,14 +16,21 @@
                         <label>&nbsp;</label>
                     </dt>
                     <dd>
-                        <input type="radio" name="tipoFinanceiro" value="ENTRADA" id="fixo" required=""/>
+                        <input type="radio" name="tipoFinanceiro" value="ENTRADA" id="fixo" required="" <? if (@$tipo[0]->tipo_movimentacao == 'ENTRADA') echo "checked"; ?>/>
                         <label for="fixo" style="display: inline; color: black; font-size: 9pt">
                             Entrada
                         </label>
-                        <input type="radio" name="tipoFinanceiro" value="SAIDA" id="periodico" required=""/>
+                        <input type="radio" name="tipoFinanceiro" value="SAIDA" id="periodico" required="" <? if (@$tipo[0]->tipo_movimentacao == 'SAIDA') echo "checked"; ?>/>
                         <label for="periodico" style="display: inline; color: black; font-size: 9pt">
                             Saida
                         </label>
+                    </dd>
+                    <dt>
+                        <label>&nbsp;</label>
+                    </dt>
+                    <dd>
+                        <input type="checkbox" name="boleto" id="boleto" <? if (@$tipo[0]->boleto == 't') echo "checked"; ?> />
+                        <label for="boleto">Gerar Boleto?</label>
                     </dd>
                 </dl>    
                 <hr/>

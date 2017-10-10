@@ -2,7 +2,7 @@
     <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/gerarboletobanconordeste" method="post">
 
         <div>        
-            <a href="<?= base_url() ?>estoque/boleto/gerarboletobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
+            <a href="<?= base_url() ?>estoque/boleto/gerarboletocontratobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
                 <button type="button" id="novaParcela">Gerar Boleto</button>
             </a>
             <? if ($boleto[0]->gerado == 't') { ?>
@@ -75,47 +75,47 @@
         </fieldset>
 
         <fieldset>
-            <legend>Dados do Cliente</legend>
+            <legend>Dados do Devedor</legend>
             <div>        
                 <label>Nome do Cliente</label>
-                <input type="text" name="descricao" id="descricao" class="texto05" value="<?= @$boleto[0]->cliente; ?>" readonly />
+                <input type="text" name="descricao" id="descricao" class="texto05" value="<?= @$devedor[0]->cliente; ?>" readonly />
             </div>
             <div>        
                 <label>Telefone</label>
-                <input type="text" name="forma_pagamento" id="forma_pagamento" class="texto03" value="<?= @$boleto[0]->cliente_telefone; ?>" readonly />
+                <input type="text" name="forma_pagamento" id="forma_pagamento" class="texto03" value="<?= @$devedor[0]->cliente_telefone; ?>" readonly />
             </div>
-            <div>        
+<!--            <div>        
                 <label>Email</label>
-                <input type="text" name="forma_pagamento" id="forma_pagamento" class="texto05" value="<?= @$boleto[0]->cliente_email; ?>" readonly />
-            </div>
+                <input type="text" name="forma_pagamento" id="forma_pagamento" class="texto05" value="<?= @$devedor[0]->cliente_email; ?>" readonly />
+            </div>-->
             <div>        
                 <label>Endereço</label>
-                <input type="text" name="descricao" id="descricao" class="texto05" value="<?= @$boleto[0]->cliente_logradouro . ' ' . @$boleto[0]->cliente_numero; ?>" readonly />
+                <input type="text" name="descricao" id="descricao" class="texto05" value="<?= @$devedor[0]->cliente_logradouro . ' ' . @$boleto[0]->cliente_numero; ?>" readonly />
             </div>
             <div>        
                 <label>Bairro</label>
-                <input type="text" name="descricao" id="descricao" class="texto03" value="<?= @$boleto[0]->cliente_bairro; ?>" readonly />
+                <input type="text" name="descricao" id="descricao" class="texto03" value="<?= @$devedor[0]->cliente_bairro; ?>" readonly />
             </div>
             <div>        
                 <label>Municipio</label>
-                <input type="text" name="descricao" id="descricao" class="texto03" value="<?= @$boleto[0]->cliente_municipio; ?>" readonly />
+                <input type="text" name="descricao" id="descricao" class="texto03" value="<?= @$devedor[0]->cliente_municipio; ?>" readonly />
             </div>
             <div>        
                 <label>UF</label>
-                <input type="text" name="descricao" id="descricao" class="texto02" value="<?= @$boleto[0]->cliente_estado; ?>" readonly />
+                <input type="text" name="descricao" id="descricao" class="texto02" value="<?= @$devedor[0]->cliente_estado; ?>" readonly />
             </div>
         </fieldset>
 
         <fieldset>
             <legend>Dados do Pagamento</legend>
-            <div>        
+<!--            <div>        
                 <label>Descriçao do Pagamento</label>
                 <input type="text" name="descricao" id="descricao" class="texto05" value="<?= @$boleto[0]->descricao; ?>" readonly />
             </div>
             <div>        
                 <label>Forme de Pagamento</label>
                 <input type="text" name="forma_pagamento" id="forma_pagamento" class="texto05" value="<?= @$boleto[0]->forma_pagamento; ?>" readonly />
-            </div>
+            </div>-->
             <div>        
                 <label>Nome da Conta</label>
                 <input type="text" name="descricao" id="descricao" class="texto05" value="<?= @$conta[0]->descricao_conta; ?>" readonly />

@@ -40,7 +40,7 @@
                 ?>
                 <tbody>
                     <?php
-                        $lista = $this->contrato->listar($_GET)->orderby('ect.nome')->limit($limit, $pagina)->get()->result();
+                        $lista = $this->contrato->listar($_GET)->orderby('ect.data_cadastro DESC, ect.nome')->limit($limit, $pagina)->get()->result();
                         $estilo_linha = "tabela_content01";
                         foreach ($lista as $item) {
                             ($estilo_linha == "tabela_content01") ? $estilo_linha = "tabela_content02" : $estilo_linha = "tabela_content01";
@@ -59,19 +59,21 @@
                                 </td>
                                 
                                 <? if($item->faturado == 'f'): ?>
-                                <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                    <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Contrato?');" href="<?= base_url() ?>estoque/contrato/excluir/<?= $item->estoque_contrato_id ?>">Excluir</a>
-                                </td>
-                                
-                                <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                    <a onclick="javascript: return confirm('Deseja realmente faturar esse Contrato?');" href="<?= base_url() ?>estoque/contrato/faturarcontrato/<?= $item->estoque_contrato_id ?>">Faturar</a>
-                                </td>
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                        <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Contrato?');" href="<?= base_url() ?>estoque/contrato/excluir/<?= $item->estoque_contrato_id ?>">Excluir</a>
+                                    </td>
+
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                        <a onclick="javascript: return confirm('Deseja realmente faturar esse Contrato?');" href="<?= base_url() ?>estoque/contrato/faturarcontrato/<?= $item->estoque_contrato_id ?>">Faturar</a>
+                                    </td>
                                 
                                 <? else: ?>
-                                <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
-                                    <span style="color:green;font-weight: bold">Faturado</span>
-                                </td>
-                                <td class="<?php echo $estilo_linha; ?>" width="70px;"></td>
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">                                  
+                                        <span style="color:green;font-weight: bold">Faturado</span>
+                                    </td>
+                                    <td class="<?php echo $estilo_linha; ?>" width="70px;">
+                                        <!--<a href="<?= base_url() ?>estoque/boleto/carregarboletoscontrato/<?= $item->estoque_contrato_id ?>">Boleto</a>-->
+                                    </td>
                                 <?  endif;?>
                             </tr>
 

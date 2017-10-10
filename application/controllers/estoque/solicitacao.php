@@ -73,9 +73,9 @@ class Solicitacao extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
-                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/stg - logo.jpg',
+                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''
@@ -462,12 +462,17 @@ class Solicitacao extends BaseController {
     function imprimirliberada($estoque_solicitacao_id) {
 
         $this->load->plugin('mpdf');
+        
+//        $mpdf = new Mpdf();
+//        $mpdf->showImageErrors = true;
+        
         $data['solicitacao_id'] = $estoque_solicitacao_id;
         $data['empresa'] = $this->solicitacao->empresa();
         $data['destinatario'] = $this->solicitacao->listadadossolicitacaoliberada($estoque_solicitacao_id);
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+//        $this->load->View('estoque/impressaoliberada', $data, true);
         $html = $this->load->View('estoque/impressaoliberada', $data, true);
         pdf($html);
     }
@@ -568,24 +573,26 @@ class Solicitacao extends BaseController {
     function gravarfaturamento($solicitacao_id) {
 
         $verifica = $this->solicitacao->gravarfaturamento($solicitacao_id);
-
+//        die;
 //            $contrato_id = $_POST['contrato_id'];
 //            $credor_devedor_id = $_POST['credor_devedor_id'];
 //            $solicitacao_id = $_POST['estoque_solicitacao_id'];
 //            
         $solicitacao_cliente = $this->solicitacao->listarsolicitacaofaturamentocliente($solicitacao_id);
-
+//        die;
         //dar saida estoque
         $this->solicitacao->finalizarsaidapedido($solicitacao_id);
-
+//        die;
         if ($solicitacao_cliente[0]->boleto == 't') {
             $verifica = $this->boleto->gravarsolicitacaoboleto($solicitacao_id);
         }
+//        die;
+//        echo  "<pre>"; var_dump($solicitacao_cliente);die;
 
         if ($solicitacao_cliente[0]->financeiro == 't') {
             $this->solicitacao->gravarfinanceirofaturamento($solicitacao_id);
         }
-
+//        die;
         if ($verifica) {
             $data['mensagem'] = 'Finalizado com sucesso.';
         } else {
@@ -804,6 +811,9 @@ class Solicitacao extends BaseController {
 
     function gravar() {
         $estoque_solicitacao_setor_id = $this->solicitacao->gravar();
+//        if(@$_POST['atualizafinanceiro'] ==  'true' && isset($_POST['financeiro'])){
+//            $this->solicitacao->removerfinanceiro($_POST['solicitacao_id']);
+//        }
         if ($estoque_solicitacao_setor_id == "-1") {
             $data['mensagem'] = 'Erro ao gravar a Solicitacao. Opera&ccedil;&atilde;o cancelada.';
         } else {
