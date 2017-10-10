@@ -568,3 +568,13 @@ ALTER TABLE ponto.tb_entradas add column descricaopagamento integer;
 ALTER TABLE ponto.tb_financeiro_contasreceber add column descricaopagamento integer;
 ALTER TABLE ponto.tb_financeiro_contaspagar add column descricaopagamento integer;
 ALTER TABLE ponto.tb_saidas add column descricaopagamento integer;
+
+-- Dia 13/05/2017
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN gerado boolean DEFAULT false;
+
+-- Dia 25/06/2017
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN multa numeric(10,2);
+
+-- Dia 26/06/2017
+ALTER TABLE ponto.tb_estoque_tipo_contrato ADD COLUMN boleto boolean DEFAULT false;
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN contrato_id integer;
