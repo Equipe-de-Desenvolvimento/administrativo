@@ -36,7 +36,7 @@
                                     foreach ($classe as $value2) :
                                         if ($value->estoque_tipo_id == $value2->tipo_id) {
                                             ?>
-                                        <optgroup label="<?= $value2->descricao ?>" class="optClasse">
+                                            <optgroup label="<?= $value2->descricao ?>" class="optClasse">
                                             <?
                                             foreach ($sub as $item) :
                                                 if ($item->classe_id == $value2->estoque_classe_id) {
@@ -49,10 +49,9 @@
                                                     </option>
                                                     <?
                                                 }
-                                            endforeach;
-                                        }
-                                        ?>
-                                    </optgroup>
+                                            endforeach; ?>
+                                            </optgroup>
+                                        <?}?>
                                     <? endforeach; ?>
 
                                 </optgroup>
@@ -83,7 +82,7 @@
                         <select name="marca" id="marca" class="size4">
                             <? foreach ($marca as $value) : ?>
                                 <option value="<?= $value->estoque_marca_id; ?>"<?
-                            if (@$obj->_unidade_id == $value->estoque_marca_id):echo'selected';
+                            if (@$obj->_marca_id == $value->estoque_marca_id):echo'selected';
                             endif;
                                 ?>><?php echo $value->descricao; ?></option>
                                     <? endforeach; ?>

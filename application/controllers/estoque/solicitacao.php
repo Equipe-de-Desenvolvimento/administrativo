@@ -427,9 +427,10 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
         $data['usuario'] = $this->solicitacao->usuarioemitente();
 //        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
-        $html = $this->load->View('estoque/impressaosaida', $data, true);
+//        $html = $this->load->View('estoque/impressaosaida', $data, true);
+        $html = $this->load->View('estoque/impressaosaida2', $data, true);
 
-        pdf($html, null, null, null, '', true);
+        pdf($html, null, null, null, '', false);
     }
 
     function imprimirsimples($estoque_solicitacao_id) {
@@ -443,8 +444,9 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
         $data['usuario'] = $this->solicitacao->usuarioemitente();
 //        $this->load->View('estoque/impressaosaidasimples', $data);
-        $html = $this->load->View('estoque/impressaosaidasimples', $data, true);
-        pdf($html, null, null, null, '', true);
+        $html = $this->load->View('estoque/impressaosaidasimples2', $data, true);
+//        $html = $this->load->View('estoque/impressaosaidasimples', $data, true);
+        pdf($html, null, null, null, '', false);
     }
 
     function imprimirliberadasimples($estoque_solicitacao_id) {

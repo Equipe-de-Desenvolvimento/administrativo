@@ -1,4 +1,14 @@
-
+<style>
+    .optTipo{
+        color: #3A539B; font-style:italic; background-color: #DADFE1; padding: 5pt 0pt 5pt 0pt;
+    }
+    .optClasse{
+        color: #F2784B; font-style:italic; background-color: #DADFE1; text-indent: 10pt;
+    }
+    .option{
+        text-indent: 30pt; color: black; font-weight: bold;
+    }
+</style>
 <?
 $tipo = $this->menu->listartipos();
 $classe = $this->produto->listarclasse();
@@ -66,12 +76,33 @@ $marca = $this->produto->listarmarca();
                                     </td>
                                     <td>
                                         <select name="subclasse_id" id="subclasse_id" class="texto02">
-                                            <option value="">SELECIONE</option>
-                                            <? foreach ($sub as $sclasse) : ?>
-                                                <option value="<?= $sclasse->estoque_sub_classe_id; ?>"
-                                                        <?= (@$_GET['subclasse_id'] == $sclasse->estoque_sub_classe_id)?'selected':'' ?>>
-                                                            <?php echo $sclasse->descricao; ?>
-                                                </option>
+                                            <option value="">SELECIONE</option>                                            
+                                            <? foreach ($tipo as $value) : ?>
+                                            <optgroup label="<?= $value->descricao ?>" class="optTipo">
+                                                <?
+                                                foreach ($classe as $value2) :
+                                                    if ($value->estoque_tipo_id == $value2->tipo_id) {
+                                                        ?>
+                                                    <optgroup label="<?= $value2->descricao ?>" class="optClasse">
+                                                        <?
+                                                        foreach ($sub as $item) :
+                                                            if ($item->classe_id == $value2->estoque_classe_id) {
+                                                                ?>
+                                                                <option 
+                                                                    class="option"
+                                                                    value="<?= $item->estoque_sub_classe_id; ?>"
+                                                                    <? if (@$obj->_sub_classe_id == $item->estoque_sub_classe_id):echo'selected';endif; ?>>
+                                                                <?= $item->descricao; ?>
+                                                                </option>
+                                                                <?
+                                                            }
+                                                        endforeach;
+                                                    }
+                                                    ?>
+                                                    </optgroup>
+                                                <? endforeach; ?>
+
+                                            </optgroup>
                                             <? endforeach; ?>
                                         </select>
                                     </td>
@@ -172,7 +203,28 @@ $marca = $this->produto->listarmarca();
     $(function () {
         $("#accordion").accordion();
     });
-
+    
+    var classe = '<option value="">SELECIONE</option>';                                            
+    <? foreach ($tipo as $value) : ?>
+        classe += '<optgroup label="<?= $value->descricao ?>" class="optTipo">';
+        <? foreach ($classe as $value2) :
+            if ($value->estoque_tipo_id == $value2->tipo_id) {
+                ?>
+                classe += '<optgroup label="<?= $value2->descricao ?>" class="optClasse">';
+                <? foreach ($sub as $item) :
+                    if ($item->classe_id == $value2->estoque_classe_id) {
+                        ?>
+                        classe += '<option class="option" value="<?= $item->estoque_sub_classe_id; ?>" <? if (@$obj->_sub_classe_id == $item->estoque_sub_classe_id):echo'selected';endif; ?>><?= $item->descricao; ?></option>';
+                        <?
+                    }
+                endforeach; ?>
+                classe += '</optgroup>';
+            <? } 
+        endforeach; ?>
+        
+         classe += '</optgroup>';
+    <? endforeach; ?>
+        
     $(function () {
         $('#classe_id').change(function () {
             if ($(this).val()) {
@@ -186,35 +238,37 @@ $marca = $this->produto->listarmarca();
                     $('.carregando').hide();
                 });
             } else {
-                $('#subclasse_id').html('<option value="">SELECIONE</option>');
+                $('#subclasse_id').html(classe);
             }
         });
     });
     $(function () {
         $('#tipo_id').change(function () {
             if ($(this).val()) {
+                
+                $('#subclasse_id').html('<option value="">SELECIONE -></option>').show();
+                
                 $('.carregando').show();
                 //Pega todas as classes para esse tipo
                 $.getJSON('<?= base_url() ?>autocomplete/estoqueclasseportipo', {tipo_id: $(this).val(), ajax: true}, function (j) {
-                    options = '<option value="">SELECIONE -></option>';
+                    var cla = '<option value="">SELECIONE -></option>';
                     for (var c = 0; c < j.length; c++) {
-                        options += '<option value="' + j[c].estoque_classe_id + '">' + j[c].descricao + '</option>';
+                        cla += '<option value="' + j[c].estoque_classe_id + '">' + j[c].descricao + '</option>';
+                        var options = '<optgroup label="' + j[c].descricao + '" class="optClasse">';
+                        $.getJSON('<?= base_url() ?>autocomplete/estoquesubclasseporclasse', {classe_id: j[c].estoque_classe_id, ajax: true}, function (t) {
+                            for (var x = 0; x < t.length; x++) {
+                                options += '<option value="' + t[x].estoque_sub_classe_id + '">' + t[x].descricao + '</option>';
+                            }
+                            $('#subclasse_id').append(options);
+                        });
+                        
                     }
-                    $('#classe_id').html(options).show();
+                    $('#classe_id').html(cla).show();
                     $('.carregando').hide();
                 });
                 
-                //Pega todas as subclasses para esse subtipo
-                $.getJSON('<?= base_url() ?>autocomplete/estoqueprodutoportipo', {tipo_id: $(this).val(), ajax: true}, function (j) {
-                    options = '<option value="">SELECIONE -></option>';
-                    for (var c = 0; c < j.length; c++) {
-                        options += '<option value="' + j[c].estoque_sub_classe_id + '">' + j[c].descricao + '</option>';
-                    }
-                    $('#subclasse_id').html(options).show();
-                    $('.carregando').hide();
-                });
             } else {
-                $('#classe_id').html('<option value="">SELECIONE</option>');
+                $('#classe_id').html(classe);
             }
         });
     });

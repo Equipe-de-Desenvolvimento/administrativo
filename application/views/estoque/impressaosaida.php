@@ -28,6 +28,9 @@
         .tabela_fim{
             font-size: 8pt;
         }
+        table tr td {font-size: 8pt;}
+        table tr td {font-size: 8pt;}
+        .dados_cabecalho{font-size: 8pt;}
     </style>
 
     <meta charset="utf-8">
@@ -45,7 +48,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr colspan="2">
                                 <td>
-                                    <img src="img/logo peq.jpg" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                                    <img src="img/logo peq.jpg" alt="" width="100" height="100" border="1" style="margin-bottom: -10pt;">
                                 </td>
                                 <td>
                                     <table class="cabecalho_principal">
@@ -163,10 +166,10 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <th align="left">COD</th>
-                                                    <th align="left">PRODUTO</th>
-                                                    <th>UNIDADE</th>
-                                                    <th>QUANTIDADE</th>
+                                                    <td align="left">COD</td>
+                                                    <td align="left">PRODUTO</td>
+                                                    <td>UNIDADE</td>
+                                                    <td>QUANTIDADE</td>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
@@ -336,7 +339,7 @@
                 </td>
 
                 <!--<td><div style="width: 50pt;"></div></td>-->
-
+                
                 <!-- LADO DIREITO -->
                 <td>
                     <div style="float: right;">
@@ -346,7 +349,7 @@
                             <!-- PRIMEIRO CABECALHO -->
                             <tr colspan="2">
                                 <td>
-                                    <img src="img/logo peq.jpg" alt="" width="150" height="100" border="1" style="margin-bottom: -10pt;">
+                                    <img src="img/logo peq.jpg" alt="" width="100" height="100" border="1" style="margin-bottom: -10pt;">
                                 </td>
                                 <td>
                                     <table class="cabecalho_principal">
@@ -469,10 +472,10 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <th align="left">COD</th>
-                                                    <th align="left">PRODUTO</th>
-                                                    <th>UNIDADE</th>
-                                                    <th>QUANTIDADE</th>
+                                                    <td align="left">COD</td>
+                                                    <td align="left">PRODUTO</td>
+                                                    <td>UNIDADE</td>
+                                                    <td>QUANTIDADE</td>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 

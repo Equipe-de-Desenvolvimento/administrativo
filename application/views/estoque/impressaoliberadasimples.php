@@ -158,7 +158,7 @@
                             <td colspan="3"><?= @$nome[0]->forma_pagamento; ?></td>
 
                             <td align="right" colspan="2"><span class="negrito">Tp.Doc: </span></td>
-                            <td colspan="4"></td>
+                            <td colspan="4"><?= @$nome[0]->descricao_pagamento; ?></td>
 
                         </tr>
 

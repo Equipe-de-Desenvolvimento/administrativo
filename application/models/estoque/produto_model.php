@@ -219,12 +219,14 @@ class produto_model extends Model {
                             n.descricao_ncm,
                             p.cest,
                             p.ipi,
+                            p.marca_id,
                             sc.descricao as sub_classe,
                             p.valor_compra,
                             p.valor_venda,
                             p.estoque_minimo');
             $this->db->from('tb_estoque_produto p');
             $this->db->join('tb_estoque_sub_classe sc', 'sc.estoque_sub_classe_id = p.sub_classe_id', 'left');
+//            $this->db->join('tb_estoque_marca em', 'em.estoque_marca_id = p.marca_id', 'left');
             $this->db->join('tb_ncm n', 'n.codigo_ncm = p.ncm', 'left');
             $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id = p.unidade_id', 'left');
             $this->db->where("estoque_produto_id", $estoque_produto_id);
@@ -244,6 +246,7 @@ class produto_model extends Model {
             $this->_valor_compra = $return[0]->valor_compra;
             $this->_valor_venda = $return[0]->valor_venda;
             $this->_estoque_minimo = $return[0]->estoque_minimo;
+            $this->_marca_id = $return[0]->marca_id;
 //            var_dump($return[0]->ncm); die;
         } else {
             $this->_estoque_produto_id = null;

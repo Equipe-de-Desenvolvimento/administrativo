@@ -3,7 +3,7 @@
 //ini_set('display_startup_erros',1);
 //error_reporting(E_ALL);
 
-require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+require_once ('./application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
 use NFePHP\NFe\ToolsNFe;
 

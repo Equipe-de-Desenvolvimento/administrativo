@@ -27,6 +27,7 @@ class Utilitario {
         $string = preg_replace("/ç/", "c", $string);
         $string = preg_replace("/Ç/", "C", $string);
         $string = preg_replace("/[][><}{)(:;,!?*%~^`@\.-]/", "", $string);
+//        var_dump($string);die;
         return $string;
     }
 

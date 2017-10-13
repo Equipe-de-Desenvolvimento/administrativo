@@ -245,12 +245,13 @@ class solicitacao_model extends Model {
 
     function solicitacaonomeliberado($estoque_solicitacao_id) {
 
-        $this->db->select('ec.nome  , esc.data_liberacao , o.nome as solicitante, fp.nome as forma_pagamento');
+        $this->db->select('ec.nome, esc.data_liberacao , o.nome as solicitante, fp.nome as forma_pagamento, df.nome as descricao_pagamento');
         $this->db->from('tb_estoque_solicitacao_cliente esc');
         $this->db->join('tb_estoque_cliente ec', 'ec.estoque_cliente_id = esc.cliente_id');
         $this->db->join('tb_operador o', 'o.operador_id = esc.operador_liberacao', 'left');
         $this->db->join('tb_estoque_solicitacao_faturamento esf', 'esf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id', 'left');
         $this->db->join('tb_forma_pagamento fp', 'fp.forma_pagamento_id = esf.forma_pagamento', 'left');
+        $this->db->join('tb_descricao_forma_pagamento df', 'df.descricao_forma_pagamento_id = esc.descricaopagamento', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $return = $this->db->get();
         return $return->result();

@@ -26,6 +26,7 @@ class menu_model extends Model {
         $this->db->join('tb_estoque_produto ep', 'ep.estoque_produto_id = mp.produto');
         $this->db->where('mp.ativo', 'true');
         $this->db->where('menu_id', $estoque_menu_id);
+        $this->db->orderby('ep.descricao');
         $return = $this->db->get();
         return $return->result();
     }
@@ -70,8 +71,10 @@ class menu_model extends Model {
     }
 
     function listarautocompleteprodutoportipo($tipo_id) {
+        $this->db->distinct();
         $this->db->select('sc.estoque_sub_classe_id,
-                            sc.descricao');
+                            sc.descricao,
+                            c.tipo_id');
         $this->db->from('tb_estoque_tipo t');
         $this->db->join('tb_estoque_classe c', 'c.tipo_id = t.estoque_tipo_id', 'left');
         $this->db->join('tb_estoque_sub_classe sc', 'sc.classe_id = c.estoque_classe_id', 'left');
@@ -84,6 +87,7 @@ class menu_model extends Model {
     }
 
     function listarautocompleteclasseportipo($tipo_id) {
+        $this->db->distinct();
         $this->db->select('c.estoque_classe_id,
                             c.descricao');
         $this->db->from('tb_estoque_tipo t');
@@ -96,6 +100,7 @@ class menu_model extends Model {
     }
 
     function listarautocompletesubclasseporclasse($classe_id) {
+        $this->db->distinct();
         $this->db->select('sc.estoque_sub_classe_id,
                             sc.descricao');
         $this->db->from('tb_estoque_classe c');

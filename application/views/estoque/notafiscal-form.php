@@ -89,7 +89,7 @@
             <div style="display: block; width: 100%">
                 <br>
                 <hr>
-                <button type="submit" name="btnEnviar">enviar</button>
+                <button type="submit" name="btnEnviar">Enviar</button>
             </div>
 
         </fieldset>

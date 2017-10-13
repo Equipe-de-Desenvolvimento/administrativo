@@ -1,11 +1,14 @@
 <?php
-
+//    ini_set('display_errors',1);
+//    ini_set('display_startup_erros',1);
+//    error_reporting(E_ALL);
+    
     use NFePHP\NFe\MakeNFe;
     use NFePHP\NFe\ToolsNFe;
-
+//    var_dump($config);die;
     $nfe = new NFePHP\NFe\MakeNFe();
     $nfeTools = new NFePHP\NFe\ToolsNFe($config);
-
+//        die('morreu');
     //Dados da NFe - infNFe
     $cUF = $dadosNFe['cUF']; //codigo numerico do estado
     $cNF = $dadosNFe['cNF']; //numero aleatório da NF
@@ -87,6 +90,7 @@
     $cMun = $dadosNFe['codMunicipio'];
     $xMun = $dadosNFe['nomMunicipio'];
     $UF = $dadosNFe['UF'];
+//    var_dump($dadosNFe['cep']); die;
     $CEP = $dadosNFe['cep'];
     $cPais = '1058';
     $xPais = 'Brasil';

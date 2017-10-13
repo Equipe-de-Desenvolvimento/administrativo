@@ -1,3 +1,3 @@
 <?php
-
-include '/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/autoload.php';
+//die('morer');
+include './application/libraries/nfephp/vendor/autoload.php';

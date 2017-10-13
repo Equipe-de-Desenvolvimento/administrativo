@@ -28,6 +28,8 @@
         .tabela_fim{
             font-size: 9pt;
         }
+        table tr td {font-size: 8pt;}
+        .dados_cabecalho{font-size: 8pt;}
     </style>
 
 
