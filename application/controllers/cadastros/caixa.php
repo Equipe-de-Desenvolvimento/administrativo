@@ -214,7 +214,7 @@ class Caixa extends BaseController {
         $dataFim = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['txtdata_fim'])));
         $nome = $_POST['nomeArquivo'];
 
-        $arquivos = directory_map("/home/sisprod/projetos/administrativo/upload/cnab");
+        $arquivos = directory_map("./upload/cnab");
         $zip = new ZipArchive;
         $zip->open("./upload/arquivosCNAB/{$nome}.zip", ZipArchive::CREATE);
 

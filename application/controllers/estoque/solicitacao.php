@@ -42,12 +42,12 @@ class Solicitacao extends BaseController {
             'pathXmlUrlFileMDFe' => 'mdf2_ws1.xml',
             'pathXmlUrlFileCLe' => '',
             'pathXmlUrlFileNFSe' => '',
-            'pathNFeFiles' => '/home/sisprod/projetos/administrativo/upload/nfe/' . $solicitacao_id . '/',
+            'pathNFeFiles' => './upload/nfe/' . $solicitacao_id . '/',
             'pathCTeFiles' => '',
             'pathMDFeFiles' => '',
             'pathCLeFiles' => '',
             'pathNFSeFiles' => '',
-            'pathCertsFiles' => '/home/sisprod/projetos/administrativo/upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
+            'pathCertsFiles' => './upload/certificado/' . $data["empresa"][0]->empresa_id . '/',
             'siteUrl' => base_url() . '/ambulatorio/empresa',
             'schemesNFe' => 'PL_008i2',
             'schemesCTe' => 'PL_CTe_200',
@@ -73,9 +73,9 @@ class Solicitacao extends BaseController {
                 'format' => 'L',
                 'paper' => 'A4',
                 'southpaw' => '1',
-                'pathLogoFile' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
-                'pathLogoNFe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
-                'pathLogoNFCe' => '/home/sisprod/projetos/administrativo/img/logo peq.jpg',
+                'pathLogoFile' => './img/logo peq.jpg',
+                'pathLogoNFe' => './img/logo peq.jpg',
+                'pathLogoNFCe' => './img/logo peq.jpg',
                 'logoPosition' => 'L',
                 'font' => 'Times',
                 'printer' => ''
@@ -332,15 +332,17 @@ class Solicitacao extends BaseController {
             "totalImposto" => number_format(0, 2, '.', '')
         );
 
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
+        require_once ('./application/libraries/nfephp/vendor/nfephp-org/nfephp/bootstrap.php');
 
         // GERA O XML PRINCIPAL
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraEspelhoNota.php');
+        require_once ('./application/libraries/nfephp/arquivosNfe/geraEspelhoNota.php');
 
-        $caminho = "/home/sisprod/projetos/administrativo/upload/nfe";
-        if (is_dir("{$caminho}/{$solicitacao_cliente_id}")) {
-            system("rm -R {$caminho}/{$solicitacao_cliente_id}");
-        }
+        $caminho = "./upload/nfe";
+        
+        $caminhoDiretorio = "{$caminho}/{$solicitacao_cliente_id}";
+        
+        $this->utilitario->apagaDiretorio($caminhoDiretorio); // Apaga o diretorio e tudo que esta dentro dele
+        
         mkdir("{$caminho}/{$solicitacao_cliente_id}");
         mkdir("{$caminho}/{$solicitacao_cliente_id}/espelho");
         chmod($caminho, 0777);
@@ -352,7 +354,7 @@ class Solicitacao extends BaseController {
         chmod($filename, 0777);
 
         // GERANDO DANFE
-        require_once ('/home/sisprod/projetos/administrativo/application/libraries/nfephp/arquivosNfe/geraEspelhoDanfe.php');
+        require_once ('./application/libraries/nfephp/arquivosNfe/geraEspelhoDanfe.php');
     }
 
     function impressaorecibo($estoque_solicitacao_id) {
@@ -710,7 +712,7 @@ class Solicitacao extends BaseController {
 
     function teste() {
         header('Content-type: text/html; charset=utf-8');
-        $path = "/home/sisprod/projetos/administrativo/application/libraries/boleto/objectBoleto";
+        $path = "./application/libraries/boleto/objectBoleto";
         include ("$path/OB_init.php");
 
         $ob = new OB('004');

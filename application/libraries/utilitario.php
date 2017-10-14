@@ -136,6 +136,37 @@ class Utilitario {
         $filler = str_replace("_", " ", $filler);
         return $filler;
     }
+    
+    function apagaDiretorio($caminhoDiretorio){ // função anonima recursiva que apaga a pasta
+        if (is_dir($caminhoDiretorio)) {
+
+            chmod($caminhoDiretorio, 0777);
+            $diretorio = dir($caminhoDiretorio);
+
+            if($dd = opendir($caminhoDiretorio)){
+
+                while (false !== ($Arq = readdir($dd))) {
+                    if($Arq != "." && $Arq != ".."){
+
+                        $Path = "$caminhoDiretorio/$Arq";
+
+                        if(is_dir($Path)){
+                            $this->apagaDiretorio($Path);
+                        }
+
+                        elseif(is_file($Path)){
+                            unlink($Path);
+                        }
+
+                    }
+                }
+                closedir($dd);
+                
+            }
+            rmdir($caminhoDiretorio);
+        }
+
+    }
 
     function zeros($tamanho) {
 
