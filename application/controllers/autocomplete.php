@@ -15,6 +15,7 @@ class Autocomplete extends Controller {
         $this->load->model('ambulatorio/exame_model', 'exame');
         $this->load->model('estoque/fornecedor_model', 'fornecedor_m');
         $this->load->model('estoque/produto_model', 'produto_m');
+        $this->load->model('estoque/armazem_model', 'armazem');
         $this->load->model('estoque/transportadora_model', 'transportadora_m');
         $this->load->model('estoque/solicitacao_model', 'solicitacao_m');
         $this->load->model('ambulatorio/laudo_model', 'laudo');
@@ -116,6 +117,25 @@ class Autocomplete extends Controller {
         echo json_encode($var);
     }
 
+    function armazemtransferenciaentradaquantidade() {
+//    $_GET['teste'] = date('Y-m-d',$_GET['teste'] );
+        if (isset($_GET['produto'])) {
+            $result = $this->armazem->armazemtransferenciaentradajsonquantidade($_GET['produto']);
+        } else {
+            $result = $this->armazem->armazemtransferenciaentradajsonquantidade();
+        }
+        echo json_encode($result);
+    }
+
+    function armazemtransferenciaentrada() {
+//    $_GET['teste'] = date('Y-m-d',$_GET['teste'] );
+        if (isset($_GET['produto'])) {
+            $result = $this->armazem->armazemtransferenciaentradajson($_GET['produto'], $_GET['armazem']);
+        } else {
+            $result = $this->armazem->armazemtransferenciaentradajson();
+        }
+        echo json_encode($result);
+    }
     function autocompletecfop() {
 
         if (isset($_GET['term'])) {
@@ -1535,6 +1555,28 @@ class Autocomplete extends Controller {
         echo json_encode($var);
     }
 
+    function produtofracionar() {
+
+        if (isset($_GET['term'])) {
+            $result = $this->produto_m->autocompleteproduto($_GET['term']);
+        } else {
+            $result = $this->produto_m->autocompleteproduto();
+        }
+        
+//        var_dump($_GET['produto_id']); die;
+        
+//        echo json_encode($_GET['produto_id']);die;
+        
+        foreach ($result as $item) {
+            if ($_GET['produto_id'] == $item->estoque_produto_id) continue;
+            
+            $retorno['value'] = $item->descricao . " - " . @$item->unidade;
+            $retorno['id'] = $item->estoque_produto_id;
+            $var[] = $retorno;
+        }
+        echo json_encode($var);
+    }
+
     function produto() {
 
         if (isset($_GET['term'])) {
@@ -1543,11 +1585,22 @@ class Autocomplete extends Controller {
             $result = $this->produto_m->autocompleteproduto();
         }
         foreach ($result as $item) {
-            $retorno['value'] = $item->descricao;
+            $retorno['value'] = $item->descricao . " - " . @$item->unidade;
             $retorno['id'] = $item->estoque_produto_id;
             $var[] = $retorno;
         }
         echo json_encode($var);
+    }
+       
+
+    function armazemtransferenciaentradaproduto() {
+//    $_GET['teste'] = date('Y-m-d',$_GET['teste'] );
+        if (isset($_GET['produto'])) {
+            $result = $this->armazem->armazemtransferenciaentradaproduto($_GET['produto'], $_GET['armazem']);
+        } else {
+            $result = $this->armazem->armazemtransferenciaentradaproduto();
+        }
+        echo json_encode($result);
     }
 
     function fornecedor() {

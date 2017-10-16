@@ -37,6 +37,15 @@ class Entrada extends BaseController {
 //            $this->carregarView($data);
     }
 
+    function carregarfracionamento($estoque_entrada_id) {
+        $obj_entrada = new entrada_model($estoque_entrada_id);
+        $data['obj'] = $obj_entrada;
+        $data['sub'] = $this->entrada->listararmazem();
+        $data['unidade'] = $this->entrada->listarunidade();
+        //$this->carregarView($data, 'giah/servidor-form');
+        $this->loadView('estoque/fracionamento-form', $data);
+    }
+
     function carregarentrada($estoque_entrada_id) {
         $obj_entrada = new entrada_model($estoque_entrada_id);
         $data['obj'] = $obj_entrada;
@@ -280,6 +289,17 @@ class Entrada extends BaseController {
             $data['mensagem'] = 'Sucesso ao excluir a Entrada';
         } else {
             $data['mensagem'] = 'Erro ao excluir a entrada. Opera&ccedil;&atilde;o cancelada.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/entrada");
+    }
+
+    function gravarfracionamento() {
+        $fracionamento_id = $this->entrada->gravarfracionamento();
+        if ($fracionamento_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar o fracionamento. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar o Fracionamento.';
         }
         $this->session->set_flashdata('message', $data['mensagem']);
         redirect(base_url() . "estoque/entrada");

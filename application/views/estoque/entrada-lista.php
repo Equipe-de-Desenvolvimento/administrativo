@@ -58,7 +58,7 @@
                     <th class="tabela_header">Armazem</th>
                     <th class="tabela_header">Quantidade</th>
                     <th class="tabela_header">Nota</th>
-                    <th class="tabela_header" width="70px;" colspan="3"><center>Detalhes</center></th>
+                    <th class="tabela_header" width="70px;" colspan="5"><center>Detalhes</center></th>
                 </tr>
                 </thead>
                 <?php
@@ -90,6 +90,9 @@
                                         <a onclick="javascript: return confirm('Deseja realmente exlcuir esse Entrada?');" href="<?= base_url() ?>estoque/entrada/excluir/<?= $item->estoque_entrada_id ?>">Excluir</a></div>
                                 </td>
                                 <td class="<?php echo $estilo_linha; ?>" width="50px;"><div class="bt_link">
+                                        <a href="<?= base_url() ?>estoque/entrada/carregarfracionamento/<?= $item->estoque_entrada_id ?>">Fracionar</a></div>
+                                </td>
+                                <td class="<?php echo $estilo_linha; ?>" width="50px;"><div class="bt_link">
                                         <a href="<?= base_url() ?>estoque/entrada/anexarimagementrada/<?= $item->estoque_entrada_id ?>">Arquivos</a></div>
                                 </td>
                             </tr>
@@ -101,7 +104,7 @@
                 ?>
                 <tfoot>
                     <tr>
-                        <th class="tabela_footer" colspan="8">
+                        <th class="tabela_footer" colspan="10">
                             <?php $this->utilitario->paginacao($url, $total, $pagina, $limit); ?>
                             Total de registros: <?php echo $total; ?>
                         </th>

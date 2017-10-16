@@ -45,6 +45,20 @@
                     <dd>
                         <input type="text" id="validade" class="texto02" name="validade" value="<?= substr(@$obj->_validade, 8,2) . "/" . substr(@$obj->_validade, 5,2) . "/" . substr(@$obj->_validade, 0,4); ?>" />
                     </dd>
+                    
+                    <dt>
+                        <label>Nota Fiscal</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="nota" alt="integer" class="texto02" name="nota" value="<?= @$obj->_nota_fiscal; ?>" />
+                    </dd>
+
+                    <dt>
+                        <label>Lote</label>
+                    </dt>
+                    <dd>
+                        <input type="text" id="lote" class="texto02" name="lote" value="<?= @$obj->_nota_fiscal; ?>" required/>
+                    </dd>
                  </dl>    
                 <hr/>
                 <button type="submit" name="btnEnviar">Enviar</button>

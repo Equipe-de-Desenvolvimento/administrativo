@@ -1,10 +1,21 @@
 
 <div class="content"> <!-- Inicio da DIV content -->
-    <div class="bt_link_new">
-        <a href="<?php echo base_url() ?>estoque/armazem/carregararmazem/0">
-            Novo Armazem
-        </a>
-    </div>
+    <table border="0">
+        <tr>
+            <td>
+                <div class="bt_link_new">
+                    <a href="<?php echo base_url() ?>estoque/armazem/carregararmazem/0">
+                        Novo Armazem
+                    </a>
+                </div>  
+            </td>
+            <td>
+                <div class="bt_link_new">
+                    <a href="<?= base_url() ?>estoque/armazem/armazemtransferencia/">Transferência</a>
+                </div> 
+            </td>
+        </tr>
+    </table>
     <div id="accordion">
         <h3 class="singular"><a href="#">Manter Armazem</a></h3>
         <div>

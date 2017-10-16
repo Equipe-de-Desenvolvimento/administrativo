@@ -518,6 +518,9 @@ class inventario_model extends Model {
             if ($_POST['validade'] != "//") {
                 $this->db->set('validade', $_POST['validade']);
             }
+            $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
+            $this->db->set('lote', $_POST['lote']);
+            
             $horario = date("Y-m-d H:i:s");
             $operador_id = $this->session->userdata('operador_id');
 
@@ -539,6 +542,8 @@ class inventario_model extends Model {
                 if ($_POST['validade'] != "//") {
                     $this->db->set('validade', $_POST['validade']);
                 }
+                $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
+                
                 $this->db->set('data_cadastro', $horario);
                 $this->db->set('operador_cadastro', $operador_id);
                 $this->db->insert('tb_estoque_saldo');
@@ -556,6 +561,7 @@ class inventario_model extends Model {
                 if ($_POST['validade'] != "//") {
                     $this->db->set('validade', $_POST['validade']);
                 }
+                $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
                 $this->db->set('data_cadastro', $horario);
                 $this->db->set('operador_cadastro', $operador_id);
                 $this->db->where('estoque_entrada_id', $estoque_entrada_id);

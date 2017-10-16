@@ -39,6 +39,26 @@ class Armazem extends BaseController {
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('estoque/armazem-form', $data);
     }
+//
+    function armazemtransferencia() {
+//
+        $data['armazem'] = $this->armazem->listararmazem();
+        $data['produto'] = $this->armazem->listarproduto();
+        $this->loadView('estoque/transferencia-form', $data);
+    }
+    
+    function gravartransferencia() {
+//        var_dump($_POST);
+//        die;
+        $exame_armazem_id = $this->armazem->gravartransferencia();
+        if ($exame_armazem_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar transferência. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar a Transferência.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/armazem");
+    }
 
     function excluir($estoque_armazem_id) {
         $valida = $this->armazem->excluir($estoque_armazem_id);
