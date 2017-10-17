@@ -27,11 +27,12 @@ class produto_model extends Model {
     function autocompleteproduto($parametro = null) {
         $this->db->select('p.estoque_produto_id,
                            p.descricao,
+                           p.codigo,
                            u.descricao as unidade');
         $this->db->from('tb_estoque_produto p');
         $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id = p.unidade_id', 'left');
         if ($parametro != null) {
-            $this->db->where('p.descricao ilike', $parametro . "%");
+            $this->db->where("(p.descricao ilike '$parametro%' OR p.codigo ilike '$parametro%')");
         }
         $return = $this->db->get();
         return $return->result();

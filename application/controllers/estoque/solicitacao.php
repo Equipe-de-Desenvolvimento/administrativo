@@ -802,6 +802,18 @@ class Solicitacao extends BaseController {
         $this->loadView('estoque/solicitacao-form', $data);
     }
 
+    function alterarobservacao($estoque_solicitacao_id) {        
+        $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
+        $data['observacao'] = $this->solicitacao->listarobservacao($estoque_solicitacao_id);
+        $this->load->View('estoque/alterarobservacao-form', $data);
+    }
+    
+
+    function observacaogravar($estoque_solicitacao_id) {
+        $verificar = $this->solicitacao->observacao($estoque_solicitacao_id);
+        redirect(base_url() . "seguranca/operador/pesquisarrecepcao");
+    }
+    
     function excluir($estoque_solicitacao_setor_id) {
         $valida = $this->solicitacao->excluir($estoque_solicitacao_setor_id);
         if ($valida == 0) {

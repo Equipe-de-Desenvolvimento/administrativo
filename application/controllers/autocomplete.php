@@ -1585,7 +1585,7 @@ class Autocomplete extends Controller {
             $result = $this->produto_m->autocompleteproduto();
         }
         foreach ($result as $item) {
-            $retorno['value'] = $item->descricao . " - " . @$item->unidade;
+            $retorno['value'] = $item->descricao . " - " . @$item->unidade . " - " . @$item->codigo;
             $retorno['id'] = $item->estoque_produto_id;
             $var[] = $retorno;
         }

@@ -24,9 +24,10 @@
                     </tr>
                     <tr>
                         <th class="tabela_header">Pedido</th>
-                        <th class="tabela_header">Data</th>
+                        <th class="tabela_header" width="70px;">Data</th>
+                        <th class="tabela_header" width="100px;">Observação</th>
                         <th class="tabela_header">Status</th>
-                        <th class="tabela_header" width="70px;" colspan="8"><center>Detalhes</center></th>
+                        <th class="tabela_header" width="50px;" colspan="8"><center>Detalhes</center></th>
                 </tr>
                 </thead>
                 <?php
@@ -57,6 +58,13 @@
                             <tr>
                                 <td class="<?php echo $estilo_linha; ?>"><?= $item->estoque_solicitacao_setor_id ?> - <?= $item->cliente; ?></td>
                                 <td class="<?php echo $estilo_linha; ?>"><?= substr($item->data_cadastro, 8, 2) . "/" . substr($item->data_cadastro, 5, 2) . "/" . substr($item->data_cadastro, 0, 4); ?></td>
+                                <td class="<?php echo $estilo_linha; ?>">
+                                    <div style="max-width: 150pt; max-height: 50pt; overflow-y: auto; margin: 5pt;">
+                                        <a onclick="javascript:window.open('<?php echo base_url() . 'estoque/solicitacao/alterarobservacao/' . $item->estoque_solicitacao_setor_id ?>', '_blank', 'width=500,height=230');">
+                                            <?= $item->observacao ?>
+                                        </a>
+                                    </div>
+                                </td>
                                 <? if ($verifica == 1) { ?>
                                     <td class="<?php echo $estilo_linha; ?>"><font color="red"><b><?= $item->situacao; ?></b></td>
                                 <? }if ($verifica == 2) { ?>

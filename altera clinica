@@ -584,3 +584,6 @@ ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN contrato_id integer;
 
 -- Dia 16/10/2017
 ALTER TABLE ponto.tb_estoque_entrada ADD COLUMN fracionamento_entrada_id integer;
+
+-- Dia 17/10/2017
+ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN observacao character varying;

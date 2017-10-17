@@ -817,6 +817,7 @@ class solicitacao_model extends Model {
                             es.faturado,
                             es.transportadora,
                             es.situacao, 
+                            es.observacao, 
                             es.cancelada, 
                             es.notafiscal,
                             n.enviada');
@@ -844,6 +845,28 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function listarobservacao($estoque_solicitacao_id) {
+        $this->db->select('observacao');
+        $this->db->from('tb_estoque_solicitacao_cliente');
+        $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $return = $this->db->get();
+        return $return->result();
+    }
+    
+    
+
+    function observacao($estoque_solicitacao_id) {
+        try {
+            $this->db->set('observacao', $_POST['txtobservacao']);
+            $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+            $this->db->update('tb_estoque_solicitacao_cliente');
+            return 0;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+
+    
     function listarentregador($args = array()) {
         $operador_id = $this->session->userdata('operador_id');
 
@@ -1105,6 +1128,9 @@ class solicitacao_model extends Model {
             }
             if (isset($_POST['descricaopagamento']) && $_POST['descricaopagamento'] != '') {
                 $this->db->set('descricaopagamento', $_POST['descricaopagamento']);
+            }
+            if ($_POST['observacao'] != '') {
+                $this->db->set('observacao', $_POST['observacao']);
             }
 
             $horario = date("Y-m-d H:i:s");
