@@ -61,7 +61,7 @@
                                 <td class="<?php echo $estilo_linha; ?>">
                                     <div style="max-width: 150pt; max-height: 50pt; overflow-y: auto; margin: 5pt;">
                                         <a onclick="javascript:window.open('<?php echo base_url() . 'estoque/solicitacao/alterarobservacao/' . $item->estoque_solicitacao_setor_id ?>', '_blank', 'width=500,height=230');">
-                                            <?= $item->observacao ?>
+                                            =><?= $item->observacao ?>
                                         </a>
                                     </div>
                                 </td>
