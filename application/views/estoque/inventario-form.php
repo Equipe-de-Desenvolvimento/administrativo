@@ -57,7 +57,7 @@
                         <label>Lote</label>
                     </dt>
                     <dd>
-                        <input type="text" id="lote" class="texto02" name="lote" value="<?= @$obj->_nota_fiscal; ?>" required/>
+                        <input type="text" id="lote" class="texto02" name="lote" value="<?= @$obj->_lote; ?>" required/>
                     </dd>
                  </dl>    
                 <hr/>

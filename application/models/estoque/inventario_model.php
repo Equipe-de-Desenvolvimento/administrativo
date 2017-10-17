@@ -516,7 +516,7 @@ class inventario_model extends Model {
             $this->db->set('armazem_id', $_POST['txtarmazem']);
             $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $_POST['quantidade'])));
             if ($_POST['validade'] != "//") {
-                $this->db->set('validade', $_POST['validade']);
+                $this->db->set('validade', date("Y-m-d", strtotime(str_replace('/', '-', $_POST['validade']) ) ));
             }
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
             $this->db->set('lote', $_POST['lote']);
