@@ -18,6 +18,7 @@ class Cliente extends BaseController {
         $this->load->model('estoque/cliente_model', 'cliente');
         $this->load->model('cadastro/convenio_model', 'convenio');
         $this->load->model('estoque/fornecedor_model', 'fornecedor');
+        $this->load->model('seguranca/operador_model', 'operador_m');
         $this->load->library('mensagem');
         $this->load->library('utilitario');
         $this->load->library('pagination');
@@ -41,6 +42,7 @@ class Cliente extends BaseController {
         $data['menu'] = $this->cliente->listarmenu();
         $data['sala'] = $this->cliente->listarsalamenu();
         $data['tipo'] = $this->fornecedor->listartipo();
+        $data['descricao_pagamento'] = $this->cliente->descricaodepagamento();
         //$this->carregarView($data, 'giah/servidor-form');
         $this->loadView('estoque/cliente-form', $data);
     }

@@ -18,6 +18,7 @@ class Autocomplete extends Controller {
         $this->load->model('estoque/armazem_model', 'armazem');
         $this->load->model('estoque/transportadora_model', 'transportadora_m');
         $this->load->model('estoque/solicitacao_model', 'solicitacao_m');
+        $this->load->model('estoque/cliente_model', 'cliente_m');
         $this->load->model('ambulatorio/laudo_model', 'laudo');
         $this->load->model('ponto/cargo_model', 'cargo');
         $this->load->model('ponto/setor_model', 'setor');
@@ -200,6 +201,26 @@ class Autocomplete extends Controller {
             $result = $this->exametemp->listarautocompletehorarios($_GET['exame'], $_GET['teste']);
         } else {
             $result = $this->exametemp->listarautocompletehorarios();
+        }
+        echo json_encode($result);
+    }
+
+    function valorprodutosolicitacao() {
+
+        if (isset($_GET['produto_id'])) {
+            $result = $this->solicitacao_m->valorprodutosolicitacao($_GET['solicitacao_id'], $_GET['produto_id']);
+        } else {
+            $result = $this->solicitacao_m->valorprodutosolicitacao();
+        }
+        echo json_encode($result);
+    }
+
+    function listardadoscliente() {
+
+        if (isset($_GET['setor'])) {
+            $result = $this->cliente_m->listardadoscliente($_GET['setor']);
+        } else {
+            $result = $this->cliente_m->listardadoscliente();
         }
         echo json_encode($result);
     }

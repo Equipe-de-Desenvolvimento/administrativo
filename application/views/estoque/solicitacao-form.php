@@ -83,7 +83,7 @@
                             <label>Entregador</label>
                         </td>
                         <td>
-                            <select name="entregador" id="setor" class="size4" >
+                            <select name="entregador" id="entregador" class="size4" >
                                 <option value="">Selecione</option>
                                 <? foreach ($entregadores as $value) : ?>
                                     <option value="<?= $value->entregador_id; ?>"><?php echo $value->nome; ?></option>
@@ -157,6 +157,23 @@
                 });
             } else {
                 $('#contrato').html('<option value="">Selecione</option>');
+            }
+        });
+    });
+    
+    $(function () {
+        $('#setor').change(function () {
+            if ($(this).val()) {
+                $('.carregando').show();
+                $.getJSON('<?= base_url() ?>autocomplete/listardadoscliente', {setor: $(this).val(), ajax: true}, function (j) {
+                    $("#descricaopagamento").val(j[0].descricaopagamento); 
+                    $("#vendedor_id").val(j[0].vendedor_id); 
+//                    console.log(j[0].vendedor_id);
+//                    j[0].descricaopagamento
+//                    j[0].vendedor_id
+                });
+            } else {
+//                $('#contrato').html('<option value="">Selecione</option>');
             }
         });
     });

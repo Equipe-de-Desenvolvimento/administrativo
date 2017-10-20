@@ -7,7 +7,7 @@
 
                 <div>
                     <label>Nome</label>
-                    <input type="hidden" name="txtestoque_solicitacao_id" value="<?php echo $estoque_solicitacao_id; ?>"/>
+                    <input type="hidden" name="txtestoque_solicitacao_id" id="txtestoque_solicitacao_id" value="<?php echo $estoque_solicitacao_id; ?>"/>
                     <input type="text" name="txtNome" class="texto10" value="<?php echo $nome[0]->nome; ?>" readonly />
                 </div>
             </fieldset>
@@ -16,13 +16,13 @@
                 <legend>Cadastro de Produtos</legend>
                 <div>
                     <label>Produtos</label>
-                    <select name="produto_id" id="produto_id" class="size4" required>
-                        <option value=""  onclick="carregaValor('0.00')">SELECIONE</option>
+                    <select name="produto_id" id="produto_id" class="size4 chosen-select" data-placeholder="Selecione" tabindex="1"  required="">
+                        <option value="">SELECIONE</option>
                         <?
                         foreach ($produto as $value) :
-                            $parametro = $value->valor_venda . '|' . $value->ipi
+//                            $parametro = $value->valor_venda . '|' . $value->ipi
                             ?>
-                            <option value="<?= $value->estoque_produto_id; ?>"  onclick="carregaValor('<?= $parametro; ?>')">
+                            <option value="<?= $value->estoque_produto_id; ?>" >
                                 <?php echo $value->codigo . " - " . $value->descricao; ?></option>
                         <? endforeach; ?>
                     </select>
@@ -170,7 +170,6 @@
         </fieldset>
     </div>
 </div> <!-- Final da DIV content -->
-
 <style>
     #spantotal{
 
@@ -188,10 +187,18 @@
     #form_solicitacaoitens div{
         margin: 3pt;
     }
+    
+    #produto_id_chosen a { width: 330px; }
 </style>
 
 
 <script type="text/javascript" src="<?= base_url() ?>js/jquery.validate.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/chosen.css">
+<!--<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/style.css">-->
+<link rel="stylesheet" href="<?= base_url() ?>js/chosen/docsupport/prism.css">
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/prism.js"></script>-->
+<script type="text/javascript" src="<?= base_url() ?>js/chosen/docsupport/init.js"></script>
 <script type="text/javascript">
 
                     function carregaValor(valor) {
@@ -234,6 +241,19 @@
                         });
                     });
 
+                    $(function () {
+                        $('#produto_id').change(function () {
+                            if ($(this).val()) {
+                                $('.carregando').show();
+                                console.log($(this).val(), $("#txtestoque_solicitacao_id").val());
+                                $.getJSON('<?= base_url() ?>autocomplete/valorprodutosolicitacao', {produto_id: $(this).val(), solicitacao_id: $("#txtestoque_solicitacao_id").val() }, function (j) {
+//                                    console.log(j[0]);
+                                    $("#valor").val(j[0].valor_venda);
+                                });
+                            }
+                        });
+                    });
+                    
                     $(function () {
                         $('#produto_id').change(function () {
                             if ($(this).val()) {

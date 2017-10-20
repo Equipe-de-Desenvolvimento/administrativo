@@ -587,3 +587,9 @@ ALTER TABLE ponto.tb_estoque_entrada ADD COLUMN fracionamento_entrada_id integer
 
 -- Dia 17/10/2017
 ALTER TABLE ponto.tb_estoque_solicitacao_cliente ADD COLUMN observacao character varying;
+
+-- Dia 19/10/2017
+ALTER TABLE ponto.tb_financeiro_credor_devedor ADD COLUMN nome character varying(200);
+ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN vendedor_id integer;
+ALTER TABLE ponto.tb_estoque_cliente ADD COLUMN descricaopagamento integer;
+

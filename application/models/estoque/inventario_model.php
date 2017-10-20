@@ -54,7 +54,107 @@ class inventario_model extends Model {
         }
         return $this->db;
     }
+    
+    
 
+    function gravarfracionamento() {
+        try {
+            
+            $qtde_fracionamento = str_replace(",", ".", str_replace(".", "", $_POST['qtde_fracionamento']));
+            $novoValorEntrada = ($_POST['compra'] / $_POST['qtde_entrada']) * ($_POST['qtde_entrada'] - $qtde_fracionamento);
+            $novaQtdeEntrada = ($_POST['qtde_entrada'] - $qtde_fracionamento);
+            $estoque_entrada_id = $_POST['txtestoque_entrada_id'];
+            
+            /* inicia o mapeamento no banco */
+            $this->db->set('produto_id', $_POST['txtprodutoentrada_id']);
+            $this->db->set('fornecedor_id', $_POST['txtfornecedor']);
+            $this->db->set('armazem_id', $_POST['txtarmazem']);
+            $this->db->set('valor_compra', $novoValorEntrada);
+            $this->db->set('quantidade', $novaQtdeEntrada);
+            $this->db->set('nota_fiscal', $_POST['nota']);
+            $this->db->set('lote', $_POST['lote']);
+            $this->db->set('codigo_cfop', $_POST['cfop']);
+
+            if ($_POST['validade'] != "") {
+                $this->db->set('validade', $_POST['validade']);
+            }
+
+            $horario = date("Y-m-d H:i:s");
+            $operador_id = $this->session->userdata('operador_id');
+            
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->where('estoque_entrada_id', $estoque_entrada_id);
+            $this->db->update('tb_estoque_entrada');
+            
+            $this->db->set('produto_id', $_POST['txtprodutoentrada_id']);
+            $this->db->set('fornecedor_id', $_POST['txtfornecedor']);
+            $this->db->set('armazem_id', $_POST['txtarmazem']);
+            $this->db->set('valor_compra', $novoValorEntrada);
+            $this->db->set('quantidade', $novaQtdeEntrada);
+            $this->db->set('nota_fiscal', $_POST['nota']);
+            if ($_POST['validade'] != "") {
+                $this->db->set('validade', $_POST['validade']);
+            }
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->where('estoque_entrada_id', $estoque_entrada_id);
+            $this->db->update('tb_estoque_saldo');
+            
+            
+            
+            /* DANDO ENTRADA NOS PRODUTOS FRACIONADOS */
+            $qtde_resultante = str_replace(",", ".", str_replace(".", "", $_POST['qtde_resultante']));
+            $valorFracionamento = $_POST['compra'] - $novoValorEntrada;
+//            echo "<pre>";
+//            var_dump($novoValorEntrada, $valorFracionamento); die;
+            
+            $this->db->set('fracionamento_entrada_id', $estoque_entrada_id);
+            $this->db->set('produto_id', $_POST['txtprodutofrac']);
+            $this->db->set('fornecedor_id', $_POST['txtfornecedor']);
+            $this->db->set('armazem_id', $_POST['txtarmazem']);
+            $this->db->set('valor_compra', $valorFracionamento);
+            $this->db->set('quantidade', $qtde_resultante);
+            $this->db->set('nota_fiscal', $_POST['nota']);
+            $this->db->set('lote', $_POST['lote']);
+            $this->db->set('codigo_cfop', $_POST['cfop']);
+            $this->db->set('inventario', 't');
+            if ($_POST['validade'] != "") {
+                $this->db->set('validade', $_POST['validade']);
+            }
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_estoque_entrada');
+            $erro = $this->db->_error_message();
+            if (trim($erro) != "") // erro de banco
+                return -1;
+            else
+                $estoque_fracionamento_id = $this->db->insert_id();
+            
+            
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+
+            $this->db->set('estoque_entrada_id', $estoque_fracionamento_id);
+            $this->db->set('produto_id', $_POST['txtprodutofrac']);
+            $this->db->set('fornecedor_id', $_POST['txtfornecedor']);
+            $this->db->set('armazem_id', $_POST['txtarmazem']);
+            $this->db->set('valor_compra', $valorFracionamento);
+            $this->db->set('quantidade', $qtde_resultante);
+            $this->db->set('nota_fiscal', $_POST['nota']);
+            if ($_POST['validade'] != "") {
+                $this->db->set('validade', $_POST['validade']);
+            }
+            $this->db->set('data_cadastro', $horario);
+            $this->db->set('operador_cadastro', $operador_id);
+            $this->db->insert('tb_estoque_saldo');
+            
+            return $estoque_fracionamento_id;
+        } catch (Exception $exc) {
+            return -1;
+        }
+    }
+    
     function listarsub() {
         $this->db->select('sc.estoque_sub_classe_id,
                             sc.descricao');

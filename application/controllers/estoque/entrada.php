@@ -76,27 +76,36 @@ class Entrada extends BaseController {
 
         $arqNome = $_FILES['userfile']['name'];
         $xml = simplexml_load_file("./upload/entradaxml/" . $arqNome);
+//        echo "<pre>";
+//        var_dump($xml);die;
+        if( count($xml->NFe->infNFe->det) > 0 ){
+            foreach ($xml->NFe->infNFe->det as $key => $value) {
+                $resultado = $this->entrada->listarprodutoentradaxml($value->prod->cProd);
 
-        foreach ($xml->NFe->infNFe->det as $key => $value) {
-            $resultado = $this->entrada->listarprodutoentradaxml($value->prod->cProd);
+                $view['produtos'][] = array(
+                    "produto_id" => $resultado[0]->estoque_produto_id,
+                    "descricao" => $resultado[0]->descricao,
+                    "qtde" => (int) $value->prod->qCom,
+                    "valorcompra" => (string) $value->prod->vProd
+                );
+            }
 
-            $view['produtos'][] = array(
-                "produto_id" => $resultado[0]->estoque_produto_id,
-                "descricao" => $resultado[0]->descricao,
-                "qtde" => (int) $value->prod->qCom,
-                "valorcompra" => (string) $value->prod->vProd
-            );
+            $dados['cnpjfornecedor'] = (string) $xml->NFe->infNFe->emit->CNPJ;
+            $cnpj = substr($dados['cnpjfornecedor'], 0, -2) . '-' . substr($dados['cnpjfornecedor'], -2, 2);
+
+            $view['fornecedor'] = $this->entrada->listarfornecedorentradaxml($cnpj);
+            $view['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
+
+            $view['sub'] = $this->entrada->listararmazem();
+    //        var_dump($cnpj)
+            $this->loadView('estoque/produtoentradaxml-form', $view);
         }
+        else{
+            $data['mensagem'] = 'Erro ao dar entrada com o XML enviado. Opera&ccedil;&atilde;o cancelada.';
 
-        $dados['cnpjfornecedor'] = (string) $xml->NFe->infNFe->emit->CNPJ;
-        $cnpj = substr($dados['cnpjfornecedor'], 0, -2) . '-' . substr($dados['cnpjfornecedor'], -2, 2);
-
-        $view['fornecedor'] = $this->entrada->listarfornecedorentradaxml($cnpj);
-        $view['numnotafiscal'] = (string) $xml->NFe->infNFe->ide->cNF;
-
-        $view['sub'] = $this->entrada->listararmazem();
-//        var_dump($cnpj)
-        $this->loadView('estoque/produtoentradaxml-form', $view);
+            $this->session->set_flashdata('message', $data['mensagem']);
+            redirect(base_url() . "estoque/entrada");
+        }
     }
 
     function novaentradaxml() {

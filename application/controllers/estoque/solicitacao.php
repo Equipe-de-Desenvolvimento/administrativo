@@ -428,11 +428,16 @@ class Solicitacao extends BaseController {
         $data['nome'] = $this->solicitacao->solicitacaonome($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listarsaidaitem($estoque_solicitacao_id);
         $data['usuario'] = $this->solicitacao->usuarioemitente();
-//        $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
 //        $html = $this->load->View('estoque/impressaosaida', $data, true);
         $html = $this->load->View('estoque/impressaosaida2', $data, true);
+        
+        $filename = "SAIDA " . $estoque_solicitacao_id;
+        
+        $rodape = "<table><tr><td><span style='font-weight: bolder;'>Usuário Emissão:</span></td></tr><tr><td> " . @$data['usuario'][0]->nome . "</td></tr><tr><td><span style='font-weight: bolder;'>Data/Hora Emissão:</span></td></tr><tr><td>" . date("d/m/Y H:i:s") . "</td></tr></table>";
+        pdf($html, $filename, null, $rodape, '', false);
+        
 
-        pdf($html, null, null, null, '', false);
+//        pdf($html, null, null, null, '', false);
     }
 
     function imprimirsimples($estoque_solicitacao_id) {
@@ -448,7 +453,13 @@ class Solicitacao extends BaseController {
 //        $this->load->View('estoque/impressaosaidasimples', $data);
         $html = $this->load->View('estoque/impressaosaidasimples2', $data, true);
 //        $html = $this->load->View('estoque/impressaosaidasimples', $data, true);
-        pdf($html, null, null, null, '', false);
+//        pdf($html, null, null, null, '', false);
+        
+        
+        $filename = "SAIDA " . $estoque_solicitacao_id;
+        
+        $rodape = "<table><tr><td><span style='font-weight: bolder;'>Usuário Emissão:</span></td></tr><tr><td> " . @$data['usuario'][0]->nome . "</td></tr><tr><td><span style='font-weight: bolder;'>Data/Hora Emissão:</span></td></tr><tr><td>" . date("d/m/Y H:i:s") . "</td></tr></table>";
+        pdf($html, $filename, null, $rodape, '', false);
     }
 
     function imprimirliberadasimples($estoque_solicitacao_id) {
@@ -459,8 +470,12 @@ class Solicitacao extends BaseController {
         $data['estoque_solicitacao_id'] = $estoque_solicitacao_id;
         $data['nome'] = $this->solicitacao->solicitacaonomeliberado($estoque_solicitacao_id);
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
+        $data['usuario'] = $this->solicitacao->usuarioemitente();
         $html = $this->load->View('estoque/impressaoliberadasimples', $data, true);
-        pdf($html);
+        $filename = "PEDIDO " . $estoque_solicitacao_id;
+        
+        $rodape = "<table><tr><td><span style='font-weight: bolder;'>Usuário Emissão:</span></td></tr><tr><td> " . @$data['usuario'][0]->nome . "</td></tr><tr><td><span style='font-weight: bolder;'>Data/Hora Emissão:</span></td></tr><tr><td>" . date("d/m/Y H:i:s") . "</td></tr></table>";
+        pdf($html, $filename, null, $rodape);
     }
 
     function imprimirliberada($estoque_solicitacao_id) {
@@ -478,7 +493,12 @@ class Solicitacao extends BaseController {
         $data['produtossaida'] = $this->solicitacao->listaritemliberado($estoque_solicitacao_id);
 //        $this->load->View('estoque/impressaoliberada', $data, true);
         $html = $this->load->View('estoque/impressaoliberada', $data, true);
-        pdf($html);
+        
+        $filename = "PEDIDO " . $estoque_solicitacao_id;
+        
+        $rodape = "<table><tr><td><span style='font-weight: bolder;'>Usuário Emissão:</span></td></tr><tr><td> " . @$data['usuario'][0]->nome . "</td></tr><tr><td><span style='font-weight: bolder;'>Data/Hora Emissão:</span></td></tr><tr><td>" . date("d/m/Y H:i:s") . "</td></tr></table>";
+        pdf($html, $filename, null, $rodape);
+//        pdf($html);
     }
 
     function saidaitens($estoque_solicitacao_itens_id, $estoque_solicitacao_id) {

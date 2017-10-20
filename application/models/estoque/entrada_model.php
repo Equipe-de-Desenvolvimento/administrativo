@@ -577,7 +577,7 @@ class entrada_model extends Model {
             $this->db->set('lote', $dados['lote']);
             $this->db->set('codigo_cfop', str_replace('.', '', $dados['cfop']));
 
-            if ($dados['validade'] != "//") {
+            if ($dados['validade'] != "") {
                 $this->db->set('validade', $dados['validade']);
             }
 
@@ -599,7 +599,7 @@ class entrada_model extends Model {
             $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $dados['compra'])));
             $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $dados['quantidade'])));
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $dados['nota'])));
-            if ($dados['validade'] != "//") {
+            if ($dados['validade'] != "") {
                 $this->db->set('validade', $dados['validade']);
             }
             $this->db->set('data_cadastro', $horario);
@@ -630,7 +630,7 @@ class entrada_model extends Model {
             $this->db->set('lote', $_POST['lote']);
             $this->db->set('codigo_cfop', $_POST['cfop']);
 
-            if ($_POST['validade'] != "//") {
+            if ($_POST['validade'] != "") {
                 $this->db->set('validade', $_POST['validade']);
             }
 
@@ -648,7 +648,7 @@ class entrada_model extends Model {
             $this->db->set('valor_compra', $novoValorEntrada);
             $this->db->set('quantidade', $novaQtdeEntrada);
             $this->db->set('nota_fiscal', $_POST['nota']);
-            if ($_POST['validade'] != "//") {
+            if ($_POST['validade'] != "") {
                 $this->db->set('validade', $_POST['validade']);
             }
             $this->db->set('data_cadastro', $horario);
@@ -673,7 +673,7 @@ class entrada_model extends Model {
             $this->db->set('nota_fiscal', $_POST['nota']);
             $this->db->set('lote', $_POST['lote']);
             $this->db->set('codigo_cfop', $_POST['cfop']);
-            if ($_POST['validade'] != "//") {
+            if ($_POST['validade'] != "") {
                 $this->db->set('validade', $_POST['validade']);
             }
             $this->db->set('data_cadastro', $horario);
@@ -696,7 +696,7 @@ class entrada_model extends Model {
             $this->db->set('valor_compra', $valorFracionamento);
             $this->db->set('quantidade', $qtde_resultante);
             $this->db->set('nota_fiscal', $_POST['nota']);
-            if ($_POST['validade'] != "//") {
+            if ($_POST['validade'] != "") {
                 $this->db->set('validade', $_POST['validade']);
             }
             $this->db->set('data_cadastro', $horario);
@@ -728,8 +728,8 @@ class entrada_model extends Model {
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
             $this->db->set('lote', $_POST['lote']);
             $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
-
-            if ($_POST['validade'] != "//") {
+            $_POST['validade'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['validade'])));
+            if ($_POST['validade'] != "") {
                 $this->db->set('validade', $_POST['validade']);
             }
 
@@ -753,7 +753,7 @@ class entrada_model extends Model {
                 $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $_POST['compra'])));
                 $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $_POST['quantidade'])));
                 $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
-                if ($_POST['validade'] != "//") {
+                if ($_POST['validade'] != "") {
                     $this->db->set('validade', $_POST['validade']);
                 }
                 $this->db->set('data_cadastro', $horario);
@@ -772,7 +772,7 @@ class entrada_model extends Model {
                 $this->db->set('valor_compra', str_replace(",", ".", str_replace(".", "", $_POST['compra'])));
                 $this->db->set('quantidade', str_replace(",", ".", str_replace(".", "", $_POST['quantidade'])));
                 $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
-                if ($_POST['validade'] != "//") {
+                if ($_POST['validade'] != "") {
                     $this->db->set('validade', $_POST['validade']);
                 }
                 $this->db->set('data_cadastro', $horario);

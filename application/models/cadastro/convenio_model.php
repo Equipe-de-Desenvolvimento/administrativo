@@ -87,7 +87,8 @@ class Convenio_model extends Model {
 
     function listarcredordevedor() {
         $this->db->select('financeiro_credor_devedor_id,
-                            razao_social,');
+                            razao_social,
+                            nome');
         $this->db->from('tb_financeiro_credor_devedor');
         $this->db->where("ativo", 't');
         $this->db->orderby('razao_social');

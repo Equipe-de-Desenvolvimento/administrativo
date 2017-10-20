@@ -7,11 +7,17 @@
 
                 <dl class="dl_desconto_lista">
                     <dt>
-                    <label>Raz&atilde;o social</label>
+                        <label>Raz&atilde;o social</label>
                     </dt>
                     <dd>
                         <input type="hidden" name="txtcadastrosfornecedorid" class="texto10" value="<?= @$obj->_financeiro_credor_devedor_id; ?>" />
                         <input type="text" name="txtrazaosocial" class="texto10" value="<?= @$obj->_razao_social; ?>" />
+                    </dd>
+                    <dt>
+                        <label>Nome Fantasia</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="txtfantasia" id="txtfantasia" class="texto10" value="<?= @$obj->_fantasia; ?>" />
                     </dd>
                     <dt>
                     <label>CNPJ</label>

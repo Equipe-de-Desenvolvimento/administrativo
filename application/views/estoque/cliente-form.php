@@ -1,4 +1,6 @@
 <div class="content"> <!-- Inicio da DIV content -->
+<? $medicos = $this->operador_m->listarvendedor(); ?>
+    
     <div id="accordion">
         <h3 class="singular"><a href="#">Cadastro de Cliente</a></h3>
         <div>
@@ -133,14 +135,14 @@
                         <input type="checkbox" name="criarcredor"/>
                     </dd>
 
-                    <dt>
+<!--                    <dt>
                         <label>Saida</label>
                     </dt>
                     <dd>
                         <input type="checkbox" name="saida" <? if (@$obj->_saida == 't') {
     echo 'checked';
 } ?>/>
-                    </dd>
+                    </dd>-->
 
 
                     <dt>
@@ -148,9 +150,10 @@
                     </dt>
                     <dd>
                         <select name="menu" id="menu" class="size4">
-                            <? foreach ($menu as $value) : ?>
+                            <? // var_dump($obj->_menu_id);die;
+                            foreach ($menu as $value) : ?>
                                 <option value="<?= $value->estoque_menu_id; ?>"<?
-                                        if (@$obj->_menu == $value->estoque_menu_id):echo 'selected';
+                                        if (@$obj->_menu_id == $value->estoque_menu_id):echo 'selected';
                                         endif;
                                         ?>><?php echo $value->descricao; ?></option>
 <? endforeach; ?>
@@ -188,6 +191,30 @@
     <?php
 }
 ?> 
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Descrição de Pagamento</label>
+                    </dt>
+                    <dd>
+                        <select name="descricaopagamento" id="descricaopagamento" class="size3" >
+                            <option value="">Selecione</option>
+                            <? foreach ($descricao_pagamento as $value) : ?>
+                                <option value="<?= $value->descricao_forma_pagamento_id ?>"
+                                        <? if (@$obj->_descricaopagamento == $value->descricao_forma_pagamento_id) echo 'selected'; ?>><?= $value->nome ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </dd>
+                    <dt>
+                        <label>Vendedor</label>
+                    </dt>
+                    <dd>
+                        <select name="vendedor_id" id="vendedor_id" class="size3">
+                            <option value="">Selecione</option>
+                            <? foreach ($medicos as $value) : ?>
+                                <option value="<?= $value->operador_id ?>"
+                                        <? if (@$obj->_vendedor_id == $value->operador_id) echo 'selected'; ?>><?= $value->nome ?></option>
+                            <? endforeach; ?>
                         </select>
                     </dd>
 

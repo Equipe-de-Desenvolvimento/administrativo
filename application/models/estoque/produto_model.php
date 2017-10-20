@@ -34,6 +34,7 @@ class produto_model extends Model {
         if ($parametro != null) {
             $this->db->where("(p.descricao ilike '$parametro%' OR p.codigo ilike '$parametro%')");
         }
+        $this->db->where('p.ativo', 'true');
         $return = $this->db->get();
         return $return->result();
     }

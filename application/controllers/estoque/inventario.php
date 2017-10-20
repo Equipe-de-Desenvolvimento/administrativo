@@ -45,6 +45,26 @@ class Inventario extends BaseController {
         $this->loadView('estoque/inventario-form', $data);
     }
 
+    function carregarfracionamento($estoque_entrada_id) {
+        $obj_entrada = new entrada_model($estoque_entrada_id);
+        $data['obj'] = $obj_entrada;
+        $data['sub'] = $this->entrada->listararmazem();
+        $data['unidade'] = $this->entrada->listarunidade();
+        //$this->carregarView($data, 'giah/servidor-form');
+        $this->loadView('estoque/fracionamentoinventario-form', $data);
+    }
+
+    function gravarfracionamento() {
+        $fracionamento_id = $this->inventario->gravarfracionamento();
+        if ($fracionamento_id == "-1") {
+            $data['mensagem'] = 'Erro ao gravar o fracionamento. Opera&ccedil;&atilde;o cancelada.';
+        } else {
+            $data['mensagem'] = 'Sucesso ao gravar o Fracionamento.';
+        }
+        $this->session->set_flashdata('message', $data['mensagem']);
+        redirect(base_url() . "estoque/inventario");
+    }
+    
     function relatoriosaldoarmazem() {
         $data['armazem'] = $this->entrada->listararmazem();
         $data['empresa'] = $this->guia->listarempresas();

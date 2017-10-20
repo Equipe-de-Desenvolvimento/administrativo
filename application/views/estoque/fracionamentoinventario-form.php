@@ -3,7 +3,7 @@
         <h3 class="singular"><a href="#">Fracionamento de Entrada</a></h3>
 
         <div>
-            <form name="form_entrada" id="form_entrada" action="<?= base_url() ?>estoque/entrada/gravarfracionamento" method="post">
+            <form name="form_entrada" id="form_entrada" action="<?= base_url() ?>estoque/inventario/gravarfracionamento" method="post">
 
                 <dl class="dl_desconto_lista">
                     <dt>

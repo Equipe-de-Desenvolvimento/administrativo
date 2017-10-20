@@ -29,6 +29,10 @@
         table{
             width: 100%;
         }
+        .cod{
+            font-size: 17pt;
+            font-weight: bold;
+        }
     </style>
 
     <meta charset="utf-8">
@@ -53,7 +57,9 @@
                             <td width="400"><?= @$empresa[0]->cnpj; ?></td>
 
                             <td width="70">Insc:</td>
-                            <td width="400"><?= @$empresa[0]->inscricao_estadual; ?></td>
+                            <td width="150"><?= @$empresa[0]->inscricao_estadual; ?></td>
+                            
+                            <td style="width: 100pt"><span class="negrito cod">Cod: <?= @$estoque_solicitacao_id; ?></span></td>
                         </tr>
                         <tr>
                             <td>Fone: </td>
@@ -130,46 +136,38 @@
                             <td><span class="negrito">Emissão: </span></td>
                             <td><?= date("d/m/Y"); ?></td>
 
-                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-
                             <td align="right"><span class="negrito">Saída: </span></td>
-                            <td>
+                            <td style="width: 150pt;">
                                 <?
                                 if (isset($destinatario[0]->data_fechamento)) {
-                                    echo date("d/m/Y", strtotime($destinatario[0]->data_fechamento));
+                                    echo date("d/m/Y H:i", strtotime($destinatario[0]->data_fechamento));
                                 } else {
                                     echo "EM ABERTO";
                                 }
                                 ?>
                             </td>
 
-                            <td>&nbsp;&nbsp;</td>
+                            
 
-                            <td align="right"><span class="negrito">Número: </span></td>
-                            <td></td>
+                            <td align="right"><span class="negrito">F.pgto: </span></td>
+                            <td colspan="2" style="width: 100pt;"><?= @$nome[0]->forma_pagamento; ?></td>
 
-                            <td>&nbsp;&nbsp;</td>
+                            <td align="right" colspan="2"><span class="negrito">Tp.Doc: </span></td>
+                            <td style="width: 100pt;"><?= @$nome[0]->descricao_pagamento; ?></td><!--
 
-                            <td align="right"><span class="negrito">Cód: </span></td>
-                            <td><?= @$solicitacao_id; ?></td>
-
-                            <td>&nbsp;&nbsp;</td>
-
-                            <td align="right"><span class="negrito">Entregador: </span></td>
-                            <td><?= @$destinatario[0]->entregador; ?></td>
+                            <td>&nbsp;&nbsp;</td>-->
 
                         </tr>
                         <tr>
 
                             <td><span class="negrito">Vendedor: </span></td>
-                            <td colspan="4"><?= @$destinatario[0]->vendedor; ?></td>
+                            <td colspan="6"><?= @$destinatario[0]->vendedor; ?></td>
 
-                            <td align="right" colspan="2"><span class="negrito">F.pgto: </span></td>
-                            <td colspan="3"><?= @$nome[0]->forma_pagamento; ?></td>
+                        </tr>
+                        <tr>
 
-                            <td align="right" colspan="2"><span class="negrito">Tp.Doc: </span></td>
-                            <td colspan="4"><?= @$nome[0]->descricao_pagamento; ?></td>
-
+                            <td ><span class="negrito">Entregador: </span></td>
+                            <td colspan="6"><?= @$destinatario[0]->entregador; ?></td>
                         </tr>
 
                         <tr>
@@ -251,13 +249,21 @@
                             <td><span class="negrito">Tot.Líquido: </span></td>
                             <td width="150"><?= number_format($totLiq, 2, '.', ',') ?></td>
 
-                            <td><span class="negrito">Assinatura: </span></td>
-                            <td colspan="3"  class="linha_abaixo" width="300"></td>
+<!--                            <td><span class="negrito">Assinatura: </span></td>
+                            <td colspan="3"  class="linha_abaixo" width="300"></td>-->
                         </tr>
                     </table>
                 </td>
             </tr>
 
         </table>
+        <div style="width: 300pt; margin-top: 100pt ; ">
+            <table>
+                <tr>
+                    <td><span class="negrito" style="font-size: 10pt;">Assinatura: </span></td>
+                    <td colspan="3"  class="linha_abaixo" width="300"></td>
+                </tr>
+            </table>
+        </div>
 
 </body>

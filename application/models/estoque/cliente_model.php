@@ -77,6 +77,30 @@ class cliente_model extends Model {
         $return = $this->db->count_all_results();
         return $return;
     }
+    
+    
+    function descricaodepagamento() {
+        $this->db->select('fp.descricao_forma_pagamento_id,
+                            fp.boleto,
+                            fp.nome as nome');
+        $this->db->from('tb_descricao_forma_pagamento fp');
+        $this->db->where('ativo', 't');
+        $this->db->orderby('fp.nome');
+        $return = $this->db->get();
+        $retorno = $return->result();
+
+        if (empty($retorno)) {
+            $this->db->select('fp.descricao_forma_pagamento_id,
+                                fp.boleto,
+                                fp.nome as nome');
+            $this->db->from('tb_descricao_forma_pagamento fp');
+            $this->db->orderby('fp.nome');
+            $return = $this->db->get();
+            return $return->result();
+        } else {
+            return $retorno;
+        }
+    }
 
     function listarcliente($operador_id) {
         $this->db->select('ec.nome, oc.estoque_operador_cliente_id');
@@ -97,6 +121,16 @@ class cliente_model extends Model {
         $this->db->where('oc.cliente_id', $cliente_id);
         $this->db->where('oc.ativo', 't');
         $this->db->where('o.ativo', 't');
+        $return = $this->db->get();
+        return $return->result();
+    }
+
+    function listardadoscliente($cliente_id) {
+        $this->db->select('vendedor_id,
+                           descricaopagamento');
+        $this->db->from('tb_estoque_cliente ec');
+        $this->db->where('ativo', 'true');
+        $this->db->where('estoque_cliente_id', $cliente_id);
         $return = $this->db->get();
         return $return->result();
     }
@@ -228,6 +262,12 @@ class cliente_model extends Model {
                 $this->db->set('saida', 'false');
             }
 
+            if ($_POST['descricaopagamento'] != '') {
+                $this->db->set('descricaopagamento', $_POST['descricaopagamento']);
+            }
+            if ($_POST['vendedor_id'] != '') {
+                $this->db->set('vendedor_id', $_POST['vendedor_id']);
+            }
             if ($_POST['municipio_id'] != '') {
                 $this->db->set('municipio_id', $_POST['municipio_id']);
             }
@@ -293,6 +333,8 @@ class cliente_model extends Model {
             $this->_sala_id = $return[0]->sala_id;
             $this->_saida = $return[0]->saida;
             $this->_credor_devedor_id = $return[0]->credor_devedor_id;
+            $this->_descricaopagamento = $return[0]->descricaopagamento;
+            $this->_vendedor_id= $return[0]->vendedor_id;
         } else {
             $this->_estoque_cliente_id = null;
         }

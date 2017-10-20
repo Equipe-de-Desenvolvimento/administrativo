@@ -87,7 +87,7 @@ class solicitacao_model extends Model {
         $this->db->join('tb_estoque_solicitacao_faturamento sf', 'sf.estoque_solicitacao_id = esc.estoque_solicitacao_setor_id', 'left');
         $this->db->join('tb_operador o', 'o.operador_id = esc.vendedor_id', 'left');
         $this->db->join('tb_estoque_solicitacao_cliente_transportadora ct', 'ct.solicitacao_cliente_id = esc.estoque_solicitacao_setor_id', 'left');
-        $this->db->join('tb_entregador ent', 'ent.entregador_id = ct.entregador_id', 'left');
+        $this->db->join('tb_entregador ent', 'ent.entregador_id = esc.entregador', 'left');
         $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('esc.ativo', 'true');
         $return = $this->db->get();
@@ -532,9 +532,27 @@ class solicitacao_model extends Model {
         return $return->result();
     }
 
+    function valorprodutosolicitacao($estoque_solicitacao_id, $produto_id) {
+        $this->db->select('emp.valor as valor_venda');
+        $this->db->from('tb_estoque_produto ep');
+        $this->db->join('tb_estoque_menu_produtos emp', 'emp.produto = ep.estoque_produto_id');
+        $this->db->join('tb_estoque_menu em', 'em.estoque_menu_id = emp.menu_id');
+        $this->db->join('tb_estoque_cliente ec', 'ec.menu_id = emp.menu_id');
+        $this->db->join('tb_estoque_solicitacao_cliente esc', 'esc.cliente_id = ec.estoque_cliente_id');
+        $this->db->where('esc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
+        $this->db->where('ep.estoque_produto_id', $produto_id);
+        $this->db->where('ep.ativo', 'true');
+        $this->db->where('emp.ativo', 'true');
+        $this->db->orderby('ep.descricao');
+        $this->db->orderby('ep.codigo');
+
+        $return = $this->db->get();
+        return $return->result();
+    }
+
     function listarprodutos($estoque_solicitacao_id) {
         $this->db->select('ep.codigo,
-            ep.estoque_produto_id,
+                            ep.estoque_produto_id,
                             ep.descricao,
                             ep.ipi,
                             emp.valor as valor_venda');
@@ -674,16 +692,18 @@ class solicitacao_model extends Model {
         $this->db->select('
                                p.descricao,
                                p.codigo,
+                               e.lote,
+                               e.validade,
                                si.solicitacao_cliente_id,
                                u.descricao as unidade,
                                sum(si.quantidade) as quantidade');
         $this->db->from('tb_estoque_solicitacao_itens si');
         $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id', 'left');
         $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id', 'left');
-
+        $this->db->join('tb_estoque_entrada e', 'e.estoque_entrada_id= si.entrada_id', 'left');
         $this->db->where('si.solicitacao_cliente_id', $estoque_solicitacao_id);
         $this->db->where('si.ativo', 'true');
-        $this->db->groupby('p.descricao, p.codigo, si.solicitacao_cliente_id, u.descricao');
+        $this->db->groupby('p.descricao, p.codigo, si.solicitacao_cliente_id, u.descricao, e.lote,e.validade');
         $this->db->orderby('si.solicitacao_cliente_id');
         $return = $this->db->get();
 //        }
@@ -696,6 +716,8 @@ class solicitacao_model extends Model {
                           p.descricao as produto,
                           p.codigo,
                           p.ncm,
+                          e.lote,
+                          e.validade,
                           u.descricao as unidade,
                           si.quantidade as quantidade_solicitada,
                           si.valor');
@@ -703,6 +725,7 @@ class solicitacao_model extends Model {
         $this->db->join('tb_estoque_solicitacao_itens si', 'si.solicitacao_cliente_id = sc.estoque_solicitacao_setor_id', 'left');
         $this->db->join('tb_estoque_produto p', 'p.estoque_produto_id = si.produto_id', 'left');
         $this->db->join('tb_estoque_unidade u', 'u.estoque_unidade_id= p.unidade_id', 'left');
+        $this->db->join('tb_estoque_entrada e', 'e.estoque_entrada_id= si.entrada_id', 'left');
 
         $this->db->where('sc.estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->where('sc.ativo', 'true');

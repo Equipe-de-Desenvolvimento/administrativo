@@ -69,6 +69,7 @@ class fornecedor_model extends Model {
             /* inicia o mapeamento no banco */
             $financeiro_credor_devedor_id = $_POST['txtcadastrosfornecedorid'];
             $this->db->set('razao_social', $_POST['txtrazaosocial']);
+            $this->db->set('nome', $_POST['txtfantasia']);
             $this->db->set('cep', $_POST['txttipo_id']);
             $this->db->set('cpf', str_replace("-", "", str_replace(".", "", $_POST['txtCPF'])));
             if ($_POST['txtCNPJ'] != '') {
@@ -127,6 +128,7 @@ class fornecedor_model extends Model {
                                bairro,
                                complemento,
                                f.municipio_id,
+                               f.nome as fantasia,
                                c.nome,
                                c.estado,
                                cep');
@@ -148,6 +150,7 @@ class fornecedor_model extends Model {
             $this->_complemento = $return[0]->complemento;
             $this->_municipio_id = $return[0]->municipio_id;
             $this->_nome = $return[0]->nome;
+            $this->_fantasia = $return[0]->fantasia;
             $this->_estado = $return[0]->estado;
             $this->_cep = $return[0]->cep;
         } else {

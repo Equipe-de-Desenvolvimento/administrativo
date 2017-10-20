@@ -51,10 +51,10 @@
                                         <tr>
                                             <td><span class="negrito">Fone: </span> <?= @$empresa[0]->telefone; ?></td>
                                             <td>&nbsp;&nbsp;</td>
-                                            <td><span class="negrito">Fax: </span> <?= @$empresa[0]->fax; ?></td>
+<!--                                            <td><span class="negrito">Fax: </span> <?= @$empresa[0]->fax; ?></td>
                                             <td>&nbsp;&nbsp;</td>
                                             <td><span class="negrito">Cod: </span> <?= @$solicitacao_id; ?></td>
-                                            <td>&nbsp;&nbsp;</td>
+                                            <td>&nbsp;&nbsp;</td>-->
                                         </tr>
                                         <tr>
                                             <td colspan="3"><span class="negrito">Email: </span><?= @$empresa[0]->email; ?></td>
@@ -80,7 +80,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3"><span class="negrito">Cnpj: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cnpj; ?></span></td>
-                                            <td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>
+                                            <!--<td><span class="negrito">CEP: </span><span class="dados_cabecalho"><?= @$destinatario[0]->cep; ?></span></td>-->
 
                                         </tr>
                                         <tr>
@@ -122,9 +122,9 @@
                                             <td colspan="4"><span class="negrito">Entregador: </span>
                                                 <span class="dados_cabecalho"><?= @$destinatario[0]->entregador; ?></span>
                                             </td>
-                                            <td colspan="5"><span class="negrito">Rota: </span>
+<!--                                            <td colspan="5"><span class="negrito">Rota: </span>
                                                 <span class="dados_cabecalho"></span>
-                                            </td>
+                                            </td>-->
         <!--                                    <td colspan="5"><span class="negrito">Rota: </span>
                                                 <span class="dados_cabecalho"></span>
                                             </td>-->
@@ -149,6 +149,8 @@
                                                     <th align="left">PRODUTO</th>
                                                     <th>UNIDADE</th>
                                                     <th>QUANTIDADE</th>
+                                                    <td>LOTE</td>
+                                                    <td>VALIDADE</td>
                                                 </tr>
                                                 <!-- LANÇAR O FOREACH DOS PRODUTOS AQUI -->
 
@@ -158,6 +160,8 @@
                                                         <td><?= @$value->descricao; ?></td>
                                                         <td style="text-align: right"><?= @$value->unidade; ?></td>
                                                         <td style="text-align: right"><?= @$value->quantidade; ?></td>
+                                                        <td><?= @$value->lote; ?></td>
+                                                        <td><?= ($value->validade != "")? date("d/m/Y", strtotime($value->validade)): "" ?></td>
                                                     </tr>
                                                 <? endforeach; ?>
                                             </tbody>
@@ -166,26 +170,26 @@
                                 </td>
                             </tr>
 
-                            <tr>
+<!--                            <tr>
                                 <td colspan="3" class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             </tr>
 
-                            <!-- OBSERVAÇÕES -->
+                             OBSERVAÇÕES 
                             <tr>
                                 <td colspan="3"><span style="font-size: 11pt;">Obs:</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             </tr> 
 
                             <tr>
                                 <td colspan="3" class="linha_abaixo">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
+                            </tr>-->
 
                             <!-- RODAPE -->
-                            <tr>
+<!--                            <tr>
                                 <td colspan="3" >
                                     <div>
                                         <table cellspacing="1">
                                             <tr>
-                                                <!--RODAPE PARTE 1 -->
+                                                RODAPE PARTE 1 
 
                                                 <td>
                                                     <table>
@@ -202,9 +206,9 @@
                                                                     <tr>
                                                                         <td colspan="4">
                                                                             <span class="negrito">Cliente: </span>
-                                                                            <!--                                                                        </td>
+                                                                                                                                                    </td>
                                                                                                                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                                                                                                                    <td colspan="5">-->
+                                                                                                                                                    <td colspan="5">
                                                                             <?= @$destinatario[0]->nome; ?>
                                                                         </td>
                                                                     </tr>
@@ -216,7 +220,7 @@
                                                                             <span style="text-align: right"><?= date("d/m/Y"); ?></span>
                                                                         </td>
 
-                                                                        <!--<td>&nbsp;&nbsp;</td>-->
+                                                                        <td>&nbsp;&nbsp;</td>
 
                                                                         <td colspan="2">
                                                                             <span class="negrito">Venc: </span>
@@ -238,7 +242,7 @@
                                                                         <td colspan="2">
                                                                             <span class="negrito">Qtd.Tot: </span>
                                                                             <span style="text-align: right">
-                                                                                <!--AQUI VEM A QTDE TOTAL-->
+                                                                                AQUI VEM A QTDE TOTAL
                                                                             </span>
                                                                         </td>
                                                                     </tr>
@@ -246,11 +250,11 @@
                                                                     <tr>
                                                                         <td colspan="2" align="right">
                                                                             <span class="negrito" style="text-align: right;">Peso bt: </span>
-                                                                            <span style="margin-left: -5pt;"><!--AQUI VEM O PESO BT--></span>
+                                                                            <span style="margin-left: -5pt;">AQUI VEM O PESO BT</span>
                                                                         </td>    
                                                                         <td colspan="2" align="right">
                                                                             <span class="negrito" style="text-align: right;">Peso liq: </span>
-                                                                            <span style="margin-left: -5pt;"><!--AQUI VEM O PESO BT--></span>
+                                                                            <span style="margin-left: -5pt;">AQUI VEM O PESO BT</span>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -264,14 +268,14 @@
                                                     <div style="height: 40pt">
                                                         <div class="negrito" style="display: block; text-align: center">Dados do Movimento</div>
                                                         <span>
-                                                            <!--AQUI VEM O "DADOS DO MOVIMENTO". EX: "VENDA"-->
+                                                            AQUI VEM O "DADOS DO MOVIMENTO". EX: "VENDA"
                                                         </span>
                                                     </div>
                                                 </td>
                                             </tr>
 
                                             <tr>
-                                                <!--RODAPE PARTE 2 -->
+                                                RODAPE PARTE 2 
                                                 <td colspan="3" >
                                                     <table>
                                                         <tr>
@@ -282,11 +286,11 @@
                                                         </tr>
                                                     </table>
                                                 </td>   
-                                                <!--<td>&nbsp;&nbsp;&nbsp;</td>-->
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
                                             </tr>
 
                                             <tr>
-                                                <!--RODAPE PARTE 3 -->
+                                                RODAPE PARTE 3 
                                                 <td colspan="" align="center">
 
                                                     <span style="width: 75pt; text-align: center" class="negrito">Assinatura</span>
@@ -311,7 +315,7 @@
                                         </table>
                                     </div>
                                 </td>
-                            </tr> 
+                            </tr> -->
 
                         </table>
                     </div>
