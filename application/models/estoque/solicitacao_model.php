@@ -489,6 +489,24 @@ class solicitacao_model extends Model {
         $this->db->set('motivo_cancelamento', $_POST['txtmotivo']);
         $this->db->where('estoque_solicitacao_setor_id', $estoque_solicitacao_id);
         $this->db->update('tb_estoque_solicitacao_cliente');
+        
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');        
+
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('ativo', 'f');
+        $this->db->where("estoque_saida_id IN (
+                    SELECT estoque_saida_id FROM ponto.tb_estoque_saida
+                    WHERE solicitacao_cliente_id = $estoque_solicitacao_id )");
+        $this->db->update('tb_estoque_saldo');
+
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('ativo', 'f');
+        $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
+        $this->db->update('tb_estoque_saida');
+
     }
 
     function usanotafiscal($estoque_solicitacao_id) {
@@ -849,11 +867,10 @@ class solicitacao_model extends Model {
         $this->db->join('tb_estoque_operador_cliente oc', 'oc.cliente_id = es.cliente_id');
         $this->db->join('tb_notafiscal n', 'n.solicitacao_cliente_id = es.estoque_solicitacao_setor_id', 'left');
         $this->db->where('es.ativo', 'true');
-        $this->db->where('oc.operador_id', $operador_id);
+//        $this->db->where('oc.operador_id', $operador_id);
         $this->db->where('oc.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
-            $this->db->where("(ec.nome ilike '%" . $args['nome'] . "%' 
-                               OR es.estoque_solicitacao_setor_id = " . $args['nome'] .")");
+            $this->db->where("(ec.nome ilike '%" . $args['nome'] . "%' )");
         }
         return $this->db;
     }
@@ -1082,7 +1099,7 @@ class solicitacao_model extends Model {
             if ($formadepagamento != '') {
                 $this->db->set('forma_pagamento', $formadepagamento);
             }
-            if ($formadepagamento != '') {
+            if ($descpag != '') {
                 $this->db->set('descricao_pagamento', $descpag);
             }
 
@@ -1195,6 +1212,20 @@ class solicitacao_model extends Model {
             $this->db->set('ativo', 'f');
             $this->db->where('estoque_solicitacao_id', $estoque_solicitacao_id);
             $this->db->update('tb_estoque_solicitacao_faturamento');
+
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('ativo', 'f');
+            $this->db->where("estoque_saida_id IN (
+                        SELECT estoque_saida_id FROM ponto.tb_estoque_saida
+                        WHERE solicitacao_cliente_id = $estoque_solicitacao_id )");
+            $this->db->update('tb_estoque_saldo');
+
+            $this->db->set('operador_atualizacao', $operador_id);
+            $this->db->set('data_atualizacao', $horario);
+            $this->db->set('ativo', 'f');
+            $this->db->where('solicitacao_cliente_id', $estoque_solicitacao_id);
+            $this->db->update('tb_estoque_saida');
 
             return $estoque_solicitacao_id;
         } catch (Exception $exc) {

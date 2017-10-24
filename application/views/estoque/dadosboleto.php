@@ -1,8 +1,8 @@
 <div class="content ficha_ceatox"> <!-- Inicio da DIV content -->
-    <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/gerarboletobanconordeste" method="post">
+    <form name="form_sala" id="form_sala" method="post">
 
         <div>        
-            <a href="<?= base_url() ?>estoque/boleto/gerarboletobnb/<?= @$boleto[0]->estoque_boleto_id; ?>">
+            <a href="<?= base_url() ?>estoque/boleto/selecionabancoboleto/<?= @$boleto[0]->estoque_boleto_id; ?>">
                 <button type="button" id="novaParcela">Gerar Boleto</button>
             </a>
             <? if ($boleto[0]->gerado == 't') { ?>

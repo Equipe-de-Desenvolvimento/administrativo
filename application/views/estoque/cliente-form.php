@@ -187,7 +187,7 @@
                                 <option   value =<?php echo $item->financeiro_credor_devedor_id; ?> <?
                                           if (@$obj->_credor_devedor_id == $item->financeiro_credor_devedor_id):echo 'selected';
                                           endif;
-                                          ?>><?php echo $item->razao_social; ?></option>
+                                          ?>><?php echo $item->nome; ?></option>
     <?php
 }
 ?> 

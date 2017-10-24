@@ -378,6 +378,15 @@ class boleto_model extends Model {
     }
     
     
+    function listarbancos() {
+        $this->db->select('nome_banco, codigo_banco');
+        $this->db->from('tb_boleto_banco');
+        $this->db->where('ativo', 't');
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    
     function jurosporparcelas($formapagamento_id) {
         $this->db->select('valor, prazo, parcela, dias');
         $this->db->from('tb_formapagamento_pacela_juros');
@@ -410,15 +419,15 @@ class boleto_model extends Model {
         $cliente = $faturamento[0]->credor_devedor_id;
         $valorPedido = $faturamento[0]->valor_total;
 
-        if ($valorPedido != '0.00') {
+//        if ($valorPedido != '0.00') {
             $valor = $faturamento[0]->valor_total;
             $tipo = $faturamento[0]->tipo;
 
             $parcelas = $this->jurosporparcelas($faturamento[0]->formadepagamento);
             $prazo = (int) $parcelas[0]->prazo;
 
-//FORMA DE PAGAMENTO 'AVISTA'
-// O valor 100 se refere a porcentagem de juros cadastrada na parcela.
+            //FORMA DE PAGAMENTO 'AVISTA'
+            // O valor 100 se refere a porcentagem de juros cadastrada na parcela.
             if ($tipo == 1) {
                 $prazo = (int) $parcelas[0]->prazo;
 
@@ -465,7 +474,7 @@ class boleto_model extends Model {
                     $this->db->insert('tb_estoque_boleto');
                 }
             }
-        }
+//        }
         return true;
     }
 
