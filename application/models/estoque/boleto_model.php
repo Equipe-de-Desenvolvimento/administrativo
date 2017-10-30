@@ -238,6 +238,7 @@ class boleto_model extends Model {
                             eb.gerado,
                             eb.instrucao_boleto,
                             eb.baixa,
+                            eb.dias_protesto,
                             eb.descricaopagamento_id,
                             dfp.nome as descricao,
                             fes.descricao as conta_descricao,
@@ -310,6 +311,28 @@ class boleto_model extends Model {
         $this->db->orderby('es.estoque_saida_id');
         $return = $this->db->get();
         return $return->result();
+    }
+
+    function gravardadoscnabsantander($estoque_boleto_id) {
+        $this->db->set('data_vencimento', $_POST['vencimento']);
+        $this->db->set('numero_documento', $_POST['numDoc']);
+        $this->db->set('nosso_numero', $_POST['nosso_numero']);
+        $this->db->set('juros', $_POST['juros']);
+        $this->db->set('mensagem_cedente', $_POST['mensagem']);
+        $this->db->set('instrucao_boleto', $_POST['instrucao']);
+        $this->db->set('aceite', $_POST['aceite']);
+        $this->db->set('especie_documento', $_POST['especie']);
+        $this->db->set('carteira', $_POST['carteira']);
+        $this->db->set('servico', $_POST['servico']);
+        $this->db->set('dias_protesto', str_replace('.', '', $_POST['diasprotesto']));
+        $this->db->set('gerado', 't');
+        $this->db->set('codigo_banco', '033');
+        $horario = date("Y-m-d H:i:s");
+        $operador_id = $this->session->userdata('operador_id');
+        $this->db->set('data_atualizacao', $horario);
+        $this->db->set('operador_atualizacao', $operador_id);
+        $this->db->where('estoque_boleto_id', $estoque_boleto_id);
+        $this->db->update('tb_estoque_boleto');
     }
 
     function gravardadoscnabtodos($estoque_boleto_id) {

@@ -867,7 +867,8 @@ class solicitacao_model extends Model {
         $this->db->join('tb_estoque_operador_cliente oc', 'oc.cliente_id = es.cliente_id');
         $this->db->join('tb_notafiscal n', 'n.solicitacao_cliente_id = es.estoque_solicitacao_setor_id', 'left');
         $this->db->where('es.ativo', 'true');
-//        $this->db->where('oc.operador_id', $operador_id);
+        $this->db->where('es.situacao !=', 'CANCELADO');
+        $this->db->where('oc.operador_id', $operador_id);
         $this->db->where('oc.ativo', 't');
         if (isset($args['nome']) && strlen($args['nome']) > 0) {
             $this->db->where("(ec.nome ilike '%" . $args['nome'] . "%' )");
@@ -1129,6 +1130,7 @@ class solicitacao_model extends Model {
     function gravar() {
         try {
             /* inicia o mapeamento no banco */
+            $this->db->set('situacao', 'ABERTA');
             $this->db->set('cliente_id', $_POST['setor']);
             if ( $_POST['entregador'] != '' ) {
                 $this->db->set('entregador', $_POST['entregador']);

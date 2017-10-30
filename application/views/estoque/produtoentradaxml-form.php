@@ -41,7 +41,7 @@
                             </td>
                             <td>
                                 <label>Valor de compra</label>
-                                <input text="text" alt="decimal" class="texto02" name="valor[<?= $i ?>]" id="valor<?= $i ?>" value="<?= $value['valorcompra']; ?>" required/>
+                                <input text="text" alt="decimal" class="texto02" name="valor[<?= $i ?>]" id="valor<?= $i ?>" value="<?= $value['valorcompra'] ; ?>" required/>
                             </td>
                             <td>
                                 <label>Quantidade</label>

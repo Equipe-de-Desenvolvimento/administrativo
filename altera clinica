@@ -608,3 +608,7 @@ CREATE TABLE ponto.tb_boleto_banco
   CONSTRAINT tb_boleto_banco_pkey PRIMARY KEY (boleto_banco_id)
 );
 -- INSERT INTO ponto.tb_boleto_banco(nome_banco, codigo_banco) VALUES ('BANCO DO NORDESTE', '004'), ('SANTANDER', '033');
+
+-- Dia 27/10/2017
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN codigo_banco character varying(10);
+ALTER TABLE ponto.tb_estoque_boleto ADD COLUMN dias_protesto integer;

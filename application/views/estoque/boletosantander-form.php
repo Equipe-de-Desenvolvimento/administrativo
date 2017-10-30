@@ -28,17 +28,17 @@
                             <input type="hidden" name="estoque_boleto_id" id="estoque_boleto_id" value="<?= $estoque_boleto_id ?>">  
                             <select name="carteira" required="" class="size2">
                                 <option value="">Selecione</option>
-                                <option value="1" <? if(@$boleto[0]->carteira == '1') echo 'selected'?> >21 - Cobrança Simples Escritural - Boleto Emitido Pelo Banco</option>
-                                <option value="2" <? if(@$boleto[0]->carteira == '2') echo 'selected'?>>41 - Cobrança Vinculada – Boleto Emitido Pelo Banco</option>
-                                <option value="4" <? if(@$boleto[0]->carteira == '4') echo 'selected'?> <?=$selected?>>21 - Cobrança Simples - Boleto Emitido Pelo Cliente</option>
-                                <option value="5" <? if(@$boleto[0]->carteira == '5') echo 'selected'?>>41 - Cobrança Vinculada - Boleto Emitido Pelo Cliente</option>
-                                <!--<option value="1" <? if(isset($boleto[0]->carteira)) echo 'selected'?>>51 - Cobrança Simplificada (Sem Registro)</option>-->
+                                <option value="1" <? if(@$boleto[0]->carteira == '1') echo 'selected'?> >Eletrônica com registro</option>
+                                <option value="3" <? if(@$boleto[0]->carteira == '3') echo 'selected'?> >Penhor eletrônica</option>
+                                <option value="5" <? if(@$boleto[0]->carteira == '5') echo 'selected'?> <?=$selected?>>Rapida com registro - Boleto Emitido Pelo Cliente</option>
+                                <option value="6" <? if(@$boleto[0]->carteira == '6') echo 'selected'?>>Penhor rápida</option>
+                                <option value="7" <? if(@$boleto[0]->carteira == '7') echo 'selected'?>>Desconto Eletrônico</option>
                             </select>
                             <? $selected = '';  ?>
                         </dd>
 
                         <dt>
-                            <label>Serviço *</label>
+                            <label>Ocorrencia *</label>
                         </dt>
                         <dd>         
                             <?
@@ -47,23 +47,19 @@
                                 $selected = '';                                
                             }
                             ?>
-                            <select name="servico" required="" class="size2">
+                            <select name="servico" id="servico" required="" class="size2">
                                 <option value="">Selecione</option>
                                 <option value="01" <? if(@$boleto[0]->servico == '01') echo 'selected'?> >Entrada Normal</option>
                                 <option value="02" <? if(@$boleto[0]->servico == '02') echo 'selected'?> >Pedido de baixa</option>
                                 <option value="04" <? if(@$boleto[0]->servico == '04') echo 'selected'?> >Concessão de Abatimento</option>
                                 <option value="06" <? if(@$boleto[0]->servico == '06') echo 'selected'?> >Alteração de Vencimento</option>
-                                <!--                        <option value="07">Alteração do Uso da empresa (Número de Controle)</option>
-                                                        <option value="08">Alteração de Seu número</option>-->
-                                <option value="09" <? if(@$boleto[0]->servico == '09') echo 'selected'?>  <?=$selected?>>Protestar</option>
-                                <option value="10" <? if(@$boleto[0]->servico == '10') echo 'selected'?> >Não Protestar</option>
-                                <option value="12" <? if(@$boleto[0]->servico == '12') echo 'selected'?> >Inclusão de Ocorrência</option>
-                                <!--<option value="13">Exclusão de ocorrência</option>-->
-                                <!--<option value="31">Alteração de Outros Dados</option>-->
-                                <option value="32" <? if(@$boleto[0]->servico == '32') echo 'selected'?> >Pedido de Devolução</option>
-                                <option value="33" <? if(@$boleto[0]->servico == '33') echo 'selected'?> >Pedido de Devolução (entregue ao Sacado).</option>
-                                <option value="99" <? if(@$boleto[0]->servico == '99') echo 'selected'?> >Pedido dos Títulos em Aberto</option>
+                                <option value="09" <? if(@$boleto[0]->servico == '09') echo 'selected'?> >Protestar</option>
+                                <option value="98" <? if(@$boleto[0]->servico == '98') echo 'selected'?> <?=$selected?>>Não Protestar</option>
                             </select>
+                            <div style="display: inline-block" id="divProtesto">
+                                <label>Dias Protesto</label>
+                                <input type="text" name="diasprotesto" id="diasprotesto" alt="integer" class="texto01" value="0"/>
+                            </div>
                             <? $selected = '';  ?>
                         </dd>
 
@@ -197,6 +193,19 @@
                             });
                         });
 
+                        $(function () {
+                            $('#servico').change(function () {
+                                if($(this).val() == '09'){
+                                    $("#divProtesto").show();
+                                }
+                                else{
+                                    $("#divProtesto").hide();
+                                    $("#diasprotesto").val(0);
+                                }
+                                    
+                            });
+                        });
+                        
                         $(function () {
                             $('#convenio1').change(function () {
                                 if ($(this).val()) {

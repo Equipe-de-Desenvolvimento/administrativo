@@ -19,9 +19,9 @@
     <!--<div class="clear"></div>-->
     <form name="form_sala" id="form_sala" action="<?= base_url() ?>estoque/boleto/solicitacaoboleto" method="post">
         <!--<div>-->
-        <a href="<?= base_url() ?>estoque/boleto/gerarboletosbnb/<?= @$solicitacao_cliente_id; ?>">
+<!--        <a href="<?= base_url() ?>estoque/boleto/gerarboletosbnb/<?= @$solicitacao_cliente_id; ?>">
                 <button type="button" id="novaParcela">Gerar Boletos</button>
-            </a>
+            </a>-->
         <!--</div>-->
         <fieldset>
             <legend>Boletos</legend>

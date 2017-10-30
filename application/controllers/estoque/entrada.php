@@ -76,17 +76,15 @@ class Entrada extends BaseController {
 
         $arqNome = $_FILES['userfile']['name'];
         $xml = simplexml_load_file("./upload/entradaxml/" . $arqNome);
-//        echo "<pre>";
-//        var_dump($xml);die;
         if( count($xml->NFe->infNFe->det) > 0 ){
             foreach ($xml->NFe->infNFe->det as $key => $value) {
                 $resultado = $this->entrada->listarprodutoentradaxml($value->prod->cProd);
-
                 $view['produtos'][] = array(
-                    "produto_id" => $resultado[0]->estoque_produto_id,
-                    "descricao" => $resultado[0]->descricao,
-                    "qtde" => (int) $value->prod->qCom,
-                    "valorcompra" => (string) $value->prod->vProd
+                    "codigo" => @$value->prod->cProd,
+                    "produto_id" => @$resultado[0]->estoque_produto_id,
+                    "descricao" => @$resultado[0]->descricao,
+                    "qtde" => (int) @$value->prod->qCom,
+                    "valorcompra" => (string) @$value->prod->vProd
                 );
             }
 

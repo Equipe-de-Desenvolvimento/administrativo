@@ -71,7 +71,7 @@ class Boleto extends BaseController {
     }
 
     function solicitacaoboleto($estoque_boleto_id) {
-        $estoque_boleto_id;
+//        $estoque_boleto_id;
 //        var_dump($estoque_boleto_id);die;
         $data['boleto'] = $this->boleto->instanciarboleto($estoque_boleto_id);
         $descricao_id = $data['boleto'][0]->descricaopagamento_id;
@@ -119,23 +119,20 @@ class Boleto extends BaseController {
     }
 
     function criarboletosantander() {
-        $solicitacao_id = $_POST['solicitacao_cliente_id'];
-        $boletos = $this->boleto->listarsolicitacaoboletoscnab($solicitacao_id);
+        $nosso_numero = $_POST['estoque_boleto_id'];
 
         $_POST['mensagem'] = mb_strtoupper($this->remover_caracter(utf8_decode($_POST['mensagem'])));
         $_POST['juros'] = str_replace(',', '.', str_replace('.', '', $_POST['juros']));
-        $_POST['seu_numero'] = $this->tamanho_string(date('dmyHi'), 10, 'numero');
-
-        foreach ($boletos as $item) {
-            $_POST['nosso_numero'] = $this->tamanho_string($item->estoque_boleto_id, 7, 'numero');
-            $_POST['numDoc'] = $this->tamanho_string($item->estoque_boleto_id, 25, 'numero');
-            $_POST['vencimento'] = $item->data_vencimento;
-            $this->boleto->gravardadoscnabtodos($item->estoque_boleto_id);
-            $this->geracnabSATANDER($item->estoque_boleto_id);
-        }
-        $mensagem = 'Boletos gerado com sucesso.';
-        $this->session->set_flashdata('message', $mensagem);
-        redirect(base_url() . "estoque/boleto/carregarboletos/$solicitacao_id");
+        $_POST['multa'] = str_replace(',', '.', str_replace('.', '', $_POST['multa']));
+        $_POST['seu_numero'] = $this->tamanho_string(date('dmyH:i'), 10, 'numero');
+        $_POST['nosso_numero'] = $this->tamanho_string($_POST['estoque_boleto_id'], 7, 'numero');
+        $_POST['numDoc'] = $this->tamanho_string($_POST['estoque_boleto_id'], 25, 'numero');
+        $_POST['vencimento'] = date("Y-m-d", strtotime(str_replace('/', '-', $_POST['vencimento'])));
+        $estoque_boleto_id = $_POST['estoque_boleto_id'];
+        $this->boleto->gravardadoscnabsantander($estoque_boleto_id);
+//        die('morreu');
+        $this->geracnabSATANDER($estoque_boleto_id);
+        redirect(base_url() . "estoque/boleto/solicitacaoboleto/$estoque_boleto_id");
     }
 
     function criarboletosbanconordestetodos() {
@@ -463,6 +460,9 @@ class Boleto extends BaseController {
         $seuNumero = $this->tamanho_string($data['boleto'][0]->seu_numero, 10, 'numero');
         $numeroDoc = $this->tamanho_string($data['boleto'][0]->numero_documento, 25, 'numero');
 
+//        $ocorrencia = $data['boleto'][0]->carteira;
+        
+        $protesto = $data['boleto'][0]->dias_protesto;
         $carteira = $data['boleto'][0]->carteira;
         $especie = $data['boleto'][0]->especie_documento;
         $aceite = $data['boleto'][0]->aceite;
@@ -481,6 +481,7 @@ class Boleto extends BaseController {
         $data['empresa'][0]->estado = mb_strtoupper($this->remover_caracter(utf8_decode($data['empresa'][0]->estado)));
         $data['empresa'][0]->municipio = mb_strtoupper($this->remover_caracter(utf8_decode($data['empresa'][0]->municipio)));
         $data['empresa'][0]->razao_social = mb_strtoupper($this->remover_caracter(utf8_decode($data['empresa'][0]->razao_social)));
+        $data['empresa'][0]->cnpj = $this->remover_caracter($data['empresa'][0]->cnpj);
 
         $data['destinatario'][0]->nome = mb_strtoupper($this->remover_caracter(utf8_decode($data['destinatario'][0]->nome)));
         $data['destinatario'][0]->logradouro = mb_strtoupper($this->remover_caracter(utf8_decode($data['destinatario'][0]->logradouro)));
@@ -500,14 +501,14 @@ class Boleto extends BaseController {
             "indentificacao_arquivo_remessa" => '1',
             "indentificacao_extenso" => "REMESSA",
             "codigo_servico" => '01',
-            "literal_servico" => "COBRANCA       ",
-            "cod_transmissao" => $this->zeros(20), 
+            "literal_servico" => $this->tamanho_string("COBRANCA", 15),
+            "cod_transmissao" => $this->zeros(20), // PESQUISAR 
             "nome_cedente" => $this->tamanho_string($data['empresa'][0]->empresa, 30), //@@ 30 caracteres
             "numero_banco" => '033',
-            "nome_banco" => 'SANTANDER      ',
-            "data_arquivo" => date("dmy"), //@@
+            "nome_banco" => $this->tamanho_string('SANTANDER', 15),
+            "data_arquivo" => date("dmy"),
             "zeros" => $this->zeros(16),
-            "mensagem_1" => $this->filler(47),
+            "mensagem_1" => $this->tamanho_string($mensagem, 47),
             "mensagem_2" => $this->filler(47),
             "mensagem_3" => $this->filler(47),
             "mensagem_4" => $this->filler(47),
@@ -519,69 +520,65 @@ class Boleto extends BaseController {
         );
 
         $transacao = array(
+            // PARTE 1
             "cod_registro" => '1',
-            "filler" => $this->filler(16),
-            "agencia_cedente" => $data['conta'][0]->agencia, //@@ 4 digitos 
-            "filler2" => $this->zeros(2),
-            "conta_cedente" => $data['conta'][0]->conta, //@@ 7 digitos
-            "digito_conta" => $data['conta'][0]->digito, //@@ 1 digito
-            "taxa_multa" => '00', // Percentual da multa por atraso. 2 digitos
-            "filler3" => $this->filler(4),
-            /* O SISTEMA IRA GERAR BASEADO EM INFORMAÇÕES VINDAS DO BANCO */
-            "numero_controle" => $this->tamanho_string($numeroDoc, 25, 'numero'), // N° Controle do Título do Cliente. (Controle da empresa). 25 digitos
-            "nosso_numero" => $this->tamanho_string($nossoNumero, 7, 'numero'), // Se o boleto for emitido pelo Cliente. Caso contrário 7 zeros.
-            "dig_nosso_num" => $this->digito_nosso_numero($nossoNumero),
-            "num_contrato" => $this->zeros(10), // Número do Contrato para cobrança. 10 zeros para cobrança simples.
-            "dt_segundo_desc" => $this->zeros(6),
-            "vlr_segundo_desc" => $this->zeros(13),
-            "filler4" => $this->filler(8),
-            /* INFORMAÇÕES */
-            "carteira" => $carteira, //** Carteira a ser utilizada
-            "cod_servico" => $servico, //** Servico desejado
-            "seu_numero" => $this->tamanho_string($seuNumero, 10, 'numero'), //** indentificação do boleto pela empresa 
-
-            /* INFORMAÇÕES */
-            "dt_vencimento" => $data_venc, //**
-
-            /* VALOR TOTAL. A virgula deve ser omitida, portanto as duas ultimas casas serao tidas como decimais */
-            "valor" => $this->tamanho_string($valor, 13, 'numero'), //@@ valor total a pagar 
-
-            /* INFORMAÇÕES */
-            "num_banco" => $this->zeros(3),
-            "agencia_cobradora" => $this->zeros(4), //BNB que definira baseado no CEP
-            "filler5" => $this->filler(1),
-            "especie" => $especie, //** 
-            "aceite" => $aceite, //** 
-            "dt_emissao" => date("dmy"), //@@
-            "cod_instrucao" => $instrucao, //**
-
-            /* JUROS E DESCONTOS */
-            "juros" => $this->tamanho_string($juros, 13, 'numero'), //** 
-            "dt_desconto" => $this->zeros(6), //@@ CASO TENHA SIDO DADO DESCONTO
-            "vlr_desconto" => $this->zeros(13), //@@ CASO TENHA SIDO DADO DESCONTO
-            "vlr_ioc" => $this->zeros(13), //@@ 
-            "vlr_abatimento" => $this->zeros(13), //** 
-
-            /* INFORMAÇÃO DO CLIENTE */
-            "cod_ins_sacado" => "02", //@@ 01 = cpf | 02 = cnpj
-            "cpf_cnpj_sacado" => $this->tamanho_string($data['destinatario'][0]->cnpj, 14, 'numero'), //@@ 
-            "nome_sacado" => $this->tamanho_string($data['destinatario'][0]->nome, 40), //@@  
-            "endereco_sacado" => $this->tamanho_string($data['destinatario'][0]->endereco, 40), //@@ 
-            "complemento_sacado" => $this->tamanho_string($data['destinatario'][0]->complemento, 12), //@@ 
-            "cep_sacado" => $data['destinatario'][0]->cep, //@@ 8 digitos
-            "cidade_sacado" => $this->tamanho_string($data['destinatario'][0]->municipio, 15), //@@ 
-            "uf" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'), //@@
-
-            /* INFORMAÇÃO */
-            "mensagem_cedente" => $this->tamanho_string($mensagem, 40), //**
-            "prazo_protesto" => "99", //** Em dias. Caso não vá protestar, preencher com 99
-            "cod_moeda" => "0", //** Em dias. Caso não vá protestar, preencher com 99
-            "sequencial_reg" => '000002'
+            "tipo_inscricao" => '02',
+            "cpf_cnpj" => $this->tamanho_string($data['empresa'][0]->cnpj, 14, 'numero'),
+            "agencia_beneficiario" => $data['conta'][0]->agencia,
+            "conta_movimento_beneficiario" => $data['conta'][0]->conta, //Qual a diferença? // PESQUISAR
+            "conta_cobranca_beneficiario" => $data['conta'][0]->conta, //Qual a diferença? // PESQUISAR
+            "numero_controle" => $this->tamanho_string($numeroDoc, 25, 'numero'),
+            "nosso_numero" => $this->tamanho_string($nossoNumero, 8, 'numero'),
+            "dt_segundo_desconto" => $this->zeros(6),
+            "branco_1" => $this->filler(1),
+            "informacao_multa" => '4',
+            "perc_multa" => '0000',
+            "moeda_corrente" => '00',
+            "vlr_outra_unidade" => $this->filler(16), // PESQUISAR
+            "branco_2" => '0000',
+            "dt_cobranca_multa" => '000000',
+            "cod_carteira" => $carteira,
+            "cod_ocorrencia" => $servico,
+            "seu_numero" => $this->tamanho_string($seuNumero, 10, 'numero'),
+            "dt_vencimento_boleto" => $data_venc,
+            "valor_boleto" => $this->tamanho_string($valor, 13, 'numero'),
+            "num_banco" => '033',
+            "cod_agencia_cobradora" => '00000', 
+            
+            // PARTE 2
+            "especie_documento" => $especie, 
+            "tp_aceite" => $aceite, 
+            "dt_emissao_boleto" => date('dmy'),
+            "instrucao_1" => $instrucao,
+            "instrucao_2" => '00',
+            "valor_atraso" => $this->zeros(13),
+            "dt_limite_desconto" => $data_venc,
+            "valor_IOF" => $this->zeros(13), // Imposto sobre Operações Financeiras
+            "valor_abatimento" => $this->zeros(16),
+            "tipo_inscricao_cliente" => '02',
+            "cpf_cnpj_cliente" => $this->tamanho_string($data['destinatario'][0]->cnpj, 14, 'numero'),
+            "nome_cliente" => $this->tamanho_string($data['destinatario'][0]->nome, 40),
+            "endereco_cliente" => $this->tamanho_string($data['destinatario'][0]->endereco, 40),            
+            "bairro_cliente" => $this->tamanho_string($data['destinatario'][0]->bairro, 12),            
+            "cep_cliente" => $data['destinatario'][0]->cep,
+            "complemento_cliente" => $this->tamanho_string($data['destinatario'][0]->complemento, 3),
+            "municipio_cliente" => $this->tamanho_string($data['destinatario'][0]->municipio, 15),
+            "uf_cliente" => $this->utilitario->codigo_uf($data['destinatario'][0]->codigo_ibge, 'sigla'),
+            "nome_emitente" => $this->tamanho_string($data['empresa'][0]->empresa, 30),
+            "branco_3" => $this->filler(1),
+            "indentificacao_comp" => '', // PESQUISAR
+            "complemento" => '', // PESQUISAR
+            "branco_4" => $this->filler(6),
+            "dias_protesto" => $this->tamanho_string($protesto, 2, 'numero'), // IMPLEMENTAR
+            "branco_5" => $this->filler(1),
+            "num_sequencial" => '000002',
         );
 
         $trailer = array(
             "cod_registro" => '9',
-            "filler" => $this->filler(393),
+            "qtde_doc" => '000001',
+            "valor_total" => $this->tamanho_string($valor, 13, 'numero'),
+            "zeros" => $this->zeros(374),
             "sequencial_reg" => '000003'
         );
 

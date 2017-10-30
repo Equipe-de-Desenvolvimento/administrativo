@@ -66,6 +66,7 @@ class cliente_model extends Model {
                             nome');
         $this->db->from('tb_estoque_cliente');
         $this->db->where('ativo', 'true');
+        $this->db->orderby('nome');
         $return = $this->db->get();
         return $return->result();
     }

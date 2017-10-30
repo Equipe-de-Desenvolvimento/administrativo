@@ -576,7 +576,8 @@ class entrada_model extends Model {
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $dados['nota'])));
             $this->db->set('lote', $dados['lote']);
             $this->db->set('codigo_cfop', str_replace('.', '', $dados['cfop']));
-
+            
+            $dados['validade'] = date("Y-m-d", strtotime(str_replace("/", "-", $dados['validade'])));
             if ($dados['validade'] != "") {
                 $this->db->set('validade', $dados['validade']);
             }
@@ -728,6 +729,7 @@ class entrada_model extends Model {
             $this->db->set('nota_fiscal', str_replace(",", ".", str_replace(".", "", $_POST['nota'])));
             $this->db->set('lote', $_POST['lote']);
             $this->db->set('codigo_cfop', str_replace('.', '', $_POST['cfop']));
+            
             $_POST['validade'] = date("Y-m-d", strtotime(str_replace("/", "-", $_POST['validade'])));
             if ($_POST['validade'] != "") {
                 $this->db->set('validade', $_POST['validade']);

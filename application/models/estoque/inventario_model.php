@@ -558,13 +558,13 @@ class inventario_model extends Model {
         $datahorainicio = $datainicio . ' 00:00:00';
         $datahorafim = $datafim . ' 23:59:59';
         $this->db->select('es.nota_fiscal,
-            es.validade as data,
-            ea.descricao as armazem,
-            ef.fantasia,
-            es.quantidade,
-            ec.nome,
-            es.valor_venda,
-            ep.descricao as produto');
+                            es.validade as data,
+                            ea.descricao as armazem,
+                            ef.fantasia,
+                            es.quantidade,
+                            ec.nome,
+                            es.valor_venda,
+                            ep.descricao as produto');
         $this->db->from('tb_estoque_saida es');
         $this->db->join('tb_estoque_armazem ea', 'ea.estoque_armazem_id = es.armazem_id', 'left');
         $this->db->join('tb_estoque_fornecedor ef', 'ef.estoque_fornecedor_id = es.fornecedor_id', 'left');
